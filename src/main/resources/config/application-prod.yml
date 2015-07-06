@@ -1,0 +1,54 @@
+server:
+    port: ${SOCIALDUMP_APP_PORT}
+
+liquibase:
+    context: prod
+
+spring:
+    profiles:
+        active: prod
+    datasource:
+        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        url: jdbc:mysql://${SOCIALDUMP_DB_HOSTNAME}:${SOCIALDUMP_DB_PORT}/${SOCIALDUMP_DB_SCHEMA}?useUnicode=true&characterEncoding=utf8
+        databaseName:
+        serverName:
+        username: ${SOCIALDUMP_DB_USERNAME}
+        password: ${SOCIALDUMP_DB_PASSWORD}
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+    jpa:
+        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database: MYSQL
+        openInView: false
+        show_sql: false
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+        properties:
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+    thymeleaf:
+        mode: XHTML
+        cache: true
+
+metrics:
+    jmx.enabled: true
+    spark:
+        enabled: false
+        host: localhost
+        port: 9999
+    graphite:
+        enabled: false
+        host: localhost
+        port: 2003
+        prefix: socialdump
+
+http:
+    cache:
+        timeToLiveInDays: 31
+

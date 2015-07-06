@@ -1,0 +1,21 @@
+{
+  "generator-jhipster": {
+    "baseName": "socialdump",
+    "packageName": "com.coredump.socialdump",
+    "packageFolder": "com/coredump/socialdump",
+    "authenticationType": "xauth",
+    "hibernateCache": "no",
+    "clusteredHttpSession": "no",
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useCompass": true,
+    "buildTool": "gradle",
+    "frontendBuilder": "grunt",
+    "javaVersion": "8",
+    "enableTranslation": false,
+    "rememberMeKey": "5a4d98638a00a6a92aa84f8fd94e56a8be5de0ac"
+  }
+}

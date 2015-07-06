@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="NewPersistenceUnit">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.coredump.socialdump.domain.Event</class>
+        <class>com.coredump.socialdump.domain.EventStatus</class>
+        <class>com.coredump.socialdump.domain.EventType</class>
+        <class>com.coredump.socialdump.domain.Functionality</class>
+        <class>com.coredump.socialdump.domain.GenericStatus</class>
+        <class>com.coredump.socialdump.domain.MonitorContact</class>
+        <class>com.coredump.socialdump.domain.Organization</class>
+        <class>com.coredump.socialdump.domain.OrganizationFuncionality</class>
+        <class>com.coredump.socialdump.domain.OrganizationMember</class>
+        <class>com.coredump.socialdump.domain.OrganizationPrivilege</class>
+        <class>com.coredump.socialdump.domain.OrganizationRole</class>
+        <class>com.coredump.socialdump.domain.Privilege</class>
+        <class>com.coredump.socialdump.domain.Role</class>
+        <class>com.coredump.socialdump.domain.SearchCriteria</class>
+        <class>com.coredump.socialdump.domain.SocialNetwork</class>
+        <class>com.coredump.socialdump.domain.SocialNetworkEndpoint</class>
+        <class>com.coredump.socialdump.domain.SocialNetworkPost</class>
+        <class>com.coredump.socialdump.domain.SocialNetworkRequest</class>
+        <class>com.coredump.socialdump.domain.SocialNetworkResponse</class>
+        <class>com.coredump.socialdump.domain.TemporalAccess</class>
+        <class>com.coredump.socialdump.domain.UserSD</class>
+        <properties>
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/socialdump"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="eclipselink.jdbc.user"/>
+            <property name="eclipselink.jdbc.password"/>
+        </properties>
+    </persistence-unit>
+</persistence>
