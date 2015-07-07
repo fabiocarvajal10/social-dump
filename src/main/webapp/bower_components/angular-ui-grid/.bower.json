@@ -21,7 +21,6 @@
     "commit": "4608197fae0b321b9ed742251773021f222a7358"
   },
   "_source": "git://github.com/angular-ui/bower-ui-grid.git",
-  "_target": "~3.0.0-rc.22",
-  "_originalSource": "angular-ui-grid",
-  "_direct": true
+  "_target": "~3.0.0-rc.16",
+  "_originalSource": "angular-ui-grid"
 }

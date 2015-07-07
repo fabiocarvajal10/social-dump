@@ -23,7 +23,6 @@
     "commit": "6c832bbdd0e5b084848ad4246c1e7b44dc2a532f"
   },
   "_source": "git://github.com/nervgh/angular-file-upload.git",
-  "_target": "~1.1.5",
-  "_originalSource": "angular-file-upload",
-  "_direct": true
+  "_target": "~1.1.1",
+  "_originalSource": "angular-file-upload"
 }

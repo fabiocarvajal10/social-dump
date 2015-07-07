@@ -1,32 +1,40 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en" data-ng-app="socialdumpApp">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>socialdump</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- build:css assets/styles/vendor.css -->
         <!-- bower:css -->
         <!-- endbower -->
         <!-- endbuild -->
         <!-- build:css assets/styles/main.css -->
-        <link rel="stylesheet" href="assets/styles/main.css">
+        <link rel="stylesheet" href="libs/jquery/bootstrap/dist/css/bootstrap.css" type="text/css" />
+        <link rel="stylesheet" href="assets/animate.css/animate.css" type="text/css" />
+        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" type="text/css" />
+        <link rel="stylesheet" href="assets/simple-line-icons/css/simple-line-icons.css" type="text/css" />
+        <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.min.css" type="text/css" />
+        <link rel="stylesheet" href="libs/angular/ui-grid.bootstrap.css" type="text/css" />
+        <link rel="stylesheet" href="assets/styles/font.css" type="text/css" />
+        <link rel="stylesheet" href="assets/styles/app.css" type="text/css" />
+        <!--JHIPSTER, REMOVE THIS LATER-->
+        <!--link rel="stylesheet" href="assets/styles/main.css">
         <!-- endbuild -->
     </head>
-    <body ng-app="socialdumpApp">
-        <!--[if lt IE 9]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <body ng-controller="AppCtrl">
+
+    <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view="content"></div>
+    <!--[if lt IE 9]>
+        <!--p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div ng-show="{{ENV === 'dev'}}" class="development" ng-cloak=""></div>
+
+    <!--div ng-show="{{ENV === 'dev'}}" class="development" ng-cloak=""></div>
         <div ui-view="navbar" ng-cloak=""></div>
         <div class="container">
             <div class="well" ui-view="content"></div>
-
-            <div class="footer">
-                <p translate="footer">This is your footer</p>
-            </div>
         </div>
 
         <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
@@ -42,26 +50,54 @@
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
+        <!-- jQuery -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/stomp-websocket/lib/stomp.min.js"></script>
         <script src="bower_components/sockjs-client/dist/sockjs.js"></script>
         <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
         <script src="bower_components/json3/lib/json3.js"></script>
+        <!-- Angular -->
         <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/angular-aria/angular-aria.js"></script>
+        <script src="bower_components/angular-messages/angular-messages.js"></script>
         <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <script src="bower_components/angular-resource/angular-resource.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/angular-touch/angular-touch.js"></script>
+        <!-- ngMaterial -->
+        <script src="bower_components/angular-material/angular-material.js"></script>
         <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
         <script src="bower_components/angular-cache-buster/angular-cache-buster.js"></script>
         <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+        <script src="bower_components/ngstorage/ngStorage.js"></script>
+        <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
+        <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+
+        <!-- bootstrap -->
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <!-- lazyload -->
+        <script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
+        <!-- translate -->
+        <script src="bower_components/angular-translate/angular-translate.js"></script>
+        <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+        <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+        <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
 
     <!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
-    <script src="scripts/app/app.js"></script>
-    <script src="scripts/app/app.constants.js"></script>
+    <!--configuration scripts-->
+    <script src="scripts/config/app.js"></script>
+    <script src="scripts/config/app.constants.js"></script>
+    <script src="scripts/config/config.js"></script>
+    <script src="scripts/config/config.lazyload.js"></script>
+
+    <!--components scripts-->
+    <!-- Services -->
+    <script src="scripts/components/util/ui-load.service.js"></script>
     <script src="scripts/components/auth/auth.service.js"></script>
     <script src="scripts/components/auth/principal.service.js"></script>
     <script src="scripts/components/auth/authority.directive.js"></script>
@@ -83,6 +119,9 @@
     <script src="scripts/components/util/base64.service.js"></script>
     <script src="scripts/components/util/parse-links.service.js"></script>
     <script src="scripts/components/util/dateutil.service.js"></script>
+
+    <!--application scripts-->
+    <script src="scripts/app/main/main.js"></script>
     <script src="scripts/app/account/account.js"></script>
     <script src="scripts/app/account/activate/activate.js"></script>
     <script src="scripts/app/account/activate/activate.controller.js"></script>
@@ -115,12 +154,16 @@
     <script src="scripts/app/admin/metrics/metrics.controller.js"></script>
     <script src="scripts/app/entities/entity.js"></script>
     <script src="scripts/app/error/error.js"></script>
-    <script src="scripts/app/main/main.js"></script>
+
     <script src="scripts/app/main/main.controller.js"></script>
+    <!--component scripts-->
     <script src="scripts/components/auth/provider/auth.xauth.service.js"></script>
+    <!--application scripts-->
     <script src="scripts/app/admin/tracker/tracker.js"></script>
     <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
     <script src="scripts/components/tracker/tracker.service.js"></script>
     <!-- endbuild -->
+
+
 </body>
 </html>

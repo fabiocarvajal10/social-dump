@@ -7,3 +7,6 @@ angular.module('socialdumpApp')
             $scope.isAuthenticated = Principal.isAuthenticated;
         });
     });
+
+
+

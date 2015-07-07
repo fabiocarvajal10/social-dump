@@ -11,8 +11,6 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function($timeo
       areaType: '@',
       areaMinSize: '=',
       resultImageSize: '=',
-      resultImageFormat: '@',
-      resultImageQuality: '=',
 
       onChange: '&',
       onLoadBegin: '&',
@@ -20,9 +18,9 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function($timeo
       onLoadError: '&'
     },
     template: '<canvas></canvas>',
-    controller: ['$scope', function($scope) {
+    controller: function($scope/*, $attrs, $element*/) {
       $scope.events = new CropPubSub();
-    }],
+    },
     link: function(scope, element/*, attrs*/) {
       // Init Events Manager
       var events = scope.events;
@@ -89,14 +87,6 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function($timeo
       });
       scope.$watch('resultImageSize',function(){
         cropHost.setResultImageSize(scope.resultImageSize);
-        updateResultImage(scope);
-      });
-      scope.$watch('resultImageFormat',function(){
-        cropHost.setResultImageFormat(scope.resultImageFormat);
-        updateResultImage(scope);
-      });
-      scope.$watch('resultImageQuality',function(){
-        cropHost.setResultImageQuality(scope.resultImageQuality);
         updateResultImage(scope);
       });
 

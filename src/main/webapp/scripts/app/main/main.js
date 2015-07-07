@@ -11,12 +11,12 @@ angular.module('socialdumpApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/main/main.html',
+                        templateUrl: 'scripts/app/main/app.html',
                         controller: 'MainController'
                     }
                 },
                 resolve: {
-                    
+
                 }
             });
     });

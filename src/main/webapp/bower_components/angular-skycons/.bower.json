@@ -34,7 +34,6 @@
     "commit": "78d38904b66259cbddf91b5475e424476903ca8d"
   },
   "_source": "git://github.com/projectweekend/angular-skycons.git",
-  "_target": "~2.0.2",
-  "_originalSource": "angular-skycons",
-  "_direct": true
+  "_target": "~2.0.0",
+  "_originalSource": "angular-skycons"
 }

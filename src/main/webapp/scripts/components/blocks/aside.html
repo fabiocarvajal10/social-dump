@@ -1,0 +1,52 @@
+<div ng-cloak class="aside-wrap">
+  <!-- if you want to use a custom scroll when aside fixed, use the slimScroll
+    <div class="navi-wrap" ui-jq="slimScroll" ui-options="{height:'100%', size:'8px'}">
+  -->
+  <div class="navi-wrap">
+    <!-- user -->
+    <div class="clearfix hidden-xs text-center" id="aside-user">
+      <div class="dropdown wrapper" dropdown>
+        <a ui-sref="app.page.profile">
+          <span class="thumb-lg w-auto-folded avatar m-t-sm">
+            <img src="/assets/images/dcflag.jpg" class="img-full" alt="...">
+          </span>
+        </a>
+        <a href class="dropdown-toggle hidden-folded" dropdown-toggle>
+          <span class="clear">
+            <span class="block m-t-sm">
+              <strong class="font-bold text-lt"> DEFCON </strong>
+              <b class="caret"></b>
+            </span>
+            <!--<span class="text-muted text-xs block">Art Director</span>-->
+          </span>
+        </a>
+        <!-- dropdown -->
+        <ul class="dropdown-menu animated fadeInRight w hidden-folded">
+          <li class="wrapper b-b m-b-sm bg-info m-t-n-xs">
+            <span class="arrow top hidden-folded arrow-info"></span>
+            <span> Definir </span>
+          </li>
+          <li>
+            <a href> Organización 1 </a>
+          </li>
+          <li>
+            <a > Organización 2 </a>
+          </li>
+          <li>
+            <a href> Organización 3 </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href> Ver Todas </a>
+          </li>
+        </ul>
+        <!-- / dropdown -->
+      </div>
+      <div class="line dk hidden-folded"></div>
+    </div>
+    <!-- / user -->
+
+    <nav ui-nav class="navi clearfix" ng-include="'scripts/components/blocks/nav.html'"></nav>
+
+  </div>
+</div>

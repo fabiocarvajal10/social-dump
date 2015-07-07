@@ -1,6 +1,6 @@
 {
   "name": "ng-img-crop",
-  "version": "0.3.2",
+  "version": "0.2.0",
   "authors": [
     "Alex Kaul <alexkaul@googlemail.com>"
   ],
@@ -25,14 +25,13 @@
   "devDependencies": {
     "angular": "~1.2.19"
   },
-  "_release": "0.3.2",
+  "_release": "0.2.0",
   "_resolution": {
     "type": "version",
-    "tag": "v0.3.2",
-    "commit": "8f29783e69e8e74cf76b278e42d3ad686f209ace"
+    "tag": "v0.2.0",
+    "commit": "89f7c1844bbaba77324a15cbb6b829c01eec783c"
   },
   "_source": "git://github.com/alexk111/ngImgCrop.git",
-  "_target": "~0.3.2",
-  "_originalSource": "ngImgCrop",
-  "_direct": true
+  "_target": "~0.2.0",
+  "_originalSource": "ngImgCrop"
 }
