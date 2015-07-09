@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
@@ -22,7 +23,8 @@ public class SocialNetworkPost {
     private GenericStatus genericStatusByStatusId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -32,7 +34,7 @@ public class SocialNetworkPost {
     }
 
     @Basic
-    @Column(name = "createdAt")
+    @Column(name = "createdAt", nullable = false)
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -42,7 +44,7 @@ public class SocialNetworkPost {
     }
 
     @Basic
-    @Column(name = "snUserId")
+    @Column(name = "snUserId", columnDefinition = "bigint(20) unsigned")
     public Long getSnUserId() {
         return snUserId;
     }
@@ -52,7 +54,8 @@ public class SocialNetworkPost {
     }
 
     @Basic
-    @Column(name = "snUserEmail")
+    @Size(max = 255)
+    @Column(name = "snUserEmail", length = 255)
     public String getSnUserEmail() {
         return snUserEmail;
     }
@@ -62,7 +65,7 @@ public class SocialNetworkPost {
     }
 
     @Basic
-    @Column(name = "body")
+    @Column(name = "body", columnDefinition = "text")
     public String getBody() {
         return body;
     }
@@ -72,7 +75,8 @@ public class SocialNetworkPost {
     }
 
     @Basic
-    @Column(name = "mediaUrl")
+    @Size(max = 255)
+    @Column(name = "mediaUrl", length = 255)
     public String getMediaUrl() {
         return mediaUrl;
     }

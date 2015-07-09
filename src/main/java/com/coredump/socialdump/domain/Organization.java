@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Collection;
 
@@ -18,7 +19,8 @@ public class Organization {
     private Collection<OrganizationMember> organizationMembersById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -28,7 +30,8 @@ public class Organization {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", length = 100, nullable = false, unique = true)
+    @Size(max = 100)
     public String getName() {
         return name;
     }
@@ -38,7 +41,7 @@ public class Organization {
     }
 
     @Basic
-    @Column(name = "createdAt")
+    @Column(name = "createdAt", nullable = false)
     public Timestamp getCreatedAt() {
         return createdAt;
     }

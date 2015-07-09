@@ -2,6 +2,7 @@ package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
 import java.util.Collection;
+import javax.validation.constraints.Size;
 
 /**
  * Created by fabio on 09/07/15.
@@ -17,7 +18,8 @@ public class GenericStatus {
     private Collection<TemporalAccess> temporalAccessesById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "smallint(3) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public short getId() {
         return id;
     }
@@ -27,7 +29,8 @@ public class GenericStatus {
     }
 
     @Basic
-    @Column(name = "status")
+    @Size(min = 1, max = 30)
+    @Column(name = "status", length = 30, unique = true, nullable = false)
     public String getStatus() {
         return status;
     }
@@ -37,7 +40,8 @@ public class GenericStatus {
     }
 
     @Basic
-    @Column(name = "description")
+    @Size(min = 1, max = 80)
+    @Column(name = "description", length = 80, nullable = false)
     public String getDescription() {
         return description;
     }

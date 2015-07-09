@@ -16,7 +16,8 @@ public class SocialNetworkResponse {
     private SocialNetworkRequest socialNetworkRequestByRequestId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -26,7 +27,7 @@ public class SocialNetworkResponse {
     }
 
     @Basic
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "smallint(3) unsigned", nullable = false)
     public short getStatus() {
         return status;
     }
@@ -36,7 +37,7 @@ public class SocialNetworkResponse {
     }
 
     @Basic
-    @Column(name = "headers")
+    @Column(name = "headers", columnDefinition = "text")
     public String getHeaders() {
         return headers;
     }
@@ -46,7 +47,7 @@ public class SocialNetworkResponse {
     }
 
     @Basic
-    @Column(name = "body")
+    @Column(name = "body", columnDefinition = "text")
     public String getBody() {
         return body;
     }

@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 /**
@@ -14,7 +15,8 @@ public class EventType {
     private Collection<Event> eventsById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "int(4) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -24,7 +26,8 @@ public class EventType {
     }
 
     @Basic
-    @Column(name = "name")
+    @Size(min = 1, max = 50)
+    @Column(name = "name", length = 50, unique = true, nullable = false)
     public String getName() {
         return name;
     }
@@ -34,7 +37,8 @@ public class EventType {
     }
 
     @Basic
-    @Column(name = "description")
+    @Size(min = 1, max = 100)
+    @Column(name = "description", length = 100, nullable = false)
     public String getDescription() {
         return description;
     }

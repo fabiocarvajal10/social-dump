@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Collection;
 
@@ -24,7 +25,8 @@ public class Event {
     private Collection<TemporalAccess> temporalAccessesById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -34,7 +36,7 @@ public class Event {
     }
 
     @Basic
-    @Column(name = "startDate")
+    @Column(name = "startDate", nullable = false)
     public Timestamp getStartDate() {
         return startDate;
     }
@@ -44,7 +46,7 @@ public class Event {
     }
 
     @Basic
-    @Column(name = "endDate")
+    @Column(name = "endDate", nullable = false)
     public Timestamp getEndDate() {
         return endDate;
     }
@@ -54,7 +56,8 @@ public class Event {
     }
 
     @Basic
-    @Column(name = "description")
+    @Size(min = 1, max = 255)
+    @Column(name = "description", length = 255, nullable = false)
     public String getDescription() {
         return description;
     }
@@ -74,7 +77,7 @@ public class Event {
     }
 
     @Basic
-    @Column(name = "postDelay")
+    @Column(name = "postDelay", columnDefinition = "int(6) unsigned", nullable = false)
     public int getPostDelay() {
         return postDelay;
     }

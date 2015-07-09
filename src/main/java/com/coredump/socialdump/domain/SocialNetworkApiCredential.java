@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
@@ -15,7 +16,8 @@ public class SocialNetworkApiCredential {
     private SocialNetwork socialNetworkBySocialNetworkId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -25,7 +27,8 @@ public class SocialNetworkApiCredential {
     }
 
     @Basic
-    @Column(name = "appId")
+    @Size(min = 1, max = 100)
+    @Column(name = "appId", length = 100, nullable = false)
     public String getAppId() {
         return appId;
     }
@@ -35,7 +38,8 @@ public class SocialNetworkApiCredential {
     }
 
     @Basic
-    @Column(name = "appSecret")
+    @Size(min = 1, max = 100)
+    @Column(name = "appSecret", length = 100, nullable = false)
     public String getAppSecret() {
         return appSecret;
     }

@@ -17,7 +17,8 @@ public class OrganizationMember {
     private User jhiUserByUserId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -27,7 +28,7 @@ public class OrganizationMember {
     }
 
     @Basic
-    @Column(name = "startDate")
+    @Column(name = "startDate", nullable = false)
     public Timestamp getStartDate() {
         return startDate;
     }

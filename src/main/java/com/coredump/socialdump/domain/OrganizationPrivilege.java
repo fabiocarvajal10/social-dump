@@ -12,7 +12,8 @@ public class OrganizationPrivilege {
     private OrganizationRole organizationRoleByRoleId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "int(7) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }

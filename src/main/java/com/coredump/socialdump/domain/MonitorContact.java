@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 /**
@@ -17,7 +18,8 @@ public class MonitorContact {
     private Collection<TemporalAccess> temporalAccessesById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -27,7 +29,8 @@ public class MonitorContact {
     }
 
     @Basic
-    @Column(name = "firstName")
+    @Column(name = "firstName", length = 100, nullable = false)
+    @Size(max = 100)
     public String getFirstName() {
         return firstName;
     }
@@ -37,7 +40,8 @@ public class MonitorContact {
     }
 
     @Basic
-    @Column(name = "lastName")
+    @Column(name = "lastName", length = 100, nullable = false)
+    @Size(max = 100)
     public String getLastName() {
         return lastName;
     }
@@ -47,7 +51,8 @@ public class MonitorContact {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", length = 255)
+    @Size(max = 255)
     public String getEmail() {
         return email;
     }
@@ -57,7 +62,8 @@ public class MonitorContact {
     }
 
     @Basic
-    @Column(name = "phone")
+    @Column(name = "phone", length = 80)
+    @Size(max = 80)
     public String getPhone() {
         return phone;
     }

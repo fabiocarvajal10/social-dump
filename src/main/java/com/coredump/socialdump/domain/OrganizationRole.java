@@ -14,7 +14,8 @@ public class OrganizationRole {
     private Collection<OrganizationPrivilege> organizationPrivilegesById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "smallint(3) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public short getId() {
         return id;
     }
@@ -24,7 +25,7 @@ public class OrganizationRole {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", length = 50, nullable = false)
     public String getName() {
         return name;
     }

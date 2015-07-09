@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
@@ -19,7 +20,8 @@ public class TemporalAccess {
     private GenericStatus genericStatusByStatusId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -29,7 +31,8 @@ public class TemporalAccess {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", length = 255, nullable = false)
+    @Size(max = 255)
     public String getEmail() {
         return email;
     }
@@ -39,7 +42,8 @@ public class TemporalAccess {
     }
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", length = 80, nullable = false)
+    @Size(max = 80)
     public String getPassword() {
         return password;
     }
@@ -49,7 +53,7 @@ public class TemporalAccess {
     }
 
     @Basic
-    @Column(name = "createdAt")
+    @Column(name = "createdAt", nullable = false)
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -59,7 +63,7 @@ public class TemporalAccess {
     }
 
     @Basic
-    @Column(name = "startDate")
+    @Column(name = "startDate", nullable = false)
     public Timestamp getStartDate() {
         return startDate;
     }
@@ -69,7 +73,7 @@ public class TemporalAccess {
     }
 
     @Basic
-    @Column(name = "endDate")
+    @Column(name = "endDate", nullable = false)
     public Timestamp getEndDate() {
         return endDate;
     }

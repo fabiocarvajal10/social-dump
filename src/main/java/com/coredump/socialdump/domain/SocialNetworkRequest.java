@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Collection;
 
@@ -21,7 +22,8 @@ public class SocialNetworkRequest {
     private Collection<SocialNetworkResponse> socialNetworkResponsesById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -31,7 +33,8 @@ public class SocialNetworkRequest {
     }
 
     @Basic
-    @Column(name = "targetUrl")
+    @Size(max = 255)
+    @Column(name = "targetUrl", length = 255, nullable = false)
     public String getTargetUrl() {
         return targetUrl;
     }
@@ -41,7 +44,7 @@ public class SocialNetworkRequest {
     }
 
     @Basic
-    @Column(name = "request")
+    @Column(name = "request", columnDefinition = "text")
     public String getRequest() {
         return request;
     }
@@ -51,7 +54,8 @@ public class SocialNetworkRequest {
     }
 
     @Basic
-    @Column(name = "searchCriteria")
+    @Size(max = 255)
+    @Column(name = "searchCriteria", length = 255)
     public String getSearchCriteria() {
         return searchCriteria;
     }
@@ -61,7 +65,7 @@ public class SocialNetworkRequest {
     }
 
     @Basic
-    @Column(name = "createdAt")
+    @Column(name = "createdAt", nullable = false)
     public Timestamp getCreatedAt() {
         return createdAt;
     }

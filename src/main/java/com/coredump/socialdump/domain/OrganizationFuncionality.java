@@ -13,7 +13,8 @@ public class OrganizationFuncionality {
     private Collection<OrganizationPrivilege> organizationPrivilegesById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -23,7 +24,7 @@ public class OrganizationFuncionality {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", length = 80, nullable = false)
     public String getName() {
         return name;
     }

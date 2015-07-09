@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 /**
@@ -16,7 +17,8 @@ public class SocialNetworkEndpoint {
     private Collection<SocialNetworkRequest> socialNetworkRequestsById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "int(5) unsigned", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -26,7 +28,8 @@ public class SocialNetworkEndpoint {
     }
 
     @Basic
-    @Column(name = "endpoint")
+    @Column(name = "endpoint", length = 255, nullable = false, unique = true)
+    @Size(min = 1, max = 255)
     public String getEndpoint() {
         return endpoint;
     }
@@ -36,7 +39,8 @@ public class SocialNetworkEndpoint {
     }
 
     @Basic
-    @Column(name = "httpMethod")
+    @Column(name = "httpMethod", length = 10, nullable = false, unique = true)
+    @Size(min = 1, max = 10)
     public String getHttpMethod() {
         return httpMethod;
     }
@@ -46,7 +50,8 @@ public class SocialNetworkEndpoint {
     }
 
     @Basic
-    @Column(name = "description")
+    @Size(max = 100)
+    @Column(name = "description", length = 100)
     public String getDescription() {
         return description;
     }
