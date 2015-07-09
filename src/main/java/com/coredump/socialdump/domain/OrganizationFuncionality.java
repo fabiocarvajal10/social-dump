@@ -1,17 +1,16 @@
 package com.coredump.socialdump.domain;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class OrganizationFuncionality {
     private int id;
     private String name;
+    private Collection<OrganizationPrivilege> organizationPrivilegesById;
 
     @Id
     @Column(name = "id")
@@ -51,5 +50,14 @@ public class OrganizationFuncionality {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "organizationFuncionalityByFunctionalityId")
+    public Collection<OrganizationPrivilege> getOrganizationPrivilegesById() {
+        return organizationPrivilegesById;
+    }
+
+    public void setOrganizationPrivilegesById(Collection<OrganizationPrivilege> organizationPrivilegesById) {
+        this.organizationPrivilegesById = organizationPrivilegesById;
     }
 }

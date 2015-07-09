@@ -1,9 +1,10 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class SocialNetworkResponse {
@@ -11,6 +12,7 @@ public class SocialNetworkResponse {
     private short status;
     private String headers;
     private String body;
+    private Collection<SocialNetworkPost> socialNetworkPostsById;
     private SocialNetworkRequest socialNetworkRequestByRequestId;
 
     @Id
@@ -75,6 +77,15 @@ public class SocialNetworkResponse {
         result = 31 * result + (headers != null ? headers.hashCode() : 0);
         result = 31 * result + (body != null ? body.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "socialNetworkResponseByResponseId")
+    public Collection<SocialNetworkPost> getSocialNetworkPostsById() {
+        return socialNetworkPostsById;
+    }
+
+    public void setSocialNetworkPostsById(Collection<SocialNetworkPost> socialNetworkPostsById) {
+        this.socialNetworkPostsById = socialNetworkPostsById;
     }
 
     @ManyToOne

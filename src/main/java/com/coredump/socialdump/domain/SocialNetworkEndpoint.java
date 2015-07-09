@@ -1,9 +1,10 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class SocialNetworkEndpoint {
@@ -12,6 +13,7 @@ public class SocialNetworkEndpoint {
     private String httpMethod;
     private String description;
     private SocialNetwork socialNetworkBySocialNetworkId;
+    private Collection<SocialNetworkRequest> socialNetworkRequestsById;
 
     @Id
     @Column(name = "id")
@@ -85,5 +87,14 @@ public class SocialNetworkEndpoint {
 
     public void setSocialNetworkBySocialNetworkId(SocialNetwork socialNetworkBySocialNetworkId) {
         this.socialNetworkBySocialNetworkId = socialNetworkBySocialNetworkId;
+    }
+
+    @OneToMany(mappedBy = "socialNetworkEndpointByEndpointId")
+    public Collection<SocialNetworkRequest> getSocialNetworkRequestsById() {
+        return socialNetworkRequestsById;
+    }
+
+    public void setSocialNetworkRequestsById(Collection<SocialNetworkRequest> socialNetworkRequestsById) {
+        this.socialNetworkRequestsById = socialNetworkRequestsById;
     }
 }

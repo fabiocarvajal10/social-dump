@@ -1,17 +1,17 @@
 package com.coredump.socialdump.domain;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class OrganizationRole {
     private short id;
     private String name;
+    private Collection<OrganizationMember> organizationMembersById;
+    private Collection<OrganizationPrivilege> organizationPrivilegesById;
 
     @Id
     @Column(name = "id")
@@ -51,5 +51,23 @@ public class OrganizationRole {
         int result = (int) id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "organizationRoleByRoleId")
+    public Collection<OrganizationMember> getOrganizationMembersById() {
+        return organizationMembersById;
+    }
+
+    public void setOrganizationMembersById(Collection<OrganizationMember> organizationMembersById) {
+        this.organizationMembersById = organizationMembersById;
+    }
+
+    @OneToMany(mappedBy = "organizationRoleByRoleId")
+    public Collection<OrganizationPrivilege> getOrganizationPrivilegesById() {
+        return organizationPrivilegesById;
+    }
+
+    public void setOrganizationPrivilegesById(Collection<OrganizationPrivilege> organizationPrivilegesById) {
+        this.organizationPrivilegesById = organizationPrivilegesById;
     }
 }

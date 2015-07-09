@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class GenericStatus {
@@ -15,7 +15,6 @@ public class GenericStatus {
     private Collection<SearchCriteria> searchCriteriasById;
     private Collection<SocialNetworkPost> socialNetworkPostsById;
     private Collection<TemporalAccess> temporalAccessesById;
-    private Collection<UserSD> usersById;
 
     @Id
     @Column(name = "id")
@@ -103,14 +102,5 @@ public class GenericStatus {
 
     public void setTemporalAccessesById(Collection<TemporalAccess> temporalAccessesById) {
         this.temporalAccessesById = temporalAccessesById;
-    }
-
-    @OneToMany(mappedBy = "genericStatusByStatusId")
-    public Collection<UserSD> getUsersById() {
-        return usersById;
-    }
-
-    public void setUsersById(Collection<UserSD> usersById) {
-        this.usersById = usersById;
     }
 }

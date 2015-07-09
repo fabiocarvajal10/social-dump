@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class SocialNetworkPost {
@@ -15,6 +15,8 @@ public class SocialNetworkPost {
     private String body;
     private String mediaUrl;
     private SocialNetwork socialNetworkBySocialNetworkId;
+    private SocialNetworkRequest socialNetworkRequestByRequestId;
+    private SocialNetworkResponse socialNetworkResponseByResponseId;
     private Event eventByEventId;
     private SearchCriteria searchCriteriaBySearchCriteriaId;
     private GenericStatus genericStatusByStatusId;
@@ -115,6 +117,26 @@ public class SocialNetworkPost {
 
     public void setSocialNetworkBySocialNetworkId(SocialNetwork socialNetworkBySocialNetworkId) {
         this.socialNetworkBySocialNetworkId = socialNetworkBySocialNetworkId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "requestId", referencedColumnName = "id")
+    public SocialNetworkRequest getSocialNetworkRequestByRequestId() {
+        return socialNetworkRequestByRequestId;
+    }
+
+    public void setSocialNetworkRequestByRequestId(SocialNetworkRequest socialNetworkRequestByRequestId) {
+        this.socialNetworkRequestByRequestId = socialNetworkRequestByRequestId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "responseId", referencedColumnName = "id")
+    public SocialNetworkResponse getSocialNetworkResponseByResponseId() {
+        return socialNetworkResponseByResponseId;
+    }
+
+    public void setSocialNetworkResponseByResponseId(SocialNetworkResponse socialNetworkResponseByResponseId) {
+        this.socialNetworkResponseByResponseId = socialNetworkResponseByResponseId;
     }
 
     @ManyToOne
