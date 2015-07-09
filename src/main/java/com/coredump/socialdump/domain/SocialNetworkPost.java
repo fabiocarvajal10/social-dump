@@ -2,13 +2,14 @@ package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by fabio on 09/07/15.
  */
 @Entity
-public class SocialNetworkPost {
+public class SocialNetworkPost implements Serializable {
     private long id;
     private Timestamp createdAt;
     private Long snUserId;

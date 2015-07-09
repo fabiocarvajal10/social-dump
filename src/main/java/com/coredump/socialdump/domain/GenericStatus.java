@@ -1,6 +1,7 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import javax.validation.constraints.Size;
 
@@ -8,7 +9,7 @@ import javax.validation.constraints.Size;
  * Created by fabio on 09/07/15.
  */
 @Entity
-public class GenericStatus {
+public class GenericStatus implements Serializable {
     private short id;
     private String status;
     private String description;
