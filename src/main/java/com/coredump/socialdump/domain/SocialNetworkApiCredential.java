@@ -1,14 +1,17 @@
 package com.coredump.socialdump.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by fabio on 09/07/15.
  */
 @Entity
-public class SocialNetworkApiCredential {
+public class SocialNetworkApiCredential implements Serializable {
     private long id;
     private String appId;
     private String appSecret;
@@ -27,6 +30,7 @@ public class SocialNetworkApiCredential {
     }
 
     @Basic
+    @JsonIgnore
     @Size(min = 1, max = 100)
     @Column(name = "appId", length = 100, nullable = false)
     public String getAppId() {
@@ -38,6 +42,7 @@ public class SocialNetworkApiCredential {
     }
 
     @Basic
+    @JsonIgnore
     @Size(min = 1, max = 100)
     @Column(name = "appSecret", length = 100, nullable = false)
     public String getAppSecret() {

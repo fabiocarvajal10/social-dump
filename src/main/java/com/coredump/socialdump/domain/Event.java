@@ -2,6 +2,7 @@ package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 
@@ -9,7 +10,7 @@ import java.util.Collection;
  * Created by fabio on 09/07/15.
  */
 @Entity
-public class Event {
+public class Event implements Serializable {
     private long id;
     private Timestamp startDate;
     private Timestamp endDate;

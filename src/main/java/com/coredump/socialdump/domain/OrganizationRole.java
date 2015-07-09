@@ -1,13 +1,14 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * Created by fabio on 09/07/15.
  */
 @Entity
-public class OrganizationRole {
+public class OrganizationRole implements Serializable {
     private short id;
     private String name;
     private Collection<OrganizationMember> organizationMembersById;

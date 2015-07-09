@@ -1,13 +1,14 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by fabio on 09/07/15.
  */
 @Entity
-public class OrganizationMember {
+public class OrganizationMember implements Serializable {
     private long id;
     private Timestamp startDate;
     private Timestamp endDate;

@@ -1,13 +1,14 @@
 package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * Created by fabio on 09/07/15.
  */
 @Entity
-public class SocialNetworkResponse {
+public class SocialNetworkResponse implements Serializable {
     private long id;
     private short status;
     private String headers;
