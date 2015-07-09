@@ -2,9 +2,10 @@ package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class SocialNetworkRequest {
@@ -13,9 +14,11 @@ public class SocialNetworkRequest {
     private String request;
     private String searchCriteria;
     private Timestamp createdAt;
+    private Collection<SocialNetworkPost> socialNetworkPostsById;
     private Event eventByEventId;
     private SearchCriteria searchCriteriaBySearchCriteriaId;
     private SocialNetworkEndpoint socialNetworkEndpointByEndpointId;
+    private Collection<SocialNetworkResponse> socialNetworkResponsesById;
 
     @Id
     @Column(name = "id")
@@ -94,6 +97,15 @@ public class SocialNetworkRequest {
         return result;
     }
 
+    @OneToMany(mappedBy = "socialNetworkRequestByRequestId")
+    public Collection<SocialNetworkPost> getSocialNetworkPostsById() {
+        return socialNetworkPostsById;
+    }
+
+    public void setSocialNetworkPostsById(Collection<SocialNetworkPost> socialNetworkPostsById) {
+        this.socialNetworkPostsById = socialNetworkPostsById;
+    }
+
     @ManyToOne
     @JoinColumn(name = "eventId", referencedColumnName = "id")
     public Event getEventByEventId() {
@@ -122,5 +134,14 @@ public class SocialNetworkRequest {
 
     public void setSocialNetworkEndpointByEndpointId(SocialNetworkEndpoint socialNetworkEndpointByEndpointId) {
         this.socialNetworkEndpointByEndpointId = socialNetworkEndpointByEndpointId;
+    }
+
+    @OneToMany(mappedBy = "socialNetworkRequestByRequestId")
+    public Collection<SocialNetworkResponse> getSocialNetworkResponsesById() {
+        return socialNetworkResponsesById;
+    }
+
+    public void setSocialNetworkResponsesById(Collection<SocialNetworkResponse> socialNetworkResponsesById) {
+        this.socialNetworkResponsesById = socialNetworkResponsesById;
     }
 }

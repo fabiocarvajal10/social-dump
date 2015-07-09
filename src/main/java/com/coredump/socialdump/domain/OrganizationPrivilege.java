@@ -3,7 +3,7 @@ package com.coredump.socialdump.domain;
 import javax.persistence.*;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class OrganizationPrivilege {

@@ -2,41 +2,23 @@ package com.coredump.socialdump.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
-import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
-import org.hibernate.annotations.Type;
-
-import javax.validation.constraints.*;
-import java.io.Serializable;
-
+import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
-@Table(name = "Organization")
-public class Organization implements Serializable{
+public class Organization {
+    private long id;
+    private String name;
+    private Timestamp createdAt;
+    private Collection<Event> eventsById;
+    private Collection<MonitorContact> monitorContactsById;
+    private User jhiUserByOwnerId;
+    private Collection<OrganizationMember> organizationMembersById;
+
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    @NotNull
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    @Column(name = "createdAt", nullable = false)
-    private Timestamp createdAt;
-
-    @ManyToOne
-    @JoinColumn(name = "ownerId", referencedColumnName = "id", nullable = false)
-    private UserSD userByOwnerId;
-
     public long getId() {
         return id;
     }
@@ -45,6 +27,8 @@ public class Organization implements Serializable{
         this.id = id;
     }
 
+    @Basic
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -53,20 +37,14 @@ public class Organization implements Serializable{
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "createdAt")
     public Timestamp getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public UserSD getUserByOwnerId() {
-        return userByOwnerId;
-    }
-
-    public void setUserByOwnerId(UserSD userByOwnerId) {
-        this.userByOwnerId = userByOwnerId;
     }
 
     @Override
@@ -91,12 +69,40 @@ public class Organization implements Serializable{
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "Organizationz{" +
-            "id=" + id +
-            ", name='" + name + "'" +
-            ", createdAt='" + createdAt+
-            '}';
+    @OneToMany(mappedBy = "organizationByOrganizationId")
+    public Collection<Event> getEventsById() {
+        return eventsById;
+    }
+
+    public void setEventsById(Collection<Event> eventsById) {
+        this.eventsById = eventsById;
+    }
+
+    @OneToMany(mappedBy = "organizationByOrganizationId")
+    public Collection<MonitorContact> getMonitorContactsById() {
+        return monitorContactsById;
+    }
+
+    public void setMonitorContactsById(Collection<MonitorContact> monitorContactsById) {
+        this.monitorContactsById = monitorContactsById;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "ownerId", referencedColumnName = "id", nullable = false)
+    public User getJhiUserByOwnerId() {
+        return jhiUserByOwnerId;
+    }
+
+    public void setJhiUserByOwnerId(User jhiUserByOwnerId) {
+        this.jhiUserByOwnerId = jhiUserByOwnerId;
+    }
+
+    @OneToMany(mappedBy = "organizationByOrganizationId")
+    public Collection<OrganizationMember> getOrganizationMembersById() {
+        return organizationMembersById;
+    }
+
+    public void setOrganizationMembersById(Collection<OrganizationMember> organizationMembersById) {
+        this.organizationMembersById = organizationMembersById;
     }
 }

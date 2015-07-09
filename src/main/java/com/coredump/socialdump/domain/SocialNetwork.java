@@ -1,18 +1,20 @@
 package com.coredump.socialdump.domain;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class SocialNetwork {
     private int id;
     private String name;
     private String url;
+    private Collection<SearchCriteria> searchCriteriasById;
+    private Collection<SocialNetworkApiCredential> socialNetworkApiCredentialsById;
+    private Collection<SocialNetworkEndpoint> socialNetworkEndpointsById;
+    private Collection<SocialNetworkPost> socialNetworkPostsById;
 
     @Id
     @Column(name = "id")
@@ -64,5 +66,41 @@ public class SocialNetwork {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "socialNetworkBySocialNetworkId")
+    public Collection<SearchCriteria> getSearchCriteriasById() {
+        return searchCriteriasById;
+    }
+
+    public void setSearchCriteriasById(Collection<SearchCriteria> searchCriteriasById) {
+        this.searchCriteriasById = searchCriteriasById;
+    }
+
+    @OneToMany(mappedBy = "socialNetworkBySocialNetworkId")
+    public Collection<SocialNetworkApiCredential> getSocialNetworkApiCredentialsById() {
+        return socialNetworkApiCredentialsById;
+    }
+
+    public void setSocialNetworkApiCredentialsById(Collection<SocialNetworkApiCredential> socialNetworkApiCredentialsById) {
+        this.socialNetworkApiCredentialsById = socialNetworkApiCredentialsById;
+    }
+
+    @OneToMany(mappedBy = "socialNetworkBySocialNetworkId")
+    public Collection<SocialNetworkEndpoint> getSocialNetworkEndpointsById() {
+        return socialNetworkEndpointsById;
+    }
+
+    public void setSocialNetworkEndpointsById(Collection<SocialNetworkEndpoint> socialNetworkEndpointsById) {
+        this.socialNetworkEndpointsById = socialNetworkEndpointsById;
+    }
+
+    @OneToMany(mappedBy = "socialNetworkBySocialNetworkId")
+    public Collection<SocialNetworkPost> getSocialNetworkPostsById() {
+        return socialNetworkPostsById;
+    }
+
+    public void setSocialNetworkPostsById(Collection<SocialNetworkPost> socialNetworkPostsById) {
+        this.socialNetworkPostsById = socialNetworkPostsById;
     }
 }

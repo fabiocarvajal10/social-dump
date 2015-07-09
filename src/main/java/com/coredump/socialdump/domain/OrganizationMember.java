@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
 public class OrganizationMember {
@@ -14,7 +14,7 @@ public class OrganizationMember {
     private Organization organizationByOrganizationId;
     private OrganizationRole organizationRoleByRoleId;
     private GenericStatus genericStatusByStatusId;
-    private UserSD userByUserId;
+    private User jhiUserByUserId;
 
     @Id
     @Column(name = "id")
@@ -100,11 +100,11 @@ public class OrganizationMember {
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
-    public UserSD getUserByUserId() {
-        return userByUserId;
+    public User getJhiUserByUserId() {
+        return jhiUserByUserId;
     }
 
-    public void setUserByUserId(UserSD userByUserId) {
-        this.userByUserId = userByUserId;
+    public void setJhiUserByUserId(User jhiUserByUserId) {
+        this.jhiUserByUserId = jhiUserByUserId;
     }
 }
