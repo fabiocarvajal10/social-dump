@@ -16,7 +16,7 @@ public class Organization implements Serializable {
     private Timestamp createdAt;
     private Collection<Event> eventsById;
     private Collection<MonitorContact> monitorContactsById;
-    private User jhiUserByOwnerId;
+    private User userByOwnerId;
     private Collection<OrganizationMember> organizationMembersById;
 
     @Id
@@ -93,12 +93,12 @@ public class Organization implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ownerId", referencedColumnName = "id", nullable = false)
-    public User getJhiUserByOwnerId() {
-        return jhiUserByOwnerId;
+    public User getUserByOwnerId() {
+        return userByOwnerId;
     }
 
-    public void setJhiUserByOwnerId(User jhiUserByOwnerId) {
-        this.jhiUserByOwnerId = jhiUserByOwnerId;
+    public void setUserByOwnerId(User userByOwnerId) {
+        this.userByOwnerId = userByOwnerId;
     }
 
     @OneToMany(mappedBy = "organizationByOrganizationId")

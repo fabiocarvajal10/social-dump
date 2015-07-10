@@ -15,7 +15,7 @@ public class OrganizationMember implements Serializable {
     private Organization organizationByOrganizationId;
     private OrganizationRole organizationRoleByRoleId;
     private GenericStatus genericStatusByStatusId;
-    private User jhiUserByUserId;
+    private User userByUserId;
 
     @Id
     @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
@@ -102,11 +102,11 @@ public class OrganizationMember implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
-    public User getJhiUserByUserId() {
-        return jhiUserByUserId;
+    public User getUserByUserId() {
+        return userByUserId;
     }
 
-    public void setJhiUserByUserId(User jhiUserByUserId) {
-        this.jhiUserByUserId = jhiUserByUserId;
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
     }
 }
