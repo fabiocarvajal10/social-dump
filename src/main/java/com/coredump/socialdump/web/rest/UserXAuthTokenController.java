@@ -35,12 +35,17 @@ public class UserXAuthTokenController {
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.POST)
     @Timed
-    public Token authorize(@RequestParam String username, @RequestParam String password) {
+    public Token authorize(@RequestParam String username,
+                           @RequestParam String password) {
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = this.authenticationManager.authenticate(token);
+        UsernamePasswordAuthenticationToken token =
+            new UsernamePasswordAuthenticationToken(username, password);
+        Authentication authentication =
+            this.authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetails details = this.userDetailsService.loadUserByUsername(username);
+        UserDetails details =
+            this.userDetailsService.loadUserByUsername(username);
+
         return tokenProvider.createToken(details);
     }
 }
