@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet author="esteban" id="1436492119137-1">
+        <createTable tableName="Event">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="EventPK"/>
+            </column>
+            <column name="activatedAt" type="datetime"/>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="endDate" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postDelay" type="INT(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="startDate" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="statusId" type="SMALLINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="eventTypeId" type="INT(4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organizationId" type="BIGINT(15)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-2">
+        <createTable tableName="EventStatus">
+            <column autoIncrement="true" name="id" type="SMALLINT(3)">
+                <constraints primaryKey="true" primaryKeyName="EventStatusPK"/>
+            </column>
+            <column name="description" type="VARCHAR(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-3">
+        <createTable tableName="EventType">
+            <column autoIncrement="true" name="id" type="INT(4)">
+                <constraints primaryKey="true" primaryKeyName="EventTypePK"/>
+            </column>
+            <column name="description" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-4">
+        <createTable tableName="GenericStatus">
+            <column autoIncrement="true" name="id" type="SMALLINT(3)">
+                <constraints primaryKey="true" primaryKeyName="GenericStatusPK"/>
+            </column>
+            <column name="description" type="VARCHAR(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-5">
+        <createTable tableName="MonitorContact">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="MonitorContactPK"/>
+            </column>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="firstName" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastName" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(80)"/>
+            <column name="organizationId" type="BIGINT(15)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-6">
+        <createTable tableName="Organization">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="OrganizationPK"/>
+            </column>
+            <column name="createdAt" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ownerId" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-7">
+        <createTable tableName="OrganizationFuncionality">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="OrganizationFuncionalityPK"/>
+            </column>
+            <column name="name" type="VARCHAR(80)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-8">
+        <createTable tableName="OrganizationMember">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="OrganizationMemberPK"/>
+            </column>
+            <column name="endDate" type="datetime"/>
+            <column name="startDate" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="statusId" type="SMALLINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organizationId" type="BIGINT(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roleId" type="SMALLINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="userId" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-9">
+        <createTable tableName="OrganizationPrivilege">
+            <column autoIncrement="true" name="id" type="INT(7)">
+                <constraints primaryKey="true" primaryKeyName="OrganizationPrivilegePK"/>
+            </column>
+            <column name="functionalityId" type="BIGINT(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roleId" type="SMALLINT(3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-10">
+        <createTable tableName="OrganizationRole">
+            <column autoIncrement="true" name="id" type="SMALLINT(3)">
+                <constraints primaryKey="true" primaryKeyName="OrganizationRolePK"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-11">
+        <createTable tableName="SearchCriteria">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="SearchCriteriaPK"/>
+            </column>
+            <column name="searchCriteria" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="eventId" type="BIGINT(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="statusId" type="SMALLINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="socialNetworkId" type="INT(4)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-12">
+        <createTable tableName="SocialNetwork">
+            <column autoIncrement="true" name="id" type="INT(4)">
+                <constraints primaryKey="true" primaryKeyName="SocialNetworkPK"/>
+            </column>
+            <column name="name" type="VARCHAR(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-13">
+        <createTable tableName="SocialNetworkApiCredential">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="SocialNetworkApiCredentialPK"/>
+            </column>
+            <column name="appId" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="appSecret" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastRequest" type="datetime"/>
+            <column name="socialNetworkId" type="INT(4)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-14">
+        <createTable tableName="SocialNetworkEndpoint">
+            <column autoIncrement="true" name="id" type="INT(5)">
+                <constraints primaryKey="true" primaryKeyName="SocialNetworkEndpointPK"/>
+            </column>
+            <column name="description" type="VARCHAR(100)"/>
+            <column name="endpoint" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="httpMethod" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="socialNetworkId" type="INT(4)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-15">
+        <createTable tableName="SocialNetworkPost">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="SocialNetworkPostPK"/>
+            </column>
+            <column name="body" type="CLOB"/>
+            <column name="createdAt" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mediaUrl" type="VARCHAR(255)"/>
+            <column name="snUserEmail" type="VARCHAR(255)"/>
+            <column name="snUserId" type="BIGINT(20)"/>
+            <column name="eventId" type="BIGINT(15)"/>
+            <column name="statusId" type="SMALLINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="searchCriteriaId" type="BIGINT(15)"/>
+            <column name="socialNetworkId" type="INT(4)"/>
+            <column name="requestId" type="BIGINT(15)"/>
+            <column name="responseId" type="BIGINT(15)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-16">
+        <createTable tableName="SocialNetworkRequest">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="SocialNetworkRequestPK"/>
+            </column>
+            <column name="createdAt" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="request" type="CLOB"/>
+            <column name="searchCriteria" type="VARCHAR(255)"/>
+            <column name="targetUrl" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="eventId" type="BIGINT(15)"/>
+            <column name="searchCriteriaId" type="BIGINT(15)"/>
+            <column name="endpointId" type="INT(5)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-17">
+        <createTable tableName="SocialNetworkResponse">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="SocialNetworkResponsePK"/>
+            </column>
+            <column name="body" type="CLOB"/>
+            <column name="headers" type="CLOB"/>
+            <column name="status" type="SMALLINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requestId" type="BIGINT(15)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-18">
+        <createTable tableName="TemporalAccess">
+            <column autoIncrement="true" name="id" type="BIGINT(15)">
+                <constraints primaryKey="true" primaryKeyName="TemporalAccessPK"/>
+            </column>
+            <column name="createdAt" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="endDate" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="startDate" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="eventId" type="BIGINT(15)"/>
+            <column name="statusId" type="SMALLINT(3)"/>
+            <column name="monitorContactId" type="BIGINT(15)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-19">
+        <addUniqueConstraint columnNames="status" constraintName="UC_EVENTSTATUSSTATUS_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="EventStatus"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-20">
+        <addUniqueConstraint columnNames="name" constraintName="UC_EVENTTYPENAME_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="EventType"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-21">
+        <addUniqueConstraint columnNames="status" constraintName="UC_GENERICSTATUSSTATUS_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="GenericStatus"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-22">
+        <addUniqueConstraint columnNames="name" constraintName="UC_ORGANIZATIONNAME_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="Organization"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-23">
+        <addUniqueConstraint columnNames="endpoint" constraintName="UC_SOCIALNETWORKENDPOINTENDPOINT_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SocialNetworkEndpoint"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-24">
+        <addUniqueConstraint columnNames="httpMethod" constraintName="UC_SOCIALNETWORKENDPOINTHTTPMETHOD_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SocialNetworkEndpoint"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-25">
+        <addForeignKeyConstraint baseColumnNames="requestId" baseTableName="SocialNetworkPost" constraintName="FK_433jxurmam4nkt14053hplpds" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetworkRequest"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-26">
+        <addForeignKeyConstraint baseColumnNames="socialNetworkId" baseTableName="SocialNetworkApiCredential" constraintName="FK_4kms08q970k4evutr9538cutx" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetwork"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-27">
+        <addForeignKeyConstraint baseColumnNames="statusId" baseTableName="SocialNetworkPost" constraintName="FK_4p6o5cvoopvwlu0g3kh2qugq3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="GenericStatus"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-28">
+        <addForeignKeyConstraint baseColumnNames="ownerId" baseTableName="Organization" constraintName="FK_682eq5kxbc3lgpyk4hqjly0w5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="JHI_USER"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-29">
+        <addForeignKeyConstraint baseColumnNames="organizationId" baseTableName="OrganizationMember" constraintName="FK_7tqdeoi1egk3pk97h6u1ra0ep" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="Organization"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-30">
+        <addForeignKeyConstraint baseColumnNames="statusId" baseTableName="TemporalAccess" constraintName="FK_8gbeiu8yfdxk94g9hu1or9xpt" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="GenericStatus"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-31">
+        <addForeignKeyConstraint baseColumnNames="eventId" baseTableName="TemporalAccess" constraintName="FK_8lj6p20d5845eki0xdxoaq140" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="Event"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-32">
+        <addForeignKeyConstraint baseColumnNames="endpointId" baseTableName="SocialNetworkRequest" constraintName="FK_8x3prdt8an0drr6c35c7d68f0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetworkEndpoint"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-33">
+        <addForeignKeyConstraint baseColumnNames="organizationId" baseTableName="Event" constraintName="FK_923iug7we3uhu33gdmurk4j3b" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="Organization"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-34">
+        <addForeignKeyConstraint baseColumnNames="eventId" baseTableName="SearchCriteria" constraintName="FK_93te31actib63c3ge121k3vru" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="Event"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-35">
+        <addForeignKeyConstraint baseColumnNames="eventTypeId" baseTableName="Event" constraintName="FK_a9aqre9h2d5a9k1wt71qa8cj5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="EventType"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-36">
+        <addForeignKeyConstraint baseColumnNames="eventId" baseTableName="SocialNetworkPost" constraintName="FK_eodwwhon8how6upnqpjbkf5au" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="Event"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-37">
+        <addForeignKeyConstraint baseColumnNames="searchCriteriaId" baseTableName="SocialNetworkPost" constraintName="FK_gtg16q5cnpofbn4xjdjuibedw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SearchCriteria"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-38">
+        <addForeignKeyConstraint baseColumnNames="requestId" baseTableName="SocialNetworkResponse" constraintName="FK_hkmoqkqd1p8rsqq266k6oha16" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetworkRequest"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-39">
+        <addForeignKeyConstraint baseColumnNames="statusId" baseTableName="SearchCriteria" constraintName="FK_hrowti7pypr5a0nfd0ahqlwm2" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="GenericStatus"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-40">
+        <addForeignKeyConstraint baseColumnNames="organizationId" baseTableName="MonitorContact" constraintName="FK_hu6nrax7xtiw9kb27mxsw1g4y" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="Organization"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-41">
+        <addForeignKeyConstraint baseColumnNames="responseId" baseTableName="SocialNetworkPost" constraintName="FK_jne5eo8utynum81xg4aqy0hrf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetworkResponse"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-42">
+        <addForeignKeyConstraint baseColumnNames="statusId" baseTableName="Event" constraintName="FK_k36tqgwfjktnb9e4nbca9b6ly" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="EventStatus"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-43">
+        <addForeignKeyConstraint baseColumnNames="functionalityId" baseTableName="OrganizationPrivilege" constraintName="FK_k8naxdvq3qaf6j1wllac0mb4w" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="OrganizationFuncionality"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-44">
+        <addForeignKeyConstraint baseColumnNames="eventId" baseTableName="SocialNetworkRequest" constraintName="FK_l0qn6ej6ji2ss2m7g5wtrf4co" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="Event"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-45">
+        <addForeignKeyConstraint baseColumnNames="searchCriteriaId" baseTableName="SocialNetworkRequest" constraintName="FK_lg87qdi6e5kuafkhg4fao7p3d" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SearchCriteria"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-46">
+        <addForeignKeyConstraint baseColumnNames="statusId" baseTableName="OrganizationMember" constraintName="FK_m40d6h10uchwfqnxsrinlulmn" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="GenericStatus"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-47">
+        <addForeignKeyConstraint baseColumnNames="socialNetworkId" baseTableName="SocialNetworkPost" constraintName="FK_mhp587tpiium47whcbr4rsdfx" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetwork"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-48">
+        <addForeignKeyConstraint baseColumnNames="socialNetworkId" baseTableName="SearchCriteria" constraintName="FK_ny9fak3blwg8k5m5vy38kffch" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetwork"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-49">
+        <addForeignKeyConstraint baseColumnNames="userId" baseTableName="OrganizationMember" constraintName="FK_qyxk2yfjk6i25yavkt0gnufao" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="JHI_USER"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-50">
+        <addForeignKeyConstraint baseColumnNames="monitorContactId" baseTableName="TemporalAccess" constraintName="FK_r30voepxbyfrvj44cyax6r79l" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="MonitorContact"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-51">
+        <addForeignKeyConstraint baseColumnNames="roleId" baseTableName="OrganizationMember" constraintName="FK_sutaged7rxkbi86v70jiwxjr8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="OrganizationRole"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-52">
+        <addForeignKeyConstraint baseColumnNames="socialNetworkId" baseTableName="SocialNetworkEndpoint" constraintName="FK_t9fqv7fe61s8k8lrjst4brhj1" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="SocialNetwork"/>
+    </changeSet>
+    <changeSet author="esteban" id="1436492119137-53">
+        <addForeignKeyConstraint baseColumnNames="roleId" baseTableName="OrganizationPrivilege" constraintName="FK_tja16ls5ee0niwq0dqldi9j3v" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="OrganizationRole"/>
+    </changeSet>
+</databaseChangeLog>
