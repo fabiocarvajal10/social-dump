@@ -14,14 +14,14 @@ async:
     queueCapacity: 10000
 
 mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.gmail.com
+    port: 587
+    username: noreply.socialdump@gmail.com
+    password: socialdumpFEF
     protocol: smtp
-    tls: false
-    auth: false
-    from: socialdump@localhost
+    tls: true
+    auth: true
+    from: noreply.socialdump@gmail.com
 
 authentication:
     xauth:

@@ -1,122 +1,114 @@
 <div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h1>Registration</h1>
+            <h1> Social Dump </h1>
+            <h3> {{ msgState }} </h3>
 
             <div class="alert alert-success" ng-show="success">
-                <strong>Registration saved!</strong> Please check your email for confirmation.
+                <strong>Se ha creado su cuenta, </strong> por favor revise su correo electrónico para finalizar la activación.
             </div>
 
             <div class="alert alert-danger" ng-show="error">
-                <strong>Registration failed!</strong> Please try again later.
+                <strong>El registro falló, </strong> por favor intentarlo en otro momento.
             </div>
 
             <div class="alert alert-danger" ng-show="errorUserExists">
-                <strong>Login name already registered!</strong> Please choose another one.
+                <strong>El nombre de usuario ya se encuentra en uso, </strong> por favor ingresar otro.
             </div>
 
             <div class="alert alert-danger" ng-show="errorEmailExists">
-                <strong>E-mail is already in use!</strong> Please choose another one.
-            </div>
-
-            <div class="alert alert-danger" ng-show="doNotMatch">
-                The password and its confirmation do not match!
+                <strong>El correo electrónico ya se encuentra en uso, </strong> por favor ingresar otro.
             </div>
 
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
-
                 <div class="form-group">
-                    <label>Login</label>
-                    <input type="text" class="form-control" name="login" placeholder="Your login"
-                           ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
-                    <div ng-show="form.login.$dirty && form.login.$invalid">
-                        <p class="help-block"
-                               ng-show="form.login.$error.required">
-                            Your login is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.login.$error.minlength">
-                            Your login is required to be at least 1 character.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.login.$error.maxlength">
-                            Your login cannot be longer than 50 characters.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.login.$error.pattern">
-                            Your login can only contain lower-case letters and digits.
-                    </p>
+                    <label> Nombre </label>
+                    <input type="text" class="form-control" name="firstName" placeholder="Nombre"
+                           ng-model="registerAccount.firstName" required>
+                    <div class="has-error" ng-messages="form.firstName.$error" ng-show="form.firstName.$touched">
+                        <label class="control-label" ng-message="required"> Debe ingresar un nombre </label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" class="form-control" name="email" placeholder="Your e-mail"
-                           ng-model="registerAccount.email" ng-minlength=5 ng-maxlength=100 required>
-                    <div ng-show="form.email.$dirty && form.email.$invalid">
-                        <p class="help-block"
-                               ng-show="form.email.$error.required">
-                            Your e-mail is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.email">
-                            Your e-mail is invalid.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.minlength">
+                    <label> Apellidos </label>
+                    <input type="text" class="form-control" name="lastName" placeholder="Apellidos"
+                           ng-model="registerAccount.lastName" required>
+                    <div class="has-error" ng-messages="form.lastName.$error" ng-show="form.lastName.$touched">
+                        <label class="control-label" ng-message="required"> Debe ingresar unos apellidos </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label> Nombre de usuario </label>
+                    <input type="text" class="form-control" name="login" placeholder="Nombre de usuario"
+                           ng-model="registerAccount.login" ng-minlength="3" ng-maxlength="50" ng-pattern="/^[a-z0-9]*$/" required>
+                    <div class="has-error" ng-messages="form.login.$error" ng-show="form.login.$touched">
+                        <label class="control-label" ng-message="required">
+                          Debe ingresar un nombre de usuario
+                        </label>
+                        <label class="control-label" ng-message="minlength">
+                          El nombre de usuario debe tener como mínimo 3 caracteres
+                        </label>
+                        <label class="control-label" ng-message="maxlength">
+                          El nombre de usuario debe tener como máximo 50 caracteres
+                        </label>
+                        <label class="control-label" ng-message="pattern">
+                          El nombre de usuario solo puede tener minúsculas y números
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label> Correo electrónico </label>
+                    <input type="email" class="form-control" name="email" placeholder="Correo electrónico"
+                           ng-model="registerAccount.email" ng-minlength="5" ng-maxlength="100" required>
+                    <div class="has-error" ng-messages="form.email.$error" ng-show="form.email.$touched">
+                        <label class="control-label" ng-message="required">
+                          Debe ingresar un correo electrónico
+                        </label>
+                        <label class="control-label" ng-message="email">
+                          El correo electrónico ingresado no es válido
+                        </label>
+                        <!--<label class="control-label" ng-message="minlength">
                             Your e-mail is required to be at least 5 characters.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.maxlength">
+                        </label>
+                        <label class="control-label" ng-message="maxlength">
                             Your e-mail cannot be longer than 100 characters.
-                        </p>
+                        </label>-->
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>New password</label>
-                    <input type="password" class="form-control" name="password" placeholder="New password"
+                    <label> Contraseña </label>
+                    <input type="password" class="form-control" name="password" placeholder="Contraseña"
                            ng-model="registerAccount.password" ng-minlength=5 ng-maxlength=50 required>
-                    <div ng-show="form.password.$dirty && form.password.$invalid">
-                        <p class="help-block"
-                               ng-show="form.password.$error.required">
-                            Your password is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.password.$error.minlength">
-                            Your password is required to be at least 5 characters.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.password.$error.maxlength">
-                            Your password cannot be longer than 50 characters.
-                        </p>
+                    <div class="has-error" ng-messages="form.password.$error" ng-show="form.password.$touched">
+                        <label class="control-label" ng-message="required"> Debe ingresar una contraseña </label>
+                        <label class="control-label" ng-message="minlength">
+                          La contraseña debe tener como mínimo 5 caracteres
+                        </label>
+                        <label class="control-label" ng-message="maxlength">
+                          La contraseña debe tener como máximo 50 caracteres                            
+                        </label>
                     </div>
-                    <password-strength-bar password-to-check="registerAccount.password"></password-strength-bar>
                 </div>
                 <div class="form-group">
-                    <label>New password confirmation</label>
-                    <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm the new password"
+                    <label> Confirmar contraseña </label>
+                    <input type="password" class="form-control" name="confirmPassword" placeholder="Confirmar contraseña"
                            ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
-                    <div ng-show="form.confirmPassword.$dirty && form.confirmPassword.$invalid">
-                        <p class="help-block"
-                               ng-show="form.confirmPassword.$error.required">
-                            Your confirmation password is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.confirmPassword.$error.minlength">
-                            Your confirmation password is required to be at least 5 characters.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.confirmPassword.$error.maxlength">
-                            Your confirmation password cannot be longer than 50 characters.
-                        </p>
+                    <div class="has-error" ng-messages="form.confirmPassword.$error" ng-show="form.confirmPassword.$touched">
+                        <label class="control-label" ng-message="required"> Debe confirmar la contraseña </label>
+                        <label class="control-label" ng-message="minlength">
+                          La confirmación de contraseña debe tener como mínimo 5 caracteres
+                        </label>
+                        <label class="control-label" ng-message="maxlength">
+                          La confirmación de contraseña debe tener como máximo 50 caracteres                            
+                        </label>
+                        <label class="control-label" ng-show="form.confirmPassword.$valid && validatePasswords()"> 
+                          Las contraseñas no coinciden </label>
                     </div>
                 </div>
 
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Register</button>
+                <button type="submit" ng-disabled="form.$invalid || validatePasswords()" class="btn btn-primary"> Crear Cuenta </button>
             </form>
             <p></p>
-            <div class="alert alert-warning">
-                If you want to <a href="#/login">authenticate</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
-            </div>
         </div>
     </div>
 </div>
