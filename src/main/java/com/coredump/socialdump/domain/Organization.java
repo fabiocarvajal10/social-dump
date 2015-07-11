@@ -15,9 +15,9 @@ public class Organization implements Serializable {
   private String name;
   private Timestamp createdAt;
   private Collection<Event> eventsById;
-  private Collection<MonitorContact> monitorContacts;
-  private User owner;
-  private Collection<OrganizationMember> organizationMembers;
+  private Collection<MonitorContact> monitorContactsById;
+  private User userByOwnerId;
+  private Collection<OrganizationMember> organizationMembersById;
 
   @Id
   @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
@@ -25,7 +25,7 @@ public class Organization implements Serializable {
   public long getId() {
     return id;
   }
-
+  
   public void setId(long id) {
     this.id = id;
   }
@@ -91,29 +91,29 @@ public class Organization implements Serializable {
 
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<MonitorContact> getMonitorContactsById() {
-    return monitorContacts;
+    return monitorContactsById;
   }
 
-  public void setMonitorContactsById(Collection<MonitorContact> monitorContacts) {
-    this.monitorContacts = monitorContacts;
+  public void setMonitorContactsById(Collection<MonitorContact> monitorContactsById) {
+    this.monitorContactsById = monitorContactsById;
   }
 
   @ManyToOne
   @JoinColumn(name = "ownerId", referencedColumnName = "id", nullable = false)
-  public User getownerId() {
-    return owner;
+  public User getUserByOwnerId() {
+    return userByOwnerId;
   }
 
-  public void setownerId(User owner) {
-    this.owner = owner;
+  public void setUserByOwnerId(User userByOwnerId) {
+    this.userByOwnerId = userByOwnerId;
   }
 
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<OrganizationMember> getOrganizationMembersById() {
-    return organizationMembers;
+    return organizationMembersById;
   }
 
-  public void setOrganizationMembersById(Collection<OrganizationMember> organizationMembers) {
-    this.organizationMembers = organizationMembers;
+  public void setOrganizationMembersById(Collection<OrganizationMember> organizationMembersById) {
+    this.organizationMembersById = organizationMembersById;
   }
 }
