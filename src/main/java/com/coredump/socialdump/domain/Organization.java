@@ -1,10 +1,10 @@
 package com.coredump.socialdump.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 /**
  * Created by fabio on 09/07/15.
@@ -22,40 +22,53 @@ public class Organization implements Serializable {
   @Id
   @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public long getId() { return id; }
+  public long getId() {
+    return id;
+  }
+
   public void setId(long id) {
-      this.id = id;
+    this.id = id;
   }
 
   @Basic
   @Column(name = "name", length = 100, nullable = false, unique = true)
   @Size(max = 100)
   public String getName() {
-      return name;
+    return name;
   }
 
   public void setName(String name) {
-      this.name = name;
+    this.name = name;
   }
 
   @Basic
   @Column(name = "createdAt", nullable = false)
   public Timestamp getCreatedAt() {
-      return createdAt;
+    return createdAt;
   }
 
   public void setCreatedAt(Timestamp createdAt) {
-      this.createdAt = createdAt;
+    this.createdAt = createdAt;
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Organization that = (Organization) o;
-    if (id != that.id) return false;
-    if (name != null ? !name.equals(that.name) : that.name != null) return false;
-    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+    Organization that = (Organization) object;
+    if (id != that.id) {
+      return false;
+    }
+    if (name != null ? !name.equals(that.name) : that.name != null) {
+      return false;
+    }
+    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) {
+      return false;
+    }
     return true;
   }
 
@@ -69,38 +82,38 @@ public class Organization implements Serializable {
 
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<Event> getEventsById() {
-      return eventsById;
+    return eventsById;
   }
 
   public void setEventsById(Collection<Event> eventsById) {
-      this.eventsById = eventsById;
+    this.eventsById = eventsById;
   }
 
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<MonitorContact> getMonitorContactsById() {
-      return monitorContacts;
+    return monitorContacts;
   }
 
   public void setMonitorContactsById(Collection<MonitorContact> monitorContacts) {
-      this.monitorContacts = monitorContacts;
+    this.monitorContacts = monitorContacts;
   }
 
   @ManyToOne
   @JoinColumn(name = "ownerId", referencedColumnName = "id", nullable = false)
   public User getownerId() {
-      return owner;
+    return owner;
   }
 
   public void setownerId(User owner) {
-      this.owner = owner;
+    this.owner = owner;
   }
 
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<OrganizationMember> getOrganizationMembersById() {
-      return organizationMembers;
+    return organizationMembers;
   }
 
   public void setOrganizationMembersById(Collection<OrganizationMember> organizationMembers) {
-      this.organizationMembers = organizationMembers;
+    this.organizationMembers = organizationMembers;
   }
 }
