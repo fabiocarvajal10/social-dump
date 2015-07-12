@@ -80,10 +80,9 @@ public class OrganizationResource {
           throws URISyntaxException, NullPointerException {
     log.debug("REST request to update Organization name: ", name);
     Organization organization;
-    try {
-      organization = organizationRepository.findOne(id);
-    } catch (Exception e) {
-      throw new NullPointerException("Organization not found");
+    organization = organizationRepository.findOne(id);
+    if(organization == null){
+      return ResponseEntity.notFound().build();
     }
     organization.setName(name);
     organizationRepository.save(organization);
