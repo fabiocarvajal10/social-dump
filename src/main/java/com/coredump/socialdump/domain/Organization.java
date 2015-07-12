@@ -1,10 +1,18 @@
 package com.coredump.socialdump.domain;
 
+import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
+import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+
 
 /**
  * Created by fabio on 09/07/15.
@@ -13,7 +21,7 @@ import javax.validation.constraints.Size;
 public class Organization implements Serializable {
   private long id;
   private String name;
-  private Timestamp createdAt;
+  private DateTime createdAt;
   private Collection<Event> eventsById;
   private Collection<MonitorContact> monitorContactsById;
   private User userByOwnerId;
@@ -41,13 +49,15 @@ public class Organization implements Serializable {
     this.name = name;
   }
 
-  @Basic
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @JsonSerialize(using = CustomDateTimeSerializer.class)
+  @JsonDeserialize(using = CustomDateTimeDeserializer.class)
   @Column(name = "createdAt", nullable = false)
-  public Timestamp getCreatedAt() {
+  public DateTime getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(Timestamp createdAt) {
+  public void setCreatedAt(DateTime createdAt) {
     this.createdAt = createdAt;
   }
 
@@ -80,6 +90,7 @@ public class Organization implements Serializable {
     return result;
   }
 
+  @JsonIgnore
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<Event> getEventsById() {
     return eventsById;
@@ -89,6 +100,7 @@ public class Organization implements Serializable {
     this.eventsById = eventsById;
   }
 
+  @JsonIgnore
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<MonitorContact> getMonitorContactsById() {
     return monitorContactsById;
@@ -98,6 +110,7 @@ public class Organization implements Serializable {
     this.monitorContactsById = monitorContactsById;
   }
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "ownerId", referencedColumnName = "id", nullable = false)
   public User getUserByOwnerId() {
@@ -108,6 +121,7 @@ public class Organization implements Serializable {
     this.userByOwnerId = userByOwnerId;
   }
 
+  @JsonIgnore
   @OneToMany(mappedBy = "organizationByOrganizationId")
   public Collection<OrganizationMember> getOrganizationMembersById() {
     return organizationMembersById;
