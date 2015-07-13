@@ -81,7 +81,7 @@ public class OrganizationResource {
     log.debug("REST request to update Organization name: ", name);
     Organization organization;
     organization = organizationRepository.findOne(id);
-    if(organization == null){
+    if (organization == null) {
       return ResponseEntity.notFound().build();
     }
     organization.setName(name);
@@ -103,8 +103,9 @@ public class OrganizationResource {
           @RequestParam(value = "per_page", required = false) Integer limit)
           throws URISyntaxException {
 
+
     Page<Organization> page = organizationRepository
-            .findAll(PaginationUtil.generatePageRequest(offset, limit));
+            .findAllForCurrentUser(PaginationUtil.generatePageRequest(offset, limit));
 
     HttpHeaders headers = PaginationUtil
             .generatePaginationHttpHeaders(page, "/api/organizations", offset, limit);

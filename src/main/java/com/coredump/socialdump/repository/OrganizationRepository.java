@@ -1,6 +1,9 @@
 package com.coredump.socialdump.repository;
 
+
 import com.coredump.socialdump.domain.Organization;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 
 import java.util.List;
@@ -10,5 +13,5 @@ import java.util.List;
  */
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
   @Query("select organization from Organization organization where organization.userByOwnerId.login = ?#{principal.username}")
-  List<Organization> findAllForCurrentUser();
+  Page<Organization> findAllForCurrentUser(Pageable pageable);
 }
