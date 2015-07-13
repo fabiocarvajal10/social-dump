@@ -15,37 +15,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 @RestController
 @RequestMapping("/api")
 public class UserXAuthTokenController {
 
-    @Inject
-    private TokenProvider tokenProvider;
+  @Inject
+  private TokenProvider tokenProvider;
 
-    @Inject
-    private AuthenticationManager authenticationManager;
+  @Inject
+  private AuthenticationManager authenticationManager;
 
-    @Inject
-    private UserDetailsService userDetailsService;
+  @Inject
+  private UserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/authenticate",
-            method = RequestMethod.POST)
-    @Timed
-    public Token authorize(@RequestParam String username,
-                           @RequestParam String password) {
+  @RequestMapping(value = "/authenticate",
+      method = RequestMethod.POST)
+  @Timed
+  public Token authorize(@RequestParam String username,
+                         @RequestParam String password) {
 
-        UsernamePasswordAuthenticationToken token =
-            new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication =
-            this.authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetails details =
-            this.userDetailsService.loadUserByUsername(username);
+    UsernamePasswordAuthenticationToken token =
+        new UsernamePasswordAuthenticationToken(username, password);
+    Authentication authentication =
+        this.authenticationManager.authenticate(token);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    UserDetails details =
+        this.userDetailsService.loadUserByUsername(username);
 
-        return tokenProvider.createToken(details);
-    }
+    return tokenProvider.createToken(details);
+
+  }
 }
