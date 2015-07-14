@@ -6,7 +6,7 @@ import com.coredump.socialdump.domain.EventStatus;
 import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
-import com.coredump.socialdump.repository.OrganizationRepository;
+import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
@@ -45,7 +45,7 @@ public class EventResource{
   private EventStatusRepository statusRepository;
 
   @Inject
-  private OrganizationRepository organizationRepository;
+  private OrganizationService organizationService;
 
   @Inject
   private EventMapper eventMapper;
@@ -66,7 +66,8 @@ public class EventResource{
     }
     Event event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
-    return ResponseEntity.created(new URI("/api/events/" + eventDTO.getId())) .build();
+    return ResponseEntity.created(new URI("/api/events/"
+            + eventDTO.getId())) .build();
   }
 
   /**
@@ -78,12 +79,27 @@ public class EventResource{
   @Timed
   public ResponseEntity<Void> update(@Valid @RequestBody EventDTO eventDTO)
           throws URISyntaxException {
-    log.debug("REST request to update Event {}: ", eventDTO.toString());
+    log.debug("REST request to update Event {}: ",
+            eventDTO.toString());
+
     Event event;
     event = eventRepository.findOne(eventDTO.getId());
+
     if (event == null) {
       return ResponseEntity.notFound().build();
     }
+
+    Organization organization = organizationService
+            .ownsOrganization(event
+                    .getOrganizationByOrganizationId()
+                    .getId());
+
+    if ( organization == null) {
+      return ResponseEntity.status(403).build();
+    }
+
+
+
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
 
@@ -104,7 +120,7 @@ public class EventResource{
           @Valid @RequestParam(value = "organizationId") Long orgId)
           throws URISyntaxException {
 
-    Organization organization = ownsOrganization(orgId);
+    Organization organization = organizationService.ownsOrganization(orgId);
     if ( organization == null) {
       return ResponseEntity.status(403).body(null);
     }
@@ -119,7 +135,8 @@ public class EventResource{
 
     return new ResponseEntity<>(page.getContent().stream()
             .map(eventMapper::eventToEventDTO)
-            .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);
+            .collect(Collectors
+                    .toCollection(LinkedList::new)), headers, HttpStatus.OK);
   }
 
   /**
@@ -129,17 +146,20 @@ public class EventResource{
           method = RequestMethod.GET,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<EventDTO> get(@Valid @PathVariable @RequestParam("id") Long id) {
+  public ResponseEntity<EventDTO> get(@Valid @PathVariable Long id) {
     log.debug("REST request to get Event : {}", id);
 
     Event event = eventRepository.findOne(id);
-
 
     if (event == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    Organization organization = ownsOrganization(event.getOrganizationByOrganizationId().getId());
+    Organization organization = organizationService
+            .ownsOrganization(event
+                    .getOrganizationByOrganizationId()
+                    .getId());
+
     if ( organization == null) {
       return ResponseEntity.status(403).body(null);
     }
@@ -168,24 +188,24 @@ public class EventResource{
       return ResponseEntity.notFound().build();
     }
 
-    Organization organization = ownsOrganization(event.getOrganizationByOrganizationId().getId());
+    Organization organization = organizationService
+            .ownsOrganization(event
+                    .getOrganizationByOrganizationId()
+                    .getId());
+
     if ( organization == null) {
       return ResponseEntity.status(403).build();
     }
 
-    EventStatus status = statusRepository.findOneByStatus("Cancelado");
+    EventStatus status = statusRepository
+            .findOneByStatus("Cancelado");
+
     event.setEventStatusByStatusId(status);
     eventRepository.save(event);
     return ResponseEntity.ok().build();
   }
 
-  private Organization ownsOrganization(Long orgId) {
-    Organization organization = organizationRepository.findOneForCurrentAndById(orgId);
-    if (organization != null) {
-      return organization;
-    }
-    return null;
-  }
+
   
   
 }

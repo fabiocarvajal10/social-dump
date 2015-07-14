@@ -3,6 +3,7 @@ package com.coredump.socialdump.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.OrganizationRepository;
+import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.OrganizationDTO;
 import com.coredump.socialdump.web.rest.mapper.OrganizationMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
@@ -45,7 +46,11 @@ public class OrganizationResource {
   private OrganizationRepository organizationRepository;
 
   @Inject
+  private OrganizationService organizationService;
+
+  @Inject
   private OrganizationMapper organizationMapper;
+
 
   /**
    * POST  /organizations -> Create a new organization.
@@ -56,16 +61,25 @@ public class OrganizationResource {
   @Timed
   public ResponseEntity<Void> create(@Valid @RequestBody OrganizationDTO organizationDTO)
           throws URISyntaxException {
-    log.debug("REST request to save Organization : {}", organizationDTO.toString());
+
+    log.debug("REST request to save Organization : {}",
+            organizationDTO.toString());
+
     if (organizationDTO.getId() != null) {
       return ResponseEntity.badRequest()
-              .header("Failure", "A new organization cannot already have an ID").build();
+              .header("Failure",
+                      "A new organization cannot already have an ID")
+              .build();
     }
     organizationDTO.setCreatedAt(DateTime.now());
-    Organization organization = organizationMapper.organizationDTOToOrganization(organizationDTO);
+
+    Organization organization = organizationMapper
+            .organizationDTOToOrganization(organizationDTO);
+
     organizationRepository.save(organization);
 
-    return ResponseEntity.created(new URI("/api/organizations/" + organizationDTO.getId())).build();
+    return ResponseEntity.created(new URI("/api/organizations/"
+            + organizationDTO.getId())).build();
   }
 
   /**
@@ -79,11 +93,12 @@ public class OrganizationResource {
                                      @RequestParam("name") String name)
           throws URISyntaxException, NullPointerException {
     log.debug("REST request to update Organization name: ", name);
-    Organization organization;
-    organization = organizationRepository.findOne(id);
+
+    Organization organization = organizationService.ownsOrganization(id);
     if (organization == null) {
       return ResponseEntity.notFound().build();
     }
+
     organization.setName(name);
     organizationRepository.save(organization);
 
@@ -103,12 +118,15 @@ public class OrganizationResource {
           @RequestParam(value = "per_page", required = false) Integer limit)
           throws URISyntaxException {
 
-
     Page<Organization> page = organizationRepository
-            .findAllForCurrentUser(PaginationUtil.generatePageRequest(offset, limit));
+            .findAllForCurrentUser(PaginationUtil
+                    .generatePageRequest(offset, limit));
 
     HttpHeaders headers = PaginationUtil
-            .generatePaginationHttpHeaders(page, "/api/organizations", offset, limit);
+            .generatePaginationHttpHeaders(page,
+                    "/api/organizations",
+                    offset,
+                    limit);
 
     return new ResponseEntity<>(page.getContent().stream()
             .map(organizationMapper::organizationToOrganizationDTO)
@@ -124,7 +142,13 @@ public class OrganizationResource {
   @Timed
   public ResponseEntity<OrganizationDTO> get(@PathVariable Long id) {
     log.debug("REST request to get Organization : {}", id);
-    return Optional.ofNullable(organizationRepository.findOne(id))
+
+    Organization organization = organizationService.ownsOrganization(id);
+    if ( organization == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    return Optional.ofNullable(organization)
             .map(organizationMapper::organizationToOrganizationDTO)
             .map(organizationDTO -> new ResponseEntity<>(
                     organizationDTO,
@@ -139,8 +163,15 @@ public class OrganizationResource {
           method = RequestMethod.DELETE,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public void delete(@PathVariable Long id) {
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
     log.debug("REST request to delete Organization : {}", id);
+
+    Organization organization = organizationService.ownsOrganization(id);
+    if ( organization == null) {
+      return ResponseEntity.notFound().build();
+    }
+
     organizationRepository.delete(id);
+    return ResponseEntity.ok().build();
   }
 }
