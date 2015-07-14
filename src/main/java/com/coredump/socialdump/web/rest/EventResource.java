@@ -6,6 +6,7 @@ import com.coredump.socialdump.domain.EventStatus;
 import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
+import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
@@ -50,6 +51,9 @@ public class EventResource{
   @Inject
   private EventMapper eventMapper;
 
+  @Inject
+  private EventService eventService;
+
   /**
    * POST /events -> Create a new event.
    */
@@ -66,6 +70,7 @@ public class EventResource{
     }
     Event event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
+    eventService.scheduleFetch(event);
     return ResponseEntity.created(new URI("/api/events/"
             + eventDTO.getId())) .build();
   }
@@ -206,6 +211,6 @@ public class EventResource{
   }
 
 
-  
-  
+
+
 }
