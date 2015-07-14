@@ -86,8 +86,9 @@ public class OrganizationDTO  implements Serializable {
 
     OrganizationDTO organizationDTO = (OrganizationDTO) object;
 
-    if ( ! Objects.equals(id, organizationDTO.id)) return false;
-
+    if ( ! Objects.equals(id, organizationDTO.id)) {
+      return false;
+    }
     return true;
   }
 

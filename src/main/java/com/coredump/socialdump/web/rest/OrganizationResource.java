@@ -56,7 +56,7 @@ public class OrganizationResource {
   @Timed
   public ResponseEntity<Void> create(@Valid @RequestBody OrganizationDTO organizationDTO)
           throws URISyntaxException {
-    log.debug("REST request to save Organization : {}", organizationDTO);
+    log.debug("REST request to save Organization : {}", organizationDTO.toString());
     if (organizationDTO.getId() != null) {
       return ResponseEntity.badRequest()
               .header("Failure", "A new organization cannot already have an ID").build();

@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
@@ -19,7 +20,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class Organization implements Serializable {
-  private long id;
+  private Long id;
   private String name;
   private DateTime createdAt;
   private Collection<Event> eventsById;
@@ -30,11 +31,11 @@ public class Organization implements Serializable {
   @Id
   @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public long getId() {
+  public Long getId() {
     return id;
   }
   
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -59,35 +60,6 @@ public class Organization implements Serializable {
 
   public void setCreatedAt(DateTime createdAt) {
     this.createdAt = createdAt;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
-    if (object == null || getClass() != object.getClass()) {
-      return false;
-    }
-    Organization that = (Organization) object;
-    if (id != that.id) {
-      return false;
-    }
-    if (name != null ? !name.equals(that.name) : that.name != null) {
-      return false;
-    }
-    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) {
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + (name != null ? name.hashCode() : 0);
-    result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-    return result;
   }
 
   @JsonIgnore
@@ -129,5 +101,31 @@ public class Organization implements Serializable {
 
   public void setOrganizationMembersById(Collection<OrganizationMember> organizationMembersById) {
     this.organizationMembersById = organizationMembersById;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+    Organization that = (Organization) object;
+    if (id.equals(that.getId())) {
+      return false;
+    }
+    if (name != null ? !name.equals(that.name) : that.name != null) {
+      return false;
+    }
+    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }
