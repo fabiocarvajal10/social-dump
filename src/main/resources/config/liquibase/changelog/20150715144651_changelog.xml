@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet author="esteban (generated)" id="1436993305726-1">
+        <dropForeignKeyConstraint baseTableName="SocialNetworkPost" constraintName="FK_433jxurmam4nkt14053hplpds"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-2">
+        <dropForeignKeyConstraint baseTableName="SocialNetworkRequest" constraintName="FK_8x3prdt8an0drr6c35c7d68f0"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-3">
+        <dropForeignKeyConstraint baseTableName="SocialNetworkResponse" constraintName="FK_hkmoqkqd1p8rsqq266k6oha16"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-4">
+        <dropForeignKeyConstraint baseTableName="SocialNetworkPost" constraintName="FK_jne5eo8utynum81xg4aqy0hrf"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-5">
+        <dropForeignKeyConstraint baseTableName="SocialNetworkRequest" constraintName="FK_l0qn6ej6ji2ss2m7g5wtrf4co"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-6">
+        <dropForeignKeyConstraint baseTableName="SocialNetworkRequest" constraintName="FK_lg87qdi6e5kuafkhg4fao7p3d"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-7">
+        <dropForeignKeyConstraint baseTableName="SocialNetworkEndpoint" constraintName="FK_t9fqv7fe61s8k8lrjst4brhj1"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-8">
+        <dropUniqueConstraint constraintName="UC_SOCIALNETWORKENDPOINTENDPOINT_COL" tableName="SocialNetworkEndpoint"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-9">
+        <dropUniqueConstraint constraintName="UC_SOCIALNETWORKENDPOINTHTTPMETHOD_COL" tableName="SocialNetworkEndpoint"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-10">
+        <dropTable tableName="SocialNetworkEndpoint"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-11">
+        <dropTable tableName="SocialNetworkRequest"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-12">
+        <dropTable tableName="SocialNetworkResponse"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-13">
+        <dropColumn columnName="requestId" tableName="SocialNetworkPost"/>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1436993305726-14">
+        <dropColumn columnName="responseId" tableName="SocialNetworkPost"/>
+    </changeSet>
+</databaseChangeLog>
