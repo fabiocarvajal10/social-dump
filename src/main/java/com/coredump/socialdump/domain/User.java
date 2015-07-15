@@ -1,17 +1,16 @@
 package com.coredump.socialdump.domain;
 
-    import com.fasterxml.jackson.annotation.JsonIgnore;
-    import org.hibernate.validator.constraints.Email;
-    import javax.persistence.*;
-    import org.hibernate.annotations.Type;
-    import javax.validation.constraints.NotNull;
-    import javax.validation.constraints.Pattern;
-    import javax.validation.constraints.Size;
-    import java.io.Serializable;
-    import java.util.HashSet;
-    import java.util.Set;
-
-    import org.joda.time.DateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Email;
+import org.joda.time.DateTime;
 
 /**
  * A user.

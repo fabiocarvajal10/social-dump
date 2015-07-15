@@ -4,14 +4,13 @@ import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
 import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 
 /**
@@ -29,8 +28,6 @@ public class Event implements Serializable {
   private EventStatus eventStatusByStatusId;
   private EventType eventTypeByEventTypeId;
   private Collection<SearchCriteria> searchCriteriasById;
-  private Collection<SocialNetworkPost> socialNetworkPostsById;
-  private Collection<SocialNetworkRequest> socialNetworkRequestsById;
   private Collection<TemporalAccess> temporalAccessesById;
 
   @Id
@@ -53,7 +50,7 @@ public class Event implements Serializable {
   }
 
   public void setStartDate(DateTime startDate) {
-    this.startDate = startDate; 
+    this.startDate = startDate;
   }
 
   @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -138,25 +135,6 @@ public class Event implements Serializable {
 
   public void setSearchCriteriasById(Collection<SearchCriteria> searchCriteriasById) {
     this.searchCriteriasById = searchCriteriasById;
-  }
-
-  @OneToMany(mappedBy = "eventByEventId")
-  public Collection<SocialNetworkPost> getSocialNetworkPostsById() {
-    return socialNetworkPostsById;
-  }
-
-  public void setSocialNetworkPostsById(Collection<SocialNetworkPost> socialNetworkPostsById) {
-    this.socialNetworkPostsById = socialNetworkPostsById;
-  }
-
-  @OneToMany(mappedBy = "eventByEventId")
-  public Collection<SocialNetworkRequest> getSocialNetworkRequestsById() {
-    return socialNetworkRequestsById;
-  }
-
-  public void setSocialNetworkRequestsById(
-          Collection<SocialNetworkRequest> socialNetworkRequestsById) {
-    this.socialNetworkRequestsById = socialNetworkRequestsById;     
   }
 
   @OneToMany(mappedBy = "eventByEventId")
