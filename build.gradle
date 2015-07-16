@@ -131,6 +131,7 @@ dependencies {
     compile 'org.springframework.social:spring-social-web:1.1.0.RELEASE'
     compile 'org.springframework.social:spring-social-facebook:2.0.1.RELEASE'
     compile 'org.springframework.social:spring-social-twitter:1.1.0.RELEASE'
+    compile 'com.sachinhandiekar:jInstagram:1.0.10'
 
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path'

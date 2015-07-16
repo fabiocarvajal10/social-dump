@@ -3,8 +3,14 @@ package com.coredump.socialdump.service;
 import com.google.common.collect.Iterables;
 
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.domain.SocialNetwork;
 
+import org.joda.time.DateTime;
+import org.joda.time.Minutes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
@@ -14,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -26,43 +33,45 @@ import javax.inject.Inject;
 @Service
 public class FetchExecutorService {
 
-  //@Inject
-  //private ScheduledExecutorFactoryBean scheduledExecutorFactoryBean;
+  private final Logger log = LoggerFactory.getLogger(FetchExecutorService.class);
+
   @Inject
-  private FetchableInterface twitterFetch;
+  private SocialNetworkBeanFactory socialNetworkFetchFactory;
+
+  private ScheduledExecutorService scheduledExecutorService;
 
   public void scheduleFetch(Event event) {
-    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
-    // = new TwitterFetch(Iterables.get(event.getSearchCriteriasById(), 0));
-    //scheduledExecutorFactoryBean.setScheduledExecutorTasks(twitterFetch.);
-      //twitterFetch.setSearchCriteria(null);
-      twitterFetch.setSearchCriteria(Iterables.get(event.getSearchCriteriasById(), 0));
-      //twitterFetch.fetchPosts();
+    int searchCriteriaQ = event.getSearchCriteriasById().size();
+    scheduledExecutorService =
+        Executors.newScheduledThreadPool(searchCriteriaQ);
+    List<SearchCriteria> scList = (List) event.getSearchCriteriasById();
 
-    try {
-      System.out.println("Date...");
-      //Date date = new Date();
-      //SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-     // String formattedDate = sdf.format(date);
-    //  System.out.println(formattedDate);
-      scheduledExecutorService.schedule(twitterFetch, 5, TimeUnit.SECONDS);
-
-    } catch (Exception e) {
-      e.printStackTrace();
+    for (int i = 0; i < searchCriteriaQ; i++) {
+      try {
+        SearchCriteria searchCriteria = scList.get(i);
+        FetchableInterface socialNetworkFetch =
+            socialNetworkFetchFactory
+                .getSocialNetworkFetch(searchCriteria.getSocialNetworkBySocialNetworkId()
+                    .getName().toLowerCase());
+        log.debug("Search Criteria {}", searchCriteria.getSearchCriteria());
+        socialNetworkFetch.setSearchCriteria(scList.get(i));
+        addSchedule(socialNetworkFetch, event.getStartDate());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
-
   }
 
-  private long getEventStartDelay(Timestamp startDate) {
-    Date now = new Date();
+  private void addSchedule(FetchableInterface socialNetworkFetch, DateTime startDate) {
+    log.debug("Scheduling {}", getEventStartDelay(startDate));
+    scheduledExecutorService.schedule(socialNetworkFetch, 1, TimeUnit.SECONDS);
+  }
 
-    long millisecondsSd = startDate.getTime();
-    long millisecondsNow = now.getTime();
+  private long getEventStartDelay(DateTime startDate) {
+    DateTime now = DateTime.now();
+    Minutes diffMinutes = Minutes.minutesBetween(now, startDate);
 
-    long diff = millisecondsSd - millisecondsNow;
-    long diffMinutes = diff / (60 * 1000);
-
-    return new Long(1);
+    return diffMinutes.getMinutes();
   }
 
 }

@@ -9,8 +9,8 @@ import com.coredump.socialdump.domain.SocialNetworkPost;
 //¡Esta interfaz tiene un nombre un correcto!. O no [inserte nombre]?
 public interface FetchableInterface extends Runnable{
 
-    @Override
-    void run();
+  @Override
+  void run();
 
-    void setSearchCriteria(SearchCriteria searchCriteria);
+  void setSearchCriteria(SearchCriteria searchCriteria);
 }
