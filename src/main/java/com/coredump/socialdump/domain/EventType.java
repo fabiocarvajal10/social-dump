@@ -15,40 +15,40 @@ public class EventType implements Serializable {
   private String name;
   private String description;
   private Collection<Event> eventsById;
-  
+
   @Id
   @Column(name = "id", columnDefinition = "int(4) unsigned", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
   public Integer getId() {
     return id;
   }
-  
+
   public void setId(Integer id) {
     this.id = id;
   }
-  
+
   @Basic
   @Size(min = 1, max = 50)
   @Column(name = "name", length = 50, unique = true, nullable = false)
   public String getName() {
     return name;
   }
-  
+
   public void setName(String name) {
     this.name = name;
   }
-  
+
   @Basic
   @Size(min = 1, max = 100)
   @Column(name = "description", length = 100, nullable = false)
   public String getDescription() {
     return description;
   }
-  
+
   public void setDescription(String description) {
     this.description = description;
   }
-  
+
   @Override
   public boolean equals(Object object) {
     if (this == object) {
@@ -71,7 +71,7 @@ public class EventType implements Serializable {
     }
     return true;
   }
-  
+
   @Override
   public int hashCode() {
     int result = id;
