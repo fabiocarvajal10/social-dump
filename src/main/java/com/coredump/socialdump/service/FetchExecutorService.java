@@ -3,8 +3,13 @@ package com.coredump.socialdump.service;
 import com.google.common.collect.Iterables;
 
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.SocialNetwork;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -21,20 +26,25 @@ import javax.inject.Inject;
 @Service
 public class FetchExecutorService {
 
-  public FetchExecutorService() {
-
-  }
+  //@Inject
+  //private ScheduledExecutorFactoryBean scheduledExecutorFactoryBean;
+  @Inject
+  private FetchableInterface twitterFetch;
 
   public void scheduleFetch(Event event) {
     ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
-    TwitterFetch twitterFetch = new TwitterFetch(Iterables.get(event.getSearchCriteriasById(), 0));
+    // = new TwitterFetch(Iterables.get(event.getSearchCriteriasById(), 0));
+    //scheduledExecutorFactoryBean.setScheduledExecutorTasks(twitterFetch.);
+      //twitterFetch.setSearchCriteria(null);
+      twitterFetch.setSearchCriteria(Iterables.get(event.getSearchCriteriasById(), 0));
+      //twitterFetch.fetchPosts();
 
     try {
       System.out.println("Date...");
-      Date date = new Date();
-      SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-      String formattedDate = sdf.format(date);
-      System.out.println(formattedDate);
+      //Date date = new Date();
+      //SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+     // String formattedDate = sdf.format(date);
+    //  System.out.println(formattedDate);
       scheduledExecutorService.schedule(twitterFetch, 5, TimeUnit.SECONDS);
 
     } catch (Exception e) {
@@ -52,7 +62,7 @@ public class FetchExecutorService {
     long diff = millisecondsSd - millisecondsNow;
     long diffMinutes = diff / (60 * 1000);
 
-    return diffMinutes;
+    return new Long(1);
   }
 
 }
