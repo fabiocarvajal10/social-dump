@@ -13,6 +13,4 @@ public interface FetchableInterface extends Runnable{
     void run();
 
     void setSearchCriteria(SearchCriteria searchCriteria);
-
-    SocialNetworkPost processPost(Post<T> post);
 }
