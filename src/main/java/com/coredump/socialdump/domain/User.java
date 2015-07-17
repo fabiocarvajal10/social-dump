@@ -1,17 +1,15 @@
 package com.coredump.socialdump.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.Email;
-
-import javax.persistence.*;
-import org.hibernate.annotations.Type;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Email;
 import org.joda.time.DateTime;
 
 /**
@@ -33,8 +31,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @JsonIgnore
     @NotNull
-    @Size(min = 60, max = 60) 
-    @Column(length = 60)
+    @Size(min = 60, max = 60)
+    @Column(length = 60,name = "PASSWORD")
     private String password;
 
     @Size(max = 50)
@@ -73,9 +71,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "JHI_USER_AUTHORITY",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+        name = "JHI_USER_AUTHORITY",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     private Set<Authority> authorities = new HashSet<>();
 
     public Long getId() {
@@ -151,11 +149,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     }
 
     public DateTime getResetDate() {
-       return resetDate;
+        return resetDate;
     }
 
     public void setResetDate(DateTime resetDate) {
-       this.resetDate = resetDate;
+        this.resetDate = resetDate;
     }
 
     public String getLangKey() {
@@ -200,14 +198,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", activated='" + activated + '\'' +
-                ", langKey='" + langKey + '\'' +
-                ", activationKey='" + activationKey + '\'' +
-                "}";
+            "login='" + login + '\'' +
+            ", password='" + password + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", activated='" + activated + '\'' +
+            ", langKey='" + langKey + '\'' +
+            ", activationKey='" + activationKey + '\'' +
+            "}";
     }
 }

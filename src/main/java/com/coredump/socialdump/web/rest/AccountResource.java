@@ -49,14 +49,21 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
-    public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO
+                                        userDTO, HttpServletRequest request) {
         return userRepository.findOneByLogin(userDTO.getLogin())
-            .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
+            .map(user -> new ResponseEntity<>("login already in use",
+                HttpStatus.BAD_REQUEST))
             .orElseGet(() -> userRepository.findOneByEmail(userDTO.getEmail())
-                .map(user -> new ResponseEntity<>("e-mail address already in use", HttpStatus.BAD_REQUEST))
+                .map(user ->
+                    new ResponseEntity<>("e-mail address already in use",
+                                            HttpStatus.BAD_REQUEST))
                 .orElseGet(() -> {
-                    User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
-                    userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
+                    User user = userService
+                        .createUserInformation(userDTO.getLogin(),
+                            userDTO.getPassword(),
+                            userDTO.getFirstName(), userDTO.getLastName(),
+                            userDTO.getEmail().toLowerCase(),
                     userDTO.getLangKey());
                     String baseUrl = request.getScheme() + // "http"
                     "://" +                                // "://"
@@ -77,14 +84,16 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
+    public ResponseEntity<String> activateAccount(
+            @RequestParam(value = "key") String key) {
         return Optional.ofNullable(userService.activateRegistration(key))
             .map(user -> new ResponseEntity<String>(HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
-     * GET  /authenticate -> check if the user is authenticated, and return its login.
+     * GET  /authenticate -> check if the user is authenticated,
+     * and return its login.
      */
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.GET,
@@ -132,11 +141,13 @@ public class AccountResource {
             .findOneByLogin(userDTO.getLogin())
             .filter(u -> u.getLogin().equals(SecurityUtils.getCurrentLogin()))
             .map(u -> {
-                userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey());
+                userService.updateUserInformation(userDTO.getFirstName(),
+                        userDTO.getLastName(), userDTO.getEmail(),
+                        userDTO.getLangKey());
                 return new ResponseEntity<String>(HttpStatus.OK);
             })
-            .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+            .orElseGet(() -> new ResponseEntity<>(
+                HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
@@ -148,7 +159,8 @@ public class AccountResource {
     @Timed
     public ResponseEntity<?> changePassword(@RequestBody String password) {
         if (!checkPasswordLength(password)) {
-            return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Incorrect password",
+                HttpStatus.BAD_REQUEST);
         }
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -158,8 +170,9 @@ public class AccountResource {
         method = RequestMethod.POST,
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
-    public ResponseEntity<?> requestPasswordReset(@RequestBody String mail, HttpServletRequest request) {
-        
+    public ResponseEntity<?> requestPasswordReset(@RequestBody String mail,
+                                                  HttpServletRequest request) {
+
         return userService.requestPasswordReset(mail)
             .map(user -> {
                 String baseUrl = request.getScheme() +
@@ -169,23 +182,30 @@ public class AccountResource {
                     request.getServerPort();
             mailService.sendPasswordResetMail(user, baseUrl);
             return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
-            }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
-        
+            }).orElse(new ResponseEntity<>("e-mail address not registered",
+                HttpStatus.BAD_REQUEST));
+
     }
 
     @RequestMapping(value = "/account/reset_password/finish",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<String> finishPasswordReset(@RequestParam(value = "key") String key, @RequestParam(value = "newPassword") String newPassword) {
+    public ResponseEntity<String> finishPasswordReset(
+        @RequestParam(value = "key") String key,
+        @RequestParam(value = "newPassword") String newPassword) {
         if (!checkPasswordLength(newPassword)) {
-            return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Incorrect password",
+                HttpStatus.BAD_REQUEST);
         }
         return userService.completePasswordReset(newPassword, key)
-              .map(user -> new ResponseEntity<String>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+              .map(user -> new ResponseEntity<String>(HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     private boolean checkPasswordLength(String password) {
-      return (!StringUtils.isEmpty(password) && password.length() >= UserDTO.PASSWORD_MIN_LENGTH && password.length() <= UserDTO.PASSWORD_MAX_LENGTH);
+      return (!StringUtils.isEmpty(password) &&
+          password.length() >= UserDTO.PASSWORD_MIN_LENGTH &&
+          password.length() <= UserDTO.PASSWORD_MAX_LENGTH);
     }
 }
