@@ -28,7 +28,7 @@ public class EventStatusResource {
     LoggerFactory.getLogger(EventStatusResource.class);
 
   @Inject
-  private EventStatusRepository EventStatusRepository;
+  private EventStatusRepository eventStatusRepository;
 
   /**
    * GET  /event-statuses -> get all EventStatuses.
@@ -39,7 +39,7 @@ public class EventStatusResource {
   @Timed
   public List<EventStatus> getAll() {
     log.debug("REST request to get all EventStatuses");
-    return EventStatusRepository.findAll();
+    return eventStatusRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class EventStatusResource {
   public ResponseEntity<EventStatus> get(
     @PathVariable Short id) {
     log.debug("REST request to get EventStatuses : {}", id);
-    return Optional.ofNullable(EventStatusRepository.findOne(id))
+    return Optional.ofNullable(eventStatusRepository.findOne(id))
             .map(EventStatus ->
                   new ResponseEntity<>(EventStatus, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

@@ -28,7 +28,7 @@ public class TemporalAccessResource {
     LoggerFactory.getLogger(TemporalAccessResource.class);
 
   @Inject
-  private TemporalAccessRepository TemporalAccessRepository;
+  private TemporalAccessRepository temporalAccessRepository;
 
   /**
    * GET  /temporal-accesses -> get all TemporalAccesses.
@@ -39,7 +39,7 @@ public class TemporalAccessResource {
   @Timed
   public List<TemporalAccess> getAll() {
     log.debug("REST request to get all TemporalAccesses");
-    return TemporalAccessRepository.findAll();
+    return temporalAccessRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class TemporalAccessResource {
   public ResponseEntity<TemporalAccess> get(
     @PathVariable long id) {
     log.debug("REST request to get TemporalAccesses : {}", id);
-    return Optional.ofNullable(TemporalAccessRepository.findOne(id))
+    return Optional.ofNullable(temporalAccessRepository.findOne(id))
             .map(TemporalAccess ->
                   new ResponseEntity<>(TemporalAccess, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

@@ -28,7 +28,7 @@ public class OrganizationRoleResource {
     LoggerFactory.getLogger(OrganizationRoleResource.class);
 
   @Inject
-  private OrganizationRoleRepository OrganizationRoleRepository;
+  private OrganizationRoleRepository organizationRoleRepository;
 
   /**
    * GET  /organization-roles -> get all OrganizationRoles.
@@ -39,7 +39,7 @@ public class OrganizationRoleResource {
   @Timed
   public List<OrganizationRole> getAll() {
     log.debug("REST request to get all OrganizationRoles");
-    return OrganizationRoleRepository.findAll();
+    return organizationRoleRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class OrganizationRoleResource {
   public ResponseEntity<OrganizationRole> get(
     @PathVariable short id) {
     log.debug("REST request to get OrganizationRoles : {}", id);
-    return Optional.ofNullable(OrganizationRoleRepository.findOne(id))
+    return Optional.ofNullable(organizationRoleRepository.findOne(id))
             .map(OrganizationRole ->
                   new ResponseEntity<>(OrganizationRole, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

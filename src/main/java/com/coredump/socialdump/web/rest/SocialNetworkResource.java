@@ -28,7 +28,7 @@ public class SocialNetworkResource {
     LoggerFactory.getLogger(SocialNetworkResource.class);
 
   @Inject
-  private SocialNetworkRepository SocialNetworkRepository;
+  private SocialNetworkRepository socialNetworkRepository;
 
   /**
    * GET  /social-networks -> get all SocialNetworks.
@@ -39,7 +39,7 @@ public class SocialNetworkResource {
   @Timed
   public List<SocialNetwork> getAll() {
     log.debug("REST request to get all SocialNetworks");
-    return SocialNetworkRepository.findAll();
+    return socialNetworkRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class SocialNetworkResource {
   public ResponseEntity<SocialNetwork> get(
     @PathVariable int id) {
     log.debug("REST request to get SocialNetworks : {}", id);
-    return Optional.ofNullable(SocialNetworkRepository.findOne(id))
+    return Optional.ofNullable(socialNetworkRepository.findOne(id))
             .map(SocialNetwork ->
                   new ResponseEntity<>(SocialNetwork, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

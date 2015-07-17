@@ -28,7 +28,7 @@ public class MonitorContactResource {
     LoggerFactory.getLogger(MonitorContactResource.class);
 
   @Inject
-  private MonitorContactRepository MonitorContactRepository;
+  private MonitorContactRepository monitorContactRepository;
 
   /**
    * GET  /monitor-contacts -> get all MonitorContacts.
@@ -39,7 +39,7 @@ public class MonitorContactResource {
   @Timed
   public List<MonitorContact> getAll() {
     log.debug("REST request to get all MonitorContacts");
-    return MonitorContactRepository.findAll();
+    return monitorContactRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class MonitorContactResource {
   public ResponseEntity<MonitorContact> get(
     @PathVariable long id) {
     log.debug("REST request to get MonitorContacts : {}", id);
-    return Optional.ofNullable(MonitorContactRepository.findOne(id))
+    return Optional.ofNullable(monitorContactRepository.findOne(id))
             .map(MonitorContact ->
                   new ResponseEntity<>(MonitorContact, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

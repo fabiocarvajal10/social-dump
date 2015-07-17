@@ -15,8 +15,16 @@ import javax.inject.Inject;
 public class GenericStatusService {
 
   private final Logger log = LoggerFactory.getLogger(GenericStatusService.class);
-  @Inject
-  private GenericStatusRepository GenericStatusRepository;
 
+  @Inject
+  private GenericStatusRepository genericStatusRepository;
+
+  /**
+   * Devuelve el estado Activo
+   * @return Estado activo
+   */
+  public GenericStatus getActive() {
+    return genericStatusRepository.findOneByStatus("Activo").get();
+  }
 }
 

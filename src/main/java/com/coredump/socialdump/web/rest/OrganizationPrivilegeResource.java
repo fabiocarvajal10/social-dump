@@ -28,7 +28,7 @@ public class OrganizationPrivilegeResource {
     LoggerFactory.getLogger(OrganizationPrivilegeResource.class);
 
   @Inject
-  private OrganizationPrivilegeRepository OrganizationPrivilegeRepository;
+  private OrganizationPrivilegeRepository organizationPrivilegeRepository;
 
   /**
    * GET  /organization-privileges -> get all OrganizationPrivileges.
@@ -39,7 +39,7 @@ public class OrganizationPrivilegeResource {
   @Timed
   public List<OrganizationPrivilege> getAll() {
     log.debug("REST request to get all OrganizationPrivileges");
-    return OrganizationPrivilegeRepository.findAll();
+    return organizationPrivilegeRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class OrganizationPrivilegeResource {
   public ResponseEntity<OrganizationPrivilege> get(
     @PathVariable int id) {
     log.debug("REST request to get OrganizationPrivileges : {}", id);
-    return Optional.ofNullable(OrganizationPrivilegeRepository.findOne(id))
+    return Optional.ofNullable(organizationPrivilegeRepository.findOne(id))
             .map(OrganizationPrivilege ->
                   new ResponseEntity<>(OrganizationPrivilege, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

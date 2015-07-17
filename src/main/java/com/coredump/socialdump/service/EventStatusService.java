@@ -16,7 +16,7 @@ public class EventStatusService {
 
   private final Logger log = LoggerFactory.getLogger(EventStatusService.class);
   @Inject
-  private EventStatusRepository EventStatusRepository;
+  private EventStatusRepository eventStatusRepository;
 
 }
 

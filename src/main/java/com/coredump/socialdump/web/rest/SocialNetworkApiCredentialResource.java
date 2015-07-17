@@ -28,7 +28,7 @@ public class SocialNetworkApiCredentialResource {
     LoggerFactory.getLogger(SocialNetworkApiCredentialResource.class);
 
   @Inject
-  private SocialNetworkApiCredentialRepository SocialNetworkApiCredentialRepository;
+  private SocialNetworkApiCredentialRepository socialNetworkApiCredentialRepository;
 
   /**
    * GET  /social-network-api-credentials -> get all SocialNetworkApiCredentials.
@@ -39,7 +39,7 @@ public class SocialNetworkApiCredentialResource {
   @Timed
   public List<SocialNetworkApiCredential> getAll() {
     log.debug("REST request to get all SocialNetworkApiCredentials");
-    return SocialNetworkApiCredentialRepository.findAll();
+    return socialNetworkApiCredentialRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class SocialNetworkApiCredentialResource {
   public ResponseEntity<SocialNetworkApiCredential> get(
     @PathVariable long id) {
     log.debug("REST request to get SocialNetworkApiCredentials : {}", id);
-    return Optional.ofNullable(SocialNetworkApiCredentialRepository.findOne(id))
+    return Optional.ofNullable(socialNetworkApiCredentialRepository.findOne(id))
             .map(SocialNetworkApiCredential ->
                   new ResponseEntity<>(SocialNetworkApiCredential, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
