@@ -3,6 +3,7 @@ package com.coredump.socialdump.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
+import com.coredump.socialdump.web.crawler.InstagramFetch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class SearchCriteriaResource {
     LoggerFactory.getLogger(SearchCriteriaResource.class);
 
   @Inject
-  private SearchCriteriaRepository SearchCriteriaRepository;
+  private SearchCriteriaRepository searchCriteriaRepository;
 
   /**
    * GET  /search-criteria -> get all SearchCriteria.
@@ -39,7 +40,7 @@ public class SearchCriteriaResource {
   @Timed
   public List<SearchCriteria> getAll() {
     log.debug("REST request to get all SearchCriteria");
-    return SearchCriteriaRepository.findAll();
+    return searchCriteriaRepository.findAll();
   }
 
   /**
@@ -52,10 +53,23 @@ public class SearchCriteriaResource {
   public ResponseEntity<SearchCriteria> get(
     @PathVariable long id) {
     log.debug("REST request to get SearchCriteria : {}", id);
-    return Optional.ofNullable(SearchCriteriaRepository.findOne(id))
+    return Optional.ofNullable(searchCriteriaRepository.findOne(id))
             .map(SearchCriteria ->
                   new ResponseEntity<>(SearchCriteria, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+
+  /**
+   * GET  /search-criteria/activate/:id
+   */
+  @RequestMapping(value = "/search-criteria/activate/{id}",
+          method = RequestMethod.GET,
+          produces = MediaType.APPLICATION_JSON_VALUE)
+  public String fetchData(@PathVariable long id){
+    new Thread(new InstagramFetch(
+      searchCriteriaRepository.findOne(id))).start();
+    return "Obteniendo info";
   }
 }
 

@@ -16,7 +16,7 @@ public class OrganizationMemberService {
 
   private final Logger log = LoggerFactory.getLogger(OrganizationMemberService.class);
   @Inject
-  private OrganizationMemberRepository OrganizationMemberRepository;
+  private OrganizationMemberRepository organizationMemberRepository;
 
 }
 

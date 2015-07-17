@@ -1,24 +1,24 @@
 package com.coredump.socialdump.service;
-    import com.coredump.socialdump.domain.Authority;
-    import com.coredump.socialdump.domain.User;
-    import com.coredump.socialdump.repository.AuthorityRepository;
-    import com.coredump.socialdump.repository.UserRepository;
-    import com.coredump.socialdump.security.SecurityUtils;
-    import com.coredump.socialdump.service.util.RandomUtil;
-    import org.joda.time.DateTime;
-    import org.joda.time.LocalDate;
-    import org.slf4j.Logger;
-    import org.slf4j.LoggerFactory;
-    import org.springframework.scheduling.annotation.Scheduled;
-    import org.springframework.security.crypto.password.PasswordEncoder;
-    import org.springframework.stereotype.Service;
-    import org.springframework.transaction.annotation.Transactional;
 
-    import javax.inject.Inject;
-    import java.util.HashSet;
-    import java.util.List;
-    import java.util.Optional;
-    import java.util.Set;
+import com.coredump.socialdump.domain.Authority;
+import com.coredump.socialdump.domain.User;
+import com.coredump.socialdump.repository.AuthorityRepository;
+import com.coredump.socialdump.repository.UserRepository;
+import com.coredump.socialdump.security.SecurityUtils;
+import com.coredump.socialdump.service.util.RandomUtil;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import javax.inject.Inject;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class for managing users.

@@ -28,7 +28,7 @@ public class OrganizationFuncionalityResource {
     LoggerFactory.getLogger(OrganizationFuncionalityResource.class);
 
   @Inject
-  private OrganizationFuncionalityRepository OrganizationFuncionalityRepository;
+  private OrganizationFuncionalityRepository organizationFuncionalityRepository;
 
   /**
    * GET  /organization-funcionalities -> get all OrganizationFuncionalities.
@@ -39,7 +39,7 @@ public class OrganizationFuncionalityResource {
   @Timed
   public List<OrganizationFuncionality> getAll() {
     log.debug("REST request to get all OrganizationFuncionalities");
-    return OrganizationFuncionalityRepository.findAll();
+    return organizationFuncionalityRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class OrganizationFuncionalityResource {
   public ResponseEntity<OrganizationFuncionality> get(
     @PathVariable int id) {
     log.debug("REST request to get OrganizationFuncionalities : {}", id);
-    return Optional.ofNullable(OrganizationFuncionalityRepository.findOne(id))
+    return Optional.ofNullable(organizationFuncionalityRepository.findOne(id))
             .map(OrganizationFuncionality ->
                   new ResponseEntity<>(OrganizationFuncionality, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

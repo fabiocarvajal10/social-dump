@@ -16,7 +16,7 @@ public class MonitorContactService {
 
   private final Logger log = LoggerFactory.getLogger(MonitorContactService.class);
   @Inject
-  private MonitorContactRepository MonitorContactRepository;
+  private MonitorContactRepository monitorContactRepository;
 
 }
 

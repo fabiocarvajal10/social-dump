@@ -28,7 +28,7 @@ public class OrganizationMemberResource {
     LoggerFactory.getLogger(OrganizationMemberResource.class);
 
   @Inject
-  private OrganizationMemberRepository OrganizationMemberRepository;
+  private OrganizationMemberRepository organizationMemberRepository;
 
   /**
    * GET  /organization-members -> get all OrganizationMembers.
@@ -39,7 +39,7 @@ public class OrganizationMemberResource {
   @Timed
   public List<OrganizationMember> getAll() {
     log.debug("REST request to get all OrganizationMembers");
-    return OrganizationMemberRepository.findAll();
+    return organizationMemberRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class OrganizationMemberResource {
   public ResponseEntity<OrganizationMember> get(
     @PathVariable long id) {
     log.debug("REST request to get OrganizationMembers : {}", id);
-    return Optional.ofNullable(OrganizationMemberRepository.findOne(id))
+    return Optional.ofNullable(organizationMemberRepository.findOne(id))
             .map(OrganizationMember ->
                   new ResponseEntity<>(OrganizationMember, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

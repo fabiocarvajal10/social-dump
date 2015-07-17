@@ -28,7 +28,7 @@ public class EventTypeResource {
     LoggerFactory.getLogger(EventTypeResource.class);
 
   @Inject
-  private EventTypeRepository EventTypeRepository;
+  private EventTypeRepository eventTypeRepository;
 
   /**
    * GET  /event-types -> get all EventTypes.
@@ -39,7 +39,7 @@ public class EventTypeResource {
   @Timed
   public List<EventType> getAll() {
     log.debug("REST request to get all EventTypes");
-    return EventTypeRepository.findAll();
+    return eventTypeRepository.findAll();
   }
 
   /**
@@ -52,7 +52,7 @@ public class EventTypeResource {
   public ResponseEntity<EventType> get(
     @PathVariable Integer id) {
     log.debug("REST request to get EventTypes : {}", id);
-    return Optional.ofNullable(EventTypeRepository.findOne(id))
+    return Optional.ofNullable(eventTypeRepository.findOne(id))
             .map(EventType ->
                   new ResponseEntity<>(EventType, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

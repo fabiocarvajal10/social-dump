@@ -16,7 +16,7 @@ public class EventTypeService {
 
   private final Logger log = LoggerFactory.getLogger(EventTypeService.class);
   @Inject
-  private EventTypeRepository EventTypeRepository;
+  private EventTypeRepository eventTypeRepository;
 
 }
 
