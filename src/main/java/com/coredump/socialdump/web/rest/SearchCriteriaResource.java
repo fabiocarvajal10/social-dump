@@ -3,7 +3,6 @@ package com.coredump.socialdump.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
-import com.coredump.socialdump.web.crawler.InstagramFetch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -59,17 +58,5 @@ public class SearchCriteriaResource {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-
-  /**
-   * GET  /search-criteria/activate/:id
-   */
-  @RequestMapping(value = "/search-criteria/activate/{id}",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
-  public String fetchData(@PathVariable long id){
-    new Thread(new InstagramFetch(
-      searchCriteriaRepository.findOne(id))).start();
-    return "Obteniendo info";
-  }
 }
 
