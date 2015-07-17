@@ -37,6 +37,7 @@ public class UserDTO {
     private List<String> roles;
 
     public UserDTO() {
+
     }
 
     public UserDTO(String login, String password, String firstName, String lastName, String email, String langKey,
