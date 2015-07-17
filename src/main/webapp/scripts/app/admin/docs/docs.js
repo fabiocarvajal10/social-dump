@@ -4,16 +4,13 @@ angular.module('socialdumpApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('docs', {
-                parent: 'admin',
-                url: '/docs',
+                parent: 'home',
+                url: 'docs',
                 data: {
                     roles: ['ROLE_ADMIN'],
                     pageTitle: 'API'
                 },
-                views: {
-                    'content@': {
-                        templateUrl: 'scripts/app/admin/docs/docs.html'
-                    }
-                }
+                templateUrl: 'scripts/app/admin/docs/docs.html'
+
             });
     });

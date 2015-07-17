@@ -1,0 +1,53 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3"> # </h1>
+</div>
+<div class="wrapper-md">
+  <div class="panel wrapper">
+    <div class="row">
+
+      <div class="col-md-6 b-r b-light no-border-xs">
+        <span class="h4 font-thin m-t-none m-b-md text-muted"> Organizaciones </span>
+        <span class="btn m-b-xs btn-sm btn-success pull-right"
+           ng-disabled="newOrg.$invalid" ng-click="createOrg(newOrg)">
+          <!--<i class="fa fa-plus"></i>-->
+          Agregar
+        </span>
+        <div class=" m-b">
+          <div class="m-b">
+            <form name="newOrg" role="form">
+              <div class="form-group">
+                <input type="text" ng-model="newOrg.name" class="form-control"
+                       name="inptName" placeholder="Nombre de la organización" required="">
+              </div>
+            </form>
+          </div>
+          <div class="m-b" ng-repeat="organization in organizations">
+            <span class="label text-base bg-success pos-rlt m-r"><i class="fa fa-circle"></i></span>
+            <span> {{ organization.name }} </span>
+            <span class="btn m-b-xs btn-xs btn-danger pull-right" ng-click="deleteOrg(organization, $index)">
+              <i class="fa fa-trash-o"></i>
+            </span>
+          </div>
+          <div class="m-b" ng-show="!organizations.length">
+            <span class="label text-base bg-info pos-rlt m-r">
+              No tiene organizaciones
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 b-light no-border-xs">
+        <h4 class="font-thin m-t-none m-b-md text-muted"> Próximos Eventos </h4>
+        <div class=" m-b">
+          <div class="m-b">
+            <span class="label text-base bg-warning pos-rlt m-r">
+              <i class="arrow right arrow-warning"></i> 10:00
+            </span>
+            <a href> Panel - DEFCON 101 - The Talk </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

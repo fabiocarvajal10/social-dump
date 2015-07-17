@@ -4,14 +4,15 @@
 </div>
 <!-- / navbar -->
 <!-- menu -->
-<div data-ng-include=" 'scripts/components/blocks/aside.html' " class="app-aside hidden-xs {{app.settings.asideColor}}">
+<div data-ng-include=" 'scripts/components/blocks/aside.html' " class="app-aside hidden-xs {{app.settings.asideColor}}"
+     ng-class="{'hide': false }">
 </div>
 <!-- / menu -->
 
 <!-- content -->
-<div class="app-content">
+<div class="app-content" ng-class="{'m-n':false, 'h-full': true}">
     <div ui-butterbar></div>
-    <div class="app-content-body fade-in-up" ui-view="content"></div>
+    <div class="app-content-body fade-in-up" ui-view></div>
 </div>
 <!-- /content -->
 

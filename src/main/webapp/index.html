@@ -26,7 +26,7 @@
     </head>
     <body ng-controller="AppCtrl">
 
-    <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view="content"></div>
+    <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view></div>
     <!--[if lt IE 9]>
         <!--p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -119,6 +119,7 @@
     <script src="scripts/components/util/base64.service.js"></script>
     <script src="scripts/components/util/parse-links.service.js"></script>
     <script src="scripts/components/util/dateutil.service.js"></script>
+    <script src="scripts/components/AccountService.js"></script>
 
     <!--application scripts-->
     <script src="scripts/app/main/main.js"></script>
@@ -153,6 +154,9 @@
     <script src="scripts/app/admin/metrics/metrics.js"></script>
     <script src="scripts/app/admin/metrics/metrics.controller.js"></script>
     <script src="scripts/app/entities/entity.js"></script>
+    <script src="scripts/app/entities/organization/organizations.js"></script>
+    <script src="scripts/app/entities/organization/OrganizationCtrl.js"></script>
+    <script src="scripts/components/organization/OrganizationService.js"></script>
     <script src="scripts/app/error/error.js"></script>
 
     <script src="scripts/app/main/main.controller.js"></script>
