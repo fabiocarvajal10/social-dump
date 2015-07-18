@@ -45,6 +45,22 @@ public class SocialNetworkPostResource {
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
    */
+  @RequestMapping(value = "/social-network-posts/recent/{id}",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<SocialNetworkPost> getRecentPosts(
+    @PathVariable long id) {
+    log.debug("REST request to get SocialNetworkPosts : {}", id);
+    return Optional.ofNullable(socialNetworkPostRepository.findOne(id))
+      .map(SocialNetworkPost ->
+        new ResponseEntity<>(SocialNetworkPost, HttpStatus.OK))
+      .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  /**
+   * GET  /social-network-posts/:id -> get the "id" generic status.
+   */
   @RequestMapping(value = "/social-network-posts/{id}",
           method = RequestMethod.GET,
           produces = MediaType.APPLICATION_JSON_VALUE)

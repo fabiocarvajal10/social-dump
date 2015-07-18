@@ -1,13 +1,9 @@
 package com.coredump.socialdump.service;
 
-import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.domain.SocialNetworkPost;
-import com.coredump.socialdump.repository.SocialNetworkApiCredentialRepository;
-import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Tweet;
@@ -16,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,9 +45,7 @@ public class TwitterFetch extends SocialNetworkFetch {
         List<Tweet> tweetsList = searchResults.getTweets();
 
         log.debug("Cantidad de Tweets obtenidos: {}...", tweetsList.size());
-        for (int i = 0; i < tweetsList.size(); i++) {
-          postsList.add(processTweet(tweetsList.get(i)));
-        }
+        tweetsList.forEach(post -> postsList.add(processTweet(post)));
 
         log.debug("Guardando los Tweets obtenidos");
         getSocialNetworkPostRepository().save(postsList);
@@ -60,8 +53,16 @@ public class TwitterFetch extends SocialNetworkFetch {
         log.debug("Sleeping");
         Thread.sleep(10000);
 
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       } catch (Exception e) {
         e.printStackTrace();
+        try {
+          Thread.sleep(30000);
+        } catch (InterruptedException ex) {
+          log.debug("Exception putting thread to sleep");
+          ex.printStackTrace();
+        }
       }
     }
   }
@@ -71,7 +72,7 @@ public class TwitterFetch extends SocialNetworkFetch {
     SocialNetworkPost post = new SocialNetworkPost();
     post.setBody(tweet.getText().replaceAll("[^\\x20-\\x7e]", ""));
     post.setCreatedAt(new Timestamp(tweet.getCreatedAt().getTime()));
-    post.setSnUserId(new Long(1));
+    post.setSnUserId(tweet.getUser().getId());
     post.setMediaUrl(tweet.getSource());
     post.setSnUserEmail(tweet.getUser().getScreenName());
     post.setEventByEventId(getSearchCriteria().getEventByEventId());
