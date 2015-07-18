@@ -16,7 +16,11 @@ angular.module('socialdumpApp')
           }
         },
         resolve: {
-
+          authorize: ['Auth',
+            function(Auth) {
+              return Auth.authorize();
+            }
+          ]
         }
       });
   });
