@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-4">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#saveEventModal" ng-click="clear()">
-                    <span class="glyphicon glyphicon-flash"></span> <span>Crea un nuevo Evento</span>
+                    <span class="glyphicon glyphicon-flash"></span> <span>Crear un nuevo Evento</span>
                 </button>
             </div>
         </div>
@@ -25,7 +25,7 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                     ng-click="clear()">&times;</button>
-                            <h4 class="modal-title" id="myEventLabel">Crea o Modifica un Evento</h4>
+                            <h4 class="modal-title" id="myEventLabel">Crear o Modificar un Evento</h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
@@ -35,7 +35,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Comienza el</label>
+                                <label>Inicia el</label>
                                 <input type="date" class="form-control" name="startDate"
                                        ng-model="event.startDate" required>
 
@@ -70,16 +70,16 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="form-group">
+<!--                             <div class="form-group">
                                 <label>Activado el</label>
                                 <input type="date" class="form-control" name="activatedAt"
                                        ng-model="event.activatedAt">
 
-                            </div>
+                            </div> -->
                             <div class="form-group">
-                                <label>Demora para recharar posts</label>
+                                <label>Segundos disponibles para rechazar posts</label>
                                 <input type="number" class="form-control" name="postDelay"
-                                       ng-model="event.postDelay" required>
+                                       ng-model="event.postDelay" required min="0" max="300">
 
                                 <div ng-show="editForm.postDelay.$invalid">
                                     <p class="help-block"
@@ -93,19 +93,19 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+<!--                             <div class="form-group">
                                 <label>Organización</label>
                                 <select class="form-control" name="organizationByOrganizationId" ng-model="event.organizationByOrganizationIdId" ng-options="organization.id as organization.name for organization in organizations">
                                 </select>
-                            </div>
-                            <div class="form-group">
+                            </div> -->
+<!--                             <div class="form-group">
                                 <label>Estado</label>
-                                <select class="form-control" name="eventStatusByStatusId" ng-model="event.eventStatusByStatusIdId" ng-options="eventStatus.id as eventStatus.status for eventStatus in eventstatuss">
+                                <select class="form-control" name="statusId" ng-model="event.statusIdId" ng-options="eventStatus.id as eventStatus.status for eventStatus in eventStatuses">
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label>Tipo</label>
-                                <select class="form-control" name="eventTypeByEventTypeId" ng-model="event.eventTypeByEventTypeIdId" ng-options="eventType.id as eventType.name for eventType in eventtypes">
+                                <select class="form-control" name="typeId" ng-model="event.typeId" ng-options="eventType.id as eventType.name for eventType in eventTypes">
                                 </select>
                             </div>
                         </div>
@@ -156,8 +156,8 @@
                         <th>Termina el</th>
                         <th>Descripción</th>
                         <th>Activado el</th>
-                        <th>Demora para recharar posts</th>
-                        <th>Organización</th>
+                        <th>Segundos disponibles para rechazar posts</th>
+                        <!-- <th>Organización</th> -->
                         <th>Estado</th>
                         <th>Tipo</th>
                         <th></th>
@@ -171,24 +171,24 @@
                         <td>{{event.description}}</td>
                         <td>{{event.activatedAt}}</td>
                         <td>{{event.postDelay}}</td>
-                        <td>{{event.organizationByOrganizationIdName}}</td>
-                        <td>{{event.eventStatusByStatusIdStatus}}</td>
-                        <td>{{event.eventTypeByEventTypeIdName}}</td>
+                        <!-- <td>{{event.organizationByOrganizationIdName}}</td> -->
+                        <td>{{event.status.status}}</td>
+                        <td>{{event.type.name}}</td>
                         <td>
                             <button type="submit"
-                                    ui-sref="eventDetail({id:event.id})"
+                                    ui-sref="events.detail({id:event.id})"
                                     class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> View</span>
+                                <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> Ver</span>
                             </button>
                             <button type="submit"
                                     ng-click="showUpdate(event.id)"
                                     class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edit</span>
+                                <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Editar</span>
                             </button>
                             <button type="submit"
                                     ng-click="delete(event.id)"
                                     class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Delete</span>
+                                <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Eliminar</span>
                             </button>
                         </td>
                     </tr>

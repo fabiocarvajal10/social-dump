@@ -7,6 +7,7 @@ import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.service.EventService;
+import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
@@ -55,6 +56,12 @@ public class EventResource{
   private EventService eventService;
 
   /**
+   * Repositorio de estados de eventos.
+   */
+  @Inject
+  private EventStatusService eventStatusService;
+
+  /**
    * POST /events -> Create a new event.
    */
   @RequestMapping(value = "/events",
@@ -69,6 +76,7 @@ public class EventResource{
               .header("Failure", "A new event cannot already have an ID").build();
     }
     Event event = eventMapper.eventDTOToEvent(eventDTO);
+    event.setEventStatusByStatusId(eventStatusService.getActive());
     eventRepository.save(event);
     eventService.scheduleFetch(event);
     return ResponseEntity.created(new URI("/api/events/"

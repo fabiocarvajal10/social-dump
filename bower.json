@@ -59,6 +59,7 @@
     "angular-translate-storage-local": "~2.5.2",
     "angular-bootstrap": "~0.12.0",
     "angular-bootstrap-nav-tree": "*",
+    "angular-bootstrap-datetimepicker": "latest",
     "angular-ui-router": "~0.2.11",
     "angular-ui-utils": "~0.2.1",
     "angular-file-upload": "~1.1.1",

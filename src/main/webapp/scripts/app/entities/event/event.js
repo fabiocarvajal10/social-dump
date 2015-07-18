@@ -11,15 +11,7 @@ angular.module('socialdumpApp')
         data: {
           roles: ['ROLE_USER'],
           pageTitle: 'Eventos'
-        }/*,
-        views: {
-          'content@': {
-            templateUrl: 'scripts/app/entities/event/events.html',
-            controller: 'EventController'
-          }
-        },
-        resolve: {
-        }*/
+        }
       })
       .state('events.list', {
         // parent: 'events',
@@ -37,31 +29,15 @@ angular.module('socialdumpApp')
         resolve: {
         }
       })
-      .state('event', {
-        parent: 'entity',
-        url: '/event',
-        data: {
-          roles: ['ROLE_USER'],
-          pageTitle: 'Events'
-        },
-        views: {
-          'content@': {
-            templateUrl: 'scripts/app/entities/event/events.html',
-            controller: 'EventController'
-          }
-        },
-        resolve: {
-        }
-      })
-      .state('eventDetail', {
-        parent: 'entity',
-        url: '/event/:id',
+      .state('events.detail', {
+        // parent: 'entity',
+        url: '/events/:id',
         data: {
           roles: ['ROLE_USER'],
           pageTitle: 'Event'
         },
         views: {
-          'content@': {
+          '': {
             templateUrl: 'scripts/app/entities/event/event-detail.html',
             controller: 'EventDetailController'
           }
