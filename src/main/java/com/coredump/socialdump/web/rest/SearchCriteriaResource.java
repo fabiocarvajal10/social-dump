@@ -58,15 +58,5 @@ public class SearchCriteriaResource {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-
-  /**
-   * GET  /search-criteria/activate/:id
-   */
-  @RequestMapping(value = "/search-criteria/activate/{id}",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
-  public String fetchData(@PathVariable long id) {
-    return "Obteniendo info";
-  }
 }
 
