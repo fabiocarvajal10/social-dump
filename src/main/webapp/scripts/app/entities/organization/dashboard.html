@@ -1,5 +1,5 @@
 <div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3"> # </h1>
+  <h1 class="m-n font-thin h3"> Dashboard de Organizaciones </h1>
 </div>
 <div class="wrapper-md">
   <div class="panel wrapper">
@@ -7,13 +7,20 @@
 
       <div class="col-md-6 b-r b-light no-border-xs">
         <span class="h4 font-thin m-t-none m-b-md text-muted"> Organizaciones </span>
-        <span class="btn m-b-xs btn-sm btn-success pull-right"
+        <span class="btn m-b-xs btn-sm btn-success pull-right" ng-hide="isUptOrg"
            ng-disabled="newOrg.$invalid" ng-click="createOrg(newOrg)">
-          <!--<i class="fa fa-plus"></i>-->
           Agregar
         </span>
+        <span class="btn m-b-xs btn-sm btn-warning pull-right" ng-show="isUptOrg"
+              ng-disabled="uptOrgForm.$invalid" ng-click="cancelUpdate()">
+          Cancelar
+        </span>
+        <span class="btn m-b-xs btn-sm btn-info pull-right" ng-show="isUptOrg"
+              ng-disabled="uptOrgForm.$invalid" ng-click="updateOrg()">
+          Modificar
+        </span>
         <div class=" m-b">
-          <div class="m-b">
+          <div class="m-b" ng-hide="isUptOrg">
             <form name="newOrg" role="form">
               <div class="form-group">
                 <input type="text" ng-model="newOrg.name" class="form-control"
@@ -21,11 +28,25 @@
               </div>
             </form>
           </div>
+          <div class="m-b" ng-show="isUptOrg">
+            <form name="uptOrgForm" role="form">
+              <div class="form-group">
+                <input type="text" ng-model="uptOrg.name" class="form-control"
+                       name="inptName" required="">
+              </div>
+            </form>
+          </div>
           <div class="m-b" ng-repeat="organization in organizations">
-            <span class="label text-base bg-success pos-rlt m-r"><i class="fa fa-circle"></i></span>
-            <span> {{ organization.name }} </span>
+            <span class="label text-base bg-success pos-rlt m-r"
+                  ng-click="changeOrgEvents(organization)">
+              <i class="fa fa-users"></i>
+            </span>
+            <span ng-click="changeOrgEvents(organization)"> {{ organization.name }} </span>
             <span class="btn m-b-xs btn-xs btn-danger pull-right" ng-click="deleteOrg(organization, $index)">
               <i class="fa fa-trash-o"></i>
+            </span>
+            <span class="btn m-b-xs btn-xs btn-warning pull-right" ng-click="showUptOrg(organization, $index)">
+              <i class="fa fa-pencil"></i>
             </span>
           </div>
           <div class="m-b" ng-show="!organizations.length">
@@ -33,17 +54,32 @@
               No tiene organizaciones
             </span>
           </div>
+          <div class="m-b" ng-show="showOrgError">
+            <span class="label text-base bg-danger pos-rlt m-r">
+              {{ orgError }}
+            </span>
+          </div>
         </div>
       </div>
 
       <div class="col-md-6 b-light no-border-xs">
-        <h4 class="font-thin m-t-none m-b-md text-muted"> Próximos Eventos </h4>
-        <div class=" m-b">
-          <div class="m-b">
-            <span class="label text-base bg-warning pos-rlt m-r">
-              <i class="arrow right arrow-warning"></i> 10:00
+        <div class="m-b">
+          <span class="h4 font-thin m-t-none m-b-xl text-muted"> Próximos Eventos </span>
+          <a ui-sref="events.list" class="btn m-b-xs btn-sm btn-success pull-right mb-sm">
+            Agregar
+          </a>
+        </div>
+        <div class="m-b">
+          <div class="m-b" ng-repeat="event in eventsByOrg">
+            <span class="label text-base bg-info pos-rlt m-r">
+              <i class="arrow right arrow-info"></i> {{ event.startDate | date:"dd/MM/yyyy 'at' h:mma"}}
             </span>
-            <a href> Panel - DEFCON 101 - The Talk </a>
+            <span> {{ event.description }} </span>
+          </div>
+          <div class="m-b" ng-show="!eventsByOrg.length">
+            <span class="label text-base bg-info pos-rlt m-r">
+              No se aproximan eventos
+            </span>
           </div>
         </div>
       </div>
