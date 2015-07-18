@@ -1,0 +1,194 @@
+<div>
+
+    <h2>Events</h2>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#saveEventModal" ng-click="clear()">
+                    <span class="glyphicon glyphicon-flash"></span> <span>Create a new Event</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="saveEventModal" tabindex="-1" role="dialog" aria-labelledby="myEventLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myEventLabel">Create or edit a Event</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="event.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>StartDate</label>
+                            <input type="date" class="form-control" name="startDate"
+                                   ng-model="event.startDate" required>
+
+                            <div ng-show="editForm.startDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.startDate.$error.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>EndDate</label>
+                            <input type="date" class="form-control" name="endDate"
+                                   ng-model="event.endDate" required>
+
+                            <div ng-show="editForm.endDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.endDate.$error.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" name="description"
+                                   ng-model="event.description" required>
+
+                            <div ng-show="editForm.description.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>ActivatedAt</label>
+                            <input type="date" class="form-control" name="activatedAt"
+                                   ng-model="event.activatedAt">
+
+                        </div>
+                        <div class="form-group">
+                            <label>PostDelay</label>
+                            <input type="number" class="form-control" name="postDelay"
+                                   ng-model="event.postDelay" required>
+
+                            <div ng-show="editForm.postDelay.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.postDelay.$error.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.postDelay.$error.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>organizationByOrganizationId</label>
+                            <select class="form-control" name="organizationByOrganizationId" ng-model="event.organizationByOrganizationIdId" ng-options="organization.id as organization.name for organization in organizations">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>eventStatusByStatusId</label>
+                            <select class="form-control" name="eventStatusByStatusId" ng-model="event.eventStatusByStatusIdId" ng-options="eventStatus.id as eventStatus.status for eventStatus in eventstatuss">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>eventTypeByEventTypeId</label>
+                            <select class="form-control" name="eventTypeByEventTypeId" ng-model="event.eventTypeByEventTypeIdId" ng-options="eventType.id as eventType.name for eventType in eventtypes">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteEventConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(event.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this Event?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>StartDate</th>
+                    <th>EndDate</th>
+                    <th>Description</th>
+                    <th>ActivatedAt</th>
+                    <th>PostDelay</th>
+                    <th>organizationByOrganizationId</th>
+                    <th>eventStatusByStatusId</th>
+                    <th>eventTypeByEventTypeId</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+                <tr ng-repeat="event in events">
+                    <td><a ui-sref="eventDetail({id:event.id})">{{event.id}}</a></td>
+                    <td>{{event.startDate}}</td>
+                    <td>{{event.endDate}}</td>
+                    <td>{{event.description}}</td>
+                    <td>{{event.activatedAt}}</td>
+                    <td>{{event.postDelay}}</td>
+                    <td>{{event.organizationByOrganizationIdName}}</td>
+                    <td>{{event.eventStatusByStatusIdStatus}}</td>
+                    <td>{{event.eventTypeByEventTypeIdName}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="eventDetail({id:event.id})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> View</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="showUpdate(event.id)"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(event.id)"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
