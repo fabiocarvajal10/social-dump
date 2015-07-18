@@ -15,6 +15,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   Page<Event> findAllByorganizationByOrganizationId(Pageable pageable,
                                                     Organization organization);
 
+  /**
+   * Devuelve todas los eventos de una organización, ordenado por fecha de
+   * activación descendiente.
+   * @param organizationByOrganizationId organización
+   * @return lista de eventos
+   */
   List<Event> findAllByOrganizationByOrganizationIdOrderByActivatedAtDesc
     (Organization organizationByOrganizationId);
 }
