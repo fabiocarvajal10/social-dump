@@ -12,7 +12,7 @@ angular.module('socialdumpApp')
          getUserId: function() {
            var q = $q.defer();
            $http({
-             url: 'http://127.0.0.1:9090/api/account',
+             url: 'api/account',
              method: 'GET'
            }).
            success(function(data) {
