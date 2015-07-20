@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('socialdumpApp')
-    .config(function ($stateProvider) {
+    .config(function($stateProvider) {
         $stateProvider
             .state('account', {
-                abstract: true,
-                parent: 'site'
+                abstract: true
+                //parent: 'site'
             });
     });

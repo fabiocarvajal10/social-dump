@@ -16,7 +16,9 @@ angular.module('socialdumpApp')
       OrganizationService.getAll()
         .then(function(data) {
           $scope.organizations = data;
-          $scope.changeOrgEvents($scope.organizations[0]);
+          if ($scope.organizations.length > 1) {
+            $scope.changeOrgEvents($scope.organizations[0]);
+          }
       })
         .catch (function(rejection) {
 
@@ -28,6 +30,7 @@ angular.module('socialdumpApp')
     $scope.createOrg = function(organization) {
       OrganizationService.register(organization.name)
         .then(function(newOrg) {
+          organization.name = '';
           $scope.organizations.push(newOrg);
         })
         .catch (function(error) {
@@ -69,10 +72,10 @@ angular.module('socialdumpApp')
 
     $scope.changeOrgEvents = function(organization) {
       OrganizationService.getAllEvents(organization.id)
-        .then(function(data){
+        .then(function(data) {
           $scope.eventsByOrg = data;
         })
-        .catch(function(error) {
+        .catch (function(error) {
 
         });
     };

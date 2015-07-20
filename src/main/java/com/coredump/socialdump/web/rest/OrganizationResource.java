@@ -79,7 +79,7 @@ public class OrganizationResource {
     organizationRepository.save(organization);
 
     return ResponseEntity.created(new URI("/api/organizations/"
-            + organizationDTO.getId())).build();
+            + organization.getId())).build();
   }
 
   /**
