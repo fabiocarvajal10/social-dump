@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.print.DocFlavor;
 
@@ -38,9 +39,8 @@ public class InstagramFetch extends SocialNetworkFetch {
   private final Logger log = LoggerFactory.getLogger(InstagramFetch.class);
 
   private Instagram instagram;
-    private InstagramService instagramService;
 
-    public InstagramFetch() {
+  public InstagramFetch() {
     super();
   }
 
@@ -50,28 +50,34 @@ public class InstagramFetch extends SocialNetworkFetch {
         new Token(ACCESS_TOKEN, getSocialNetworkApiCredential().getAppSecret());
     instagram = new Instagram(accessToken);
     List<SocialNetworkPost> postsList = new ArrayList<>();
-      while (true) {
-          try {
-              log.debug("Obteniendo grams de: {}...", getSearchCriteria().getSearchCriteria());
-              TagMediaFeed mediaFeed =
-                  instagram.getRecentMediaTags(getSearchCriteria().getSearchCriteria());
-              List<MediaFeedData> mediaFeeds = mediaFeed.getData();
+    while (true) {
+      try {
+        log.debug("Obteniendo grams de: {}...", getSearchCriteria().getSearchCriteria());
+        TagMediaFeed mediaFeed =
+            instagram.getRecentMediaTags(getSearchCriteria().getSearchCriteria());
+        List<MediaFeedData> mediaFeeds = mediaFeed.getData();
 
-              log.debug("Cantidad de posts (inst) obtenidos: {}...", mediaFeeds.size());
-              for (int i = 0; i < mediaFeeds.size(); i++) {
-                  postsList.add(processGram(mediaFeeds.get(i)));
-              }
+        log.debug("Cantidad de posts (inst) obtenidos: {}...", mediaFeeds.size());
 
-              //log.debug("Guardando los grams obtenidos");
-              getSocialNetworkPostRepository().save(postsList);
-              postsList.clear();
-              log.debug("Sleeping");
-              Thread.sleep(10000);
+        postsList.addAll(mediaFeeds
+              .stream()
+              .map(this::processGram)
+              .collect(Collectors.toList()));
 
-          } catch (Exception e) {
-              e.printStackTrace();
-          }
+        //log.debug("Guardando los grams obtenidos");
+        //List<SocialNetworkPost> list = getSocialNetworkPostRepository().save(postsList);
+        getSocialNetworkPostRepository().save(postsList);
+        super.notifyPublications(postsList);
+        postsList.clear();
+
+        log.debug("Sleeping");
+
+        Thread.sleep(10000);
+
+      } catch (Exception e) {
+          e.printStackTrace();
       }
+    }
   }
 
   private SocialNetworkPost processGram(MediaFeedData mediaFeedData) {

@@ -2,10 +2,11 @@
  * Created by fabio on 7/17/15.
  */
 
-
 angular.module('socialdumpApp')
 	.controller('PostController',
-		['$scope', function ($scope) {
+		['$scope', 'PostTracker', function ($scope, PostTracker) {
+			//This controller uses a websocket connection to receive posts from one event
+
 			$scope.filters = [[['tabs', 'contains', 'home']]];
 			$scope.rankers = null;
 
@@ -14,6 +15,21 @@ angular.module('socialdumpApp')
 				filter: false
 			};
 
+			$scope.eventPosts = [];
+			console.log("On posts");
+
+
+
+			PostTracker.receive().then(null, null, function(post) {
+				console.log("Receive");
+				displayPost(post)
+			});
+
+			function displayPost(post) {
+				var existingPost = false;
+				if (!existingPost) $scope.eventPosts.push(post);
+				console.log(post)
+			}
 			/**
 			 * Update the filters array based on the given filter
 			 * $param filter: the name of a tab like 'work'

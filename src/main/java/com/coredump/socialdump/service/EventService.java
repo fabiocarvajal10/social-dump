@@ -1,4 +1,5 @@
 package com.coredump.socialdump.service;
+
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
@@ -42,6 +43,7 @@ public class EventService {
   }
 
   //Temporal
+
   private void insertScTest(Event event) {
     SearchCriteria sc = new SearchCriteria();
     sc.setEventByEventId(event);

@@ -28,8 +28,16 @@ angular.module('socialdumpApp')
 						controller: 'PostController'
 					}
 				},
-				resolve:{}
-			})
+				resolve:{},
+				onEnter: function(PostTracker) {
+					PostTracker.connect();
+					console.log("Subscribing");
+					PostTracker.subscribe();
+				},
+				onExit: function(PostTracker) {
+					PostTracker.unsubscribe();
+				}
+			});
 			/*.state('PostDetail', {
 				parent: 'entity',
 				url: '/post/:id',
