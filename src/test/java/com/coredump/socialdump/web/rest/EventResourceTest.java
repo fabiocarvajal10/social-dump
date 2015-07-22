@@ -5,6 +5,7 @@ import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,16 +43,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EventResourceTest {
 
 
-    private static final LocalDate DEFAULT_START_DATE = new LocalDate(0L);
-    private static final LocalDate UPDATED_START_DATE = new LocalDate();
+    private static final DateTime DEFAULT_START_DATE = new DateTime(0L);
+    private static final DateTime UPDATED_START_DATE = new DateTime();
 
-    private static final LocalDate DEFAULT_END_DATE = new LocalDate(0L);
-    private static final LocalDate UPDATED_END_DATE = new LocalDate();
+    private static final DateTime DEFAULT_END_DATE = new DateTime(0L);
+    private static final DateTime UPDATED_END_DATE = new DateTime();
     private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
     private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
 
-    private static final LocalDate DEFAULT_ACTIVATED_AT = new LocalDate(0L);
-    private static final LocalDate UPDATED_ACTIVATED_AT = new LocalDate();
+    private static final DateTime DEFAULT_ACTIVATED_AT = new DateTime(0L);
+    private static final DateTime UPDATED_ACTIVATED_AT = new DateTime();
 
     private static final Integer DEFAULT_POST_DELAY = 0;
     private static final Integer UPDATED_POST_DELAY = 1;
