@@ -116,6 +116,7 @@ public class AccountResource {
             .map(user -> {
                 return new ResponseEntity<>(
                     new UserDTO(
+                        user.getId(),
                         user.getLogin(),
                         null,
                         user.getFirstName(),

@@ -15,9 +15,10 @@ angular.module('socialdumpApp')
       }).then(function() {
         $scope.authenticationError = false;
         if ($rootScope.previousStateName === 'register') {
-          $state.go('home');
+          $state.go('login');
         } else {
           $rootScope.back();
+          $state.go('dashboard');
         }
       }).catch (function() {
         $scope.authenticationError = true;

@@ -1,0 +1,54 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "eventsById",
+            "relationshipNameCapitalized": "EventsById",
+            "relationshipFieldName": "eventsById",
+            "otherEntityName": "event",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "Event",
+            "otherEntityRelationshipName": "eventStatusByEventStatusId"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "status",
+            "fieldType": "String",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "Status",
+            "fieldNameUnderscored": "status",
+            "fieldInJavaBeanMethod": "Status",
+            "fieldValidate": true,
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "Description",
+            "fieldNameUnderscored": "description",
+            "fieldInJavaBeanMethod": "Description",
+            "fieldValidate": true,
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOwnerOneToOne": false,
+    "fieldsContainOneToMany": true,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": false,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "fieldsContainDate": false,
+    "changelogDate": "20150718092445",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "validation": true
+}

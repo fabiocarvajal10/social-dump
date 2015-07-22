@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('socialdumpApp')
-    .factory('AuthServerProvider', function loginService($http, localStorageService, Base64) {
+    .factory('AuthServerProvider', function loginService($http, localStorageService, Base64, AccountService) {
         return {
             login: function(credentials) {
                 var data = "username=" + credentials.username + "&password="
@@ -13,6 +13,10 @@ angular.module('socialdumpApp')
                     }
                 }).success(function (response) {
                     localStorageService.set('token', response);
+                    AccountService.getUserId().
+                    then(function(data){
+                      localStorageService.set('userId', data);
+                    });
                     return response;
                 });
             },

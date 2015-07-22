@@ -18,5 +18,12 @@ public class EventStatusService {
   @Inject
   private EventStatusRepository eventStatusRepository;
 
+  /**
+   * Obtiene el estado activo.
+   * @return estado activo
+   */
+  public EventStatus getActive() {
+    return eventStatusRepository.findOneByStatus("Activo");
+  }
 }
 

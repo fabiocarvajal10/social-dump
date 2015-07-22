@@ -1,0 +1,130 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "organizationByOrganizationId",
+            "relationshipNameCapitalized": "OrganizationByOrganizationId",
+            "relationshipFieldName": "organizationByOrganizationId",
+            "otherEntityName": "organization",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "Organization",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "eventStatusByStatusId",
+            "relationshipNameCapitalized": "EventStatusByStatusId",
+            "relationshipFieldName": "eventStatusByStatusId",
+            "otherEntityName": "eventStatus",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "EventStatus",
+            "otherEntityField": "status"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "eventTypeByEventTypeId",
+            "relationshipNameCapitalized": "EventTypeByEventTypeId",
+            "relationshipFieldName": "eventTypeByEventTypeId",
+            "otherEntityName": "eventType",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "EventType",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "searchCriteriasById",
+            "relationshipNameCapitalized": "SearchCriteriasById",
+            "relationshipFieldName": "searchCriteriasById",
+            "otherEntityName": "searchCriteria",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "SearchCriteria",
+            "otherEntityRelationshipName": "eventByEventId"
+        },
+        {
+            "relationshipId": 5,
+            "relationshipName": "temporalAccessByTemporalAccessesById",
+            "relationshipNameCapitalized": "TemporalAccessByTemporalAccessesById",
+            "relationshipFieldName": "temporalAccessByTemporalAccessesById",
+            "otherEntityName": "temporalAccess",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "TemporalAccess",
+            "otherEntityRelationshipName": "eventByEventId"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "startDate",
+            "fieldType": "LocalDate",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "StartDate",
+            "fieldNameUnderscored": "start_date",
+            "fieldInJavaBeanMethod": "StartDate",
+            "fieldValidate": true,
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "endDate",
+            "fieldType": "LocalDate",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "EndDate",
+            "fieldNameUnderscored": "end_date",
+            "fieldInJavaBeanMethod": "EndDate",
+            "fieldValidate": true,
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "Description",
+            "fieldNameUnderscored": "description",
+            "fieldInJavaBeanMethod": "Description",
+            "fieldValidate": true,
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "activatedAt",
+            "fieldType": "LocalDate",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "ActivatedAt",
+            "fieldNameUnderscored": "activated_at",
+            "fieldInJavaBeanMethod": "ActivatedAt",
+            "fieldValidate": false
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "postDelay",
+            "fieldType": "Integer",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "PostDelay",
+            "fieldNameUnderscored": "post_delay",
+            "fieldInJavaBeanMethod": "PostDelay",
+            "fieldValidate": true,
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOwnerOneToOne": false,
+    "fieldsContainOneToMany": true,
+    "fieldsContainLocalDate": true,
+    "fieldsContainCustomTime": true,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "fieldsContainDate": false,
+    "changelogDate": "20150718002052",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "validation": true
+}

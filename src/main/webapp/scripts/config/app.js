@@ -2,8 +2,10 @@
 
 angular.module('socialdumpApp', [ 'ngAnimate',
     'ngAria', 'ngMessages', 'ngSanitize', 'ngTouch', 'ngStorage',
-    'LocalStorageModule', 'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'infinite-scroll',
-    'ui.grid', 'ui.bootstrap', 'ui.utils', 'ui.load', 'ui.jq', 'oc.lazyLoad', 'pascalprecht.translate', 'ngMaterial'])
+    'LocalStorageModule', 'ngResource', 'ui.router', 'ngCookies',
+    'ngCacheBuster', 'infinite-scroll', 'ui.grid', 'ui.bootstrap', 'ui.utils',
+    'ui.load', 'ui.jq', 'oc.lazyLoad', 'pascalprecht.translate', 'ngMaterial',
+    'ui.date'/*, 'ui.bootstrap.datetimepicker'*/])
     .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window',
         function(              $scope,   $translate,   $localStorage,   $window ) {
             // add 'ie' classes to html

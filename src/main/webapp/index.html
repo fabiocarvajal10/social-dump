@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>socialdump</title>
+        <title>Social Dump</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" type="text/css" />
         <link rel="stylesheet" href="assets/simple-line-icons/css/simple-line-icons.css" type="text/css" />
         <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.min.css" type="text/css" />
+        <!-- <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/> -->
         <link rel="stylesheet" href="libs/angular/ui-grid.bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="assets/styles/font.css" type="text/css" />
         <link rel="stylesheet" href="assets/styles/app.css" type="text/css" />
@@ -56,6 +57,8 @@
         <script src="bower_components/sockjs-client/dist/sockjs.js"></script>
         <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
         <script src="bower_components/json3/lib/json3.js"></script>
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+        <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
         <!-- Angular -->
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -66,6 +69,12 @@
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
         <script src="bower_components/angular-touch/angular-touch.js"></script>
+        <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+        <script type="text/javascript" src="bower_components/angular-ui-date/src/date.js"></script>
+        <!-- <script type="text/javascript" src="bower_components/moment/moment.js"></script> -->
+        <!-- <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script> -->
+        <!-- <script type="text/javascript" src="bower_components/angular/angular.js"></script> -->
+        <!-- <script type="text/javascript" src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script> -->
         <!-- ngMaterial -->
         <script src="bower_components/angular-material/angular-material.js"></script>
         <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
@@ -119,6 +128,7 @@
     <script src="scripts/components/util/base64.service.js"></script>
     <script src="scripts/components/util/parse-links.service.js"></script>
     <script src="scripts/components/util/dateutil.service.js"></script>
+    <script src="scripts/components/AccountService.js"></script>
 
     <!--application scripts-->
     <script src="scripts/app/main/main.js"></script>
@@ -153,6 +163,9 @@
     <script src="scripts/app/admin/metrics/metrics.js"></script>
     <script src="scripts/app/admin/metrics/metrics.controller.js"></script>
     <script src="scripts/app/entities/entity.js"></script>
+    <script src="scripts/app/entities/organization/organizations.js"></script>
+    <script src="scripts/app/entities/organization/OrganizationCtrl.js"></script>
+    <script src="scripts/components/organization/OrganizationService.js"></script>
     <script src="scripts/app/error/error.js"></script>
 
     <script src="scripts/app/main/main.controller.js"></script>
@@ -162,6 +175,18 @@
     <script src="scripts/app/admin/tracker/tracker.js"></script>
     <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
     <script src="scripts/components/tracker/tracker.service.js"></script>
+    <script src="scripts/app/entities/event/event.js"></script>
+    <script src="scripts/app/entities/event/event.controller.js"></script>
+    <script src="scripts/app/entities/event/event-detail.controller.js"></script>
+    <script src="scripts/components/entities/event/event.service.js"></script>
+    <script src="scripts/app/entities/eventType/eventType.js"></script>
+    <script src="scripts/app/entities/eventType/eventType.controller.js"></script>
+    <script src="scripts/app/entities/eventType/eventType-detail.controller.js"></script>
+    <script src="scripts/components/entities/eventType/eventType.service.js"></script>
+    <script src="scripts/app/entities/eventStatus/eventStatus.js"></script>
+    <script src="scripts/app/entities/eventStatus/eventStatus.controller.js"></script>
+    <script src="scripts/app/entities/eventStatus/eventStatus-detail.controller.js"></script>
+    <script src="scripts/components/entities/eventStatus/eventStatus.service.js"></script>
     <!-- endbuild -->
 
 

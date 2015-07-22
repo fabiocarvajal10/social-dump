@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('socialdumpApp')
-  .config(function($stateProvider) {
-    $stateProvider
+  angular.module('socialdumpApp')
+    .config(function($stateProvider) {
+      $stateProvider
         .state('login', {
           parent: 'account',
           url: '/login',
@@ -18,4 +19,5 @@ angular.module('socialdumpApp')
           },
           resolve: {}
         });
-  });
+    });
+}());
