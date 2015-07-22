@@ -55,6 +55,42 @@ public class EventResource{
   @Inject
   private EventService eventService;
 
+  private Organization validateOwner(Event event) {
+    return organizationService.ownsOrganization(event
+          .getOrganizationByOrganizationId()
+          .getId());
+  }
+
+  private Organization validateOwner(Long id) {
+    return organizationService.ownsOrganization(id);
+  }
+
+  /**
+   * POST  /events/activate/:id -> activate the "id" event.
+   */
+  @RequestMapping(value = "/events/activate/{id}",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<Void> activate(@Valid @PathVariable Long id) {
+    log.debug("REST request to get Event : {}", id);
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    if ( validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    eventService.scheduleFetch(event);
+
+    return ResponseEntity.ok().build();
+  }
+
+
   /**
    * Repositorio de estados de eventos.
    */
@@ -102,16 +138,9 @@ public class EventResource{
       return ResponseEntity.notFound().build();
     }
 
-    Organization organization = organizationService
-            .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
-
-    if ( organization == null) {
+    if ( validateOwner(event) == null) {
       return ResponseEntity.status(403).build();
     }
-
-
 
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
@@ -133,7 +162,7 @@ public class EventResource{
           @Valid @RequestParam(value = "organizationId") Long orgId)
           throws URISyntaxException {
 
-    Organization organization = organizationService.ownsOrganization(orgId);
+    Organization organization = validateOwner(orgId);
     if ( organization == null) {
       return ResponseEntity.status(403).body(null);
     }
@@ -168,12 +197,7 @@ public class EventResource{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    Organization organization = organizationService
-            .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
-
-    if ( organization == null) {
+    if ( validateOwner(event) == null) {
       return ResponseEntity.status(403).body(null);
     }
 
@@ -201,13 +225,8 @@ public class EventResource{
       return ResponseEntity.notFound().build();
     }
 
-    Organization organization = organizationService
-            .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
-
-    if ( organization == null) {
-      return ResponseEntity.status(403).build();
+    if ( validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
     }
 
     EventStatus status = statusRepository
@@ -217,8 +236,5 @@ public class EventResource{
     eventRepository.save(event);
     return ResponseEntity.ok().build();
   }
-
-
-
 
 }

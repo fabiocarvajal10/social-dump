@@ -1,0 +1,63 @@
+<div class="container-fluid">
+
+    <h2>Social Dump</h2>
+
+    <!--Replace for event name-->
+    <h1 class="text-center title">Event Name
+        <!--Replace for event #hashtag-->
+        <p><small>#Hashtag</small></p>
+    </h1>
+
+    <div class="features">
+
+        <div class="row">
+            <!--
+            <div class="col-md-3">
+              <h5>Triggering layout</h5>
+              A layout can be triggered at any time, for example when resizing a card. A callback will be fired once the animations have completed.
+            </div>
+          -->
+            <div class="col-md-4">
+                <h5>Filtering</h5>
+
+                <div class="btn-group" role="group">
+                    <button class="btn btn-default" ng-class="{active: isTabActive('home')}" ng-click="filter('home')">Show all</button>
+                    <button class="btn btn-default" ng-class="{active: isTabActive('work')}" ng-click="filter('work')">Experience</button>
+                    <button class="btn btn-default" ng-class="{active: isTabActive('education')}" ng-click="filter('education')">Education</button>
+                    <button class="btn btn-default" ng-class="{active: isTabActive('twitter')}" ng-click="filter('twitter')">Twitter</button>
+                    <button class="btn btn-default" ng-class="{active: isTabActive('instagram')}" ng-click="filter('instagram')">Facebook</button>
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+                <h5>Sorting</h5>
+
+                <div class="btn-group" role="group">
+                    <button class="btn btn-default"ng-class="{active: rankers === null}"   ng-click="rankers = null">Original order</button>
+                    <button class="btn btn-default" ng-class="{active: isRankerActive('added')}"  ng-click="orderBy('added')">Time created</button>
+                </div>
+            </div>
+
+            <!--div class="col-md-4">
+                <h5>Adding and removing items</h5>
+
+                <div class="btn-group" role="group">
+                    <button class="btn btn-default" ng-click="addCard()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button class="btn btn-default" ng-click="removeFirstCard()">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+
+                </div>
+
+            </div-->
+
+        </div>
+
+    </div>
+
+    <div dynamic-layout items="cards" filters="filters" rankers="rankers"></div>
+</div>
+

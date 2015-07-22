@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.print.DocFlavor;
 
@@ -33,7 +34,6 @@ public class InstagramFetch extends SocialNetworkFetch {
   private final Logger log = LoggerFactory.getLogger(InstagramFetch.class);
 
   private Instagram instagram;
-  private InstagramService instagramService;
 
   public InstagramFetch() {
     super();
@@ -53,10 +53,12 @@ public class InstagramFetch extends SocialNetworkFetch {
         List<MediaFeedData> mediaFeeds = mediaFeed.getData();
 
         log.debug("Cantidad de posts (inst) obtenidos: {}...", mediaFeeds.size());
+
         mediaFeeds.forEach(post -> postsList.add(processGram(post)));
 
         log.debug("Guardando los grams obtenidos");
         getSocialNetworkPostRepository().save(postsList);
+        super.notifyPublications(postsList);
         postsList.clear();
         log.debug("Sleeping");
         Thread.sleep(10000);

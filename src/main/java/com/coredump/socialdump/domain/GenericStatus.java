@@ -2,6 +2,7 @@ package com.coredump.socialdump.domain;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
@@ -67,10 +68,7 @@ public class GenericStatus implements Serializable {
 
   @Override
   public int hashCode() {
-    int result = (int) id;
-    result = 31 * result + (status != null ? status.hashCode() : 0);
-    result = 31 * result + (description != null ? description.hashCode() : 0);
-    return result;
+    return Objects.hashCode(id);
   }
 
   @OneToMany(mappedBy = "genericStatusByStatusId")
@@ -107,5 +105,13 @@ public class GenericStatus implements Serializable {
 
   public void setTemporalAccessesById(Collection<TemporalAccess> temporalAccessesById) {
     this.temporalAccessesById = temporalAccessesById;
+  }
+
+  @Override
+  public String toString() {
+    return "GenericStatus{"
+          + "status='" + status + '\''
+          + ", description='" + description + '\''
+          + '}';
   }
 }
