@@ -5,9 +5,6 @@
 
 angular.module('socialdumpApp')
   .factory('OrganizationService', function($http, $q, localStorageService) {
-    // var rootUrl = $location.protocol() + '://' + $location.host() + ':' +
-    //               $location.port();
-    // var orgsUrl = rootUrl + '/api/organizations';
     var currOrgId = 1;
     return {
       register: function(organizationName) {
@@ -18,18 +15,20 @@ angular.module('socialdumpApp')
 
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'POST',
           data: organization
         }).
         success(function(data, status, headers) {
-          organization['id'] = parseInt(headers('Location').match(/[0-9]+/g));
-          currOrgId = organization['id'];
+          organization.id = parseInt(headers('Location').match(/[0-9]+/g));
+          currOrgId = organization.id;
+          console.log(currOrgId);
           q.resolve(organization);
         }).
         catch (function(error) {
           var err = error.data.exception;
-          if (err === 'org.springframework.dao.DataIntegrityViolationException') {
+          if (err ===
+              'org.springframework.dao.DataIntegrityViolationException') {
             err = 'Ya cuenta con una organización del mismo nombre';
           }else {
             err = 'Error inesperado al intentar crear la organización';
@@ -43,7 +42,7 @@ angular.module('socialdumpApp')
       getAll: function() {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'GET'
         }).
           success(function(data) {
@@ -59,7 +58,7 @@ angular.module('socialdumpApp')
       getAllEvents: function(organizationId) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/events',
+          url: 'api/events',
           method: 'GET',
           params: {
             'organizationId': organizationId
@@ -78,7 +77,7 @@ angular.module('socialdumpApp')
       update: function(organization) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'PUT',
           params: {
             'id': organization.id,
@@ -104,7 +103,7 @@ angular.module('socialdumpApp')
       delete: function(id) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations/' + id,
+          url: 'api/organizations/' + id,
           method: 'DELETE',
           data: id
         }).

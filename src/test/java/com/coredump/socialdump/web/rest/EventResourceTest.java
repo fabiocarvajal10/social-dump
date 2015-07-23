@@ -77,12 +77,12 @@ public class EventResourceTest {
 
     @Before
     public void initTest() {
-        /*event = new Event();
+        event = new Event();
         event.setStartDate(DEFAULT_START_DATE);
         event.setEndDate(DEFAULT_END_DATE);
         event.setDescription(DEFAULT_DESCRIPTION);
         event.setActivatedAt(DEFAULT_ACTIVATED_AT);
-        event.setPostDelay(DEFAULT_POST_DELAY);*/
+        event.setPostDelay(DEFAULT_POST_DELAY);
     }
 
     @Test
@@ -110,8 +110,7 @@ public class EventResourceTest {
     @Test
     @Transactional
     public void checkStartDateIsRequired() throws Exception {
-        // Validate the database is empty
-        assertThat(eventRepository.findAll()).hasSize(0);
+        int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
         event.setStartDate(null);
 
@@ -121,16 +120,14 @@ public class EventResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(event)))
                 .andExpect(status().isBadRequest());
 
-        // Validate the database is still empty
         List<Event> events = eventRepository.findAll();
-        assertThat(events).hasSize(0);
+        assertThat(events).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     public void checkEndDateIsRequired() throws Exception {
-        // Validate the database is empty
-        assertThat(eventRepository.findAll()).hasSize(0);
+        int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
         event.setEndDate(null);
 
@@ -140,16 +137,14 @@ public class EventResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(event)))
                 .andExpect(status().isBadRequest());
 
-        // Validate the database is still empty
         List<Event> events = eventRepository.findAll();
-        assertThat(events).hasSize(0);
+        assertThat(events).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     public void checkDescriptionIsRequired() throws Exception {
-        // Validate the database is empty
-        assertThat(eventRepository.findAll()).hasSize(0);
+        int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
         event.setDescription(null);
 
@@ -159,18 +154,16 @@ public class EventResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(event)))
                 .andExpect(status().isBadRequest());
 
-        // Validate the database is still empty
         List<Event> events = eventRepository.findAll();
-        assertThat(events).hasSize(0);
+        assertThat(events).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     public void checkPostDelayIsRequired() throws Exception {
-        // Validate the database is empty
-        assertThat(eventRepository.findAll()).hasSize(0);
+        int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
-        event.setPostDelay(25);
+        event.setPostDelay(null);
 
         // Create the Event, which fails.
         restEventMockMvc.perform(post("/api/events")
@@ -178,9 +171,8 @@ public class EventResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(event)))
                 .andExpect(status().isBadRequest());
 
-        // Validate the database is still empty
         List<Event> events = eventRepository.findAll();
-        assertThat(events).hasSize(0);
+        assertThat(events).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -236,10 +228,10 @@ public class EventResourceTest {
 		int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
         // Update the event
-        /*event.setStartDate(UPDATED_START_DATE);
+        event.setStartDate(UPDATED_START_DATE);
         event.setEndDate(UPDATED_END_DATE);
         event.setDescription(UPDATED_DESCRIPTION);
-        event.setActivatedAt(UPDATED_ACTIVATED_AT);*/
+        event.setActivatedAt(UPDATED_ACTIVATED_AT);
         event.setPostDelay(UPDATED_POST_DELAY);
         restEventMockMvc.perform(put("/api/events")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

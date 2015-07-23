@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the Event entity.
+ * Performance test for the SearchCriteria entity.
  */
-class EventGatlingTest extends Simulation {
+class SearchCriteriaGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class EventGatlingTest extends Simulation {
         "x-auth-token" -> "${x_auth_token}"
     )
 
-    val scn = scenario("Test the Event entity")
+    val scn = scenario("Test the SearchCriteria entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,26 +62,26 @@ class EventGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all events")
-            .get("/api/events")
+            exec(http("Get all searchCriterias")
+            .get("/api/searchCriterias")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new event")
-            .post("/api/events")
+            .exec(http("Create new searchCriteria")
+            .post("/api/searchCriterias")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "startDate":"2020-01-01T00:00:00.000Z", "endDate":"2020-01-01T00:00:00.000Z", "description":"SAMPLE_TEXT", "activatedAt":"2020-01-01T00:00:00.000Z", "postDelay":"0"}""")).asJSON
+            .body(StringBody("""{"id":null, "searchCriteria":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_event_url")))
+            .check(headerRegex("Location", "(.*)").saveAs("new_searchCriteria_url")))
             .pause(10)
             .repeat(5) {
-                exec(http("Get created event")
-                .get("${new_event_url}")
+                exec(http("Get created searchCriteria")
+                .get("${new_searchCriteria_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created event")
-            .delete("${new_event_url}")
+            .exec(http("Delete created searchCriteria")
+            .delete("${new_searchCriteria_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }
