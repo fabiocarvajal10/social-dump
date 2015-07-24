@@ -1,0 +1,24 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3"> Contactos de Monitoreo </h1>
+</div>
+<div class="wrapper-md">
+  <a ui-sref="app.organizations.create" class="btn m-b-xs btn-sm btn-success btn-addon"><i class="fa fa-plus"></i> Agregar </a>
+  <div class="row">
+    <div class="col-xs-6 col-lg-3" ng-repeat="monitorContact in monitorContacts">
+      <div class="panel padder-v item wrapper">
+        <div class="top text-right w-full" ng-click="">
+          <span class="btn m-b-xs btn-xs btn-warning m-xs" ng-click="showUptOrg(organization, $index)">
+            <i class="fa fa-pencil"></i>
+          </span>
+          <span class="btn m-b-xs btn-xs btn-danger m-xs" ng-click="deleteMonitor(organization, $index)">
+            <i class="fa fa-trash-o"></i>
+          </span>
+        </div>
+        <div class="h3 text-info font-thin m-t-sm"> {{ monitorContact.firstName }} {{monitorContact.lastName}}</div>
+        <p class="h3"> {{ monitorContact.phone }} </p>
+        <p class="h4"> {{ monitorContact.email }} </p>
+        <p class="h5"> {{ monitorContact.organizationByOrganizationId.name }}</p>
+      </div>
+    </div>
+  </div>
+</div>

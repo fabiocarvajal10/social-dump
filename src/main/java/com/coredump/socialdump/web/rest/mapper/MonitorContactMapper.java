@@ -20,8 +20,8 @@ public abstract class MonitorContactMapper {
   private OrganizationRepository organizationRepository;
 
   @Mapping(source = "organizationId", target = "organizationByOrganizationId")
-  public abstract MonitorContact monitorContactDTOToMonitorContact(
-      MonitorContactDTO monitorContactDTO);
+  public abstract MonitorContact monitorContactDTOToMonitorContact(MonitorContactDTO
+      monitorContactDTO);
 
   public Organization organizationFromId(Long id) {
     if (id == null) {
