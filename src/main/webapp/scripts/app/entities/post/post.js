@@ -2,7 +2,7 @@
  * Created by fabio on 7/17/15.
  */
 'use strict';
-
+angular.module('socialdumpApp.posts',[]);
 angular.module('socialdumpApp')
 	.config(function($stateProvider) {
 		$stateProvider
@@ -28,7 +28,19 @@ angular.module('socialdumpApp')
 						controller: 'PostController'
 					}
 				},
-				resolve:{},
+				resolve:{
+					store: function($ocLazyLoad){
+						console.log("here")
+						return $ocLazyLoad.load({
+							name: 'socialdumpApp.posts',
+							files: ['scripts/app/entities/post/post.controller.js',
+								'scripts/components/entities/post/post.service.js',
+								'scripts/components/entities/post/post-tracker.service.js',
+								'scripts/components/entities/post/cards.service.js'
+							]
+						})
+					}
+				},
 				onEnter: function(PostTracker) {
 					PostTracker.connect();
 					console.log("Subscribing");

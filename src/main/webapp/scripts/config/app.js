@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('socialdumpApp', [ 'ngAnimate',
+angular.module('socialdumpApp', ['socialdumpApp.posts', 'ngAnimate',
     'ngAria', 'ngMessages', 'ngSanitize', 'ngTouch', 'ngStorage',
     'LocalStorageModule', 'ngResource', 'ui.router', 'ngCookies',
     'ngCacheBuster', 'infinite-scroll', 'ui.grid', 'ui.bootstrap', 'ui.utils',

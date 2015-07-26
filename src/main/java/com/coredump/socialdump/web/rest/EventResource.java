@@ -12,6 +12,8 @@ import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
+import com.coredump.socialdump.web.rest.util.ValidatorUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -109,11 +111,22 @@ public class EventResource{
     log.debug("REST request to save Event: {}", eventDTO.toString());
     if (eventDTO.getId() != null) {
       return ResponseEntity.badRequest()
-              .header("Failure", "A new event cannot already have an ID").build();
+            .header("Failure", "A new event cannot already have an ID")
+            .build();
     }
+
+    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "End date can't be lower than start date")
+            .build();
+    }
+
     Event event = eventMapper.eventDTOToEvent(eventDTO);
     event.setEventStatusByStatusId(eventStatusService.getActive());
+
+
     eventRepository.save(event);
+
     eventService.scheduleFetch(event);
     return ResponseEntity.created(new URI("/api/events/"
             + eventDTO.getId())) .build();
@@ -140,6 +153,13 @@ public class EventResource{
 
     if ( validateOwner(event) == null) {
       return ResponseEntity.status(403).build();
+    }
+
+
+    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "End date can't be lower than start date")
+            .build();
     }
 
     event = eventMapper.eventDTOToEvent(eventDTO);

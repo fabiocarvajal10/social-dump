@@ -1,15 +1,19 @@
-package com.coredump.socialdump.web.websocket.dto;
+package com.coredump.socialdump.web.rest.dto;
+
+import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.GenericStatus;
+import com.coredump.socialdump.domain.SearchCriteria;
+import com.coredump.socialdump.domain.SocialNetwork;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
- * Created by fabio on 7/18/15.
+ * Created by fabio on 7/25/15.
  */
-public class SocialNetworkPostDTO   implements Serializable {
-  private Long id;
+public class SocialNetworkPostDTO {
+  private long id;
 
   @NotNull
   private Timestamp createdAt;
@@ -20,7 +24,6 @@ public class SocialNetworkPostDTO   implements Serializable {
   @NotNull
   private String snUserEmail;
   private String mediaUrl;
-
 
   @NotNull
   private String body;
@@ -43,6 +46,7 @@ public class SocialNetworkPostDTO   implements Serializable {
   @NotNull
   private String eventName;
 
+  //Access methods
   public String getSocialNetworkName() {
     return socialNetworkName;
   }
@@ -99,20 +103,16 @@ public class SocialNetworkPostDTO   implements Serializable {
     this.socialNetworkId = socialNetworkId;
   }
 
-  public Timestamp getCreatedAt() {
-    return createdAt;
+  public void setId(long id) {
+    this.id = id;
   }
 
-  public void setCreatedAt(Timestamp createdAt) {
-    this.createdAt = createdAt;
+  public String getMediaUrl() {
+    return mediaUrl;
   }
 
-  public Long getSnUserId() {
-    return snUserId;
-  }
-
-  public void setSnUserId(Long snUserId) {
-    this.snUserId = snUserId;
+  public void setMediaUrl(String mediaUrl) {
+    this.mediaUrl = mediaUrl;
   }
 
   public String getSnUserEmail() {
@@ -123,13 +123,30 @@ public class SocialNetworkPostDTO   implements Serializable {
     this.snUserEmail = snUserEmail;
   }
 
-  public String getMediaUrl() {
-    return mediaUrl;
+  public Long getSnUserId() {
+    return snUserId;
   }
 
-  public void setMediaUrl(String mediaUrl) {
-    this.mediaUrl = mediaUrl;
+  public void setSnUserId(Long snUserId) {
+    this.snUserId = snUserId;
   }
+
+  public Timestamp getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Timestamp createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public String getEventName() {
+    return eventName;
+  }
+
+  public void setEventName(String eventName) {
+    this.eventName = eventName;
+  }
+
 
   @Override
   public int hashCode() {
@@ -164,11 +181,5 @@ public class SocialNetworkPostDTO   implements Serializable {
           + '}';
   }
 
-  public String getEventName() {
-    return eventName;
-  }
 
-  public void setEventName(String eventName) {
-    this.eventName = eventName;
-  }
 }
