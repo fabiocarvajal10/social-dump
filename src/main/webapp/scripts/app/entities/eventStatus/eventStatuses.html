@@ -1,0 +1,133 @@
+<div>
+
+  <h2>EventStatuses</h2>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#saveEventStatusModal" ng-click="clear()">
+          <span class="glyphicon glyphicon-flash"></span> <span>Create a new EventStatus</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="saveEventStatusModal" tabindex="-1" role="dialog" aria-labelledby="myEventStatusLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+            <h4 class="modal-title" id="myEventStatusLabel">Create or edit a EventStatus</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>ID</label>
+              <input type="text" class="form-control" name="id"
+                   ng-model="eventStatus.id" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Status</label>
+              <input type="text" class="form-control" name="status"
+                   ng-model="eventStatus.status" required>
+
+              <div ng-show="editForm.status.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.status.$error.required">
+                  This field is required.
+                </p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" class="form-control" name="description"
+                   ng-model="eventStatus.description" required>
+
+              <div ng-show="editForm.description.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.description.$error.required">
+                  This field is required.
+                </p>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+              <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+            </button>
+            <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+              <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteEventStatusConfirmation">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form name="deleteForm" ng-submit="confirmDelete(eventStatus.id)">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+            <h4 class="modal-title">Confirm delete operation</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete this EventStatus?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+              <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+            </button>
+            <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+              <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>Delete</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+        <tr ng-repeat="eventStatus in eventStatuses">
+          <td><a ui-sref="eventStatusDetail({id:eventStatus.id})">{{eventStatus.id}}</a></td>
+          <td>{{eventStatus.status}}</td>
+          <td>{{eventStatus.description}}</td>
+          <td>
+            <button type="submit"
+                ui-sref="eventStatusDetail({id:eventStatus.id})"
+                class="btn btn-info btn-sm">
+              <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> View</span>
+            </button>
+            <button type="submit"
+                ng-click="showUpdate(eventStatus.id)"
+                class="btn btn-primary btn-sm">
+              <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edit</span>
+            </button>
+            <button type="submit"
+                ng-click="delete(eventStatus.id)"
+                class="btn btn-danger btn-sm">
+              <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Delete</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

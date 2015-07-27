@@ -37,7 +37,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api")
-public class EventResource{
+public class  EventResource{
   private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
   @Inject
@@ -139,7 +139,7 @@ public class EventResource{
     }
 
     Page<Event> page = eventRepository
-            .findAllByorganizationByOrganizationId(
+            .findAllByOrganizationByOrganizationIdOrderByStartDateDesc(
                     PaginationUtil.generatePageRequest(offset, limit),
                     organization);
 
@@ -206,7 +206,7 @@ public class EventResource{
                     .getOrganizationByOrganizationId()
                     .getId());
 
-    if ( organization == null) {
+    if (organization == null) {
       return ResponseEntity.status(403).build();
     }
 

@@ -177,7 +177,7 @@ angular.module('socialdumpApp', ['ngAnimate',
                     return $ocLazyLoad.load(JQ_CONFIG[src]);
                   }
                   angular.forEach(MODULE_CONFIG, function(module) {
-                    if (module.name == src) {
+                    if (module.name === src) {
                       name = module.name;
                     } else {
                       name = src;

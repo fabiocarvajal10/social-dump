@@ -5,7 +5,7 @@
     .config(function($stateProvider) {
       $stateProvider
         .state('searchCriteria', {
-          parent: 'entity',
+          parent: 'home',
           url: '/searchCriterias',
           data: {
             roles: ['ROLE_USER'],
@@ -22,7 +22,7 @@
           }
         })
         .state('searchCriteria.detail', {
-          parent: 'entity',
+          parent: 'home',
           url: '/searchCriteria/{id}',
           data: {
             roles: ['ROLE_USER'],

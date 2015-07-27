@@ -7,7 +7,7 @@
         .state('event', {
           abstract: true,
           parent: 'home',
-          url: '/events',
+          url: 'events',
           template: '<ui-view/>',
           data: {
             roles: ['ROLE_USER'],
@@ -40,7 +40,7 @@
         })
         .state('event.detail', {
           parent: 'home',
-          url: '/events/{id}',
+          url: 'events/{id}',
           data: {
             roles: ['ROLE_USER'],
             pageTitle: 'Evento'
@@ -77,9 +77,9 @@
                   }
                 }
               }).result.then(function(result) {
-                $state.go('event', null, { reload: true });
+                $state.go('event.list', null, { reload: true });
               }, function() {
-                $state.go('event');
+                $state.go('event.list');
               });
           }]
         })
@@ -101,9 +101,9 @@
                 }]
               }
             }).result.then(function(result) {
-              $state.go('event', null, { reload: true });
+              $state.go('event.list', null, { reload: true });
             }, function() {
-              $state.go('^');
+              $state.go('^.sibling');
             });
           }]
         });

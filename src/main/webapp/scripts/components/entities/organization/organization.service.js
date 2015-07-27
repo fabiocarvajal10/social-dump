@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('socialdumpApp')
-    .factory('Event', function($resource, DateUtils) {
+    .factory('Organization', function($resource, DateUtils) {
       return $resource('api/organizations/:id', {}, {
         'query': { method: 'GET', isArray: true},
         'get': {
