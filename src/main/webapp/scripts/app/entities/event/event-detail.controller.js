@@ -7,7 +7,6 @@ angular.module('socialdumpApp')
       $scope.event = entity;
       $scope.defaultDateTimeFormat = DateUtils.defaultDateTimeFormat();
       $scope.load = function(id) {
-        console.log('load event detail controller');
         Event.get({id: id}, function(result) {
           $scope.event = result;
         });

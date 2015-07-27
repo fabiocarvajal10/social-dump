@@ -7,7 +7,7 @@
     <h4 class="modal-title" id="myEventLabel">
       <span ng-hide="!!event.id">Crear</span>
       <span ng-show="!!event.id">Modificar</span>
-      el Evento
+      un Evento
     </h4>
   </div>
   <div class="modal-body">
@@ -71,7 +71,8 @@
     </div>
     <div class="form-group">
       <label for="field_type">Tipo</label>
-      <select class="form-control" id="field_type" name="type" ng-model="event.typeId" ng-options="eventType.id as eventType.name for eventType in eventTypes">
+      <select class="form-control" id="field_type" name="type" ng-model="event.typeId"
+              ng-options="eventType.id as eventType.name for eventType in eventTypes">
       </select>
     </div>
   </div>

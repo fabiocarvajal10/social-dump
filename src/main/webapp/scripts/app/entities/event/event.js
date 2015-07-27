@@ -103,7 +103,7 @@
             }).result.then(function(result) {
               $state.go('event.list', null, { reload: true });
             }, function() {
-              $state.go('^.sibling');
+              $state.go('event.list');
             });
           }]
         });

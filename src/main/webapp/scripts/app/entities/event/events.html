@@ -39,7 +39,8 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-striped">
+    <div ui-grid="gridOptions"></div>
+<!--     <table class="table table-striped">
       <thead>
         <tr>
           <th>Descripción</th>
@@ -53,7 +54,6 @@
       </thead>
       <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
         <tr ng-repeat="event in events">
-          <!-- <td><a ui-sref="event.detail({id:event.id})">{{event.id}}</a></td> -->
           <td>{{event.description}}</td>
           <td>{{event.startDate | date: defaultDateTimeFormat}}</td>
           <td>{{event.endDate | date: defaultDateTimeFormat}}</td>
@@ -79,6 +79,6 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
 </div>
