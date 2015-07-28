@@ -2,12 +2,45 @@
  * Created by fabio on 7/17/15.
  */
 'use strict';
-angular.module('socialdumpApp.posts')
+	angular.module('socialdumpApp.posts')
 	.service('Cards', function(){
+
+		this.createCards = function(posts, externalScope){
+			var cardsToAdd = [];
+			var card = {};
+			var scope = this;
+			posts.forEach( function(post) {
+				card = scope.createCard(post);
+				cardsToAdd.push(card);
+			});
+			this.addCards(cardsToAdd, externalScope);
+		};
+
+		this.createCard = function(post){
+			var socialNetworkName = post.socialNetworkName.toLowerCase();
+			return {
+				'id': post.id,
+				'template': 'scripts/app/entities/post/partials/post-card.html',
+				'tabs': ['home', socialNetworkName],
+				'social': socialNetworkName,
+				'event': post.eventName,
+				'searchCriteria': post.searchCriteria,
+				'body': post.body
+			};
+		};
+
 		/**
-		 * Update the filters array based on the given filter
-		 * $param filter: the name of a tab like 'work'
+		 * Takes cardsToAdd and prepend it to the list of
+		 * cards.
 		 */
+		this.addCards = function(cardsToAdd, externalScope){
+			cardsToAdd.forEach( function(card, index){
+				if(index !== -1){
+					externalScope.cards.unshift(card);
+					cardsToAdd.splice(index, 1);
+				}
+			});
+		};
 
 		/**
 		 * Delete a given card
@@ -25,36 +58,4 @@ angular.module('socialdumpApp.posts')
 				cards.splice(index, 1);
 			}
 		};
-
-
-		/**
-		 * Add a card to the main view
-		 * Takes a card from the pile of cardsToAdd and prepend it to the list of
-		 * cards. Take a card belonging to the selected tab
-		 */
-		this.addCard = function(filters, cardsToAdd, cards){
-			var getCurrentTab = function(){
-				return filters[0][0][2];
-			};
-
-			var getIndexOfNextCardInTab = function(tab){
-				var index = -1;
-
-				for(i in cardsToAdd){
-					if(cardsToAdd[i].tabs.indexOf(tab) !== -1){
-						index = i;
-						break;
-					}
-				}
-				return index;
-			};
-
-			var index =  getIndexOfNextCardInTab(getCurrentTab());
-
-			if(index !== -1){
-				cards.unshift(cardsToAdd[index]);
-				cardsToAdd.splice(index, 1);
-			}
-		}
-
 	});

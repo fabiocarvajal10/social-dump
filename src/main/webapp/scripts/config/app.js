@@ -123,6 +123,8 @@ angular.module('socialdumpApp', ['socialdumpApp.posts', 'ngAnimate',
         //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
 
+
+
         $urlRouterProvider.otherwise('/');
         $stateProvider.state('site', {
             'abstract': true,
@@ -139,7 +141,10 @@ angular.module('socialdumpApp', ['socialdumpApp.posts', 'ngAnimate',
                     }
                 ]
             }
-        });
+        })
+          .state('public', {
+              'abstract':true
+          });
 
         $httpProvider.interceptors.push('authInterceptor');
 

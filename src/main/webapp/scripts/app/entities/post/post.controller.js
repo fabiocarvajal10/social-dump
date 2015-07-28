@@ -5,11 +5,9 @@
 
 angular.module('socialdumpApp.posts')
 	.controller('PostController',
-		['$scope', 'PostTracker', 'Cards',
-			function ($scope, PostTracker, Cards) {
+		['$scope', '$stateParams','PostTracker', 'Cards', 'PostService',
+			function ($scope, $stateParams, PostTracker, Cards, PostService) {
 			//This controller uses a websocket connection to receive posts from one event
-
-				$scope.eventPosts = [];
 
 				$scope.cards = [];
 
@@ -21,34 +19,20 @@ angular.module('socialdumpApp.posts')
 					filter: false
 				};
 
+				$scope.loaded = false;
+				//Loading existing data when entry
+				PostService
+					.query( {'id': $stateParams.id} )
+					.$promise.then(function(data) {
+						Cards.createCards(data, $scope);
+					});
 
 				PostTracker.receive().then(null, null, function(posts) {
 					console.log('Receive');
-					var cardsToAdd = [];
-					var card = {};
-					posts.forEach( function(post) {
-						card = $scope.createCard(post);
-						cardsToAdd.push(card);
-					});
-					$scope.addCards(cardsToAdd);
+					if($scope.loaded === true) {
+						Cards.createCards(posts, $scope);
+					}
 				});
-
-
-
-
-				$scope.createCard = function(post){
-					//console.log(post);
-					var socialNetworkName = post.socialNetworkName.toLowerCase();
-					return {
-						'id': post.id,
-						'template': 'scripts/app/entities/post/partials/post-card.html',
-						'tabs': ['home', socialNetworkName],
-						'social': socialNetworkName,
-						'event': post.eventName,
-						'searchCriteria': post.searchCriteria,
-						'body': post.body
-					};
-				};
 
 				/**
 				 * Update the filters array based on the given filter
@@ -92,22 +76,8 @@ angular.module('socialdumpApp.posts')
 				 * cards. Take a card belonging to the selected tab
 				 */
 				$scope.addCards = function(cardsToAdd){
-					Cards.addCard($scope.filters, cardsToAdd, $scope.cards)
+					Cards.addCards($scope.filters, cardsToAdd, $scope.cards)
 				};
-
-				$scope.cards.push({
-					id: 2,
-					template : "scripts/app/entities/post/partials/post-card.html",
-					tabs : ["home", "instagram"],
-					"position" : "Data Scientist",
-					"company" : "Big Data Inc."
-				});
-
-
-
-
-
-
 
 				//Refactorizar pasar a servicio
 				/*

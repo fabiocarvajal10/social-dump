@@ -1,5 +1,10 @@
 package com.coredump.socialdump.web.websocket.dto;
 
+import com.coredump.socialdump.domain.util.CustomTimestampDeserializer;
+import com.coredump.socialdump.domain.util.CustomTimestampSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -8,10 +13,12 @@ import java.util.Objects;
 /**
  * Created by fabio on 7/18/15.
  */
-public class SocialNetworkPostDTO   implements Serializable {
+public class SocialNetworkPostSocketDTO implements Serializable {
   private Long id;
 
   @NotNull
+  @JsonSerialize(using = CustomTimestampSerializer.class)
+  @JsonDeserialize(using = CustomTimestampDeserializer.class)
   private Timestamp createdAt;
 
   @NotNull
@@ -146,9 +153,9 @@ public class SocialNetworkPostDTO   implements Serializable {
       return false;
     }
 
-    SocialNetworkPostDTO socialNetworkPostDTODTO = (SocialNetworkPostDTO) object;
+    SocialNetworkPostSocketDTO socialNetworkPostDTO = (SocialNetworkPostSocketDTO) object;
 
-    if ( ! Objects.equals(id, socialNetworkPostDTODTO.id)) {
+    if ( ! Objects.equals(id, socialNetworkPostDTO.id)) {
       return false;
     }
     return true;

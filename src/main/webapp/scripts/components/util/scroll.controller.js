@@ -1,6 +1,7 @@
 /**
  * Created by fabio on 7/22/15.
  */
+'use strict';
 app.controller('ScrollController', ['$scope', '$timeout', function($scope, $timeout) {
 	$scope.datasource = {
 		get : function(index, count, success) {

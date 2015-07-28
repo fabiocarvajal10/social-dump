@@ -1,7 +1,7 @@
 /**
  * Created by fabio on 7/17/15.
  */
-
+'use strict';
 angular.module('socialdumpApp.posts')
 	.factory('PostTracker', function ($rootScope, $cookies, $http, $q) {
 		var stompClient = null;

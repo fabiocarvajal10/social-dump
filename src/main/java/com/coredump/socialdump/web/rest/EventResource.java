@@ -182,6 +182,8 @@ public class EventResource{
           @Valid @RequestParam(value = "organizationId") Long orgId)
           throws URISyntaxException {
 
+    log.debug("REST request to get all Organizations");
+
     Organization organization = validateOwner(orgId);
     if ( organization == null) {
       return ResponseEntity.status(403).body(null);
@@ -193,12 +195,15 @@ public class EventResource{
                     organization);
 
     HttpHeaders headers = PaginationUtil
-            .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+            .generatePaginationHttpHeaders(page, "/api/events",
+                  offset, limit);
 
-    return new ResponseEntity<>(page.getContent().stream()
-            .map(eventMapper::eventToEventDTO)
-            .collect(Collectors
-                    .toCollection(LinkedList::new)), headers, HttpStatus.OK);
+    return new ResponseEntity<>(page
+          .getContent()
+          .stream()
+          .map(eventMapper::eventToEventDTO)
+          .collect(Collectors.toCollection(LinkedList::new)),
+          headers, HttpStatus.OK);
   }
 
   /**

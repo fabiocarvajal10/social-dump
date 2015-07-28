@@ -1,10 +1,10 @@
 package com.coredump.socialdump.web.rest.dto;
 
-import com.coredump.socialdump.domain.Event;
-import com.coredump.socialdump.domain.GenericStatus;
-import com.coredump.socialdump.domain.SearchCriteria;
-import com.coredump.socialdump.domain.SocialNetwork;
 
+import com.coredump.socialdump.domain.util.CustomTimestampDeserializer;
+import com.coredump.socialdump.domain.util.CustomTimestampSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -13,9 +13,11 @@ import java.util.Objects;
  * Created by fabio on 7/25/15.
  */
 public class SocialNetworkPostDTO {
-  private long id;
+  private Long id;
 
   @NotNull
+  @JsonSerialize(using = CustomTimestampSerializer.class)
+  @JsonDeserialize(using = CustomTimestampDeserializer.class)
   private Timestamp createdAt;
 
   @NotNull
@@ -23,6 +25,7 @@ public class SocialNetworkPostDTO {
 
   @NotNull
   private String snUserEmail;
+
   private String mediaUrl;
 
   @NotNull
@@ -47,6 +50,14 @@ public class SocialNetworkPostDTO {
   private String eventName;
 
   //Access methods
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   public String getSocialNetworkName() {
     return socialNetworkName;
   }
@@ -61,6 +72,14 @@ public class SocialNetworkPostDTO {
 
   public void setSearchCriteriaId(Long searchCriteriaId) {
     this.searchCriteriaId = searchCriteriaId;
+  }
+
+  public int getSocialNetworkId() {
+    return socialNetworkId;
+  }
+
+  public void setSocialNetworkId(int socialNetworkId) {
+    this.socialNetworkId = socialNetworkId;
   }
 
   public String getSearchCriteria() {
@@ -78,33 +97,12 @@ public class SocialNetworkPostDTO {
   public void setEventId(Long eventId) {
     this.eventId = eventId;
   }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public String getBody() {
     return body;
   }
 
   public void setBody(String body) {
     this.body = body;
-  }
-
-  public int getSocialNetworkId() {
-    return socialNetworkId;
-  }
-
-  public void setSocialNetworkId(int socialNetworkId) {
-    this.socialNetworkId = socialNetworkId;
-  }
-
-  public void setId(long id) {
-    this.id = id;
   }
 
   public String getMediaUrl() {
@@ -163,9 +161,9 @@ public class SocialNetworkPostDTO {
       return false;
     }
 
-    SocialNetworkPostDTO socialNetworkPostDTODTO = (SocialNetworkPostDTO) object;
+    SocialNetworkPostDTO socialNetworkPostDTO = (SocialNetworkPostDTO) object;
 
-    if ( ! Objects.equals(id, socialNetworkPostDTODTO.id)) {
+    if ( ! Objects.equals(id, socialNetworkPostDTO.id)) {
       return false;
     }
     return true;
