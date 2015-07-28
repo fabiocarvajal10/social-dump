@@ -19,7 +19,6 @@ angular.module('socialdumpApp.posts')
 					filter: false
 				};
 
-				$scope.loaded = false;
 				//Loading existing data when entry
 				PostService
 					.query( {'id': $stateParams.id} )
@@ -28,10 +27,8 @@ angular.module('socialdumpApp.posts')
 					});
 
 				PostTracker.receive().then(null, null, function(posts) {
-					console.log('Receive');
-					if($scope.loaded === true) {
-						Cards.createCards(posts, $scope);
-					}
+					console.log('Now we are getting posts')	
+					Cards.createCards(posts, $scope);
 				});
 
 				/**
@@ -112,7 +109,6 @@ angular.module('socialdumpApp.posts')
 				 }]
 				 );
 				 */
-
 			}
 		]
 	);

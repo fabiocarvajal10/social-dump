@@ -22,13 +22,20 @@
 				'id': post.id,
 				'template': 'scripts/app/entities/post/partials/post-card.html',
 				'tabs': ['home', socialNetworkName],
-				'social': socialNetworkName,
-				'event': post.eventName,
-				'searchCriteria': post.searchCriteria,
-				'body': post.body
+				'data': {
+					'social': socialNetworkName,
+					'socialId': post.socialNetworkId,
+					'event': post.eventName,
+					'searchCriteria': post.searchCriteria,
+					'body': post.body,
+					'snUser': post.snUserEmail,
+					'snUserId': post.snUserId,
+					'createdAt': post.createdAt,
+					'eventId': post.eventId,
+					'mediaUrl': post.mediaUrl
+				}
 			};
 		};
-
 		/**
 		 * Takes cardsToAdd and prepend it to the list of
 		 * cards.
