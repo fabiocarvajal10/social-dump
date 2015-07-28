@@ -3,8 +3,8 @@ package com.coredump.socialdump.web.websocket;
 import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 
-import com.coredump.socialdump.web.websocket.dto.SocialNetworkPostDTO;
-import com.coredump.socialdump.web.websocket.mapper.SocialNetworkPostMapper;
+import com.coredump.socialdump.web.websocket.dto.SocialNetworkPostSocketDTO;
+import com.coredump.socialdump.web.websocket.mapper.SocialNetworkPostSocketMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 
 /**
@@ -39,7 +39,7 @@ public class EventPublicationService implements ApplicationListener<BrokerAvaila
   private AtomicBoolean brokerAvailable = new AtomicBoolean();
 
   @Inject
-  SocialNetworkPostMapper postSocketMapper;
+  SocialNetworkPostSocketMapper postSocketMapper;
 
   @Inject
   SocialNetworkPostRepository socialNetworkPostRepository;
@@ -54,10 +54,10 @@ public class EventPublicationService implements ApplicationListener<BrokerAvaila
   * */
   public void showPost(List<SocialNetworkPost> postList) throws Exception {
     String destination = "/topic/eventPublications";
-    List<SocialNetworkPostDTO> dtoList = new ArrayList<>();
-    for (SocialNetworkPost post : postList){
-      dtoList.add(postSocketMapper.SocialNetworkPostToSocialNetworkPostDTO(post));
-    }
+    List<SocialNetworkPostSocketDTO> dtoList = postList
+          .stream()
+          .map(postSocketMapper::SocialNetworkPostToSocialNetworkPostDTO)
+          .collect(Collectors.toList());
     this.messagingTemplate.convertAndSend(destination, dtoList);
   }
 

@@ -1,4 +1,4 @@
-package com.coredump.socialdump.web.websocket.mapper;
+package com.coredump.socialdump.web.rest.mapper;
 
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.SearchCriteria;
@@ -7,7 +7,7 @@ import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.repository.SocialNetworkRepository;
-import com.coredump.socialdump.web.websocket.dto.SocialNetworkPostDTO;
+import com.coredump.socialdump.web.rest.dto.SocialNetworkPostDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -15,11 +15,10 @@ import org.mapstruct.Mappings;
 import javax.inject.Inject;
 
 /**
- * Created by fabio on 7/18/15.
+ * Created by fabio on 7/25/15.
  */
 @Mapper(componentModel = "spring", uses = {})
 public abstract class SocialNetworkPostMapper {
-
   @Inject
   private SocialNetworkRepository socialNetworkRepository;
 
@@ -36,14 +35,14 @@ public abstract class SocialNetworkPostMapper {
         @Mapping(source = "searchCriteriaBySearchCriteriaId.searchCriteria", target = "searchCriteria"),
         @Mapping(source = "eventByEventId.id", target = "eventId"),
         @Mapping(source = "eventByEventId.description", target = "eventName")})
-  public abstract SocialNetworkPostDTO SocialNetworkPostToSocialNetworkPostDTO(
+  public abstract SocialNetworkPostDTO socialNetworkPostToSocialNetworkPostDTO(
         SocialNetworkPost post);
 
   @Mappings({
         @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
         @Mapping(source = "searchCriteriaId", target = "searchCriteriaBySearchCriteriaId"),
         @Mapping(source = "eventId", target = "eventByEventId")})
-  public abstract SocialNetworkPost SocialNetworkPostDTOToSocialNetworkPost(
+  public abstract SocialNetworkPost socialNetworkPostDTOToSocialNetworkPost(
         SocialNetworkPostDTO postDTO);
 
   /**
@@ -74,4 +73,3 @@ public abstract class SocialNetworkPostMapper {
     return searchCriteriaRepository.findOne(id);
   }
 }
-
