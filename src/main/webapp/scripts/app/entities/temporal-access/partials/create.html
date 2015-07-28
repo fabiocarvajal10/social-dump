@@ -1,0 +1,63 @@
+<div class="modal-header">
+  <h4 class="modal-title m-n font-thin h3"> Crear Acceso Temporal </h4>
+</div>
+<div class="modal-body">
+  <div class="m-b" ng-show="errorMessage.length">
+    <span class="label text-base bg-danger pos-rlt m-r">
+      {{ errorMessage }}
+    </span>
+  </div>
+  <div class="m-b">
+    <form name="taForm" role="form">
+      <div class="form-group">
+        <label> Monitor </label>
+        <ui-select ng-model="temporalAccess.monitor" theme="bootstrap">
+          <ui-select-match placeholder="Seleccione o busque al monitor">
+            {{$select.selected.firstName}}
+            {{$select.selected.lastName}}
+          </ui-select-match>
+          <ui-select-choices repeat="monitor in monitorContacts | filter: $select.search">
+            <div ng-bind-html="monitor.firstName + ' ' + monitor.lastName | highlight: $select.search"></div>
+            <small ng-bind-html="monitor.email | highlight: $select.search"></small>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="i-checks">
+            <input type="checkbox" name="accessChk" ng-model="temporalAccess.allEvent">
+            <i></i> Acceso para todo el evento
+          </label>
+        </div>
+      </div>
+      <div class="form-group" ng-hide="temporalAccess.allEvent">
+        <label> Fecha de Inicio </label>
+        <input type="text" class="form-control" name="startDate" placeholder="Fecha de inicio"
+               ng-model="monitorContact.lastName" ng-required="!temporalAccess.allEvent">
+        <div class="has-error" ng-messages="taForm.startDate.$error"
+             ng-show="taForm.startDate.$touched">
+          <label class="control-label" ng-message="required">
+            Debe seleccionar una fecha de inicio
+          </label>
+        </div>
+      </div>
+      <div class="form-group" ng-hide="temporalAccess.allEvent">
+        <label> Fecha de Fin </label>
+        <input type="email" class="form-control" name="endDate" placeholder="Fecha de fin"
+               ng-model="temporalAccess.endDate" ng-required="!temporalAccess.allEvent">
+        <div class="has-error" ng-messages="taForm.endDate.$error"
+             ng-show="taForm.endDate.$touched">
+          <label class="control-label" ng-message="required">
+            Debe seleccionar una fecha de fin
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-info" ng-click="createTA(temporalAccess)" ng-disabled="taForm.$invalid">
+    Agregar
+  </button>
+  <button class="btn btn-warning" ng-click="cancel()"> Cancelar </button>
+</div>

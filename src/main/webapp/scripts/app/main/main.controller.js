@@ -5,9 +5,12 @@ angular.module('socialdumpApp')
     Principal.identity().then(function(account) {
       $scope.account = account;
       $scope.isAuthenticated = Principal.isAuthenticated;
+      $scope.hasValidToken = AuthServerProvider.hasValidToken();
     });
 
-    $scope.$watch('isAuthenticated', function(){
+    $scope.$watch(function(){
+      return AuthServerProvider.hasValidToken();
+    }, function(){
       if(!Principal.isAuthenticated() || !AuthServerProvider.hasValidToken()){
         AuthServerProvider.logout();
         $state.go('login');

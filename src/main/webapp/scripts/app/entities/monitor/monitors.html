@@ -2,22 +2,30 @@
   <h1 class="m-n font-thin h3"> Contactos de Monitoreo </h1>
 </div>
 <div class="wrapper-md">
-  <a ui-sref="app.organizations.create" class="btn m-b-xs btn-sm btn-success btn-addon"><i class="fa fa-plus"></i> Agregar </a>
+  <a class="btn m-b-xs btn-sm btn-success btn-addon m-r-sm" ng-click="open(null, null,'create')">
+    <i class="fa fa-plus">
+    </i> Agregar
+  </a>
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="!monitorContacts.length">
+    No posee ningún contacto monitor
+  </span>
   <div class="row">
     <div class="col-xs-6 col-lg-3" ng-repeat="monitorContact in monitorContacts">
       <div class="panel padder-v item wrapper">
         <div class="top text-right w-full" ng-click="">
-          <span class="btn m-b-xs btn-xs btn-warning m-xs" ng-click="showUptOrg(organization, $index)">
+          <span class="btn m-b-xs btn-xs btn-warning m-xs"
+                ng-click="open(monitorContact, $index, 'update')">
             <i class="fa fa-pencil"></i>
           </span>
-          <span class="btn m-b-xs btn-xs btn-danger m-xs" ng-click="deleteMonitor(organization, $index)">
+          <span class="btn m-b-xs btn-xs btn-danger m-xs"
+                ng-click="open(monitorContact, $index, 'delete')">
             <i class="fa fa-trash-o"></i>
           </span>
         </div>
-        <div class="h3 text-info font-thin m-t-sm"> {{ monitorContact.firstName }} {{monitorContact.lastName}}</div>
+        <p class="h3 text-info font-thin m-t-sm"> {{ monitorContact.firstName }} </p>
+        <p class="h3 text-info font-thin"> {{monitorContact.lastName}} </p>
         <p class="h3"> {{ monitorContact.phone }} </p>
         <p class="h4"> {{ monitorContact.email }} </p>
-        <p class="h5"> {{ monitorContact.organizationByOrganizationId.name }}</p>
       </div>
     </div>
   </div>

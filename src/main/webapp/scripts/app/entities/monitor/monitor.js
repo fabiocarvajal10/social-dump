@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('socialdumpApp')
+angular.module('socialdumpApp.monitors', [])
   .config(function($stateProvider) {
     $stateProvider
       .state('monitors', {
@@ -14,6 +14,17 @@ angular.module('socialdumpApp')
           pageTitle: 'Contactos de Monitoreo'
         },
         templateUrl: 'scripts/app/entities/monitor/monitors.html',
-        controller: 'MonitorCtrl'
+        controller: 'MonitorCtrl',
+        resolve: {
+          store: function($ocLazyLoad){
+            return $ocLazyLoad.load({
+              name: 'socialdumpApp.monitors',
+              files: ['scripts/app/entities/monitor/monitor.controller.js',
+                      'scripts/app/entities/monitor/monitor-detail.controller.js',
+                      'scripts/components/entities/monitor/monitor.service.js'
+              ]
+            });
+          }
+        }
       });
   });

@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,15 +59,16 @@ public class MonitorContactResource {
       produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
   public ResponseEntity<?> create(@RequestBody MonitorContactDTO monitorContactDTO) {
-    return monitorContactRepository.findOneByEmail(monitorContactDTO.getEmail())
-      .map(monitor -> new ResponseEntity<>("e-mail address already in use",
-        HttpStatus.BAD_REQUEST))
-        .orElseGet(() -> {
-            MonitorContact monitorContact =
-                monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
+    MonitorContact monitorContact =
+        monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
 
+    return monitorContactRepository
+        .findOneByEmailAndOrganizationByOrganizationId(monitorContact.getEmail(),
+            monitorContact.getOrganizationByOrganizationId())
+        .map(monitor -> new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT))
+        .orElseGet(() -> {
             monitorContactRepository.save(monitorContact);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(Long.toString(monitorContact.getId()), HttpStatus.CREATED);
           });
   }
 
@@ -74,28 +77,39 @@ public class MonitorContactResource {
    */
   @RequestMapping(value = "/monitor-contacts",
       method = RequestMethod.PUT,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+      produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
-  public ResponseEntity<Void> update(@RequestBody MonitorContactDTO monitorContactDTO) {
+  public ResponseEntity<?> update(@RequestBody MonitorContactDTO monitorContactDTO) {
 
-    MonitorContact monitorContact = monitorContactRepository.findOne(monitorContactDTO.getId());
-
-    if (monitorContact == null) {
+    if (monitorContactRepository.findOne(monitorContactDTO.getId()) == null) {
       return ResponseEntity.notFound().build();
     }
 
-    monitorContact = monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
-    monitorContactRepository.save(monitorContact);
+    MonitorContact monitorContact =
+        monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
 
-    return ResponseEntity.ok().build();
+    return monitorContactRepository.findOneByEmailAndOrganizationByOrganizationId(
+        monitorContact.getEmail(), monitorContact.getOrganizationByOrganizationId())
+        .map(monitor ->  {
+            if (monitor.getId() == monitorContact.getId()) {
+              monitorContactRepository.save(monitorContact);
+              return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+              return new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT);
+            }
+          })
+        .orElseGet(() -> {
+            monitorContactRepository.save(monitorContact);
+            return new ResponseEntity<>(HttpStatus.OK);
+          });
   }
 
   /**
    * GET  /monitor-contacts -> get all the monitors.
    */
   @RequestMapping(value = "/monitor-contacts",
-    method = RequestMethod.GET,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public List<MonitorContact> getAll(@RequestParam(value = "organizationId") Long organizationId) {

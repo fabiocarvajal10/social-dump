@@ -1,0 +1,22 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3"> Accesos Temporales </h1>
+</div>
+<div class="wrapper-md">
+  <a class="btn m-b-xs btn-sm btn-success btn-addon m-r-sm" ng-click="open(null, null,'create')">
+    <i class="fa fa-plus">
+    </i> Agregar
+  </a>
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="gridTemporalAccesses.length">
+    No ha habilitado ningún acceso temporal
+  </span>
+  <div class="table-responsive m-b-lg">
+    <div ui-grid="gridTemporalAccesses"></div>
+  </div>
+  <ui-select ng-model="temporalAccess.monitor" theme="bootstrap">
+    <ui-select-match placeholder="Seleccione o busque al monitor">{{$select.selected.firstName}}</ui-select-match>
+    <ui-select-choices repeat="monitor in monitorContacts | filter: $select.search">
+      <div ng-bind-html="monitor.firstName + ' ' + monitor.lastName | highlight: $select.search"></div>
+      <small ng-bind-html="monitor.email | highlight: $select.search"></small>
+    </ui-select-choices>
+  </ui-select>
+</div>

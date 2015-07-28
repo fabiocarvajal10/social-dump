@@ -1,11 +1,15 @@
 package com.coredump.socialdump.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.TemporalAccess;
+import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.MonitorContactRepository;
 import com.coredump.socialdump.repository.TemporalAccessRepository;
 import com.coredump.socialdump.service.GenericStatusService;
+import com.coredump.socialdump.service.MailService;
+import com.coredump.socialdump.service.util.RandomUtil;
 import com.coredump.socialdump.web.rest.dto.TemporalAccessDTO;
 import com.coredump.socialdump.web.rest.mapper.TemporalAccessMapper;
 
@@ -15,13 +19,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -45,10 +52,19 @@ public class TemporalAccessResource {
   private MonitorContactRepository monitorContactRepository;
 
   @Inject
+  private PasswordEncoder passwordEncoder;
+
+  @Inject
+  private EventRepository eventRepository;
+
+  @Inject
   private GenericStatusService genericStatusService;
 
   @Inject
   private TemporalAccessMapper temporalAccessMapper;
+
+  @Inject
+  private MailService mailService;
 
   /**
    * POST  /register -> register the monitor contact.
@@ -57,20 +73,25 @@ public class TemporalAccessResource {
     method = RequestMethod.POST,
     produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
-  public ResponseEntity<?> create(@RequestBody TemporalAccessDTO temporalAccessDTO) {
-      TemporalAccess temporalAccess =
-          temporalAccessMapper.temporalAccessDTOToTemporalAccess(temporalAccessDTO);
+  public ResponseEntity<?> create(@RequestBody TemporalAccessDTO temporalAccessDTO,
+      HttpServletRequest request) {
+    TemporalAccess temporalAccess =
+        temporalAccessMapper.temporalAccessDTOToTemporalAccess(temporalAccessDTO);
 
-        temporalAccess.setGenericStatusByStatusId(genericStatusService.getActive());
-        temporalAccess.setCreatedAt(new DateTime());
+    String password = RandomUtil.generatePassword();
+    temporalAccess.setEmail(temporalAccess.getMonitorContactByMonitorContactId().getEmail());
+    temporalAccess.setPassword(passwordEncoder.encode(password));
+    temporalAccess.setGenericStatusByStatusId(genericStatusService.getActive());
+    temporalAccess.setCreatedAt(new DateTime());
 
-        MonitorContact monitorContact = monitorContactRepository
-          .findOne(temporalAccessDTO.getMonitorContactId());
+    temporalAccessRepository.save(temporalAccess);
 
-        temporalAccessRepository.save(temporalAccess);
-        //enviarEmail
+    String baseUrl = request.getScheme() + request.getServerName() + request.getServerPort();
+    temporalAccess.setPassword(password);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    mailService.temporalAccessEmail(temporalAccess, baseUrl);
+
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   /**
@@ -80,9 +101,10 @@ public class TemporalAccessResource {
     method = RequestMethod.GET,
     produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public List<TemporalAccess> getAll() {
+  public List<TemporalAccess> getAll(@RequestParam(value = "eventId") Long eventId) {
     log.debug("REST request to get all TemporalAccesses");
-    return temporalAccessRepository.findAll();
+    Event event = eventRepository.findOne(eventId);
+    return temporalAccessRepository.getAllByEventByEventId(event);
   }
 
   /**

@@ -2,6 +2,7 @@ package com.coredump.socialdump.domain;
 
 import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
 import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -20,12 +21,16 @@ import javax.validation.constraints.Size;
 public class TemporalAccess implements Serializable {
   private long id;
   private String email;
+
+  @JsonIgnore
   private String password;
   private DateTime createdAt;
   private DateTime startDate;
   private DateTime endDate;
   private Event eventByEventId;
   private MonitorContact monitorContactByMonitorContactId;
+
+  @JsonIgnore
   private GenericStatus genericStatusByStatusId;
 
   @Id

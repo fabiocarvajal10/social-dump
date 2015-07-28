@@ -17,5 +17,8 @@ public interface MonitorContactRepository
 
   Optional<MonitorContact> findOneByEmail(String email);
 
+  Optional<MonitorContact>
+      findOneByEmailAndOrganizationByOrganizationId(String email, Organization organization);
+
 }
 
