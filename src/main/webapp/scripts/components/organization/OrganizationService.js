@@ -22,7 +22,6 @@ angular.module('socialdumpApp')
         success(function(data, status, headers) {
           organization.id = parseInt(headers('Location').match(/[0-9]+/g));
           currOrgId = organization.id;
-          console.log(currOrgId);
           q.resolve(organization);
         }).
         catch (function(error) {

@@ -44,6 +44,7 @@
           $scope.page = 1;
           $scope.events = [];
           $scope.loadAll();
+          $scope.gridOptions.data = $scope.events;
         };
         $scope.loadPage = function(page) {
           $scope.page = page;
@@ -87,7 +88,7 @@
               // cellClass: 'col-sm-2',
               field: 'id',
               displayName: 'ID',
-              visible: false,
+              visible: false
             },
             {
               // cellClass: 'col-sm-2',

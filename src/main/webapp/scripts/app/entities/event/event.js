@@ -58,7 +58,7 @@
           }
         })
         .state('event.new', {
-          parent: 'event',
+          parent: 'event.list',
           url: '/new',
           data: {
             roles: ['ROLE_USER']

@@ -1,15 +1,12 @@
 (function() {
   'use strict';
 
-  angular.module('socialdumpApp').controller('EventDialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Event',
-     // 'Organization',
-     'EventType', 'SearchCriteria',
-     'OrganizationService',
+  angular.module('socialdumpApp').controller('EventDialogController', [
+    '$scope', '$stateParams', '$modalInstance', 'entity', 'Event',
+    'EventType', 'SearchCriteria', 'OrganizationService',
       function($scope, $stateParams, $modalInstance, entity, Event,
                EventType, SearchCriteria, OrganizationService) {
         $scope.event = entity;
-        // $scope.eventstatuses = EventStatus.query();
         $scope.eventTypes = EventType.query();
         $scope.load = function(id) {
           Event.get({id: id}, function(result) {

@@ -139,9 +139,9 @@ public class  EventResource{
     }
 
     Page<Event> page = eventRepository
-            .findAllByOrganizationByOrganizationIdOrderByStartDateDesc(
+            .findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
                     PaginationUtil.generatePageRequest(offset, limit),
-                    organization);
+                    organization.getId());
 
     HttpHeaders headers = PaginationUtil
             .generatePaginationHttpHeaders(page, "/api/events", offset, limit);

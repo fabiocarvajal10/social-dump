@@ -2,11 +2,12 @@ package com.coredump.socialdump.repository;
 
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.Organization;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * Created by fabio on 13/07/15.
@@ -33,4 +34,16 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    */
   Page<Event> findAllByOrganizationByOrganizationIdOrderByStartDateDesc(
     Pageable pageable, Organization organization);
+
+  /**
+   * Devuelve todas los eventos de una organización, ordenado por fecha de
+   * inicio de manera descendiente, sin incluir eventos cancelados.
+   * @param pageable objeto paginable que indica la paginación deseada
+   * @param organization organización
+   * @return objeto página con eventos
+   */
+  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate desc")
+  Page<Event> findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
+    Pageable pageable,
+    @Param("orgId") Long orgId);
 }

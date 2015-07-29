@@ -199,7 +199,6 @@
                         promise = deferred.promise;
                       }
                       angular.forEach(srcs, function(src) {
-                        // console.log(src);
                         promise = promise.then(function() {
                           if (JQ_CONFIG[src]) {
                             return $ocLazyLoad.load(JQ_CONFIG[src]);

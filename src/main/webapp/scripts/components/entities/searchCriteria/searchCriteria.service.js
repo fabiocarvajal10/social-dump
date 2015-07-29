@@ -3,7 +3,7 @@
 
   angular.module('socialdumpApp')
     .factory('SearchCriteria', function($resource) {
-      return $resource('api/searchCriterias/:id', {}, {
+      return $resource('api/search-criteria/:id', {}, {
         'query': { method: 'GET', isArray: true},
         'get': {
           method: 'GET',

@@ -6,7 +6,7 @@
       $stateProvider
         .state('searchCriteria', {
           parent: 'home',
-          url: '/searchCriterias',
+          url: 'search-criterias',
           data: {
             roles: ['ROLE_USER'],
             pageTitle: 'SearchCriterias'
@@ -23,7 +23,7 @@
         })
         .state('searchCriteria.detail', {
           parent: 'home',
-          url: '/searchCriteria/{id}',
+          url: 'search-criterias/{id}',
           data: {
             roles: ['ROLE_USER'],
             pageTitle: 'SearchCriteria'
