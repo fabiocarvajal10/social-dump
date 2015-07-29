@@ -1,6 +1,8 @@
 /**
  * Created by Franz on 27/07/2015.
  */
+'use strict';
+
 angular.module('socialdumpApp.temporalAccess')
   .controller('TemporalAccessDetailCtrl',
     function ($scope, TemporalAccessService, $modalInstance, MonitorService) {

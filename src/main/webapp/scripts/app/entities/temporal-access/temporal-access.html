@@ -12,11 +12,4 @@
   <div class="table-responsive m-b-lg">
     <div ui-grid="gridTemporalAccesses"></div>
   </div>
-  <ui-select ng-model="temporalAccess.monitor" theme="bootstrap">
-    <ui-select-match placeholder="Seleccione o busque al monitor">{{$select.selected.firstName}}</ui-select-match>
-    <ui-select-choices repeat="monitor in monitorContacts | filter: $select.search">
-      <div ng-bind-html="monitor.firstName + ' ' + monitor.lastName | highlight: $select.search"></div>
-      <small ng-bind-html="monitor.email | highlight: $select.search"></small>
-    </ui-select-choices>
-  </ui-select>
 </div>
