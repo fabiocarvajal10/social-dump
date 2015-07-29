@@ -4,7 +4,6 @@ import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
-import com.coredump.socialdump.web.rest.dto.SearchCriteriaRequestDTO;
 import com.coredump.socialdump.web.rest.mapper.SearchCriteriaMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
 import java.net.URI;
@@ -51,69 +50,49 @@ public class SearchCriteriaResource {
   private SearchCriteriaMapper searchCriteriaMapper;
 
   /**
-   * POST /search-criteria -> post create new SearchCriteria
-   */
-  @RequestMapping(value = "/search-criteria",
-        method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-  @Timed
-  public ResponseEntity<Void> create(@Valid @RequestBody SearchCriteriaRequestDTO searchCriteriaDTO)
-        throws URISyntaxException {
-
-    log.debug("REST request to save Event: {}", searchCriteriaDTO.getId());
-
-    if (searchCriteriaDTO.getId() != null) {
-      return ResponseEntity.badRequest()
-            .header("Failure", "A new search criteria cannot already have an ID").build();
-    }
-
-    SearchCriteria searchCriteria = searchCriteriaMapper
-          .searchCriteriaRequestDTOToSearchCriteria(searchCriteriaDTO);
-
-    if (searchCriteria.getEventByEventId() == null) {
-      return ResponseEntity.badRequest()
-            .header("Failure", "Event doesn't exist").build();
-    }
-    if (searchCriteria.getSocialNetworkBySocialNetworkId() == null) {
-      return ResponseEntity.badRequest()
-            .header("Failure", "Social network doesn't exist").build();
-    }
-
-    if (searchCriteria.getGenericStatusByStatusId() == null) {
-      return ResponseEntity.badRequest()
-            .header("Failure", "Status doesn't exist").build();
-    }
-
-    searchCriteriaRepository.save(searchCriteria);
-
-    return ResponseEntity.created(new URI("/api/search-criteria/"
-          + searchCriteriaDTO.getId())) .build();
-  }
-
-  /**
    * POST  /search-criteria -> Crea un nuevo criterio de búsqueda.
    * @param searchCriteriaDTO encapsulación del criterio de búsqueda
    * @return representación del nuevo criterio de búsqueda
    */
   @RequestMapping(value = "/search-criteria",
-    method = RequestMethod.POST,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<SearchCriteriaDTO> create(
     @Valid @RequestBody SearchCriteriaDTO searchCriteriaDTO)
     throws URISyntaxException {
-    log.debug("REST request to save SearchCriteria : {}", searchCriteriaDTO);
+
+    log.debug("REST request to save SearchCriteria : {}",
+              searchCriteriaDTO.getId());
+
     if (searchCriteriaDTO.getId() != null) {
       return ResponseEntity.badRequest()
         .header("Failure", "Un nuevo criterio de búsqueda no puede tener un ID")
         .body(null);
     }
-    SearchCriteria searchCriteria =
-      searchCriteriaMapper.searchCriteriaDTOToSearchCriteria(searchCriteriaDTO);
-    SearchCriteria result = searchCriteriaRepository.save(searchCriteria);
+
+    SearchCriteria searchCriteria = searchCriteriaMapper
+          .searchCriteriaDTOToSearchCriteria(searchCriteriaDTO);
+
+    if (searchCriteria.getEventByEventId() == null) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "Event doesn't exist").body(null);
+    }
+    if (searchCriteria.getSocialNetworkBySocialNetworkId() == null) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "Social network doesn't exist").body(null);
+    }
+
+    if (searchCriteria.getGenericStatusByStatusId() == null) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "Status doesn't exist").body(null);
+    }
+
+    searchCriteriaRepository.save(searchCriteria);
+
     return ResponseEntity.created(new URI("/api/search-criteria/" +
       searchCriteriaDTO.getId()))
-        .body(searchCriteriaMapper.searchCriteriaToSearchCriteriaDTO(result));
+        .body(searchCriteriaMapper.searchCriteriaToSearchCriteriaDTO(searchCriteria));
   }
 
   /**
