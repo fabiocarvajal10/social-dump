@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="libs/angular/ui-grid.bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="assets/styles/font.css" type="text/css" />
         <link rel="stylesheet" href="assets/styles/app.css" type="text/css" />
+        <link rel="stylesheet" href="assets/styles/dynamic-layout.css" type="text/css" />
         <!--JHIPSTER, REMOVE THIS LATER-->
         <!--link rel="stylesheet" href="assets/styles/main.css">
         <!-- endbuild -->
@@ -82,7 +83,10 @@
         <script src="bower_components/ngstorage/ngStorage.js"></script>
         <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
         <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
-
+        <script src="bower_components/angular-dynamic-layout/src/dynamic-layout.js"></script>
+        <script src="bower_components/angular-dynamic-layout/src/services/position.js"></script>
+        <script src="bower_components/angular-dynamic-layout/src/services/filter.js"></script>
+        <script src="bower_components/angular-dynamic-layout/src/services/ranker.js"></script>
         <!-- bootstrap -->
         <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
         <!-- lazyload -->
@@ -92,6 +96,7 @@
         <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
         <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
         <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -171,13 +176,14 @@
     <!--component scripts-->
     <script src="scripts/components/auth/provider/auth.xauth.service.js"></script>
     <!--application scripts-->
-    <script src="scripts/app/admin/tracker/tracker.js"></script>
+    <!--script src="scripts/app/admin/tracker/tracker.js"></script>
     <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
-    <script src="scripts/components/tracker/tracker.service.js"></script>
+    <!--script src="scripts/components/tracker/tracker.service.js"></script-->
     <script src="scripts/app/entities/event/event.js"></script>
     <script src="scripts/app/entities/event/event.controller.js"></script>
     <script src="scripts/app/entities/event/event-detail.controller.js"></script>
     <script src="scripts/components/entities/event/event.service.js"></script>
+
     <script src="scripts/app/entities/eventType/eventType.js"></script>
     <script src="scripts/app/entities/eventType/eventType.controller.js"></script>
     <script src="scripts/app/entities/eventType/eventType-detail.controller.js"></script>
@@ -186,6 +192,7 @@
     <script src="scripts/app/entities/eventStatus/eventStatus.controller.js"></script>
     <script src="scripts/app/entities/eventStatus/eventStatus-detail.controller.js"></script>
     <script src="scripts/components/entities/eventStatus/eventStatus.service.js"></script>
+
     <script src="scripts/app/entities/searchCriteria/searchCriteria.js"></script>
     <script src="scripts/app/entities/searchCriteria/searchCriteria.controller.js"></script>
     <script src="scripts/app/entities/searchCriteria/searchCriteria-dialog.controller.js"></script>
@@ -193,6 +200,10 @@
     <script src="scripts/components/entities/searchCriteria/searchCriteria.service.js"></script>
     <script src="scripts/app/entities/event/event-dialog.controller.js"></script>
     <script src="scripts/components/entities/organization/organization.service.js"></script>
+
+    <script src="scripts/app/entities/post/post.js"></script>
+
+    <script src="scripts/components/util/scroll.controller.js"></script>
     <!-- endbuild -->
 
 

@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
+import com.coredump.socialdump.web.rest.dto.SearchCriteriaRequestDTO;
 import com.coredump.socialdump.web.rest.mapper.SearchCriteriaMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
 import java.net.URI;
@@ -42,6 +43,49 @@ public class SearchCriteriaResource {
    */
   @Inject
   private SearchCriteriaRepository searchCriteriaRepository;
+
+  @Inject
+  private SearchCriteriaMapper searchCriteriaMapper;
+
+  /**
+   * POST /search-criteria -> post create new SearchCriteria
+   */
+  @RequestMapping(value = "/search-criteria",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<Void> create(@Valid @RequestBody SearchCriteriaRequestDTO searchCriteriaDTO)
+        throws URISyntaxException {
+
+    log.debug("REST request to save Event: {}", searchCriteriaDTO.getId());
+
+    if (searchCriteriaDTO.getId() != null) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "A new search criteria cannot already have an ID").build();
+    }
+
+    SearchCriteria searchCriteria = searchCriteriaMapper
+          .searchCriteriaRequestDTOToSearchCriteria(searchCriteriaDTO);
+
+    if (searchCriteria.getEventByEventId() == null) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "Event doesn't exist").build();
+    }
+    if (searchCriteria.getSocialNetworkBySocialNetworkId() == null) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "Social network doesn't exist").build();
+    }
+
+    if (searchCriteria.getGenericStatusByStatusId() == null) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "Status doesn't exist").build();
+    }
+
+    searchCriteriaRepository.save(searchCriteria);
+
+    return ResponseEntity.created(new URI("/api/search-criteria/"
+          + searchCriteriaDTO.getId())) .build();
+  }
 
   /**
    * Mapeador de DTOs y criterios de búsqueda.
@@ -107,8 +151,8 @@ public class SearchCriteriaResource {
    * @throws URISyntaxException si se forma incorrectamente el URI de respuesta
    */
   @RequestMapping(value = "/search-criteria",
-    method = RequestMethod.GET,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public ResponseEntity<List<SearchCriteriaDTO>> getAll(

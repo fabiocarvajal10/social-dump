@@ -1,15 +1,33 @@
 package com.coredump.socialdump.web.rest.mapper;
 
-import com.coredump.socialdump.domain.*;
-import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
-import org.mapstruct.*;
+import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.GenericStatus;
+import com.coredump.socialdump.domain.SearchCriteria;
+import com.coredump.socialdump.domain.SocialNetwork;
+import com.coredump.socialdump.repository.EventRepository;
+import com.coredump.socialdump.repository.GenericStatusRepository;
+import com.coredump.socialdump.repository.SocialNetworkRepository;
+import com.coredump.socialdump.web.rest.dto.SearchCriteriaRequestDTO;
+import javax.inject.Inject;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 /**
- * Mapeador de criterios de búsqueda y objetos de transmisión de datos.
- * @author esteban
+ * Created by fabio on 7/19/15.
+ * Mapper for the entity SearchCriteria and its DTO SearchCriteriaDTO.
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface SearchCriteriaMapper {
+
+  @Inject
+  private EventRepository eventRepository;
+
+  @Inject
+  private SocialNetworkRepository socialNetworkRepository;
+
+  @Inject
+  private GenericStatusRepository genericStatusRepository;
 
   @Mappings({
     @Mapping(source = "eventByEventId.id",
@@ -32,7 +50,7 @@ public interface SearchCriteriaMapper {
    * Obtiene un criterio de búsqueda de un DTO
    * @param searchCriteriaDTO DTO de criterio de búsqueda
    * @return criterio de búsqueda
-  @*/
+   */
   @Mappings({
     @Mapping(source = "eventId",
              target = "eventByEventId"),
@@ -45,6 +63,13 @@ public interface SearchCriteriaMapper {
   })
   SearchCriteria searchCriteriaDTOToSearchCriteria(
     SearchCriteriaDTO searchCriteriaDTO);
+
+  @Mappings({
+        @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
+        @Mapping(source = "eventId", target = "eventByEventId"),
+        @Mapping(source = "genericStatusId", target = "genericStatusByStatusId")})
+  SearchCriteria searchCriteriaRequestDTOToSearchCriteria(
+        SearchCriteriaRequestDTO searchCriteriaRequestDTO);
 
   /**
    * Genera un evento de un Id
@@ -87,4 +112,5 @@ public interface SearchCriteriaMapper {
     genericStatus.setId(id);
     return genericStatus;
   }
+
 }

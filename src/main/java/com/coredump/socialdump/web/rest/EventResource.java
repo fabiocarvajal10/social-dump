@@ -12,6 +12,8 @@ import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
+import com.coredump.socialdump.web.rest.util.ValidatorUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -55,6 +57,42 @@ public class  EventResource{
   @Inject
   private EventService eventService;
 
+  private Organization validateOwner(Event event) {
+    return organizationService.ownsOrganization(event
+          .getOrganizationByOrganizationId()
+          .getId());
+  }
+
+  private Organization validateOwner(Long id) {
+    return organizationService.ownsOrganization(id);
+  }
+
+  /**
+   * POST  /events/activate/:id -> activate the "id" event.
+   */
+  @RequestMapping(value = "/events/activate/{id}",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<Void> activate(@Valid @PathVariable Long id) {
+    log.debug("REST request to get Event : {}", id);
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    if ( validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    eventService.scheduleFetch(event);
+
+    return ResponseEntity.ok().build();
+  }
+
+
   /**
    * Repositorio de estados de eventos.
    */
@@ -73,11 +111,22 @@ public class  EventResource{
     log.debug("REST request to save Event: {}", eventDTO.toString());
     if (eventDTO.getId() != null) {
       return ResponseEntity.badRequest()
-              .header("Failure", "A new event cannot already have an ID").build();
+            .header("Failure", "A new event cannot already have an ID")
+            .build();
     }
+
+    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "End date can't be lower than start date")
+            .build();
+    }
+
     Event event = eventMapper.eventDTOToEvent(eventDTO);
     event.setEventStatusByStatusId(eventStatusService.getActive());
+
+
     eventRepository.save(event);
+
     eventService.scheduleFetch(event);
     return ResponseEntity.created(new URI("/api/events/"
             + eventDTO.getId())) .build();
@@ -102,16 +151,16 @@ public class  EventResource{
       return ResponseEntity.notFound().build();
     }
 
-    Organization organization = organizationService
-            .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
-
-    if ( organization == null) {
+    if ( validateOwner(event) == null) {
       return ResponseEntity.status(403).build();
     }
 
 
+    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "End date can't be lower than start date")
+            .build();
+    }
 
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
@@ -133,7 +182,9 @@ public class  EventResource{
           @Valid @RequestParam(value = "organizationId") Long orgId)
           throws URISyntaxException {
 
-    Organization organization = organizationService.ownsOrganization(orgId);
+    log.debug("REST request to get all Organizations");
+
+    Organization organization = validateOwner(orgId);
     if ( organization == null) {
       return ResponseEntity.status(403).body(null);
     }
@@ -144,12 +195,15 @@ public class  EventResource{
                     organization.getId());
 
     HttpHeaders headers = PaginationUtil
-            .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+            .generatePaginationHttpHeaders(page, "/api/events",
+                  offset, limit);
 
-    return new ResponseEntity<>(page.getContent().stream()
-            .map(eventMapper::eventToEventDTO)
-            .collect(Collectors
-                    .toCollection(LinkedList::new)), headers, HttpStatus.OK);
+    return new ResponseEntity<>(page
+          .getContent()
+          .stream()
+          .map(eventMapper::eventToEventDTO)
+          .collect(Collectors.toCollection(LinkedList::new)),
+          headers, HttpStatus.OK);
   }
 
   /**
@@ -168,12 +222,7 @@ public class  EventResource{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    Organization organization = organizationService
-            .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
-
-    if ( organization == null) {
+    if ( validateOwner(event) == null) {
       return ResponseEntity.status(403).body(null);
     }
 
@@ -208,6 +257,8 @@ public class  EventResource{
 
     if (organization == null) {
       return ResponseEntity.status(403).build();
+    if (validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
     }
 
     EventStatus status = statusRepository
@@ -217,8 +268,5 @@ public class  EventResource{
     eventRepository.save(event);
     return ResponseEntity.ok().build();
   }
-
-
-
 
 }

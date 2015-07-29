@@ -119,8 +119,7 @@ public class OrganizationResource {
           throws URISyntaxException {
 
     Page<Organization> page = organizationRepository
-            .findAllForCurrentUser(PaginationUtil
-                    .generatePageRequest(offset, limit));
+          .findAllForCurrentUser(PaginationUtil.generatePageRequest(offset, limit));
 
     HttpHeaders headers = PaginationUtil
             .generatePaginationHttpHeaders(page,
@@ -128,9 +127,13 @@ public class OrganizationResource {
                     offset,
                     limit);
 
-    return new ResponseEntity<>(page.getContent().stream()
-            .map(organizationMapper::organizationToOrganizationDTO)
-            .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);
+    return new ResponseEntity<>(page
+          .getContent()
+          .stream()
+          .map(organizationMapper::organizationToOrganizationDTO)
+          .collect(Collectors
+                .toCollection(LinkedList::new)),
+          headers, HttpStatus.OK);
   }
 
   /**

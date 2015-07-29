@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('socialdumpApp', ['ngAnimate',
-  'ngAria', 'ngMessages', 'ngSanitize', 'ngTouch', 'ngStorage',
+angular.module('socialdumpApp', ['socialdumpApp.posts',
+  'ngAnimate', 'ngAria', 'ngMessages', 'ngSanitize', 'ngTouch', 'ngStorage',
   'LocalStorageModule', 'ngResource', 'ui.router', 'ngCookies',
   'ngCacheBuster', 'infinite-scroll', 'ui.grid', 'ui.grid.resizeColumns',
   'ui.bootstrap', 'ui.bootstrap.modal', 'ui.utils',
   'ui.load', 'ui.jq', 'oc.lazyLoad', 'pascalprecht.translate', 'ngMaterial',
-  'ui.date'/*, 'ui.bootstrap.datetimepicker'*/])
+  'ui.date', 'dynamicLayout'])
   .controller('AppCtrl', [
     '$scope', '$translate', '$localStorage', '$window',
     function($scope, $translate, $localStorage, $window) {
@@ -193,7 +193,4 @@ angular.module('socialdumpApp', ['ngAnimate',
             }]
         };
       }
-
-
   }]);
-
