@@ -39,7 +39,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api")
-public class EventResource{
+public class  EventResource{
   private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
   @Inject
@@ -190,9 +190,9 @@ public class EventResource{
     }
 
     Page<Event> page = eventRepository
-            .findAllByorganizationByOrganizationId(
+            .findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
                     PaginationUtil.generatePageRequest(offset, limit),
-                    organization);
+                    organization.getId());
 
     HttpHeaders headers = PaginationUtil
             .generatePaginationHttpHeaders(page, "/api/events",
@@ -250,7 +250,16 @@ public class EventResource{
       return ResponseEntity.notFound().build();
     }
 
-    if ( validateOwner(event) == null) {
+    Organization organization = organizationService
+            .ownsOrganization(event
+                    .getOrganizationByOrganizationId()
+                    .getId());
+
+    if (organization == null) {
+      return ResponseEntity.status(403).build();
+    }
+
+    if (validateOwner(event) == null) {
       return ResponseEntity.status(403).body(null);
     }
 
