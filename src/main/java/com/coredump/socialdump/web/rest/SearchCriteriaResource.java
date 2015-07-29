@@ -58,14 +58,17 @@ public class SearchCriteriaResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<Void> create(@Valid @RequestBody SearchCriteriaDTO searchCriteriaDTO)
-        throws URISyntaxException {
+  public ResponseEntity<SearchCriteriaDTO> create(
+    @Valid @RequestBody SearchCriteriaDTO searchCriteriaDTO)
+    throws URISyntaxException {
 
-    log.debug("REST request to save Event: {}", searchCriteriaDTO.getId());
+    log.debug("REST request to save SearchCriteria : {}",
+              searchCriteriaDTO.getId());
 
     if (searchCriteriaDTO.getId() != null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "A new search criteria cannot already have an ID").build();
+        .header("Failure", "Un nuevo criterio de búsqueda no puede tener un ID")
+        .body(null);
     }
 
     SearchCriteria searchCriteria = searchCriteriaMapper
@@ -73,22 +76,23 @@ public class SearchCriteriaResource {
 
     if (searchCriteria.getEventByEventId() == null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "Event doesn't exist").build();
+            .header("Failure", "Event doesn't exist").body(null);
     }
     if (searchCriteria.getSocialNetworkBySocialNetworkId() == null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "Social network doesn't exist").build();
+            .header("Failure", "Social network doesn't exist").body(null);
     }
 
     if (searchCriteria.getGenericStatusByStatusId() == null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "Status doesn't exist").build();
+            .header("Failure", "Status doesn't exist").body(null);
     }
 
     searchCriteriaRepository.save(searchCriteria);
 
-    return ResponseEntity.created(new URI("/api/search-criteria/"
-          + searchCriteriaDTO.getId())) .build();
+    return ResponseEntity.created(new URI("/api/search-criteria/" +
+      searchCriteriaDTO.getId()))
+        .body(searchCriteriaMapper.searchCriteriaToSearchCriteriaDTO(searchCriteria));
   }
 
   /**
