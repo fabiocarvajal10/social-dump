@@ -257,6 +257,8 @@ public class  EventResource{
 
     if (organization == null) {
       return ResponseEntity.status(403).build();
+    }
+
     if (validateOwner(event) == null) {
       return ResponseEntity.status(403).body(null);
     }

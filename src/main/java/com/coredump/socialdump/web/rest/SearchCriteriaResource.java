@@ -44,6 +44,9 @@ public class SearchCriteriaResource {
   @Inject
   private SearchCriteriaRepository searchCriteriaRepository;
 
+  /**
+   * Mapeador de DTOs y criterios de búsqueda.
+   */
   @Inject
   private SearchCriteriaMapper searchCriteriaMapper;
 
@@ -86,12 +89,6 @@ public class SearchCriteriaResource {
     return ResponseEntity.created(new URI("/api/search-criteria/"
           + searchCriteriaDTO.getId())) .build();
   }
-
-  /**
-   * Mapeador de DTOs y criterios de búsqueda.
-   */
-  @Inject
-  private SearchCriteriaMapper searchCriteriaMapper;
 
   /**
    * POST  /search-criteria -> Crea un nuevo criterio de búsqueda.

@@ -7,6 +7,7 @@ import com.coredump.socialdump.domain.SocialNetwork;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.GenericStatusRepository;
 import com.coredump.socialdump.repository.SocialNetworkRepository;
+import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
 import com.coredump.socialdump.web.rest.dto.SearchCriteriaRequestDTO;
 import javax.inject.Inject;
 import org.mapstruct.Mapper;
@@ -20,14 +21,14 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring", uses = {})
 public interface SearchCriteriaMapper {
 
-  @Inject
-  private EventRepository eventRepository;
+  // @Inject
+  // private EventRepository eventRepository;
 
-  @Inject
-  private SocialNetworkRepository socialNetworkRepository;
+  // @Inject
+  // private SocialNetworkRepository socialNetworkRepository;
 
-  @Inject
-  private GenericStatusRepository genericStatusRepository;
+  // @Inject
+  // private GenericStatusRepository genericStatusRepository;
 
   @Mappings({
     @Mapping(source = "eventByEventId.id",
