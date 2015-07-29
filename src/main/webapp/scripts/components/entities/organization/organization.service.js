@@ -18,13 +18,13 @@ angular.module('socialdumpApp')
 
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'POST',
           data: organization
         }).
         success(function(data, status, headers) {
-          organization['id'] = parseInt(headers('Location').match(/[0-9]+/g));
-          currOrgId = organization['id'];
+          organization.id = parseInt(headers('Location').match(/[0-9]+/g));
+          currOrgId = organization.id;
           q.resolve(organization);
         }).
         catch (function(error) {
@@ -43,15 +43,15 @@ angular.module('socialdumpApp')
       getAll: function() {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'GET'
         }).
-          success(function(data) {
-                    q.resolve(data);
-                  }).
-          error(function(error) {
-                  q.reject(error);
-                });
+        success(function(data) {
+          q.resolve(data);
+        }).
+        error(function(error) {
+          q.reject(error);
+        });
 
         return q.promise;
       },
@@ -59,18 +59,18 @@ angular.module('socialdumpApp')
       getAllEvents: function(organizationId) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/events',
+          url: 'api/events',
           method: 'GET',
           params: {
             'organizationId': organizationId
           }
         }).
-          success(function(data) {
-            q.resolve(data);
-          }).
-          error(function(error) {
-            q.reject(error);
-          });
+        success(function(data) {
+          q.resolve(data);
+        }).
+        error(function(error) {
+          q.reject(error);
+        });
 
         return q.promise;
       },
@@ -78,7 +78,7 @@ angular.module('socialdumpApp')
       update: function(organization) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'PUT',
           params: {
             'id': organization.id,
@@ -104,7 +104,7 @@ angular.module('socialdumpApp')
       delete: function(id) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations/' + id,
+          url: 'api/organizations/' + id,
           method: 'DELETE',
           data: id
         }).
