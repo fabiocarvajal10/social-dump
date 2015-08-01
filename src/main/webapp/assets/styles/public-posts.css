@@ -1,0 +1,167 @@
+#post-main-wrapper {
+	background-color:#424242;
+	margin:0;
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0px; 
+    left: 0px;
+    z-index: -1;
+}
+
+.wrapper-post {
+	top:0px;
+}
+
+.circle-card {
+	-webkit-border-radius: 200px;
+	-moz-border-radius: 200px;
+	border-radius: 200px;
+}
+
+.bg-light.lter{
+	background-color: #ecf0f1;
+}
+
+.bg-light.lter.b-b{
+	border-bottom-width: 3px;
+	border-color: #95a5a6;
+}
+
+.bg-light.lter.b-r{
+	border-right-width: 2px;
+	border-color: #95a5a6;
+}
+
+.filter-wrapper {
+	height: 65px;
+	width:25%;
+}
+
+/*
+#nav-public {
+  	-webkit-transition: opacity 1s ease;
+	-moz-transition: opacity 1s ease;
+	-ms-transition: opacity 1s ease;
+	-o-transition: opacity 1s ease;
+	transition: opacity 1s ease;
+  	/* IE 8 
+ 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+
+	/* IE 5-7 
+	filter: alpha(opacity=50);
+
+	/* Netscape 
+	-moz-opacity: 0.5;
+
+	/* Safari 1.x *
+	-khtml-opacity: 0.5;
+
+	/* Good browsers *
+	opacity: 0.5;
+}
+
+#nav-public:hover {
+	-webkit-transition: opacity 1s ease;
+	-moz-transition: opacity 1s ease;
+	-ms-transition: opacity 1s ease;
+	-o-transition: opacity 1s ease;
+	transition: opacity 1s ease;
+
+  	/* IE 8 
+  	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=1)";
+
+	/* IE 5-7 
+	filter: alpha(opacity=1);
+
+	/* Netscape 
+	-moz-opacity: 1;
+
+	/* Safari 1.x 
+	-khtml-opacity: 1;
+
+	/* Good browsers 
+	opacity: 1;
+}
+*/
+.navbar-default .navbar-nav > li > .btn-twitter {
+	color: #55acee;
+}
+
+.navbar-default .navbar-nav > li > .btn-twitter:hover{
+	color: #309aea;
+}
+
+.navbar-default .navbar-nav > li > .btn-instagram {
+	color: #3f729b;
+}
+
+.navbar-default .navbar-nav > li > .btn-instagram:hover{
+	color: #335d7e;
+}
+
+.navbar-default .navbar-nav > li > .btn-all {
+	color: #444;
+}
+
+.navbar-default .navbar-nav > li > .btn-all:hover {
+	color: #303030;
+}
+
+#nav-public{
+	color: #f8f8f8;
+	border-bottom-width: 4px;
+	border-color:  #e74c3c;
+}
+
+#nav-public a{
+	height: 46px;	
+}
+
+
+
+.navbar-default .navbar-nav > .active > a, 
+.navbar-default .navbar-nav > .active > a:hover, 
+.navbar-default .navbar-nav > .active > a:focus{
+	background-color: #f8f8f8;
+}
+
+/*
+div > .bootcards-cards > div > .header {
+	border-width: 2px;
+	border-color: #e74c3c;
+}
+*/ 
+/*
+#nav-public ul{
+	height: 10px;
+}
+*/ 
+
+.graff {
+	display: block;
+	margin-top: 4px;
+	margin-bottom: 0;
+	font-family: 'Erica One', cursive, sans-serif;
+	font-size: 1em;
+	letter-spacing: -0.01em;
+	font-weight: normal;
+	text-transform: uppercase;
+	color: #212121;
+}
+
+.panel.panel-default {
+	background-color: #16a085;
+	border-color: #424242;
+}
+
+.panel-heading.header.clearfix {
+	background-color: #ef5350;
+	color: #ecf0f1;
+}
+
+.panel-footer {
+}
+
+
+/*Recordar hacer lista de reproduccion de cartas*/

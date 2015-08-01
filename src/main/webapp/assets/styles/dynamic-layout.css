@@ -64,16 +64,13 @@
 }
 
 [dynamic-layout]{
-  float: left;
+  margin: auto;
   position: relative;
 }
 
-.container-fluid{
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
-}
+
 
 .title{
   margin-bottom: 50px;
 }
+

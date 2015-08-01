@@ -11,7 +11,6 @@ angular.module('socialdumpApp.posts')
 		var alreadyConnectedOnce = false;
 
 		return {
-
 			connect: function () {
 				console.log("Connecting");
 				var loc = window.location;
@@ -40,7 +39,7 @@ angular.module('socialdumpApp.posts')
 			},
 
 			unsubscribe: function() {
-				if (subscriber != null) {
+				if (subscriber !== null) {
 					subscriber.unsubscribe();
 				}
 			},
@@ -50,7 +49,7 @@ angular.module('socialdumpApp.posts')
 			},
 
 			disconnect: function() {
-				if (stompClient != null) {
+				if (stompClient !== null) {
 					stompClient.disconnect();
 					stompClient = null;
 				}

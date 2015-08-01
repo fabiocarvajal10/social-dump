@@ -42,7 +42,7 @@
 		 */
 		this.addCards = function(cardsToAdd, externalScope){
 			cardsToAdd.forEach( function(card, index){
-				if(index !== -1){
+				if(index !== -1) {
 					externalScope.cards.unshift(card);
 					cardsToAdd.splice(index, 1);
 				}
@@ -56,7 +56,7 @@
 		this.deleteCard = function(id, cards){
 			var index = -1;
 			for(var i in cards){
-				if(cards[i].id == id){
+				if(cards[i].id === id){
 					index = i;
 					break;
 				}

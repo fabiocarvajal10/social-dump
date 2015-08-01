@@ -2,8 +2,11 @@
 
     <div class="panel panel-default">
 
-        <div class="panel-heading header clearfix">
+        <div class="panel-heading clearfix">
             <h3 class="panel-title pull-left">{{it.data.snUser}}</h3>
+            <a class="btn btn-default pull-right" href="#" ng-click='externalScope().deleteCard(it.id)'>
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
         </div>
 
         <div class="list-group">
