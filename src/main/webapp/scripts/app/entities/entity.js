@@ -1,10 +1,12 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('socialdumpApp')
-    .config(function ($stateProvider) {
-        $stateProvider
-            .state('entity', {
-                abstract: true,
-                parent: 'site'
-            });
-    });
+  angular.module('socialdumpApp')
+    .config(['$stateProvider', function($stateProvider) {
+      $stateProvider
+        .state('entity', {
+          abstract: true,
+          parent: 'home'
+        });
+    }]);
+}());

@@ -57,7 +57,7 @@
     "angular-translate-loader-static-files": "~2.5.2",
     "angular-translate-storage-cookie": "~2.5.2",
     "angular-translate-storage-local": "~2.5.2",
-    "angular-bootstrap": "~0.12.0",
+    "angular-bootstrap": "0.13.0",
     "angular-bootstrap-nav-tree": "*",
     "angular-bootstrap-datetimepicker": "latest",
     "angular-ui-router": "~0.2.11",
