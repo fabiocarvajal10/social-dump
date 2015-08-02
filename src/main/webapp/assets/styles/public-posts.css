@@ -9,6 +9,10 @@
     z-index: -1;
 }
 
+.list-group-item {
+	background-color: transparent;
+}
+
 .wrapper-post {
 	top:0px;
 }
@@ -151,7 +155,7 @@ div > .bootcards-cards > div > .header {
 }
 
 .panel.panel-default {
-	background-color: #16a085;
+	background-color: #ffffff;
 	border-color: #424242;
 }
 

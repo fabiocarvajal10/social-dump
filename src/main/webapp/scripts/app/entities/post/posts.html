@@ -3,7 +3,6 @@
 <nav class="navbar navbar-default navbar-fixed-top" id="nav-public">
     
     <div class="container">
-    
         <div class="navbar-header">
             <button type="button" class="navbar-right navbar-toggle btn navbar-btn" ng-init="navCollapsed = true"
                     ng-click="navCollapsed = !navCollapsed">
@@ -14,9 +13,11 @@
             </button>
             <a class="navbar-brand" href="#">
                 <b>
-                    <h5 class="graff">
+                    <h5 class="graff">{{::event.description}}
                     <!--Replace for event #hashtag-->
-                    <p class="hash"><small>#Hashtag</small></p>
+                        <p class="hash">
+                            <small data-ng-repeat="hashtag in event.searchCriterias">#{{::hashtag}}</small>
+                        </p>
                     </h5>
                 </b>
             </a><!--Replace for event name-->

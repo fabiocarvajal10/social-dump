@@ -32,7 +32,10 @@
 					'snUserId': post.snUserId,
 					'createdAt': post.createdAt,
 					'eventId': post.eventId,
-					'mediaUrl': post.mediaUrl
+					'mediaUrl': post.mediaUrl,
+					'profileImage': post.profileImage,
+					'profileUrl': post.profileUrl,
+					'fullName': post.fullName
 				}
 			};
 		};

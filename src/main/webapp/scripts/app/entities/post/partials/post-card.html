@@ -3,20 +3,37 @@
     <div class="panel panel-default">
 
         <div class="panel-heading header clearfix">
-            <h3 class="panel-title pull-left">{{it.data.snUser}}</h3>
+            <h3 class="panel-title pull-left">{{::it.data.snUser}}</h3>
+            <p>{{::it.data.fullName}}</p>
         </div>
-
-        <div class="list-group">
-
-            <div class="list-group-item">
-                <p class="list-group-item-text">{{it.data.body}}</p>
-            </div>
-
+        <!--img  {{it.data.mediaUrl ? it.data.mediaUrl : 'img/avatar.png'}} ng-src="{{::it.data.mediaUrl}}media/?size=t">
+        <div class="list-group" social-image="{{::it.data.mediaUrl}}media/"-->    
+        <img ng-src="{{::it.data.mediaUrl}}media/" class="img-responsive">
+        <div class="panel-body">
+            <p>{{::it.data.body}}</p>
         </div>
 
         <div class="panel-footer">
-            <small>{{it.data.createdAt}}</small>
+            <small><a href="{{::it.data.profileUrl}}">See profile</a></small>
+            <small>{{::it.data.createdAt}}</small>
         </div>
     </div>
 
 </div>
+
+<!--
+    {
+  "id": null,
+  "startDate": "2015-07-18T03:52:39Z",
+  "endDate": "2015-07-19T03:52:39Z",
+  "description": "#NoFuePenal",
+  "activatedAt": "2015-07-18T03:52:39Z",
+  "postDelay": 30,
+  "organizationId": 3,
+  "statusId": 1,
+  "typeId": 1,
+  "searchCriterias": [
+    "#NoFuePenal"
+  ]
+}
+-->

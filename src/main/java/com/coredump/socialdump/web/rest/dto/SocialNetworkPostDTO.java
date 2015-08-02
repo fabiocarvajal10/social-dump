@@ -49,6 +49,15 @@ public class SocialNetworkPostDTO {
   @NotNull
   private String eventName;
 
+  @NotNull
+  private String fullName;
+
+  @NotNull
+  private String profileImage;
+
+  @NotNull
+  private String profileUrl;
+
   //Access methods
   public Long getId() {
     return id;
@@ -56,6 +65,30 @@ public class SocialNetworkPostDTO {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getFullName() {
+    return fullName;
+  }
+
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
+
+  public String getProfileImage() {
+    return profileImage;
+  }
+
+  public void setProfileImage(String profileImage) {
+    this.profileImage = profileImage;
+  }
+
+  public String getProfileUrl() {
+    return profileUrl;
+  }
+
+  public void setProfileUrl(String profileUrl) {
+    this.profileUrl = profileUrl;
   }
 
   public String getSocialNetworkName() {

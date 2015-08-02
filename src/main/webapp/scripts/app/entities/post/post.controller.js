@@ -1,116 +1,110 @@
 /**
  * Created by fabio on 7/17/15.
  */
-'use strict';
+(function () {
+	'use strict';
+	angular.module('socialdumpApp.posts')
+	  .controller('PostController',
+	   	['$scope','$stateParams', 'PostTracker', 
+	   	'Cards', 'PostService', 'EventPublic',
+			function ($scope, $stateParams, PostTracker, Cards, PostService, EventPublic) {
+			//This controller uses a websocket connection to receive posts from one event
 
-angular.module('socialdumpApp.posts')
-  .controller('PostController',
-   	'$scope','$stateParams', 'PostTracker', 'Cards', 'PostService',
-		function ($scope, $stateParams, PostTracker, Cards, PostService) {
-		//This controller uses a websocket connection to receive posts from one event
-
-			$scope.event = ;
-
-			$scope.cards = [];
-
-			$scope.filters = [[['tabs', 'contains', 'home', 'twitter', 'instagram']]];
-			$scope.rankers = null;
-
-			$scope.isDropdownOpen = {
-				orderBy: false,
-				filter: false
-			};
-
-			//Loading existing data when entry
-			PostService
-				.query( {'id': $stateParams.id} )
-				.$promise.then(function(data) {
-					Cards.createCards(data, $scope);
+				EventPublic.get({'id': $stateParams.id})
+					.$promise.then(function(data) {
+						$scope.event = data;
 				});
 
-			PostTracker.receive().then(null, null, function(posts) {
-				console.log('Now we are getting posts')	
-				Cards.createCards(posts, $scope);
-			});
+				$scope.cards = [];
 
-			/**
-			 * Update the filters array based on the given filter
-			 * $param filter: the name of a tab like 'work'
-			 */
-			$scope.filter = function(filter){
-				$scope.filters = [[['tabs', 'contains', filter]]];
-			};
+				$scope.filters = [[['tabs', 'contains', 'home', 'twitter', 'instagram']]];
+				$scope.rankers = null;
 
-			$scope.isTabActive = function(tab){
-				return $scope.filters && $scope.filters[0][0][2] === tab;
-			};
+				$scope.isDropdownOpen = {
+					orderBy: false,
+					filter: false
+				};
 
-			/**
-			 * Update the rankers array based on the given ranker
-			 * $param ranker: the name of a card's property or a custom function
-			 */
-			$scope.orderBy = function(ranker){
-				$scope.rankers = [[ranker, "asc"]];
-			};
+				//Loading existing data when entry
+				PostService
+					.query( {'id': $stateParams.id} )
+					.$promise.then(function(data) {
+						Cards.createCards(data, $scope);
+					});
+				
+				PostTracker.receive().then(null, null, function(posts) {
+					console.log('Now we are getting posts')	
+					Cards.createCards(posts, $scope);
+				});
 
-			$scope.isRankerActive = function(ranker){
-				return $scope.rankers && $scope.rankers[0][0] === ranker;
-			};
+				/**
+				 * Update the filters array based on the given filter
+				 * $param filter: the name of a tab like 'work'
+				 */
+				$scope.filter = function(filter){
+					$scope.filters = [[['tabs', 'contains', filter]]];
+				};
 
-			/**
-			 * Delete a given card
-			 * $param index: the index of the card in the cards array
-			 */
-			$scope.deleteCard = function(id){
-				Cards.deleteCard(id, $scope.cards);
-			};
+				$scope.isTabActive = function(tab){
+					return $scope.filters && $scope.filters[0][0][2] === tab;
+				};
 
-			$scope.removeFirstCard = function(){
-				Cards.deleteCard($scope.filteredItems[0].id, $scope.cards);
-			};
+				/**
+				 * Update the rankers array based on the given ranker
+				 * $param ranker: the name of a card's property or a custom function
+				 */
+				$scope.orderBy = function(ranker){
+					$scope.rankers = [[ranker, "asc"]];
+				};
 
-			/**
-			 * Add a card to the main view
-			 * Takes a card from the pile of cardsToAdd and prepend it to the list of
-			 * cards. Take a card belonging to the selected tab
-			 */
-			$scope.addCards = function(cardsToAdd){
-				Cards.addCards($scope.filters, cardsToAdd, $scope.cards)
-			};
+				$scope.isRankerActive = function(ranker){
+					return $scope.rankers && $scope.rankers[0][0] === ranker;
+				};
 
-			//Refactorizar pasar a servicio
-			/*
+				/**
+				 * Delete a given card
+				 * $param index: the index of the card in the cards array
+				 */
+				$scope.deleteCard = function(id){
+					Cards.deleteCard(id, $scope.cards);
+				};
 
-			 PostTracker.receive().then(null, null, function(posts) {
-			  console.log('Receive');
-			  console.log(posts);
-			 });
+				$scope.removeFirstCard = function(){
+					Cards.deleteCard($scope.filteredItems[0].id, $scope.cards);
+				};
 
-			 $scope.createCard = function(post){
-			 console.log(post);
-			 return {
-			 id: post.id,
-			 template: 'scripts/app/entities/post/partials/post-card.html',
-			 tabs: post.socialNetworkName,
-			 social: post.socialNetworkName,
-			 event: post.eventName,
-			 searchCriteria: post.searchCriteria,
-			 body: post.body
-			 };
-			 };
+				/**
+				 * Add a card to the main view
+				 * Takes a card from the pile of cardsToAdd and prepend it to the list of
+				 * cards. Take a card belonging to the selected tab
+				 */
+				$scope.addCards = function(cardsToAdd){
+					Cards.addCards($scope.filters, cardsToAdd, $scope.cards)
+				};
 
-			 /*addCards(
-			 [{
-			 id: 1,
-			 template: 'scripts/app/entities/post/partials/post-card.html',
-			 tabs: 'Facebook',
-			 social: 'Facebook',
-			 event: '#NoEraPenal',
-			 searchCriteria: 'NoEraPenal',
-			 body: 'Mexico ladrones #NoEraPenal'
-			 }]
-			 );
-			 */
-			}
-		]
-	);
+				//Refactorizar pasar a servicio
+				/*
+
+				 PostTracker.receive().then(null, null, function(posts) {
+				  console.log('Receive');
+				  console.log(posts);
+				 });
+
+				 $scope.createCard = function(post){
+				 console.log(post);
+				 return {
+				 id: post.id,
+				 template: 'scripts/app/entities/post/partials/post-card.html',
+				 tabs: post.socialNetworkName,
+				 social: post.socialNetworkName,
+				 event: post.eventName,
+				 searchCriteria: post.searchCriteria,
+				 body: post.body
+				 };
+				 };
+				}
+				*/
+				}
+			]
+		);
+})();
