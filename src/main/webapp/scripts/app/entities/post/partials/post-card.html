@@ -3,18 +3,29 @@
     <div class="panel panel-default">
 
         <div class="panel-heading header clearfix">
-            <h3 class="panel-title pull-left">{{::it.data.snUser}}</h3>
-            <p>{{::it.data.fullName}}</p>
+            <h3 class="panel-title pull-left">@{{::it.data.snUser}}</h3>
+            <br>
+            <small>{{::it.data.fullName}}</small>
+            <i ></i>
+        </div>
+        <div id="ribbon-container">
+            <a ng-if="it.data.profileUrl === null" href="{{::it.data.mediaUrl}}" id="ribbon" target="_blank"> 
+                <i class="fa fa-{{::it.data.social}}"></i>
+            </a>
+            <a ng-if="it.data.profileUrl !== null" href="{{::it.data.profileUrl}}" id="ribbon" target="_blank"> 
+                <i class="fa fa-{{::it.data.social}}"></i>
+            </a>
         </div>
         <!--img  {{it.data.mediaUrl ? it.data.mediaUrl : 'img/avatar.png'}} ng-src="{{::it.data.mediaUrl}}media/?size=t">
         <div class="list-group" social-image="{{::it.data.mediaUrl}}media/"-->    
-        <img ng-src="{{::it.data.mediaUrl}}media/" class="img-responsive">
+        <img ng-if="it.data.social === 'instagram'" ng-src="{{::it.data.mediaUrl}}media/" class="img-responsive">
         <div class="panel-body">
             <p>{{::it.data.body}}</p>
         </div>
 
         <div class="panel-footer">
-            <small><a href="{{::it.data.profileUrl}}">See profile</a></small>
+            <small ng-if="it.data.profileUrl === null"><a href="{{::it.data.mediaUrl}}">See profile</a></small>
+            <small ng-if="it.data.profileUrl !== null"><a href="{{::it.data.profileUrl}}">See profile</a></small>
             <small>{{::it.data.createdAt}}</small>
         </div>
     </div>
