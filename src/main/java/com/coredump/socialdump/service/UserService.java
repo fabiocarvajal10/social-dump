@@ -1,27 +1,25 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Authority;
-import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.domain.User;
 import com.coredump.socialdump.repository.AuthorityRepository;
-import com.coredump.socialdump.repository.TemporalAccessRepository;
 import com.coredump.socialdump.repository.UserRepository;
 import com.coredump.socialdump.security.SecurityUtils;
 import com.coredump.socialdump.service.util.RandomUtil;
+
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import javax.inject.Inject;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class for managing users.
@@ -49,12 +47,12 @@ public class UserService {
     userRepository.findOneByActivationKey(key)
         .map(user -> {
           // activate given user for the registration key.
-          user.setActivated(true);
-          user.setActivationKey(null);
-          userRepository.save(user);
-          log.debug("Activated user: {}", user);
-          return user;
-        });
+            user.setActivated(true);
+            user.setActivationKey(null);
+            userRepository.save(user);
+            log.debug("Activated user: {}", user);
+            return user;
+          });
 
     return Optional.empty();
   }
@@ -64,27 +62,27 @@ public class UserService {
 
     return userRepository.findOneByResetKey(key)
         .filter(user -> {
-          DateTime oneDayAgo = DateTime.now().minusHours(24);
-          return user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis());
-        })
+            DateTime oneDayAgo = DateTime.now().minusHours(24);
+            return user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis());
+          })
           .map(user -> {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            user.setResetKey(null);
-            user.setResetDate(null);
-            userRepository.save(user);
-            return user;
-          });
+              user.setPassword(passwordEncoder.encode(newPassword));
+              user.setResetKey(null);
+              user.setResetDate(null);
+              userRepository.save(user);
+              return user;
+            });
   }
 
   public Optional<User> requestPasswordReset(String mail) {
     return userRepository.findOneByEmail(mail)
         .filter(user -> user.getActivated() == true)
         .map(user -> {
-          user.setResetKey(RandomUtil.generateResetKey());
-          user.setResetDate(DateTime.now());
-          userRepository.save(user);
-          return user;
-        });
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(DateTime.now());
+            userRepository.save(user);
+            return user;
+          });
   }
 
   public User createUserInformation(String login, String password, String firstName,
@@ -93,6 +91,8 @@ public class UserService {
     User newUser = new User();
     Authority authority = authorityRepository.findOne("ROLE_USER");
     Set<Authority> authorities = new HashSet<>();
+    authorities.add(authority);
+    newUser.setAuthorities(authorities);
     String encryptedPassword = passwordEncoder.encode(password);
     newUser.setLogin(login);
     // new user gets initially a generated password
@@ -105,8 +105,6 @@ public class UserService {
     newUser.setActivated(false);
     // new user gets registration key
     newUser.setActivationKey(RandomUtil.generateActivationKey());
-    authorities.add(authority);
-    newUser.setAuthorities(authorities);
     userRepository.save(newUser);
     log.debug("Created Information for User: {}", newUser);
 

@@ -16,7 +16,7 @@ angular.module('socialdumpApp.monitors', [])
         templateUrl: 'scripts/app/entities/monitor/monitors.html',
         controller: 'MonitorCtrl',
         resolve: {
-          store: function($ocLazyLoad){
+          store: function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name: 'socialdumpApp.monitors',
               files: ['scripts/app/entities/monitor/monitor.controller.js',

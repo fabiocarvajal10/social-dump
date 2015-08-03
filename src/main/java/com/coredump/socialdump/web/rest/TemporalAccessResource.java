@@ -2,7 +2,6 @@ package com.coredump.socialdump.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.Event;
-import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.MonitorContactRepository;
@@ -28,13 +27,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * REST controller for managing TemporalAccesses.
@@ -43,8 +40,7 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class TemporalAccessResource {
 
-  private final Logger log =
-    LoggerFactory.getLogger(TemporalAccessResource.class);
+  private final Logger log = LoggerFactory.getLogger(TemporalAccessResource.class);
 
   @Inject
   private TemporalAccessRepository temporalAccessRepository;
@@ -71,8 +67,8 @@ public class TemporalAccessResource {
    * POST  /register -> register the monitor contact.
    */
   @RequestMapping(value = "/temporal-accesses",
-    method = RequestMethod.POST,
-    produces = MediaType.TEXT_PLAIN_VALUE)
+      method = RequestMethod.POST,
+      produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
   public ResponseEntity<?> create(@RequestBody TemporalAccessDTO temporalAccessDTO,
       HttpServletRequest request) {
@@ -93,18 +89,16 @@ public class TemporalAccessResource {
     if (temporalAccess.getStartDate().isBefore(temporalAccess.getEventByEventId().getStartDate())) {
       return new ResponseEntity<>("Monitor cant access before the event",
         HttpStatus.CONFLICT);
-    } else if (temporalAccess.getEndDate().isAfter(temporalAccess.getEventByEventId().getEndDate())) {
+    } else if (temporalAccess.getEndDate().isAfter(temporalAccess.getEventByEventId()
+        .getEndDate())) {
       return new ResponseEntity<>("Monitor cant access after the event",
         HttpStatus.CONFLICT);
     }
 
     temporalAccessRepository.save(temporalAccess);
 
-    String baseUrl = request.getScheme() + // "http"
-      "://" +                                // "://"
-      request.getServerName() +              // "myhost"
-      ":" +                                  // ":"
-      request.getServerPort();               // "80"
+    String baseUrl =
+        request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
 
     temporalAccess.setPassword(password);
 
@@ -117,8 +111,8 @@ public class TemporalAccessResource {
    * GET  /temporal-accesses -> get all TemporalAccesses.
    */
   @RequestMapping(value = "/temporal-accesses",
-    method = RequestMethod.GET,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public List<TemporalAccess> getAll(@RequestParam(value = "eventId") Long eventId) {
     log.debug("REST request to get all TemporalAccesses");
@@ -145,8 +139,8 @@ public class TemporalAccessResource {
    * DELETE  /temporal-accesses/:id -> delete the temporal access.
    */
   @RequestMapping(value = "/temporal-accesses/{id}",
-    method = RequestMethod.DELETE,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional
   public ResponseEntity<Void> delete(@PathVariable Long id) {

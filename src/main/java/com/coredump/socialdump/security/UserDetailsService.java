@@ -1,9 +1,6 @@
 package com.coredump.socialdump.security;
 
-import com.coredump.socialdump.domain.Authority;
-import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.domain.User;
-import com.coredump.socialdump.repository.TemporalAccessRepository;
 import com.coredump.socialdump.repository.UserRepository;
 import com.coredump.socialdump.service.TemporalAccessService;
 
@@ -11,27 +8,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.Collections;
-import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Authenticate a user from the database.
  */
 @Component("userDetailsService")
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class UserDetailsService
+    implements org.springframework.security.core.userdetails.UserDetailsService {
 
   private final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 

@@ -4,7 +4,7 @@ import com.coredump.socialdump.domain.Authority;
 import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.domain.User;
 import com.coredump.socialdump.repository.TemporalAccessRepository;
-import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.inject.Inject;
 
 /**
  * Service class for managing TemporalAccesses.
@@ -31,7 +33,7 @@ public class TemporalAccessService {
   public Optional<User> userForTemporalAccess(String login) {
 
     TemporalAccess temporalAccess =
-      temporalAccessRepository.findOneByIdAndEmail(temporalAccessId, login);
+        temporalAccessRepository.findOneByIdAndEmail(temporalAccessId, login);
 
     if (temporalAccess == null) {
       return Optional.empty();
@@ -51,9 +53,10 @@ public class TemporalAccessService {
     Optional<User> user = Optional.of(tempUser);
 
     return user;
+
   }
 
-  public void setTemporalAccessId(Long id){
+  public void setTemporalAccessId(Long id) {
     temporalAccessId = id;
   }
 }

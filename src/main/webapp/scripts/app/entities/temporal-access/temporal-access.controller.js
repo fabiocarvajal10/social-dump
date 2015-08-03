@@ -10,26 +10,26 @@ angular.module('socialdumpApp.temporalAccess')
     $scope.init = function() {
       TemporalAccessService.getAll('e')
         .then(function(data) {
-          if(data.length > 0){
+          if (data.length > 0) {
             buildGrid(data);
             buildMonitorNameField(data);
           }
         })
-        .catch(function(error){
+        .catch (function(error) {
 
         });
-    }
+    };
 
-    function buildMonitorNameField(data){
-      angular.forEach(data, function(row){
-        row.getNameAndLastName = function(){
+    function buildMonitorNameField(data) {
+      angular.forEach(data, function(row) {
+        row.getNameAndLastName = function() {
           return row.monitorContactByMonitorContactId.firstName + ' ' +
                  row.monitorContactByMonitorContactId.lastName;
-        }
+        };
       });
     }
 
-    function buildGrid(data){
+    function buildGrid(data) {
       //ToDo mover a un gridTASettings factory o algo por el estilo
       var deleteCT = ' <button class="btn m-b-xs btn-xs btn-danger m-xs" ' +
                      ' ng-click="grid.appScope.open(row, \'delete\')"> ' +
@@ -41,9 +41,20 @@ angular.module('socialdumpApp.temporalAccess')
         enableFiltering: true,
         columnDefs: [
           {field: 'getNameAndLastName()', displayName: 'Nombre del Monitor' },
-          {field: 'monitorContactByMonitorContactId.email', displayName: 'Correo Electrónico'},
-          {field: 'startDate', displayName: 'Fecha de Inicio', cellFilter: 'date:"dd/MM/yyyy hh:mma"' },
-          {field: 'endDate', displayName: 'Fecha de Fin', cellFilter: 'date:"dd/MM/yyyy hh:mma"' },
+          {
+            field: 'monitorContactByMonitorContactId.email',
+            displayName: 'Correo Electrónico'
+          },
+          {
+            field: 'startDate',
+            displayName: 'Fecha de Inicio',
+            cellFilter: 'date:"dd/MM/yyyy hh:mma"'
+          },
+          {
+            field: 'endDate',
+            displayName: 'Fecha de Fin',
+            cellFilter: 'date:"dd/MM/yyyy hh:mma"'
+          },
           {
             field: 'icons',
             displayName: '',
@@ -53,19 +64,19 @@ angular.module('socialdumpApp.temporalAccess')
             cellTemplate: deleteCT
           }
         ]
-      }
+      };
     }
 
-    $scope.open = function (gridRow, action) {
+    $scope.open = function(gridRow, action) {
       var modalInstance = $modal.open({
         animation: true,
         templateUrl: getModalUrl(action),
         controller: 'TemporalAccessDetailCtrl',
         resolve: {
-          'gridTA': function(){
+          'gridTA': function() {
             return $scope.gridTemporalAccesses;
           },
-          'gridRow': function(){
+          'gridRow': function() {
             return gridRow;
           }
         }
@@ -73,14 +84,14 @@ angular.module('socialdumpApp.temporalAccess')
 
       modalInstance.result.then(function() {
         $scope.init();
-      }, function () {
+      }, function() {
 
       });
     };
 
-    $scope.test = function(monitor){
+    $scope.test = function(monitor) {
       console.log(monitor);
-    }
+    };
 
     $scope.init();
 

@@ -4,16 +4,16 @@
 'use strict';
 
 angular.module('socialdumpApp.access')
-  .controller('AccessController', function($rootScope, $scope, $state, AuthServerProvider,
-      $location) {
+  .controller('AccessController', function($rootScope, $scope, $state,
+      AuthServerProvider, $location) {
     $scope.id = 0;
     $scope.user = {};
     $scope.errors = {};
     $scope.errorMessage = '';
 
-    $scope.init = function(){
+    $scope.init = function() {
       $scope.id = $location.search().key;
-    }
+    };
 
     $scope.login = function(event) {
       event.preventDefault();

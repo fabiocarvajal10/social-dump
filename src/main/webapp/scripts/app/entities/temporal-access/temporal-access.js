@@ -16,7 +16,7 @@ angular.module('socialdumpApp.temporalAccess', [])
         templateUrl: 'scripts/app/entities/temporal-access/temporal-access.html',
         controller: 'TemporalAccessCtrl',
         resolve: {
-          store: function ($ocLazyLoad) {
+          store: function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name: 'socialdumpApp.temporalAccess',
               files: ['scripts/app/entities/temporal-access/temporal-access.controller.js',

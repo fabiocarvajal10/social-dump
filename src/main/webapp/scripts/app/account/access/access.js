@@ -21,7 +21,7 @@
             }
           },
           resolve: {
-            store: function($ocLazyLoad){
+            store: function($ocLazyLoad) {
               return $ocLazyLoad.load({
                 name: 'socialdumpApp.access',
                 files: ['scripts/app/account/access/access.controller.js']

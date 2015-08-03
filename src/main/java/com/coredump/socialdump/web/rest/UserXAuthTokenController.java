@@ -73,6 +73,7 @@ public class UserXAuthTokenController {
 
     DateTime now = new DateTime();
     TemporalAccess temporalAccess = null;
+
     temporalAccessService.setTemporalAccessId(id);
     UsernamePasswordAuthenticationToken token =
         new UsernamePasswordAuthenticationToken(username, password);

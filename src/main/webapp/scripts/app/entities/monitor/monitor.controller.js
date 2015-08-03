@@ -6,17 +6,17 @@ angular.module('socialdumpApp.monitors')
     function($scope, MonitorService, $modal) {
       $scope.monitorContacts = [];
 
-      $scope.init = function(){
-        MonitorService.getAll('foo')
+      $scope.init = function() {
+        MonitorService.getAll()
           .then(function(data) {
             $scope.monitorContacts = data;
           })
-          .catch(function() {
+          .catch (function() {
 
           });
-      }
+      };
 
-      $scope.open = function (monitorContact, index, action) {
+      $scope.open = function(monitorContact, index, action) {
 
         var modalInstance = $modal.open({
           animation: true,
@@ -37,7 +37,7 @@ angular.module('socialdumpApp.monitors')
 
         modalInstance.result.then(function() {
 
-        }, function () {
+        }, function() {
 
         });
       };
