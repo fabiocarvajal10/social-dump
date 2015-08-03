@@ -72,7 +72,7 @@ public class TwitterFetch extends SocialNetworkFetch {
   private SocialNetworkPost processTweet(Tweet tweet) {
     log.debug("Procesando tweets");
     SocialNetworkPost post = new SocialNetworkPost();
-    post.setBody(tweet.getText().replaceAll("[^\\x20-\\x7e]", ""));
+    post.setBody(tweet.getText());
     post.setCreatedAt(new Timestamp(tweet.getCreatedAt().getTime()));
     post.setSnUserId(tweet.getUser().getId());
     post.setMediaUrl(tweet.getSource());

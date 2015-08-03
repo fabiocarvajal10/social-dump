@@ -44,7 +44,7 @@ public class SocialNetworkPost implements Serializable {
 
   @Basic
   @Size(max = 255)
-  @Column(name = "fullName", nullable = false, length = 255)
+  @Column(name = "fullName", nullable = true, length = 255)
   public String getFullName() {
     return fullName;
   }
@@ -55,7 +55,7 @@ public class SocialNetworkPost implements Serializable {
 
   @Basic
   @Size(max = 255)
-  @Column(name = "profileImage", nullable = false, length = 255)
+  @Column(name = "profileImage", nullable = true, length = 255)
   public String getProfileImage() {
     return profileImage;
   }
@@ -66,7 +66,7 @@ public class SocialNetworkPost implements Serializable {
 
   @Basic
   @Size(max = 255)
-  @Column(name = "profileUrl", nullable = false, length = 255)
+  @Column(name = "profileUrl", nullable = true, length = 255)
   public String getProfileUrl() {
     return profileUrl;
   }

@@ -80,14 +80,13 @@ public class InstagramFetch extends SocialNetworkFetch {
   private SocialNetworkPost processGram(MediaFeedData mediaFeedData) {
     SocialNetworkPost post = new SocialNetworkPost();
     log.debug("Procesando gram  ");
-    post.setBody(mediaFeedData.getCaption().getText().replaceAll("[^\\x20-\\x7e]", ""));
+    post.setBody(mediaFeedData.getCaption().getText());
     post.setCreatedAt(new Timestamp(new Date().getTime()));
     post.setSnUserId(Long.parseLong(mediaFeedData.getUser().getId()));
     post.setMediaUrl(mediaFeedData.getLink());
     post.setProfileImage(mediaFeedData.getUser().getProfilePictureUrl());
     post.setFullName(mediaFeedData.getUser().getFullName());
     post.setProfileUrl(mediaFeedData.getUser().getWebsiteUrl());
-
     post.setSnUserEmail(mediaFeedData.getUser().getUserName());
     post.setEventByEventId(getSearchCriteria().getEventByEventId());
     post.setGenericStatusByStatusId(getSearchCriteria().getGenericStatusByStatusId());

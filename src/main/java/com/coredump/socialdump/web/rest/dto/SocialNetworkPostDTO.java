@@ -49,13 +49,13 @@ public class SocialNetworkPostDTO {
   @NotNull
   private String eventName;
 
-  @NotNull
+
   private String fullName;
 
-  @NotNull
+
   private String profileImage;
 
-  @NotNull
+
   private String profileUrl;
 
   //Access methods

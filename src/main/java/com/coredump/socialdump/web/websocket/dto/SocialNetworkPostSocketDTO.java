@@ -50,6 +50,36 @@ public class SocialNetworkPostSocketDTO implements Serializable {
   @NotNull
   private String eventName;
 
+  private String fullName;
+
+  private String profileImage;
+
+  private String profileUrl;
+
+  public String getFullName() {
+    return fullName;
+  }
+
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
+
+  public String getProfileImage() {
+    return profileImage;
+  }
+
+  public void setProfileImage(String profileImage) {
+    this.profileImage = profileImage;
+  }
+
+  public String getProfileUrl() {
+    return profileUrl;
+  }
+
+  public void setProfileUrl(String profileUrl) {
+    this.profileUrl = profileUrl;
+  }
+
   public String getSocialNetworkName() {
     return socialNetworkName;
   }
