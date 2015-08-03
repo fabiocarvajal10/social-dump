@@ -126,8 +126,12 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
+      setCurrentOrgId: function(organizationId){
+        localStorageService.set('orgId', organizationId);
+      },
+
       getCurrentOrgId: function() {
-        return currOrgId;
+        return parseInt(localStorageService.get('orgId'));
       }
 
      };

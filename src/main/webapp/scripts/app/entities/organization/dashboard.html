@@ -4,7 +4,6 @@
 <div class="wrapper-md">
   <div class="panel wrapper">
     <div class="row">
-
       <div class="col-md-6 b-r b-light no-border-xs">
         <span class="h4 font-thin m-t-none m-b-md text-muted"> Organizaciones </span>
         <span class="btn m-b-xs btn-sm btn-success pull-right" ng-hide="isUptOrg"
@@ -65,14 +64,11 @@
       <div class="col-md-6 b-light no-border-xs">
         <div class="m-b">
           <span class="h4 font-thin m-t-none m-b-xl text-muted"> Próximos Eventos </span>
-          <a ui-sref="events.list" class="btn m-b-xs btn-sm btn-success pull-right mb-sm">
-            Agregar
-          </a>
         </div>
         <div class="m-b">
-          <div class="m-b" ng-repeat="event in eventsByOrg">
+          <div class="m-b" ng-repeat="event in eventsByOrg" ng-click="changeEvent(event)">
             <span class="label text-base bg-info pos-rlt m-r">
-              <i class="arrow right arrow-info"></i> {{ event.startDate | date:"dd/MM/yyyy 'at' h:mma"}}
+              <i class="arrow right arrow-info"></i> {{ event.startDate | date:"dd/MM/yyyy '|' h:mma"}}
             </span>
             <span> {{ event.description }} </span>
           </div>
@@ -83,7 +79,62 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
+
+  <div class="panel wrapper">
+    <div class="row">
+      <div class="col-md-6 b-r b-light no-border-xs">
+        <span class="h4 font-thin m-t-none m-b-md text-muted">
+          Total de Publicaciones Obtenidas
+        </span>
+        <div class="row row-sm text-center">
+          <div class="col-xs-6">
+            <div class="panel padder-v item">
+              <div class="h1 text-info font-thin h1">521</div>
+              <span class="text-muted text-xs"> Facebook </span>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="panel padder-v bg-info item">
+              <div class="h1 text-white font-thin h1">521</div>
+              <span class="text-muted text-xs"> Twitter </span>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="panel padder-v item">
+              <div class="h1 text-info font-thin h1">521</div>
+              <span class="text-muted text-xs"> Instagram </span>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="panel padder-v item">
+              <div class="h1 text-info font-thin h1">521</div>
+              <span class="text-muted text-xs"> Total </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 b-light no-border-xs">
+        <div class="m-b">
+          <span class="h4 font-thin m-t-none m-b-xl text-muted"> Eventos Anteriores </span>
+        </div>
+        <div class="m-b">
+          <div class="m-b" ng-repeat="pastEvent in pastEventsOrg" ng-click="changeEvent(event)">
+            <span class="label text-base bg-info pos-rlt m-r">
+              <i class="arrow right arrow-info"></i> {{ event.startDate | date:"dd/MM/yyyy '|' h:mma"}}
+            </span>
+            <span> {{ event.description }} </span>
+          </div>
+          <div class="m-b" ng-show="!pastEventsOrg.length">
+            <span class="label text-base bg-info pos-rlt m-r">
+              No ha realizado ningún evento
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

@@ -4,10 +4,10 @@
 'use strict';
 
 angular.module('socialdumpApp.monitors')
-  .factory('MonitorService', function($http, $q, localStorageService) {
+  .factory('MonitorService', function($http, $q, OrganizationService) {
      return {
        register: function(monitorContact) {
-         monitorContact.organizationId = 2;//parseInt(localStorageService.get('organizationId'));
+         monitorContact.organizationId = OrganizationService.getCurrentOrgId();
          var q = $q.defer();
          $http({
            url: 'api/monitor-contacts',
@@ -18,7 +18,7 @@ angular.module('socialdumpApp.monitors')
            monitorContact.id = parseInt(data);
            q.resolve(monitorContact);
          }).
-         catch (function(error) {
+         catch(function(error) {
            if(error.data === 'e-mail address already in use'){
              error = 'Ya cuenta con un contacto de monitoreo con el mismo correo electrónico';
            }else{
@@ -36,8 +36,7 @@ angular.module('socialdumpApp.monitors')
            url: 'api/monitor-contacts',
            method: 'GET',
            params: {
-             //ToDo Definir como se va a elegir la organización actual
-             'organizationId': 2//parseInt(localStorageService.get('organizationId'))
+             'organizationId': OrganizationService.getCurrentOrgId()
            }
          }).
          success(function (data) {

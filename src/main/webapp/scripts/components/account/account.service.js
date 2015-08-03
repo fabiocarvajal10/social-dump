@@ -16,6 +16,7 @@ angular.module('socialdumpApp')
              method: 'GET'
            }).
            success(function(data) {
+             console.log(data);
              q.resolve(data.id.toString());
            }).
            catch (function(error) {

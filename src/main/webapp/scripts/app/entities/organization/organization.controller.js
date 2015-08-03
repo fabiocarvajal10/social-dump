@@ -73,11 +73,16 @@ angular.module('socialdumpApp')
     $scope.changeOrgEvents = function(organization) {
       OrganizationService.getAllEvents(organization.id)
         .then(function(data) {
+          OrganizationService.setCurrentOrgId(organization.id);
           $scope.eventsByOrg = data;
         })
         .catch (function(error) {
 
         });
+    };
+
+    $scope.changeEvent = function(event){
+
     };
 
     function showError(error) {

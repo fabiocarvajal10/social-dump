@@ -11,6 +11,10 @@ import java.util.Optional;
 public interface TemporalAccessRepository
   extends JpaRepository<TemporalAccess, Long> {
 
+  Optional<TemporalAccess> findOneById(Long id);
+
+  TemporalAccess findOneByIdAndEmail(Long id, String email);
+
   Long deleteByMonitorContactByMonitorContactId(MonitorContact monitorContact);
 
   List<TemporalAccess> getAllByEventByEventId(Event event);

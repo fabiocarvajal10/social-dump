@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('socialdumpApp')
-  .controller('MainController', function($scope, Principal, AuthServerProvider, $state) {
+  .controller('MainController',
+    function($scope, Principal, AuthServerProvider, $state, $modalStack) {
     Principal.identity().then(function(account) {
       $scope.account = account;
       $scope.isAuthenticated = Principal.isAuthenticated;
@@ -12,6 +13,7 @@ angular.module('socialdumpApp')
       return AuthServerProvider.hasValidToken();
     }, function(){
       if(!Principal.isAuthenticated() || !AuthServerProvider.hasValidToken()){
+        $modalStack.dismissAll('cancel');
         AuthServerProvider.logout();
         $state.go('login');
       }

@@ -6,21 +6,31 @@
 angular.module('socialdumpApp.temporalAccess')
   .factory('TemporalAccessService', function($http, $q, localStorageService) {
     return {
-      register: function(monitorContact) {
-        monitorContact.organizationId = 2;//parseInt(localStorageService.get('organizationId'));
+      register: function(temporalAccess) {
+        temporalAccess.organizationId = 2;//parseInt(localStorageService.get('organizationId'));
+        temporalAccess.eventId = 81;
+        temporalAccess.monitorContactId = temporalAccess.monitorContactByMonitorContactId.id;
+        if(temporalAccess.allEvent){
+          temporalAccess.startDate = null;
+          temporalAccess.endDate = null;
+        }
         var q = $q.defer();
         $http({
-          url: 'api/monitor-contacts',
+          url: 'api/temporal-accesses',
           method: 'POST',
-          data: monitorContact
+          data: temporalAccess
         }).
         success(function(data) {
-          monitorContact.id = parseInt(data);
-          q.resolve(monitorContact);
+          temporalAccess.id = parseInt(data);
+          q.resolve(temporalAccess);
         }).
         catch (function(error) {
           if(error.data === 'e-mail address already in use'){
             error = 'Ya cuenta con un contacto de monitoreo con el mismo correo electrónico';
+          }else if(error.data === 'Monitor cant access before the event') {
+            error = 'El acceso temporal no puede iniciar antes del evento';
+          }else if(error.data === 'Monitor cant access after the event'){
+            error = 'El acceso temporal no puede finalizar después del evento';
           }else{
             error = 'Error inesperado al intentar crear el contacto de monitoreo';
           }
@@ -45,6 +55,24 @@ angular.module('socialdumpApp.temporalAccess')
         }).
         error(function (error) {
           q.reject(error);
+        });
+
+        return q.promise;
+      },
+
+      delete: function (id) {
+        var q = $q.defer();
+        $http({
+          url: 'api/temporal-accesses/' + id,
+          method: 'DELETE',
+          data: id
+        }).
+        success(function (data) {
+          q.resolve(data);
+        }).
+        catch(function (error) {
+          var err = 'Error al eliminar el acceso temporal';
+          q.reject(err);
         });
 
         return q.promise;

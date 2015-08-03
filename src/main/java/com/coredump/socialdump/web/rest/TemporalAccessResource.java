@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,14 +85,32 @@ public class TemporalAccessResource {
     temporalAccess.setGenericStatusByStatusId(genericStatusService.getActive());
     temporalAccess.setCreatedAt(new DateTime());
 
+    if (temporalAccess.getStartDate() == null && temporalAccess.getEndDate() == null) {
+      temporalAccess.setStartDate(temporalAccess.getEventByEventId().getStartDate());
+      temporalAccess.setEndDate(temporalAccess.getEventByEventId().getEndDate());
+    }
+
+    if (temporalAccess.getStartDate().isBefore(temporalAccess.getEventByEventId().getStartDate())) {
+      return new ResponseEntity<>("Monitor cant access before the event",
+        HttpStatus.CONFLICT);
+    } else if (temporalAccess.getEndDate().isAfter(temporalAccess.getEventByEventId().getEndDate())) {
+      return new ResponseEntity<>("Monitor cant access after the event",
+        HttpStatus.CONFLICT);
+    }
+
     temporalAccessRepository.save(temporalAccess);
 
-    String baseUrl = request.getScheme() + request.getServerName() + request.getServerPort();
+    String baseUrl = request.getScheme() + // "http"
+      "://" +                                // "://"
+      request.getServerName() +              // "myhost"
+      ":" +                                  // ":"
+      request.getServerPort();               // "80"
+
     temporalAccess.setPassword(password);
 
     mailService.temporalAccessEmail(temporalAccess, baseUrl);
 
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    return new ResponseEntity<>(Long.toString(temporalAccess.getId()), HttpStatus.CREATED);
   }
 
   /**
@@ -120,6 +139,27 @@ public class TemporalAccessResource {
             .map(TemporalAccess ->
                   new ResponseEntity<>(TemporalAccess, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  /**
+   * DELETE  /temporal-accesses/:id -> delete the temporal access.
+   */
+  @RequestMapping(value = "/temporal-accesses/{id}",
+    method = RequestMethod.DELETE,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+    TemporalAccess temporalAccess = temporalAccessRepository.findOne(id);
+
+    if (temporalAccess == null) {
+      return ResponseEntity.notFound().build();
+    } else {
+      temporalAccessRepository.delete(temporalAccess);
+      return ResponseEntity.ok().build();
+    }
+
   }
 }
 
