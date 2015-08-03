@@ -10,7 +10,8 @@
       </div>
       <div class="list-group list-group-sm">
         <div class="list-group-item">
-          <input type="text" placeholder="Nombre de usuario" class="form-control no-border" name="username" ng-model="username" required>
+          <input type="text" placeholder="Nombre de usuario" class="form-control no-border"
+                 name="username"  autofocus ng-model="username" required>
         </div>
         <div class="has-error" ng-messages="loginForm.username.$error" ng-show="loginForm.username.$touched">
           <label class="control-label" ng-message="required"> Debe ingresar un nombre de usuario </label>

@@ -1,0 +1,87 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+        ng-click="clear()">&times;</button>
+    <h4 class="modal-title" id="myEventLabel">
+      <span ng-hide="!!event.id">Crear</span>
+      <span ng-show="!!event.id">Modificar</span>
+      un Evento
+    </h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group hide">
+      <label>ID</label>
+      <input type="text" class="form-control" name="id"
+          ng-model="event.id" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="field_startDate">Comienza</label>
+      <input type="date" class="form-control" name="startDate" id="field_startDate"
+          ng-model="event.startDate" required>
+
+      <div ng-show="editForm.startDate.$invalid">
+        <p class="help-block"
+          ng-show="editForm.startDate.$error.required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="field_endDate">Termina</label>
+      <input type="date" class="form-control" name="endDate" id="field_endDate"
+          ng-model="event.endDate" required>
+
+      <div ng-show="editForm.endDate.$invalid">
+        <p class="help-block"
+          ng-show="editForm.endDate.$error.required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="field_description">Descripción</label>
+      <input type="text" class="form-control" name="description" id="field_description"
+          ng-model="event.description" required>
+
+      <div ng-show="editForm.description.$invalid">
+        <p class="help-block"
+          ng-show="editForm.description.$error.required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="field_postDelay">Demora para rechazar Posts</label>
+      <input type="number" class="form-control" name="postDelay" id="field_postDelay"
+          ng-model="event.postDelay" required>
+
+      <div ng-show="editForm.postDelay.$invalid">
+        <p class="help-block"
+          ng-show="editForm.postDelay.$error.required">
+          Este campo es requerido.
+        </p>
+        <p class="help-block"
+          ng-show="editForm.postDelay.$error.number">
+          Este campo solo acepta números.
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="field_type">Tipo</label>
+      <select class="form-control" id="field_type" name="type" ng-model="event.typeId"
+              ng-options="eventType.id as eventType.name for eventType in eventTypes">
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+      <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancelar</span>
+    </button>
+    <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+      <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Guardar</span>
+    </button>
+  </div>
+</form>

@@ -5,9 +5,6 @@
 
 angular.module('socialdumpApp')
   .factory('OrganizationService', function($http, $q, localStorageService) {
-    // var rootUrl = $location.protocol() + '://' + $location.host() + ':' +
-    //               $location.port();
-    // var orgsUrl = rootUrl + '/api/organizations';
     var currOrgId = 1;
     return {
       register: function(organizationName) {
@@ -29,7 +26,8 @@ angular.module('socialdumpApp')
         }).
         catch (function(error) {
           var err = error.data.exception;
-          if (err === 'org.springframework.dao.DataIntegrityViolationException') {
+          if (err ===
+              'org.springframework.dao.DataIntegrityViolationException') {
             err = 'Ya cuenta con una organización del mismo nombre';
           }else {
             err = 'Error inesperado al intentar crear la organización';

@@ -1,4 +1,5 @@
 package com.coredump.socialdump.service;
+
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
@@ -20,8 +21,6 @@ import javax.inject.Inject;
 public class EventService {
 
   private final Logger log = LoggerFactory.getLogger(EventService.class);
-  @Inject
-  private EventRepository EventRepository;
 
   @Inject
   private SearchCriteriaRepository searchCriteriaRepository;
@@ -37,11 +36,14 @@ public class EventService {
 
   public void scheduleFetch(Event event) {
     insertScTest(event);
+    log.info("Preparing fetch of hashtags");
     event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+    //event.getSearchCriteriasById();
     fetchExecutorService.scheduleFetch(event);
   }
 
   //Temporal
+
   private void insertScTest(Event event) {
     SearchCriteria sc = new SearchCriteria();
     sc.setEventByEventId(event);
@@ -57,5 +59,6 @@ public class EventService {
     sc2.setGenericStatusByStatusId(genericStatusRepository.getOne((short) 1));
     searchCriteriaRepository.save(sc2);
   }
+
 }
 

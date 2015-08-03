@@ -68,7 +68,7 @@ class EventGatlingTest extends Simulation {
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new event")
-            .put("/api/events")
+            .post("/api/events")
             .headers(headers_http_authenticated)
             .body(StringBody("""{"id":null, "startDate":"2020-01-01T00:00:00.000Z", "endDate":"2020-01-01T00:00:00.000Z", "description":"SAMPLE_TEXT", "activatedAt":"2020-01-01T00:00:00.000Z", "postDelay":"0"}""")).asJSON
             .check(status.is(201))

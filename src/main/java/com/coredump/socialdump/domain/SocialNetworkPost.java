@@ -1,5 +1,10 @@
 package com.coredump.socialdump.domain;
 
+import com.coredump.socialdump.domain.util.CustomTimestampDeserializer;
+import com.coredump.socialdump.domain.util.CustomTimestampSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.*;
@@ -34,6 +39,8 @@ public class SocialNetworkPost implements Serializable {
 
   @Basic
   @Column(name = "createdAt", nullable = false)
+  @JsonSerialize(using = CustomTimestampSerializer.class)
+  @JsonDeserialize(using = CustomTimestampDeserializer.class)
   public Timestamp getCreatedAt() {
     return createdAt;
   }

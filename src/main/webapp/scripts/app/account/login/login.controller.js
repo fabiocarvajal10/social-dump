@@ -14,7 +14,6 @@ angular.module('socialdumpApp')
         rememberMe: $scope.rememberMe
       }).then(function() {
         $scope.authenticationError = false;
-        console.log($rootScope.previousStateName);
         $state.go('dashboard');
       }).catch (function() {
         $scope.authenticationError = true;

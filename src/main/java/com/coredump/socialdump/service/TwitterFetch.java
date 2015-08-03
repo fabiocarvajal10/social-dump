@@ -45,10 +45,12 @@ public class TwitterFetch extends SocialNetworkFetch {
         List<Tweet> tweetsList = searchResults.getTweets();
 
         log.debug("Cantidad de Tweets obtenidos: {}...", tweetsList.size());
+
         tweetsList.forEach(post -> postsList.add(processTweet(post)));
 
         log.debug("Guardando los Tweets obtenidos");
         getSocialNetworkPostRepository().save(postsList);
+        super.notifyPublications(postsList);
         postsList.clear();
         log.debug("Sleeping");
         Thread.sleep(10000);

@@ -1,25 +1,15 @@
 package com.coredump.socialdump.service;
 
-import com.google.common.collect.Iterables;
-
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.SearchCriteria;
-import com.coredump.socialdump.domain.SocialNetwork;
 
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,18 +32,22 @@ public class FetchExecutorService {
 
   public void scheduleFetch(Event event) {
     int searchCriteriaQ = event.getSearchCriteriasById().size();
-    scheduledExecutorService =
-        Executors.newScheduledThreadPool(searchCriteriaQ);
+
+    scheduledExecutorService = Executors
+          .newScheduledThreadPool(searchCriteriaQ);
+
     List<SearchCriteria> scList = (List) event.getSearchCriteriasById();
 
     for (int i = 0; i < searchCriteriaQ; i++) {
       try {
         SearchCriteria searchCriteria = scList.get(i);
-        FetchableInterface socialNetworkFetch =
-            socialNetworkFetchFactory
-                .getSocialNetworkFetch(searchCriteria.getSocialNetworkBySocialNetworkId()
+        FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
+              .getSocialNetworkFetch(searchCriteria
+                    .getSocialNetworkBySocialNetworkId()
                     .getName().toLowerCase());
+
         log.debug("Search Criteria {}", searchCriteria.getSearchCriteria());
+
         socialNetworkFetch.setSearchCriteria(scList.get(i));
         addSchedule(socialNetworkFetch, event.getStartDate());
       } catch (Exception e) {
