@@ -1,7 +1,7 @@
 <div class="dynamic-layout-item dynamic-layout-col-4 bootcards-cards">
 
     <div class="panel panel-default">
-
+        <img class="pull-left thumb-sm avatar b-3x m-r post-profile" ng-src="{{::it.data.profileImage}}"/>
         <div class="panel-heading header clearfix">
             <h3 class="panel-title pull-left">@{{::it.data.snUser}}</h3>
             <br>
@@ -24,9 +24,11 @@
         </div>
 
         <div class="panel-footer">
-            <small ng-if="it.data.profileUrl === null"><a href="{{::it.data.mediaUrl}}">See profile</a></small>
-            <small ng-if="it.data.profileUrl !== null"><a href="{{::it.data.profileUrl}}">See profile</a></small>
-            <small>{{::it.data.createdAt}}</small>
+            <small ng-if="it.data.profileUrl === null" class="label bg-danger">
+                <a href="{{::it.data.mediaUrl}}" target="_blank">See profile</a></small>
+            <small ng-if="it.data.profileUrl !== null" class="label bg-danger">
+                <a href="{{::it.data.profileUrl}}" target="_blank">See profile</a></small>
+            <small>Created at: {{::it.data.createdAt}}</small>
         </div>
     </div>
 

@@ -153,7 +153,10 @@ div > .bootcards-cards > div > .header {
 	text-transform: uppercase;
 	color: #212121;
 }
-
+img.pull-left.thumb-sm.avatar.b-3x.m-r.post-profile {
+	margin-top: 5px;
+    margin-left: 5px;
+}
 
 #ribbon-container {
 	position: absolute;
