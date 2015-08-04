@@ -20,23 +20,24 @@
   <div class="m-b-lg">
     <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
       <div class="list-group list-group-sm">
-        <div class="list-group-item">
-          <input type="text" class="form-control no-border" name="firstName" placeholder="Nombre"
-            ng-model="registerAccount.firstName" required>
+        <div class="list-group-item white-background">
+          <input type="text" class="form-control no-border" name="firstName"
+            placeholder="Nombre" ng-model="registerAccount.firstName" required>
         </div>
         <div class="has-error" ng-messages="form.firstName.$error" ng-show="form.firstName.$touched">
           <label class="control-label" ng-message="required"> Debe ingresar un nombre </label>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="text" class="form-control no-border" name="lastName" placeholder="Apellidos"
             ng-model="registerAccount.lastName" required>
         </div>
         <div class="has-error" ng-messages="form.lastName.$error" ng-show="form.lastName.$touched">
           <label class="control-label" ng-message="required"> Debe ingresar unos apellidos </label>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="text" class="form-control no-border" name="login" placeholder="Nombre de usuario"
-            ng-model="registerAccount.login" ng-minlength="3" ng-maxlength="50" ng-pattern="/^[a-z0-9]*$/" required>
+            ng-model="registerAccount.login" ng-minlength="3" ng-maxlength="50"
+              ng-pattern="/^[a-z0-9]*$/" required>
         </div>
         <div class="has-error" ng-messages="form.login.$error" ng-show="form.login.$touched">
           <label class="control-label" ng-message="required">
@@ -52,7 +53,7 @@
             El nombre de usuario solo puede tener minúsculas y números
           </label>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="email" class="form-control no-border" name="email" placeholder="Correo electrónico"
             ng-model="registerAccount.email" ng-minlength="5" ng-maxlength="100" required>
         </div>
@@ -64,20 +65,20 @@
             El correo electrónico ingresado no es válido
           </label>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="password" class="form-control no-border" name="password" placeholder="Contraseña"
             ng-model="registerAccount.password" ng-minlength=5 ng-maxlength=50 required>
-        </div>              
+        </div>
         <div class="has-error" ng-messages="form.password.$error" ng-show="form.password.$touched">
           <label class="control-label" ng-message="required"> Debe ingresar una contraseña </label>
           <label class="control-label" ng-message="minlength">
             La contraseña debe tener como mínimo 5 caracteres
           </label>
           <label class="control-label" ng-message="maxlength">
-            La contraseña debe tener como máximo 50 caracteres                            
+            La contraseña debe tener como máximo 50 caracteres
           </label>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="password" class="form-control no-border" name="confirmPassword" placeholder="Confirmar contraseña"
             ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
         </div>
@@ -87,15 +88,15 @@
             La confirmación de contraseña debe tener como mínimo 5 caracteres
           </label>
           <label class="control-label" ng-message="maxlength">
-            La confirmación de contraseña debe tener como máximo 50 caracteres                            
+            La confirmación de contraseña debe tener como máximo 50 caracteres
           </label>
-          <label class="control-label" ng-show="form.confirmPassword.$valid && validatePasswords()"> 
+          <label class="control-label" ng-show="form.confirmPassword.$valid && validatePasswords()">
             Las contraseñas no coinciden
           </label>
         </div>
       </div>
-      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled="form.$invalid || validatePasswords()"> 
-        Crear Cuenta 
+      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled="form.$invalid || validatePasswords()">
+        Crear Cuenta
       </button>
       <p class="text-center"><small> ¿Ya posee una cuenta? </small></p>
       <a href="#/login" class="btn btn-lg btn-default btn-block"> Entrar </a>
