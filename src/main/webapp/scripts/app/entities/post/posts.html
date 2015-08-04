@@ -1,23 +1,61 @@
-<div class="container-fluid">
-
-    <h2>Social Dump</h2>
-
-    <!--Replace for event name-->
-    <h1 class="text-center title">Event Name
-        <!--Replace for event #hashtag-->
-        <p><small>#Hashtag</small></p>
-    </h1>
-
-    <div class="bg-light lter b-b wrapper-md ng-scope">
-        <div class="btn-group" role="group">
-            <button class="btn btn-default" ng-class="{active: isTabActive('home')}" ng-click="filter('home')">All</button>
-            <button class="btn btn-default" ng-class="{active: isTabActive('twitter')}" ng-click="filter('twitter')">Twitter</button>
-            <button class="btn btn-default" ng-class="{active: isTabActive('instagram')}" ng-click="filter('instagram')">Instagram</button>
+<div style="padding-top: 70px;">
+<!--Nav Bar-->
+<nav class="navbar navbar-default navbar-fixed-top" id="nav-public">
+    
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-right navbar-toggle btn navbar-btn" ng-init="navCollapsed = true"
+                    ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <b>
+                    <h5 class="graff">{{::event.description}}
+                    <!--Replace for event #hashtag-->
+                        <p class="hash">
+                            <small data-ng-repeat="hashtag in event.searchCriterias">#{{::hashtag}}</small>
+                        </p>
+                    </h5>
+                </b>
+            </a><!--Replace for event name-->
         </div>
+        
+        <div collapse="navCollapsed" class="collapse navbar-collapse navbar-right">
+          <ul class="nav navbar-nav ng-scope">
+            <li ng-class="{active: isTabActive('home')}" ng-click="filter('home')">
+                <a class="fa fa-th-large fa-2x btn-all"></a>
+            </li>
+            <li ng-class="{active: isTabActive('twitter')}" ng-click="filter('twitter')">
+                <a class="fa fa-twitter-square fa-2x btn-twitter"></a>
+            </li>
+
+            <li ng-class="{active: isTabActive('instagram')}" ng-click="filter('instagram')">
+                <a class="fa fa-instagram fa-2x btn-instagram"></a>
+            </li>
+          </ul>
+        </div>
+        
     </div>
 
+</nav>
 
-            <!--div class="col-md-4">
+<div class="container wrapper-post">
+    
+    <div dynamic-layout items="cards" filters="filters" rankers="rankers" ></div>
+        
+</div>
+
+</div>
+
+<div id="post-main-wrapper">
+</div>
+
+<!--This works for monitor screen-->
+
+<!--div class="col-md-4">
                 <h5>Adding and removing items</h5>
 
                 <div class="btn-group" role="group">
@@ -29,13 +67,22 @@
                     </button>
 
                 </div>
-
+ssss
             </div-->
-    <div class="wrapper-md" ng-controller="ScrollController">
-        <div ui-scroll-viewport class="row" style="height: 400px; overflow-y: auto; display: block;">
-            <div dynamic-layout items="cards" filters="filters" rankers="rankers" ></div>
+
+<!--div class="bg-light lter b-b b-r wrapper-md ng-scope filter-wrapper center-block">
+    <div class="row no-gutter text-center b-light text-sm" role="group">
+        <div class="col-xs-4 padder-v text-muted b-r" ng-class="{active: isTabActive('home')}" ng-click="filter('home')">
+        <a class="fa fa-home block fa-2x btn-all"></a>
+        </div>
+        
+        <div class="col-xs-4 padder-v text-muted b-r" ng-class="{active: isTabActive('twitter')}" ng-click="filter('twitter')">
+            <a class="fa fa-twitter-square block  fa-2x btn-twitter"></a>
+        </div>
+
+        <div class="col-xs-4 padder-v text-muted" ng-class="{active: isTabActive('instagram')}" ng-click="filter('instagram')">
+            <a class="fa fa-instagram block fa-2x btn-instagram"></a>
         </div>
     </div>
-
-</div>
+</div--> 
 

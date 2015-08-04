@@ -115,7 +115,7 @@ public class SocialNetworkPostResource {
 
     List<SocialNetworkPost> postsList =
         socialNetworkPostRepository.findPostsSocialNetworkIdsByOrg(organizationId);
-   
+
     return null;
   }
 }

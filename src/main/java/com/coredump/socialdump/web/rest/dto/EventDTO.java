@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -38,7 +39,15 @@ public class EventDTO {
   private Long organizationId;
   private short statusId;
   private int typeId;
+  private List<String> searchCriterias;
 
+  public List<String> getSearchCriterias() {
+    return searchCriterias;
+  }
+
+  public void setSearchCriterias(List<String> searchCriterias) {
+    this.searchCriterias = searchCriterias;
+  }
 
   public int getTypeId() {
     return typeId;

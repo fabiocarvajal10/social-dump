@@ -12,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing Events.
@@ -33,6 +37,15 @@ public class EventService {
 
   @Inject
   private FetchExecutorService fetchExecutorService;
+
+
+  public List<String>  getSearchCriterias(Event event) {
+    return  searchCriteriaRepository.findAllByEventByEventId(event)
+          .stream()
+          .map(SearchCriteria::getSearchCriteria)
+          .collect(Collectors.toCollection(ArrayList::new));
+  }
+
 
   public void scheduleFetch(Event event) {
     insertScTest(event);

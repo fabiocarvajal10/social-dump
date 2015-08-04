@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.EventStatus;
 import com.coredump.socialdump.domain.Organization;
+import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.service.EventService;
@@ -324,18 +325,18 @@ public class  EventResource{
     throws URISyntaxException {
 
     Organization organization = validateOwner(orgId);
-    if ( organization == null) {
+    if (organization == null) {
       return ResponseEntity.status(403).body(null);
     }
 
     DateTime now = new DateTime();
     Page<Event> page = eventRepository
-        .findFinalizedEvents(PaginationUtil.generatePageRequest(offset, limit),
-          organization.getId(),
-          now);
+      .findFinalizedEvents(PaginationUtil.generatePageRequest(offset, limit),
+        organization.getId(),
+        now);
 
     HttpHeaders headers = PaginationUtil
-        .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+      .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
 
     return new ResponseEntity<>(page
       .getContent()
@@ -344,5 +345,31 @@ public class  EventResource{
       .map(eventMapper::eventToEventDTO)
       .collect(Collectors.toCollection(LinkedList::new)),
       headers, HttpStatus.OK);
+  }
+
+  /**
+   * GET  /events-public/:id -> get the "id" event.
+   */
+  @RequestMapping(value = "/events-public/{id}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<EventDTO> getPublic(@Valid @PathVariable Long id) {
+    log.debug("REST request to get Event : {}", id);
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    List<String> searchCriteriaList = eventService.getSearchCriterias(event);
+
+    EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+
+    eventDTO.setSearchCriterias(searchCriteriaList);
+
+    return new ResponseEntity<>(eventDTO, HttpStatus.OK);
+
   }
 }

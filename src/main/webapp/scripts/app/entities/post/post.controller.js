@@ -1,16 +1,22 @@
 /**
  * Created by fabio on 7/17/15.
  */
-'use strict';
-
-angular.module('socialdumpApp.posts')
-	.controller('PostController',
-		['$scope', '$stateParams','PostTracker', 'Cards', 'PostService',
-			function ($scope, $stateParams, PostTracker, Cards, PostService) {
+(function () {
+	'use strict';
+	angular.module('socialdumpApp.posts')
+	  .controller('PostController',
+	   	['$scope', '$timeout', '$stateParams', 
+	   	'PostTracker', 'Cards', 'PostService', 'EventPublic',
+			function ($scope, $timeout, $stateParams, 
+				PostTracker, Cards, PostService, EventPublic) {
 			//This controller uses a websocket connection to receive posts from one event
 
-				$scope.cards = [];
+				EventPublic.get({'id': $stateParams.id})
+					.$promise.then(function(data) {
+						$scope.event = data;
+				});
 
+				$scope.cards = [];
 				$scope.filters = [[['tabs', 'contains', 'home', 'twitter', 'instagram']]];
 				$scope.rankers = null;
 
@@ -23,12 +29,40 @@ angular.module('socialdumpApp.posts')
 				PostService
 					.query( {'id': $stateParams.id} )
 					.$promise.then(function(data) {
-						Cards.createCards(data, $scope);
+						play(data)
+						//Cards.createCards(data, $scope);
 					});
-
+				
+				//playlist continuar con esto mas tarde
+				
+				function play(data) {
+					var toReproduce,
+					count = 1,
+					size = data.length,
+					reproduce = function() {
+						//cleaning variable
+						toReproduce = []
+						if(count < size) {
+							//adding new values
+							toReproduce.push(
+								data.shift(), 
+								data.shift(), 
+								data.shift());
+							//calling service that creates de cards
+							Cards.createCards(toReproduce, $scope)
+							//Delay and recursive call in order to
+							//make it synchronous
+							$timeout(reproduce, 5000);
+						}
+						count+=3;
+					}
+					//executing function
+					reproduce();
+				}
+				
 				PostTracker.receive().then(null, null, function(posts) {
-					console.log('Now we are getting posts')	
-					Cards.createCards(posts, $scope);
+					//console.log('Now we are getting posts')	
+					play(posts)
 				});
 
 				/**
@@ -96,19 +130,9 @@ angular.module('socialdumpApp.posts')
 				 body: post.body
 				 };
 				 };
-
-				 /*addCards(
-				 [{
-				 id: 1,
-				 template: 'scripts/app/entities/post/partials/post-card.html',
-				 tabs: 'Facebook',
-				 social: 'Facebook',
-				 event: '#NoEraPenal',
-				 searchCriteria: 'NoEraPenal',
-				 body: 'Mexico ladrones #NoEraPenal'
-				 }]
-				 );
-				 */
-			}
-		]
-	);
+				}
+				*/
+				}
+			]
+		);
+})();

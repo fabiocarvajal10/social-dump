@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by fabio on 13/07/15.
