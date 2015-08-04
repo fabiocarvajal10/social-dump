@@ -146,7 +146,7 @@ dependencies {
 
     testCompile group: 'com.h2database', name: 'h2'
 
-    testCompile 'org.springframework.social:spring-social-test:1.1.0.RELEASE'
+    //testCompile 'org.springframework.social:spring-social-test:1.1.0.RELEASE'
 }
 
 task wrapper(type: Wrapper) {

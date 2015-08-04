@@ -1,0 +1,71 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "eventByEventId",
+            "relationshipNameCapitalized": "EventByEventId",
+            "relationshipFieldName": "eventByEventId",
+            "otherEntityName": "event",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "Event",
+            "otherEntityField": "description"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "socialNetworkBySocialNetworkId",
+            "relationshipNameCapitalized": "SocialNetworkBySocialNetworkId",
+            "relationshipFieldName": "socialNetworkBySocialNetworkId",
+            "otherEntityName": "socialNetwork",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "SocialNetwork",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "genericStatusByGenericStatusId",
+            "relationshipNameCapitalized": "GenericStatusByGenericStatusId",
+            "relationshipFieldName": "genericStatusByGenericStatusId",
+            "otherEntityName": "genericStatus",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "GenericStatus",
+            "otherEntityField": "status"
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "socialNetworkPostsById",
+            "relationshipNameCapitalized": "SocialNetworkPostsById",
+            "relationshipFieldName": "socialNetworkPostsById",
+            "otherEntityName": "socialNetworkPost",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "SocialNetworkPost",
+            "otherEntityRelationshipName": "searchCriteriaBySearchCriteriaId"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "searchCriteria",
+            "fieldType": "String",
+            "fieldIsEnum": false,
+            "fieldNameCapitalized": "SearchCriteria",
+            "fieldNameUnderscored": "search_criteria",
+            "fieldInJavaBeanMethod": "SearchCriteria",
+            "fieldValidate": true,
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOwnerOneToOne": false,
+    "fieldsContainOneToMany": true,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": false,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "fieldsContainDate": false,
+    "changelogDate": "20150721062434",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "validation": true
+}

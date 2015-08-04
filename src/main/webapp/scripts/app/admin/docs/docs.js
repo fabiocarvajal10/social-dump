@@ -1,19 +1,21 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('socialdumpApp')
-    .config(function ($stateProvider) {
-        $stateProvider
-            .state('docs', {
-                parent: 'admin',
-                url: '/docs',
-                data: {
-                    roles: ['ROLE_ADMIN'],
-                    pageTitle: 'API'
-                },
-                views: {
-                    'content@': {
-                        templateUrl: 'scripts/app/admin/docs/docs.html'
-                    }
-                }
-            });
+  angular.module('socialdumpApp')
+    .config(function($stateProvider) {
+    $stateProvider
+      .state('docs', {
+      parent: 'admin',
+      url: '/docs',
+      data: {
+        roles: ['ROLE_ADMIN'],
+        pageTitle: 'API'
+      },
+      views: {
+        'content@': {
+        templateUrl: 'scripts/app/admin/docs/docs.html'
+        }
+      }
+      });
     });
+}());

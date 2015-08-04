@@ -14,7 +14,7 @@ public class SocialNetworkBeanFactory {
   @Inject
   private ApplicationContext applicationContext;
 
-  public FetchableInterface getSocialNetworkFetch(String qualifier) {
-    return (FetchableInterface) applicationContext.getBean(qualifier);
+  public FetchableInterface getSocialNetworkFetch(String name) {
+    return (FetchableInterface) applicationContext.getBean(name);
   }
 }

@@ -1,5 +1,10 @@
 package com.coredump.socialdump.domain;
 
+import com.coredump.socialdump.domain.util.CustomTimestampDeserializer;
+import com.coredump.socialdump.domain.util.CustomTimestampSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.*;
@@ -16,6 +21,10 @@ public class SocialNetworkPost implements Serializable {
   private String snUserEmail;
   private String body;
   private String mediaUrl;
+  private String fullName;
+  private String profileImage;
+  private String profileUrl;
+
   private SocialNetwork socialNetworkBySocialNetworkId;
   private Event eventByEventId;
   private SearchCriteria searchCriteriaBySearchCriteriaId;
@@ -32,8 +41,44 @@ public class SocialNetworkPost implements Serializable {
     this.id = id;
   }
 
+
+  @Basic
+  @Size(max = 255)
+  @Column(name = "fullName", nullable = true, length = 255)
+  public String getFullName() {
+    return fullName;
+  }
+
+  public void setFullName(String name) {
+    this.fullName = name;
+  }
+
+  @Basic
+  @Size(max = 255)
+  @Column(name = "profileImage", nullable = true, length = 255)
+  public String getProfileImage() {
+    return profileImage;
+  }
+
+  public void setProfileImage(String profileImage) {
+    this.profileImage = profileImage;
+  }
+
+  @Basic
+  @Size(max = 255)
+  @Column(name = "profileUrl", nullable = true, length = 255)
+  public String getProfileUrl() {
+    return profileUrl;
+  }
+
+  public void setProfileUrl(String profileUrl) {
+    this.profileUrl = profileUrl;
+  }
+
   @Basic
   @Column(name = "createdAt", nullable = false)
+  @JsonSerialize(using = CustomTimestampSerializer.class)
+  @JsonDeserialize(using = CustomTimestampDeserializer.class)
   public Timestamp getCreatedAt() {
     return createdAt;
   }

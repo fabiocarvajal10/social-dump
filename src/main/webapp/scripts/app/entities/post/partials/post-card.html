@@ -1,0 +1,52 @@
+<div class="dynamic-layout-item dynamic-layout-col-4 bootcards-cards">
+
+    <div class="panel panel-default">
+        <img class="pull-left thumb-sm avatar b-3x m-r post-profile" ng-src="{{::it.data.profileImage}}"/>
+        <div class="panel-heading header clearfix">
+            <h3 class="panel-title pull-left">@{{::it.data.snUser}}</h3>
+            <br>
+            <small>{{::it.data.fullName}}</small>
+            <i ></i>
+        </div>
+        <div id="ribbon-container">
+            <a ng-if="it.data.profileUrl === null" href="{{::it.data.mediaUrl}}" id="ribbon" target="_blank"> 
+                <i class="fa fa-{{::it.data.social}}"></i>
+            </a>
+            <a ng-if="it.data.profileUrl !== null" href="{{::it.data.profileUrl}}" id="ribbon" target="_blank"> 
+                <i class="fa fa-{{::it.data.social}}"></i>
+            </a>
+        </div>
+        <!--img  {{it.data.mediaUrl ? it.data.mediaUrl : 'img/avatar.png'}} ng-src="{{::it.data.mediaUrl}}media/?size=t">
+        <div class="list-group" social-image="{{::it.data.mediaUrl}}media/"-->    
+        <img ng-if="it.data.social === 'instagram'" ng-src="{{::it.data.mediaUrl}}media/" class="img-responsive">
+        <div class="panel-body">
+            <p>{{::it.data.body}}</p>
+        </div>
+
+        <div class="panel-footer">
+            <small ng-if="it.data.profileUrl === null" class="label bg-danger">
+                <a href="{{::it.data.mediaUrl}}" target="_blank">See profile</a></small>
+            <small ng-if="it.data.profileUrl !== null" class="label bg-danger">
+                <a href="{{::it.data.profileUrl}}" target="_blank">See profile</a></small>
+            <small>Created at: {{::it.data.createdAt}}</small>
+        </div>
+    </div>
+
+</div>
+
+<!--
+    {
+  "id": null,
+  "startDate": "2015-07-18T03:52:39Z",
+  "endDate": "2015-07-19T03:52:39Z",
+  "description": "#NoFuePenal",
+  "activatedAt": "2015-07-18T03:52:39Z",
+  "postDelay": 30,
+  "organizationId": 3,
+  "statusId": 1,
+  "typeId": 1,
+  "searchCriterias": [
+    "#NoFuePenal"
+  ]
+}
+-->
