@@ -1,5 +1,14 @@
 package com.coredump.socialdump.domain;
 
+import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
+import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.*;
@@ -12,12 +21,16 @@ import javax.validation.constraints.Size;
 public class TemporalAccess implements Serializable {
   private long id;
   private String email;
+
+  @JsonIgnore
   private String password;
-  private Timestamp createdAt;
-  private Timestamp startDate;
-  private Timestamp endDate;
+  private DateTime createdAt;
+  private DateTime startDate;
+  private DateTime endDate;
   private Event eventByEventId;
   private MonitorContact monitorContactByMonitorContactId;
+
+  @JsonIgnore
   private GenericStatus genericStatusByStatusId;
 
   @Id
@@ -54,32 +67,41 @@ public class TemporalAccess implements Serializable {
   }
 
   @Basic
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   @Column(name = "createdAt", nullable = false)
-  public Timestamp getCreatedAt() {
+  @JsonSerialize(using = CustomDateTimeSerializer.class)
+  @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+  public DateTime getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(Timestamp createdAt) {
+  public void setCreatedAt(DateTime createdAt) {
     this.createdAt = createdAt;
   }
 
   @Basic
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   @Column(name = "startDate", nullable = false)
-  public Timestamp getStartDate() {
+  @JsonSerialize(using = CustomDateTimeSerializer.class)
+  @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+  public DateTime getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Timestamp startDate) {
+  public void setStartDate(DateTime startDate) {
     this.startDate = startDate;
   }
 
   @Basic
   @Column(name = "endDate", nullable = false)
-  public Timestamp getEndDate() {
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @JsonSerialize(using = CustomDateTimeSerializer.class)
+  @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+  public DateTime getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(Timestamp endDate) {
+  public void setEndDate(DateTime endDate) {
     this.endDate = endDate;
   }
 

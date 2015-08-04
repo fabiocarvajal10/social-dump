@@ -31,10 +31,10 @@ angular.module('socialdumpApp')
         }).catch (function(response) {
           $scope.success = null;
           if (response.status === 400 &&
-              response.data === 'El nombre de usuario ya se encuentra en uso') {
+              response.data === 'login already in use') {
             $scope.errorUserExists = 'ERROR';
           } else if (response.status === 400 &&
-            response.data === 'El correo electrónico ya se encuentra en uso') {
+            response.data === 'e-mail address already in use') {
             $scope.errorEmailExists = 'ERROR';
           } else {
             $scope.error = 'ERROR';

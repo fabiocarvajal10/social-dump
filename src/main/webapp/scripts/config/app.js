@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('socialdumpApp', ['socialdumpApp.posts',
-  'ngAnimate', 'ngAria', 'ngMessages', 'ngSanitize', 'ngTouch', 'ngStorage',
-  'LocalStorageModule', 'ngResource', 'ui.router', 'ngCookies',
+angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts', 'socialdumpApp.monitors',
+  'socialdumpApp.temporalAccess', 'socialdumpApp.access', 'ngAnimate', 'ngAria', 'ngMessages',
+  'ngSanitize', 'ngTouch', 'ngStorage', 'LocalStorageModule', 'ngResource', 'ngCookies',
   'ngCacheBuster', 'infinite-scroll', 'ui.grid', 'ui.grid.resizeColumns',
-  'ui.bootstrap', 'ui.bootstrap.modal', 'ui.utils',
-  'ui.load', 'ui.jq', 'oc.lazyLoad', 'pascalprecht.translate', 'ngMaterial',
+  'ui.bootstrap', 'ui.bootstrap.modal', 'ui.bootstrap.datetimepicker', 'ui.utils',
+  'ui.load', 'ui.jq', 'ui.select', 'oc.lazyLoad', 'pascalprecht.translate', 'ngMaterial',
   'ui.date', 'dynamicLayout'])
   .controller('AppCtrl', [
     '$scope', '$translate', '$localStorage', '$window',
