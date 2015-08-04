@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h4 class="modal-title m-n font-thin h3"> Confirmar eliminación </h4>
+</div>
+<div class="modal-body">
+  <p class="h5"> ¿Desea eliminar al contacto de monitoreo? </p>
+  <div class="padder-v item wrapper">
+    <p class="h3 text-info font-thin m-t-sm"> {{ monitorContact.firstName }} </p>
+    <p class="h3 text-info font-thin"> {{monitorContact.lastName}} </p>
+    <p class="h3"> {{ monitorContact.phone }} </p>
+    <p class="h4"> {{ monitorContact.email }} </p>
+    <p class="h5"> {{ monitorContact.organizationByOrganizationId.name }}</p>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="deleteMC()"> Eliminar </button>
+  <button class="btn btn-warning" ng-click="cancel()"> Cancelar </button>
+</div>

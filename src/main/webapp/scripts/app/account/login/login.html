@@ -10,7 +10,8 @@
       </div>
       <div class="list-group list-group-sm">
         <div class="list-group-item">
-          <input type="text" placeholder="Nombre de usuario" class="form-control no-border" name="username" ng-model="username" required>
+          <input type="text" placeholder="Nombre de usuario" class="form-control no-border"
+                 name="username"  autofocus ng-model="username" required>
         </div>
         <div class="has-error" ng-messages="loginForm.username.$error" ng-show="loginForm.username.$touched">
           <label class="control-label" ng-message="required"> Debe ingresar un nombre de usuario </label>
@@ -23,7 +24,7 @@
         </div>
       </div>
       <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled='loginForm.$invalid'> Entrar </button>
-      <div class="text-center m-t m-b"><a href="#/reset/request"> ¿Olvido su contraseña? </a></div>
+      <div class="text-center m-t m-b"><a href="#/reset/request"> ¿Olvidó su contraseña? </a></div>
       <div class="line line-dashed"></div>
       <p class="text-center"><small> ¿No tiene una cuenta? </small></p>
       <a href="#/register" class="btn btn-lg btn-default btn-block"> Crear cuenta </a>

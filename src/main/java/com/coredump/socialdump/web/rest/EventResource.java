@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.EventStatus;
 import com.coredump.socialdump.domain.Organization;
+import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.service.EventService;
@@ -12,6 +13,9 @@ import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
+import com.coredump.socialdump.web.rest.util.ValidatorUtil;
+
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -37,7 +41,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api")
-public class EventResource{
+public class  EventResource{
   private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
   @Inject
@@ -54,6 +58,42 @@ public class EventResource{
 
   @Inject
   private EventService eventService;
+
+  private Organization validateOwner(Event event) {
+    return organizationService.ownsOrganization(event
+          .getOrganizationByOrganizationId()
+          .getId());
+  }
+
+  private Organization validateOwner(Long id) {
+    return organizationService.ownsOrganization(id);
+  }
+
+  /**
+   * POST  /events/activate/:id -> activate the "id" event.
+   */
+  @RequestMapping(value = "/events/activate/{id}",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<Void> activate(@Valid @PathVariable Long id) {
+    log.debug("REST request to get Event : {}", id);
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    if ( validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    eventService.scheduleFetch(event);
+
+    return ResponseEntity.ok().build();
+  }
+
 
   /**
    * Repositorio de estados de eventos.
@@ -73,11 +113,22 @@ public class EventResource{
     log.debug("REST request to save Event: {}", eventDTO.toString());
     if (eventDTO.getId() != null) {
       return ResponseEntity.badRequest()
-              .header("Failure", "A new event cannot already have an ID").build();
+            .header("Failure", "A new event cannot already have an ID")
+            .build();
     }
+
+    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "End date can't be lower than start date")
+            .build();
+    }
+
     Event event = eventMapper.eventDTOToEvent(eventDTO);
     event.setEventStatusByStatusId(eventStatusService.getActive());
+
+
     eventRepository.save(event);
+
     eventService.scheduleFetch(event);
     return ResponseEntity.created(new URI("/api/events/"
             + eventDTO.getId())) .build();
@@ -102,16 +153,16 @@ public class EventResource{
       return ResponseEntity.notFound().build();
     }
 
-    Organization organization = organizationService
-            .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
-
-    if ( organization == null) {
+    if ( validateOwner(event) == null) {
       return ResponseEntity.status(403).build();
     }
 
 
+    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+      return ResponseEntity.badRequest()
+            .header("Failure", "End date can't be lower than start date")
+            .build();
+    }
 
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
@@ -133,23 +184,28 @@ public class EventResource{
           @Valid @RequestParam(value = "organizationId") Long orgId)
           throws URISyntaxException {
 
-    Organization organization = organizationService.ownsOrganization(orgId);
+    log.debug("REST request to get all Organizations");
+
+    Organization organization = validateOwner(orgId);
     if ( organization == null) {
       return ResponseEntity.status(403).body(null);
     }
 
     Page<Event> page = eventRepository
-            .findAllByorganizationByOrganizationId(
+            .findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
                     PaginationUtil.generatePageRequest(offset, limit),
-                    organization);
+                    organization.getId());
 
     HttpHeaders headers = PaginationUtil
-            .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+            .generatePaginationHttpHeaders(page, "/api/events",
+                  offset, limit);
 
-    return new ResponseEntity<>(page.getContent().stream()
-            .map(eventMapper::eventToEventDTO)
-            .collect(Collectors
-                    .toCollection(LinkedList::new)), headers, HttpStatus.OK);
+    return new ResponseEntity<>(page
+          .getContent()
+          .stream()
+          .map(eventMapper::eventToEventDTO)
+          .collect(Collectors.toCollection(LinkedList::new)),
+          headers, HttpStatus.OK);
   }
 
   /**
@@ -168,12 +224,7 @@ public class EventResource{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    Organization organization = organizationService
-            .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
-
-    if ( organization == null) {
+    if ( validateOwner(event) == null) {
       return ResponseEntity.status(403).body(null);
     }
 
@@ -206,8 +257,12 @@ public class EventResource{
                     .getOrganizationByOrganizationId()
                     .getId());
 
-    if ( organization == null) {
+    if (organization == null) {
       return ResponseEntity.status(403).build();
+    }
+
+    if (validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
     }
 
     EventStatus status = statusRepository
@@ -218,7 +273,103 @@ public class EventResource{
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * GET  /events -> get the next 5 incoming events.
+   */
+  @RequestMapping(value = "/events/incoming",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional(readOnly = true)
+  public ResponseEntity<List<EventDTO>> getIncomingEvents(
+      @RequestParam(value = "page" , required = false) Integer offset,
+      @RequestParam(value = "per_page", required = false) Integer limit,
+      @Valid @RequestParam(value = "organizationId") Long orgId)
+    throws URISyntaxException {
 
+    Organization organization = validateOwner(orgId);
+    if ( organization == null) {
+      return ResponseEntity.status(403).body(null);
+    }
 
+    DateTime now = new DateTime();
+    Page<Event> page = eventRepository
+        .findIncomingEvents(PaginationUtil.generatePageRequest(offset, limit),
+          organization.getId(),
+          now);
 
+    HttpHeaders headers = PaginationUtil
+        .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+
+    return new ResponseEntity<>(page
+      .getContent()
+      .stream()
+      .limit(5)
+      .map(eventMapper::eventToEventDTO)
+      .collect(Collectors.toCollection(LinkedList::new)),
+      headers, HttpStatus.OK);
+  }
+
+  /**
+   * GET  /events -> get the last 5 finalized events.
+   */
+  @RequestMapping(value = "/events/finalized",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional(readOnly = true)
+  public ResponseEntity<List<EventDTO>> getFinalizedEvents(
+      @RequestParam(value = "page" , required = false) Integer offset,
+      @RequestParam(value = "per_page", required = false) Integer limit,
+      @Valid @RequestParam(value = "organizationId") Long orgId)
+    throws URISyntaxException {
+
+    Organization organization = validateOwner(orgId);
+    if (organization == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    DateTime now = new DateTime();
+    Page<Event> page = eventRepository
+      .findFinalizedEvents(PaginationUtil.generatePageRequest(offset, limit),
+        organization.getId(),
+        now);
+
+    HttpHeaders headers = PaginationUtil
+      .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+
+    return new ResponseEntity<>(page
+      .getContent()
+      .stream()
+      .limit(5)
+      .map(eventMapper::eventToEventDTO)
+      .collect(Collectors.toCollection(LinkedList::new)),
+      headers, HttpStatus.OK);
+  }
+
+  /**
+   * GET  /events-public/:id -> get the "id" event.
+   */
+  @RequestMapping(value = "/events-public/{id}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<EventDTO> getPublic(@Valid @PathVariable Long id) {
+    log.debug("REST request to get Event : {}", id);
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    List<String> searchCriteriaList = eventService.getSearchCriterias(event);
+
+    EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+
+    eventDTO.setSearchCriterias(searchCriteriaList);
+
+    return new ResponseEntity<>(eventDTO, HttpStatus.OK);
+
+  }
 }

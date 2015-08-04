@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
  * Created by fabio on 11/07/15.
  */
 
-public class OrganizationDTO  implements Serializable {
+public class OrganizationDTO {
 
   private Long id;
 

@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.socket.AbstractSecurit
 @Configuration
 public class WebsocketSecurityConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
-    @Override
+    /*@Override
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
         messages
             // message types other than MESSAGE and SUBSCRIBE
@@ -22,7 +22,7 @@ public class WebsocketSecurityConfiguration extends AbstractSecurityWebSocketMes
             // catch all
             .anyMessage().denyAll();
     }
-
+    */
     /**
      * Disables CSRF for Websockets.
      */

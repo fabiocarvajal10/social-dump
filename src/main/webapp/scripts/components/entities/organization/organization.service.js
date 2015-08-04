@@ -5,9 +5,6 @@
 
 angular.module('socialdumpApp')
   .factory('OrganizationService', function($http, $q, localStorageService) {
-    // var rootUrl = $location.protocol() + '://' + $location.host() + ':' +
-    //               $location.port();
-    // var orgsUrl = rootUrl + '/api/organizations';
     var currOrgId = 1;
     return {
       register: function(organizationName) {
@@ -18,18 +15,19 @@ angular.module('socialdumpApp')
 
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'POST',
           data: organization
         }).
         success(function(data, status, headers) {
-          organization['id'] = parseInt(headers('Location').match(/[0-9]+/g));
-          currOrgId = organization['id'];
+          organization.id = parseInt(headers('Location').match(/[0-9]+/g));
+          currOrgId = organization.id;
           q.resolve(organization);
         }).
         catch (function(error) {
           var err = error.data.exception;
-          if (err === 'org.springframework.dao.DataIntegrityViolationException') {
+          if (err ===
+              'org.springframework.dao.DataIntegrityViolationException') {
             err = 'Ya cuenta con una organización del mismo nombre';
           }else {
             err = 'Error inesperado al intentar crear la organización';
@@ -43,34 +41,53 @@ angular.module('socialdumpApp')
       getAll: function() {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'GET'
         }).
-          success(function(data) {
-                    q.resolve(data);
-                  }).
-          error(function(error) {
-                  q.reject(error);
-                });
+        success(function(data) {
+          q.resolve(data);
+        }).
+        error(function(error) {
+          q.reject(error);
+        });
 
         return q.promise;
       },
 
-      getAllEvents: function(organizationId) {
+      getIncomingEvents: function(organizationId) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/events',
+          url: 'api/events/incoming',
           method: 'GET',
           params: {
             'organizationId': organizationId
           }
         }).
-          success(function(data) {
-            q.resolve(data);
-          }).
-          error(function(error) {
-            q.reject(error);
-          });
+        success(function(data) {
+          q.resolve(data);
+        }).
+        catch(function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+
+      getFinalizedEvents: function(organizationId) {
+        var q = $q.defer();
+        $http({
+          url: 'api/events/finalized',
+          method: 'GET',
+          params: {
+            'organizationId': organizationId
+          }
+        }).
+        success(function(data) {
+          q.resolve(data);
+        }).
+        catch(function(error) {
+          q.reject(error);
+        });
 
         return q.promise;
       },
@@ -78,7 +95,7 @@ angular.module('socialdumpApp')
       update: function(organization) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations',
+          url: 'api/organizations',
           method: 'PUT',
           params: {
             'id': organization.id,
@@ -104,7 +121,7 @@ angular.module('socialdumpApp')
       delete: function(id) {
         var q = $q.defer();
         $http({
-          url: 'http://127.0.0.1:9090/api/organizations/' + id,
+          url: 'api/organizations/' + id,
           method: 'DELETE',
           data: id
         }).
@@ -126,8 +143,20 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
+      setCurrentOrgId: function(organizationId){
+        localStorageService.set('orgId', organizationId);
+      },
+
+      getCurrentEventId: function() {
+        return parseInt(localStorageService.get('eventId'));
+      },
+
+      setCurrentEventId: function(eventId){
+        localStorageService.set('eventId', eventId);
+      },
+
       getCurrentOrgId: function() {
-        return currOrgId;
+        return parseInt(localStorageService.get('orgId'));
       }
 
      };

@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h4 class="modal-title m-n font-thin h3"> Confirmar eliminación </h4>
+</div>
+<div class="modal-body">
+  <p class="h5"> ¿Desea eliminar el accesso temporal? </p>
+  <div class="padder-v item wrapper">
+    <p class="h3 text-info font-thin m-t-sm">
+      {{ temporalAccess.monitorContactByMonitorContactId.firstName }}
+      {{ temporalAccess.monitorContactByMonitorContactId.lastName }}
+    </p>
+    <p class="h4 text-info font-thin">
+      {{ temporalAccess.monitorContactByMonitorContactId.email }}
+    </p>
+    <p class="h4">Inicio del acceso: {{ temporalAccess.startDate | date:"dd/MM/yyyy h:mma" }} </p>
+    <p class="h4">Fin del acceso: {{ temporalAccess.endDate | date:"dd/MM/yyyy h:mma" }} </p>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="deleteTA(temporalAccess.id)"> Eliminar </button>
+  <button class="btn btn-warning" ng-click="cancel()"> Cancelar </button>
+</div>

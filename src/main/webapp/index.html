@@ -17,10 +17,13 @@
         <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" type="text/css" />
         <link rel="stylesheet" href="assets/simple-line-icons/css/simple-line-icons.css" type="text/css" />
         <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.min.css" type="text/css" />
-        <!-- <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/> -->
+        <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
         <link rel="stylesheet" href="libs/angular/ui-grid.bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="assets/styles/font.css" type="text/css" />
         <link rel="stylesheet" href="assets/styles/app.css" type="text/css" />
+        <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" type="text/css" />
+        <link rel="stylesheet" href="assets/styles/dynamic-layout.css" type="text/css" />
+        <link rel="stylesheet" href="assets/styles/public-posts.css" type="text/css" />
         <!--JHIPSTER, REMOVE THIS LATER-->
         <!--link rel="stylesheet" href="assets/styles/main.css">
         <!-- endbuild -->
@@ -57,7 +60,6 @@
         <script src="bower_components/sockjs-client/dist/sockjs.js"></script>
         <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
         <script src="bower_components/json3/lib/json3.js"></script>
-        <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
         <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
         <!-- Angular -->
         <script src="bower_components/angular/angular.js"></script>
@@ -69,12 +71,13 @@
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
         <script src="bower_components/angular-touch/angular-touch.js"></script>
+        <script src="bower_components/angular-ui-select/dist/select.js"></script>
         <script type="text/javascript" src="bower_components/angular/angular.js"></script>
         <script type="text/javascript" src="bower_components/angular-ui-date/src/date.js"></script>
-        <!-- <script type="text/javascript" src="bower_components/moment/moment.js"></script> -->
+        <script type="text/javascript" src="bower_components/moment/moment.js"></script>
         <!-- <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script> -->
         <!-- <script type="text/javascript" src="bower_components/angular/angular.js"></script> -->
-        <!-- <script type="text/javascript" src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script> -->
+        <script type="text/javascript" src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
         <!-- ngMaterial -->
         <script src="bower_components/angular-material/angular-material.js"></script>
         <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
@@ -83,7 +86,10 @@
         <script src="bower_components/ngstorage/ngStorage.js"></script>
         <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
         <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
-
+        <script src="bower_components/angular-dynamic-layout/src/dynamic-layout.js"></script>
+        <script src="bower_components/angular-dynamic-layout/src/services/position.js"></script>
+        <script src="bower_components/angular-dynamic-layout/src/services/filter.js"></script>
+        <script src="bower_components/angular-dynamic-layout/src/services/ranker.js"></script>
         <!-- bootstrap -->
         <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
         <!-- lazyload -->
@@ -93,6 +99,7 @@
         <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
         <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
         <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -128,7 +135,8 @@
     <script src="scripts/components/util/base64.service.js"></script>
     <script src="scripts/components/util/parse-links.service.js"></script>
     <script src="scripts/components/util/dateutil.service.js"></script>
-    <script src="scripts/components/AccountService.js"></script>
+    <script src="scripts/components/account/account.service.js"></script>
+    <script src="scripts/components/entities/organization/organization.service.js"></script>
 
     <!--application scripts-->
     <script src="scripts/app/main/main.js"></script>
@@ -163,22 +171,25 @@
     <script src="scripts/app/admin/metrics/metrics.js"></script>
     <script src="scripts/app/admin/metrics/metrics.controller.js"></script>
     <script src="scripts/app/entities/entity.js"></script>
-    <script src="scripts/app/entities/organization/organizations.js"></script>
-    <script src="scripts/app/entities/organization/OrganizationCtrl.js"></script>
-    <script src="scripts/components/organization/OrganizationService.js"></script>
+    <script src="scripts/app/entities/monitor/monitor.js"></script>
+    <script src="scripts/components/entities/monitor/monitor.service.js"></script>
+    <script src="scripts/app/entities/temporal-access/temporal-access.js"></script>
+    <script src="scripts/app/entities/organization/organization.js"></script>
+    <script src="scripts/app/entities/organization/organization.controller.js"></script>
+    <script src="scripts/app/account/access/access.js"></script>
     <script src="scripts/app/error/error.js"></script>
-
     <script src="scripts/app/main/main.controller.js"></script>
     <!--component scripts-->
     <script src="scripts/components/auth/provider/auth.xauth.service.js"></script>
     <!--application scripts-->
-    <script src="scripts/app/admin/tracker/tracker.js"></script>
+    <!--script src="scripts/app/admin/tracker/tracker.js"></script>
     <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
-    <script src="scripts/components/tracker/tracker.service.js"></script>
+    <!--script src="scripts/components/tracker/tracker.service.js"></script-->
     <script src="scripts/app/entities/event/event.js"></script>
     <script src="scripts/app/entities/event/event.controller.js"></script>
     <script src="scripts/app/entities/event/event-detail.controller.js"></script>
     <script src="scripts/components/entities/event/event.service.js"></script>
+
     <script src="scripts/app/entities/eventType/eventType.js"></script>
     <script src="scripts/app/entities/eventType/eventType.controller.js"></script>
     <script src="scripts/app/entities/eventType/eventType-detail.controller.js"></script>
@@ -187,6 +198,22 @@
     <script src="scripts/app/entities/eventStatus/eventStatus.controller.js"></script>
     <script src="scripts/app/entities/eventStatus/eventStatus-detail.controller.js"></script>
     <script src="scripts/components/entities/eventStatus/eventStatus.service.js"></script>
+    <script src="scripts/components/util/datetimepicker.directive.js"></script>
+    <script src="scripts/components/util/dateformat.directive.js"></script>
+
+    <script src="scripts/app/entities/searchCriteria/searchCriteria.js"></script>
+    <script src="scripts/app/entities/searchCriteria/searchCriteria.controller.js"></script>
+    <script src="scripts/app/entities/searchCriteria/searchCriteria-dialog.controller.js"></script>
+    <script src="scripts/app/entities/searchCriteria/searchCriteria-detail.controller.js"></script>
+    <script src="scripts/components/entities/searchCriteria/searchCriteria.service.js"></script>
+    <script src="scripts/app/entities/event/event-dialog.controller.js"></script>
+    <script src="scripts/components/entities/organization/organization.service.js"></script>
+
+    <script src="scripts/app/entities/post/post.js"></script>
+
+    <script src="scripts/components/directives/image.directive.js"></script>
+    <script src="scripts/components/util/scroll.controller.js"></script>
+
     <!-- endbuild -->
 
 

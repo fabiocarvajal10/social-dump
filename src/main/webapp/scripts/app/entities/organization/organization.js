@@ -10,7 +10,7 @@ angular.module('socialdumpApp')
         parent: 'home',
         url: 'dashboard/organizations',
         data: {
-          roles: [],
+          roles: ['ROLE_USER'],
           pageTitle: 'Dashboard Organizaciones'
         },
         templateUrl: 'scripts/app/entities/organization/dashboard.html',

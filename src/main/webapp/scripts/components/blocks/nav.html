@@ -1,6 +1,6 @@
 <!-- list -->
 <ul ng-cloak class="nav">
-  <li>
+  <li ui-sref-active="active">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -17,14 +17,8 @@
       </li>
     </ul>
   </li>
-  <li ui-sref-active="active">
-    <a href>
-      <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
-      <span class="font-bold"> Calendario </span>
-    </a>
-  </li>
-  <li>
-    <a ui-sref="events.list" class="auto">
+  <li has-role="ROLE_USER">
+    <a ui-sref="event.list" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -33,7 +27,7 @@
       <span class="font-bold"> Eventos </span>
     </a>
   </li>
-  <li>
+  <li has-role="ROLE_USER">
     <a ui-sref="dashboard" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -43,7 +37,7 @@
       <span class="font-bold"> Organizaciones </span>
     </a>
   </li>
-  <li>
+  <li has-role="ROLE_USER">
     <a ui-sref="app.summaries.list" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>

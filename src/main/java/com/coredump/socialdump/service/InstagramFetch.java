@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.print.DocFlavor;
 
@@ -33,7 +34,6 @@ public class InstagramFetch extends SocialNetworkFetch {
   private final Logger log = LoggerFactory.getLogger(InstagramFetch.class);
 
   private Instagram instagram;
-  private InstagramService instagramService;
 
   public InstagramFetch() {
     super();
@@ -53,10 +53,12 @@ public class InstagramFetch extends SocialNetworkFetch {
         List<MediaFeedData> mediaFeeds = mediaFeed.getData();
 
         log.debug("Cantidad de posts (inst) obtenidos: {}...", mediaFeeds.size());
+
         mediaFeeds.forEach(post -> postsList.add(processGram(post)));
 
         log.debug("Guardando los grams obtenidos");
         getSocialNetworkPostRepository().save(postsList);
+        super.notifyPublications(postsList);
         postsList.clear();
         log.debug("Sleeping");
         Thread.sleep(10000);
@@ -77,11 +79,14 @@ public class InstagramFetch extends SocialNetworkFetch {
 
   private SocialNetworkPost processGram(MediaFeedData mediaFeedData) {
     SocialNetworkPost post = new SocialNetworkPost();
-
-    post.setBody(mediaFeedData.getCaption().getText().replaceAll("[^\\x20-\\x7e]", ""));
+    log.debug("Procesando gram  ");
+    post.setBody(mediaFeedData.getCaption().getText());
     post.setCreatedAt(new Timestamp(new Date().getTime()));
     post.setSnUserId(Long.parseLong(mediaFeedData.getUser().getId()));
     post.setMediaUrl(mediaFeedData.getLink());
+    post.setProfileImage(mediaFeedData.getUser().getProfilePictureUrl());
+    post.setFullName(mediaFeedData.getUser().getFullName());
+    post.setProfileUrl(mediaFeedData.getUser().getWebsiteUrl());
     post.setSnUserEmail(mediaFeedData.getUser().getUserName());
     post.setEventByEventId(getSearchCriteria().getEventByEventId());
     post.setGenericStatusByStatusId(getSearchCriteria().getGenericStatusByStatusId());

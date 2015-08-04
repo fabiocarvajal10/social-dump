@@ -2,13 +2,16 @@ package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.domain.SocialNetworkApiCredential;
+import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.SocialNetworkApiCredentialRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 
+import com.coredump.socialdump.web.websocket.EventPublicationService;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -18,6 +21,9 @@ import javax.inject.Inject;
  */
 @Service
 public abstract class SocialNetworkFetch implements FetchableInterface {
+
+  @Inject
+  EventPublicationService eventPublicationService;
 
   @Inject
   private SocialNetworkApiCredentialRepository socialNetworkApiCredentialRepository;
@@ -55,6 +61,14 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
           socialNetworkApiCredentialRepository
               .findOneBySocialNetworkBySocialNetworkId(getSearchCriteria()
                   .getSocialNetworkBySocialNetworkId());
+    }
+  }
+
+  protected void notifyPublications(List<SocialNetworkPost> postList) {
+    try {
+      eventPublicationService.showPost(postList);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 }
