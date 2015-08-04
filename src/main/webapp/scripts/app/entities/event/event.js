@@ -40,7 +40,7 @@
         })
         .state('event.detail', {
           parent: 'home',
-          url: 'events/{id}',
+          url: 'event/{id}',
           data: {
             roles: ['ROLE_USER'],
             pageTitle: 'Evento'
