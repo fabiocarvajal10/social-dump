@@ -5,7 +5,8 @@ angular.module('socialdumpApp')
   .controller('OrganizationCtrl',
       function($scope, OrganizationService, $timeout) {
     $scope.organizations = [];
-    $scope.eventsByOrg = [];
+    $scope.incomingEventsByOrg = [];
+    $scope.finalizedEventsByOrg = [];
     $scope.modOrg = null;
     $scope.orgError = '';
     $scope.uptOrg = {};
@@ -71,10 +72,19 @@ angular.module('socialdumpApp')
     };
 
     $scope.changeOrgEvents = function(organization) {
-      OrganizationService.getAllEvents(organization.id)
+      OrganizationService.getIncomingEvents(organization.id)
         .then(function(data) {
           OrganizationService.setCurrentOrgId(organization.id);
-          $scope.eventsByOrg = data;
+          $scope.incomingEventsByOrg = data;
+        })
+        .catch (function(error) {
+
+        });
+
+      OrganizationService.getFinalizedEvents(organization.id)
+        .then(function(data) {
+          OrganizationService.setCurrentOrgId(organization.id);
+          $scope.finalizedEventsByOrg = data;
         })
         .catch (function(error) {
 
@@ -82,7 +92,7 @@ angular.module('socialdumpApp')
     };
 
     $scope.changeEvent = function(event){
-
+      OrganizationService.setCurrentEventId(event.id);
     };
 
     function showError(error) {

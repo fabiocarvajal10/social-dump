@@ -54,10 +54,10 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
-      getAllEvents: function(organizationId) {
+      getIncomingEvents: function(organizationId) {
         var q = $q.defer();
         $http({
-          url: 'api/events',
+          url: 'api/events/incoming',
           method: 'GET',
           params: {
             'organizationId': organizationId
@@ -66,7 +66,26 @@ angular.module('socialdumpApp')
         success(function(data) {
           q.resolve(data);
         }).
-        error(function(error) {
+        catch(function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+
+      getFinalizedEvents: function(organizationId) {
+        var q = $q.defer();
+        $http({
+          url: 'api/events/finalized',
+          method: 'GET',
+          params: {
+            'organizationId': organizationId
+          }
+        }).
+        success(function(data) {
+          q.resolve(data);
+        }).
+        catch(function(error) {
           q.reject(error);
         });
 
@@ -126,6 +145,14 @@ angular.module('socialdumpApp')
 
       setCurrentOrgId: function(organizationId){
         localStorageService.set('orgId', organizationId);
+      },
+
+      getCurrentEventId: function() {
+        return parseInt(localStorageService.get('eventId'));
+      },
+
+      setCurrentEventId: function(eventId){
+        localStorageService.set('eventId', eventId);
       },
 
       getCurrentOrgId: function() {

@@ -35,16 +35,18 @@
               </div>
             </form>
           </div>
-          <div class="m-b" ng-repeat="organization in organizations">
-            <span class="label text-base bg-success pos-rlt m-r"
-                  ng-click="changeOrgEvents(organization)">
+          <div class="m-b" ng-repeat="organization in organizations"
+               ng-click="changeOrgEvents(organization)">
+            <span class="label text-base bg-success pos-rlt m-r">
               <i class="fa fa-users"></i>
             </span>
-            <span ng-click="changeOrgEvents(organization)"> {{ organization.name }} </span>
-            <span class="btn m-b-xs btn-xs btn-danger pull-right" ng-click="deleteOrg(organization, $index)">
+            <span> {{ organization.name }} </span>
+            <span class="btn m-b-xs btn-xs btn-danger pull-right"
+                  ng-click="deleteOrg(organization, $index)">
               <i class="fa fa-trash-o"></i>
             </span>
-            <span class="btn m-b-xs btn-xs btn-warning pull-right m-r-xs" ng-click="showUptOrg(organization, $index)">
+            <span class="btn m-b-xs btn-xs btn-warning pull-right m-r-xs"
+                  ng-click="showUptOrg(organization, $index)">
               <i class="fa fa-pencil"></i>
             </span>
           </div>
@@ -66,13 +68,17 @@
           <span class="h4 font-thin m-t-none m-b-xl text-muted"> Próximos Eventos </span>
         </div>
         <div class="m-b">
-          <div class="m-b" ng-repeat="event in eventsByOrg" ng-click="changeEvent(event)">
+          <div class="m-b" ng-repeat="incomingEvent in incomingEventsByOrg"
+               ng-click="changeEvent(incomingEvent)">
             <span class="label text-base bg-info pos-rlt m-r">
-              <i class="arrow right arrow-info"></i> {{ event.startDate | date:"dd/MM/yyyy '|' h:mma"}}
+              <i class="arrow right arrow-info"></i>
+              {{ incomingEvent.startDate | date:"dd/MM/yyyy '|' h:mma"}}
+              -
+              {{ incomingEvent.endDate | date:"dd/MM/yyyy '|' h:mma"}}
             </span>
-            <span> {{ event.description }} </span>
+            <span> {{ incomingEvent.description }} </span>
           </div>
-          <div class="m-b" ng-show="!eventsByOrg.length">
+          <div class="m-b" ng-show="!incomingEventsByOrg.length">
             <span class="label text-base bg-info pos-rlt m-r">
               No se aproximan eventos
             </span>
@@ -121,13 +127,16 @@
           <span class="h4 font-thin m-t-none m-b-xl text-muted"> Eventos Anteriores </span>
         </div>
         <div class="m-b">
-          <div class="m-b" ng-repeat="pastEvent in pastEventsOrg" ng-click="changeEvent(event)">
-            <span class="label text-base bg-info pos-rlt m-r">
-              <i class="arrow right arrow-info"></i> {{ event.startDate | date:"dd/MM/yyyy '|' h:mma"}}
+          <div class="m-b" ng-repeat="finalizedEvent in finalizedEventsByOrg">
+            <span class="label text-base bg-dark lter pos-rlt m-r">
+              <i class="arrow right arrow-dark"></i>
+              {{ finalizedEvent.startDate | date:"dd/MM/yyyy" }}
+              -
+              {{ finalizedEvent.endDate | date:"dd/MM/yyyy" }}
             </span>
-            <span> {{ event.description }} </span>
+            <span> {{ finalizedEvent.description }} </span>
           </div>
-          <div class="m-b" ng-show="!pastEventsOrg.length">
+          <div class="m-b" ng-show="!finalizedEventsByOrg.length">
             <span class="label text-base bg-info pos-rlt m-r">
               No ha realizado ningún evento
             </span>
