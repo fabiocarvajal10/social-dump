@@ -6,9 +6,10 @@
 	.service('Cards', function(){
 
 		this.createCards = function(posts, externalScope){
-			var cardsToAdd = [];
-			var card = {};
-			var scope = this;
+			console.log('createCards')
+			var cardsToAdd = [],
+				card = {},
+				scope = this;
 			posts.forEach( function(post) {
 				card = scope.createCard(post);
 				cardsToAdd.push(card);
