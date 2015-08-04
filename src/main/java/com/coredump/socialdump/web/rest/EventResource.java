@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.EventStatus;
 import com.coredump.socialdump.domain.Organization;
+import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.service.EventService;
@@ -271,4 +272,29 @@ public class  EventResource{
     return ResponseEntity.ok().build();
   }
 
+
+  /**
+   * GET  /events-public/:id -> get the "id" event.
+   */
+  @RequestMapping(value = "/events-public/{id}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<EventDTO> getPublic(@Valid @PathVariable Long id) {
+    log.debug("REST request to get Event : {}", id);
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    List<String> searchCriteriaList = eventService.getSearchCriterias(event);
+
+    EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+
+    eventDTO.setSearchCriterias(searchCriteriaList);
+
+    return new ResponseEntity<>(eventDTO, HttpStatus.OK);
+  }
 }

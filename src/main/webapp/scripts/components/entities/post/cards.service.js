@@ -6,9 +6,10 @@
 	.service('Cards', function(){
 
 		this.createCards = function(posts, externalScope){
-			var cardsToAdd = [];
-			var card = {};
-			var scope = this;
+			console.log('createCards')
+			var cardsToAdd = [],
+				card = {},
+				scope = this;
 			posts.forEach( function(post) {
 				card = scope.createCard(post);
 				cardsToAdd.push(card);
@@ -32,7 +33,10 @@
 					'snUserId': post.snUserId,
 					'createdAt': post.createdAt,
 					'eventId': post.eventId,
-					'mediaUrl': post.mediaUrl
+					'mediaUrl': post.mediaUrl,
+					'profileImage': post.profileImage,
+					'profileUrl': post.profileUrl,
+					'fullName': post.fullName
 				}
 			};
 		};
@@ -42,7 +46,7 @@
 		 */
 		this.addCards = function(cardsToAdd, externalScope){
 			cardsToAdd.forEach( function(card, index){
-				if(index !== -1){
+				if(index !== -1) {
 					externalScope.cards.unshift(card);
 					cardsToAdd.splice(index, 1);
 				}
@@ -56,7 +60,7 @@
 		this.deleteCard = function(id, cards){
 			var index = -1;
 			for(var i in cards){
-				if(cards[i].id == id){
+				if(cards[i].id === id){
 					index = i;
 					break;
 				}

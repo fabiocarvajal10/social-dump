@@ -164,7 +164,7 @@ public class EventResourceTest {
     public void checkPostDelayIsRequired() throws Exception {
         int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
-        event.setPostDelay(null);
+        event.setPostDelay(30);
 
         // Create the Event, which fails.
         restEventMockMvc.perform(post("/api/events")
