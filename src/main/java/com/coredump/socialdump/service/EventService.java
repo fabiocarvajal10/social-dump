@@ -67,8 +67,15 @@ public class EventService {
 
     SearchCriteria sc2 = new SearchCriteria();
     sc2.setEventByEventId(event);
-    sc2.setSearchCriteria("summer");
+    sc2.setSearchCriteria(event.getDescription());
     sc2.setSocialNetworkBySocialNetworkId(socialNetworkRepository.getOne(2));
+    sc2.setGenericStatusByStatusId(genericStatusRepository.getOne((short) 1));
+    searchCriteriaRepository.save(sc2);
+
+    SearchCriteria sc3 = new SearchCriteria();
+    sc2.setEventByEventId(event);
+    sc2.setSearchCriteria(event.getDescription());
+    sc2.setSocialNetworkBySocialNetworkId(socialNetworkRepository.getOne(3));
     sc2.setGenericStatusByStatusId(genericStatusRepository.getOne((short) 1));
     searchCriteriaRepository.save(sc2);
   }

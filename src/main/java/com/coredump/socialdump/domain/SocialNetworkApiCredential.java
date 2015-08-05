@@ -15,6 +15,7 @@ public class SocialNetworkApiCredential implements Serializable {
   private String appId;
   private String appSecret;
   private Timestamp lastRequest;
+  private String accessToken;
   private SocialNetwork socialNetworkBySocialNetworkId;
 
   @Id
@@ -62,6 +63,18 @@ public class SocialNetworkApiCredential implements Serializable {
     this.lastRequest = lastRequest;
   }
 
+  @Basic
+  @JsonIgnore
+  @Size(min = 1, max = 100)
+  @Column(name = "accessToken", length = 100)
+  public String getAccessToken() {
+    return accessToken;
+  }
+
+  public void setAccessToken(String accessToken) {
+    this.accessToken = accessToken;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -73,6 +86,7 @@ public class SocialNetworkApiCredential implements Serializable {
     if (appId != null ? !appId.equals(that.appId) : that.appId != null) return false;
     if (appSecret != null ? !appSecret.equals(that.appSecret) : that.appSecret != null) return false;
     if (lastRequest != null ? !lastRequest.equals(that.lastRequest) : that.lastRequest != null) return false;
+    if (accessToken != null ? !accessToken.equals(that.accessToken) : that.accessToken != null) return false;
 
     return true;
   }
