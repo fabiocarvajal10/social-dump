@@ -22,21 +22,17 @@
 	-moz-border-radius: 200px;
 	border-radius: 200px;
 }
-
-.bg-light.lter{
-	background-color: #ecf0f1;
-}
-
+/*
 .bg-light.lter.b-b{
 	border-bottom-width: 3px;
-	border-color: #95a5a6;
+	border-color: #FF5252;
 }
 
 .bg-light.lter.b-r{
 	border-right-width: 2px;
 	border-color: #95a5a6;
 }
-
+*/
 .filter-wrapper {
 	height: 65px;
 	width:25%;

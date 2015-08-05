@@ -4,8 +4,12 @@
       <button class="pull-right visible-xs dk" ui-toggle-class="show" data-target=".navbar-collapse">
         <i class="glyphicon glyphicon-cog"></i>
       </button>
-      <button class="pull-right visible-xs" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+      <button class="pull-right visible-xs" ui-toggle-class="off-screen" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
         <i class="glyphicon glyphicon-align-justify"></i>
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </button>
       <!-- brand -->
       <a href="#/" class="navbar-brand text-lt">
