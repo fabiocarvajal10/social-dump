@@ -143,6 +143,23 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
+      getOrgPostCount: function(organizationId) {
+        var q = $q.defer();
+        $http({
+          url: 'api//social-network-posts/count',
+          method: 'GET',
+          params: { 'organizationId': organizationId}
+        }).
+        success(function(data) {
+          q.resolve(data);
+        }).
+        catch (function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+
       setCurrentOrgId: function(organizationId){
         localStorageService.set('orgId', organizationId);
       },

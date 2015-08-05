@@ -7,6 +7,7 @@ angular.module('socialdumpApp')
     $scope.organizations = [];
     $scope.incomingEventsByOrg = [];
     $scope.finalizedEventsByOrg = [];
+    $scope.postsCount = [];
     $scope.modOrg = null;
     $scope.orgError = '';
     $scope.uptOrg = {};
@@ -89,10 +90,38 @@ angular.module('socialdumpApp')
         .catch (function(error) {
 
         });
+
+      OrganizationService.getOrgPostCount(organization.id)
+        .then(function(data) {
+         $scope.postsCount.splice(0, $scope.postsCount.length);
+          processPostCount(data);
+        })
+        .catch (function(error) {
+
+      });
     };
 
     $scope.changeEvent = function(event){
       OrganizationService.setCurrentEventId(event.id);
+    };
+
+    function processPostCount(postCount) {
+      var total = 0;
+      for(var key in postCount) {
+        if (postCount.hasOwnProperty(key)) {
+          var socialNetwork = {
+            name: key,
+            cant: postCount[key]
+          }
+          $scope.postsCount.push(socialNetwork);
+          total += postCount[key];
+        }
+      }
+      $scope.postsCount.push({
+        name: 'Total',
+        cant: total
+      })
+
     };
 
     function showError(error) {
