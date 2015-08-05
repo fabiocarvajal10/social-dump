@@ -18,7 +18,7 @@ angular.module('socialdumpApp')
       OrganizationService.getAll()
         .then(function(data) {
           $scope.organizations = data;
-          if ($scope.organizations.length > 1) {
+          if ($scope.organizations.length > 0) {
             $scope.changeOrgEvents($scope.organizations[0]);
           }
       })

@@ -8,7 +8,7 @@ angular.module('socialdumpApp.temporalAccess')
     return {
       register: function(temporalAccess) {
         temporalAccess.organizationId = OrganizationService.getCurrentOrgId();
-        temporalAccess.eventId = 81;
+        temporalAccess.eventId = OrganizationService.getCurrentEventId();
         temporalAccess.monitorContactId =
           temporalAccess.monitorContactByMonitorContactId.id;
         if (temporalAccess.allEvent) {
@@ -28,14 +28,14 @@ angular.module('socialdumpApp.temporalAccess')
         catch (function(error) {
           if (error.data === 'e-mail address already in use') {
             error = 'Ya cuenta con un contacto de monitoreo' +
-                    'con el mismo correo electrónico';
+                    ' con el mismo correo electrónico';
           }else if (error.data === 'Monitor cant access before the event') {
             error = 'El acceso temporal no puede iniciar antes del evento';
           }else if (error.data === 'Monitor cant access after the event') {
             error = 'El acceso temporal no puede finalizar después del evento';
           }else {
             error = 'Error inesperado al intentar crear' +
-                    'el contacto de monitoreo';
+                    ' el contacto de monitoreo';
           }
           q.reject(error);
         });
@@ -50,7 +50,7 @@ angular.module('socialdumpApp.temporalAccess')
           method: 'GET',
           params: {
           //ToDo Definir como se va a elegir la organización actual
-            'eventId': 81//parseInt(localStorageService.get('eventId'))
+            'eventId': OrganizationService.getCurrentEventId()//parseInt(localStorageService.get('eventId'))
           }
         }).
         success(function(data) {
