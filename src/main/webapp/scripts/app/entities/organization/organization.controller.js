@@ -5,7 +5,9 @@ angular.module('socialdumpApp')
   .controller('OrganizationCtrl',
       function($scope, OrganizationService, $timeout) {
     $scope.organizations = [];
-    $scope.eventsByOrg = [];
+    $scope.incomingEventsByOrg = [];
+    $scope.finalizedEventsByOrg = [];
+    $scope.postsCount = [];
     $scope.modOrg = null;
     $scope.orgError = '';
     $scope.uptOrg = {};
@@ -16,7 +18,9 @@ angular.module('socialdumpApp')
       OrganizationService.getAll()
         .then(function(data) {
           $scope.organizations = data;
-          $scope.changeOrgEvents($scope.organizations[0]);
+          if ($scope.organizations.length > 1) {
+            $scope.changeOrgEvents($scope.organizations[0]);
+          }
       })
         .catch (function(rejection) {
 
@@ -28,6 +32,7 @@ angular.module('socialdumpApp')
     $scope.createOrg = function(organization) {
       OrganizationService.register(organization.name)
         .then(function(newOrg) {
+          organization.name = '';
           $scope.organizations.push(newOrg);
         })
         .catch (function(error) {
@@ -68,13 +73,55 @@ angular.module('socialdumpApp')
     };
 
     $scope.changeOrgEvents = function(organization) {
-      OrganizationService.getAllEvents(organization.id)
-        .then(function(data){
-          $scope.eventsByOrg = data;
+      OrganizationService.getIncomingEvents(organization.id)
+        .then(function(data) {
+          OrganizationService.setCurrentOrgId(organization.id);
+          $scope.incomingEventsByOrg = data;
         })
-        .catch(function(error) {
+        .catch (function(error) {
 
         });
+
+      OrganizationService.getFinalizedEvents(organization.id)
+        .then(function(data) {
+          OrganizationService.setCurrentOrgId(organization.id);
+          $scope.finalizedEventsByOrg = data;
+        })
+        .catch (function(error) {
+
+        });
+
+      OrganizationService.getOrgPostCount(organization.id)
+        .then(function(data) {
+         $scope.postsCount.splice(0, $scope.postsCount.length);
+          processPostCount(data);
+        })
+        .catch (function(error) {
+
+      });
+    };
+
+    $scope.changeEvent = function(event){
+      OrganizationService.setCurrentEventId(event.id);
+    };
+
+    function processPostCount(postCount) {
+      var total = 0;
+      for(var key in postCount) {
+        if (postCount.hasOwnProperty(key)) {
+          var socialNetwork = {
+            name: key,
+            cant: postCount[key]
+          }
+          $scope.postsCount.push(socialNetwork);
+          total += postCount[key];
+        }
+      }
+      $scope.postsCount.push({
+        name: 'Total',
+        cant: total
+      })
+
     };
 
     function showError(error) {

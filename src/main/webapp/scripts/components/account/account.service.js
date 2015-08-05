@@ -1,6 +1,3 @@
-/**
- * Created by Franz on 17/07/2015.
- */
 (function() {
   'use strict';
   angular.module('socialdumpApp')

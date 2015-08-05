@@ -4,7 +4,6 @@
 <div class="wrapper-md">
   <div class="panel wrapper">
     <div class="row">
-
       <div class="col-md-6 b-r b-light no-border-xs">
         <span class="h4 font-thin m-t-none m-b-md text-muted"> Organizaciones </span>
         <span class="btn m-b-xs btn-sm btn-success pull-right" ng-hide="isUptOrg"
@@ -15,7 +14,7 @@
               ng-disabled="uptOrgForm.$invalid" ng-click="cancelUpdate()">
           Cancelar
         </span>
-        <span class="btn m-b-xs btn-sm btn-info pull-right" ng-show="isUptOrg"
+        <span class="btn m-b-xs btn-sm btn-info pull-right m-r-sm" ng-show="isUptOrg"
               ng-disabled="uptOrgForm.$invalid" ng-click="updateOrg()">
           Modificar
         </span>
@@ -36,16 +35,18 @@
               </div>
             </form>
           </div>
-          <div class="m-b" ng-repeat="organization in organizations">
-            <span class="label text-base bg-success pos-rlt m-r"
-                  ng-click="changeOrgEvents(organization)">
+          <div class="m-b" ng-repeat="organization in organizations"
+               ng-click="changeOrgEvents(organization)">
+            <span class="label text-base bg-success pos-rlt m-r">
               <i class="fa fa-users"></i>
             </span>
-            <span ng-click="changeOrgEvents(organization)"> {{ organization.name }} </span>
-            <span class="btn m-b-xs btn-xs btn-danger pull-right" ng-click="deleteOrg(organization, $index)">
+            <span> {{ organization.name }} </span>
+            <span class="btn m-b-xs btn-xs btn-danger pull-right"
+                  ng-click="deleteOrg(organization, $index)">
               <i class="fa fa-trash-o"></i>
             </span>
-            <span class="btn m-b-xs btn-xs btn-warning pull-right" ng-click="showUptOrg(organization, $index)">
+            <span class="btn m-b-xs btn-xs btn-warning pull-right m-r-xs"
+                  ng-click="showUptOrg(organization, $index)">
               <i class="fa fa-pencil"></i>
             </span>
           </div>
@@ -65,25 +66,66 @@
       <div class="col-md-6 b-light no-border-xs">
         <div class="m-b">
           <span class="h4 font-thin m-t-none m-b-xl text-muted"> Próximos Eventos </span>
-          <a ui-sref="events.list" class="btn m-b-xs btn-sm btn-success pull-right mb-sm">
-            Agregar
-          </a>
         </div>
         <div class="m-b">
-          <div class="m-b" ng-repeat="event in eventsByOrg">
+          <div class="m-b" ng-repeat="incomingEvent in incomingEventsByOrg"
+               ng-click="changeEvent(incomingEvent)">
             <span class="label text-base bg-info pos-rlt m-r">
-              <i class="arrow right arrow-info"></i> {{ event.startDate | date:"dd/MM/yyyy 'at' h:mma"}}
+              <i class="arrow right arrow-info"></i>
+              {{ incomingEvent.startDate | date:"dd/MM/yyyy '|' h:mma"}}
+              -
+              {{ incomingEvent.endDate | date:"dd/MM/yyyy '|' h:mma"}}
             </span>
-            <span> {{ event.description }} </span>
+            <span> {{ incomingEvent.description }} </span>
           </div>
-          <div class="m-b" ng-show="!eventsByOrg.length">
+          <div class="m-b" ng-show="!incomingEventsByOrg.length">
             <span class="label text-base bg-info pos-rlt m-r">
               No se aproximan eventos
             </span>
           </div>
         </div>
       </div>
-
     </div>
   </div>
+
+  <div class="panel wrapper">
+    <div class="row">
+      <div class="col-md-6 b-r b-light no-border-xs">
+        <span class="h4 font-thin m-t-none m-b-md text-muted">
+          Total de Publicaciones Obtenidas
+        </span>
+        <div class="row row-sm text-center">
+          <div class="col-xs-6" ng-repeat="postCount in postsCount">
+            <div class="panel padder-v item">
+              <div class="h1 text-info font-thin h1"> {{ postCount.cant }} </div>
+              <span class="text-muted text-xs"> {{ postCount.name }} </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 b-light no-border-xs">
+        <div class="m-b">
+          <span class="h4 font-thin m-t-none m-b-xl text-muted"> Eventos Anteriores </span>
+        </div>
+        <div class="m-b">
+          <div class="m-b" ng-repeat="finalizedEvent in finalizedEventsByOrg">
+            <span class="label text-base bg-dark lter pos-rlt m-r">
+              <i class="arrow right arrow-dark"></i>
+              {{ finalizedEvent.startDate | date:"dd/MM/yyyy" }}
+              -
+              {{ finalizedEvent.endDate | date:"dd/MM/yyyy" }}
+            </span>
+            <span> {{ finalizedEvent.description }} </span>
+          </div>
+          <div class="m-b" ng-show="!finalizedEventsByOrg.length">
+            <span class="label text-base bg-info pos-rlt m-r">
+              No ha realizado ningún evento
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

@@ -2,11 +2,13 @@ package com.coredump.socialdump.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.SocialNetwork;
 import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 import com.coredump.socialdump.web.rest.dto.SocialNetworkPostDTO;
 import com.coredump.socialdump.web.rest.mapper.SocialNetworkPostMapper;
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import javax.inject.Inject;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 /**
@@ -99,9 +102,28 @@ public class SocialNetworkPostResource {
     log.debug("REST request to get SocialNetworkPosts : {}", id);
     return Optional.ofNullable(socialNetworkPostRepository.findOne(id))
             .map(SocialNetworkPost ->
-                  new ResponseEntity<>(SocialNetworkPost, HttpStatus.OK))
+              new ResponseEntity<>(SocialNetworkPost, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
+  /**
+   * GET  /social-network-posts/:id -> get the "id" generic status.
+   */
+  @RequestMapping(value = "/social-network-posts/count",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> getPostsCountByOrg(
+    @RequestParam("organizationId") long organizationId) {
+
+    List<SocialNetwork> postsList =
+        socialNetworkPostRepository.findPostsSocialNetworkIdsByOrg(organizationId);
+
+    Map<String, Long> countList =
+        postsList.stream()
+          .collect(Collectors.groupingBy(p -> p.getName(), Collectors.counting()));
+
+    return new ResponseEntity<>(countList, HttpStatus.OK);
+  }
 }
 

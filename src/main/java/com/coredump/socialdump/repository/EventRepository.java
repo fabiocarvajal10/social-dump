@@ -3,6 +3,8 @@ package com.coredump.socialdump.repository;
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.Organization;
 import java.util.List;
+
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,4 +48,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   Page<Event> findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
     Pageable pageable,
     @Param("orgId") Long orgId);
+
+  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.startDate >= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate asc")
+  Page<Event> findIncomingEvents(Pageable pageable, @Param("orgId") Long orgId,
+      @Param("date") DateTime date);
+
+  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.endDate <= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.endDate desc")
+  Page<Event> findFinalizedEvents(Pageable pageable, @Param("orgId") Long orgId,
+      @Param("date") DateTime date);
 }

@@ -15,6 +15,7 @@ import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
 import com.coredump.socialdump.web.rest.util.ValidatorUtil;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -272,6 +273,79 @@ public class  EventResource{
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * GET  /events -> get the next 5 incoming events.
+   */
+  @RequestMapping(value = "/events/incoming",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional(readOnly = true)
+  public ResponseEntity<List<EventDTO>> getIncomingEvents(
+      @RequestParam(value = "page" , required = false) Integer offset,
+      @RequestParam(value = "per_page", required = false) Integer limit,
+      @Valid @RequestParam(value = "organizationId") Long orgId)
+    throws URISyntaxException {
+
+    Organization organization = validateOwner(orgId);
+    if ( organization == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    DateTime now = new DateTime();
+    Page<Event> page = eventRepository
+        .findIncomingEvents(PaginationUtil.generatePageRequest(offset, limit),
+          organization.getId(),
+          now);
+
+    HttpHeaders headers = PaginationUtil
+        .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+
+    return new ResponseEntity<>(page
+      .getContent()
+      .stream()
+      .limit(5)
+      .map(eventMapper::eventToEventDTO)
+      .collect(Collectors.toCollection(LinkedList::new)),
+      headers, HttpStatus.OK);
+  }
+
+  /**
+   * GET  /events -> get the last 5 finalized events.
+   */
+  @RequestMapping(value = "/events/finalized",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional(readOnly = true)
+  public ResponseEntity<List<EventDTO>> getFinalizedEvents(
+      @RequestParam(value = "page" , required = false) Integer offset,
+      @RequestParam(value = "per_page", required = false) Integer limit,
+      @Valid @RequestParam(value = "organizationId") Long orgId)
+    throws URISyntaxException {
+
+    Organization organization = validateOwner(orgId);
+    if (organization == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    DateTime now = new DateTime();
+    Page<Event> page = eventRepository
+      .findFinalizedEvents(PaginationUtil.generatePageRequest(offset, limit),
+        organization.getId(),
+        now);
+
+    HttpHeaders headers = PaginationUtil
+      .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+
+    return new ResponseEntity<>(page
+      .getContent()
+      .stream()
+      .limit(5)
+      .map(eventMapper::eventToEventDTO)
+      .collect(Collectors.toCollection(LinkedList::new)),
+      headers, HttpStatus.OK);
+  }
 
   /**
    * GET  /events-public/:id -> get the "id" event.
@@ -296,5 +370,6 @@ public class  EventResource{
     eventDTO.setSearchCriterias(searchCriteriaList);
 
     return new ResponseEntity<>(eventDTO, HttpStatus.OK);
+
   }
 }
