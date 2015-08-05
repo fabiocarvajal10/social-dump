@@ -1,6 +1,7 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.GenericStatusRepository;
@@ -38,7 +39,6 @@ public class EventService {
   @Inject
   private FetchExecutorService fetchExecutorService;
 
-
   public List<String>  getSearchCriterias(Event event) {
     return  searchCriteriaRepository.findAllByEventByEventId(event)
           .stream()
@@ -56,6 +56,27 @@ public class EventService {
   }
 
   //Temporal
+
+  public boolean stopSync(Event event, SearchCriteria searchCriteria) {
+
+    if (fetchExecutorService.stopSynchronization(event, searchCriteria)) {
+      GenericStatus genericStatus = genericStatusRepository.findOne((short) 2);
+      searchCriteria.setGenericStatusByStatusId(genericStatus);
+      searchCriteriaRepository.save(searchCriteria);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean modifyDelay(Event event, SearchCriteria searchCriteria, int delay) {
+
+    if (fetchExecutorService.modifyDelay(event, searchCriteria, delay)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   private void insertScTest(Event event) {
     SearchCriteria sc = new SearchCriteria();

@@ -7,12 +7,9 @@ import com.coredump.socialdump.repository.SocialNetworkApiCredentialRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 
 import com.coredump.socialdump.web.websocket.EventPublicationService;
-import org.springframework.beans.factory.annotation.Lookup;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -33,6 +30,9 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
 
   private SearchCriteria searchCriteria;
   private SocialNetworkApiCredential socialNetworkApiCredential;
+  private boolean alive;
+  private int delay;
+  private String name;
 
   public SocialNetworkFetch() {
 
@@ -42,9 +42,12 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     return searchCriteria;
   }
 
-  public void setSearchCriteria(SearchCriteria searchCriteria) {
+  public void prepareFetch(SearchCriteria searchCriteria, int delay) {
     this.searchCriteria = searchCriteria;
     this.setSocialNetworkApiCrededential();
+    this.alive = true;
+    this.delay = (delay * 1000);
+    this.setName(searchCriteria);
   }
 
   public SocialNetworkApiCredential getSocialNetworkApiCredential() {
@@ -64,6 +67,37 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     }
   }
 
+  public void kill() {
+    setIsAlive(false);
+  }
+
+  protected boolean getIsAlive() {
+    return this.alive;
+  }
+
+  public void setDelay(int delay) {
+    this.delay = delay;
+  }
+
+  public int getDelay() {
+    return this.delay;
+  }
+
+  private void setIsAlive(boolean alive) {
+    this.alive = alive;
+  }
+
+  protected String getName() {
+    return this.name;
+  }
+
+  private void setName(SearchCriteria searchCriteria) {
+    String orgName = searchCriteria.getEventByEventId().getOrganizationByOrganizationId().getName();
+    String eventName = searchCriteria.getEventByEventId().getDescription();
+    String searchCriteriaName = searchCriteria.getSearchCriteria();
+
+    this.name = orgName + eventName + searchCriteriaName;
+  }
   protected void notifyPublications(List<SocialNetworkPost> postList) {
     try {
       eventPublicationService.showPost(postList);

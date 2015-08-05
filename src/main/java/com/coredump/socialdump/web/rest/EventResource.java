@@ -7,6 +7,7 @@ import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
+import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
@@ -49,6 +50,9 @@ public class  EventResource{
 
   @Inject
   private EventStatusRepository statusRepository;
+
+  @Inject
+  private SearchCriteriaRepository searchCriteriaRepository;
 
   @Inject
   private OrganizationService organizationService;
@@ -370,6 +374,61 @@ public class  EventResource{
     eventDTO.setSearchCriterias(searchCriteriaList);
 
     return new ResponseEntity<>(eventDTO, HttpStatus.OK);
+
+  }
+  //Enviar solo SCId
+  /**
+   * POST  /events/synchronization/kill
+   */
+  @RequestMapping(value = "/events/synchronization/kill",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> stopSync(@RequestParam(value = "eventId") Long eventId,
+      @RequestParam(value = "searchCriteriaId") Long searchCriteriaId) {
+
+    Event event = eventRepository.findOne(eventId);
+    SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
+
+    if (event == null || searchCriteria == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    boolean killed = eventService.stopSync(event, searchCriteria);
+
+    if (killed) {
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+  }
+
+  /**
+   * POST  /events/synchronization/kill
+   */
+  @RequestMapping(value = "/events/delay",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> changeDelay(@RequestParam(value = "eventId") Long eventId,
+      @RequestParam(value = "searchCriteriaId") Long searchCriteriaId,
+         @RequestParam(value = "delay") int delay) {
+
+    Event event = eventRepository.findOne(eventId);
+    SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
+
+    if (event == null || searchCriteria == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    boolean delayed = eventService.modifyDelay(event, searchCriteria, delay);
+
+    if (delayed) {
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 
   }
 }

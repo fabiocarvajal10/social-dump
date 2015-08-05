@@ -37,7 +37,8 @@ public class TwitterFetch extends SocialNetworkFetch {
     String appSecret = getSocialNetworkApiCredential().getAppSecret();
     twitterTemplate = new TwitterTemplate(appId, appSecret);
     List<SocialNetworkPost> postsList = new ArrayList<>();
-    while (true) {
+    Thread.currentThread().setName(this.getName());
+    while (this.getIsAlive()) {
       try {
         log.debug("Obteniendo Tweets de: {}...", getSearchCriteria().getSearchCriteria());
         SearchResults searchResults = twitterTemplate.searchOperations()
@@ -52,8 +53,8 @@ public class TwitterFetch extends SocialNetworkFetch {
         getSocialNetworkPostRepository().save(postsList);
         super.notifyPublications(postsList);
         postsList.clear();
-        log.debug("Sleeping");
-        Thread.sleep(10000);
+        log.debug("Sleeping for " + this.getDelay() + " ms");
+        Thread.sleep(this.getDelay());
 
       } catch (InterruptedException e) {
         e.printStackTrace();
