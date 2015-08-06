@@ -65,8 +65,8 @@ public class  EventResource{
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
-          .getOrganizationByOrganizationId()
-          .getId());
+      .getOrganizationByOrganizationId()
+      .getId());
   }
 
   private Organization validateOwner(Long id) {
@@ -135,7 +135,7 @@ public class  EventResource{
 
     eventService.scheduleFetch(event);
     return ResponseEntity.created(new URI("/api/events/"
-            + eventDTO.getId())) .build();
+      + eventDTO.getId())) .build();
   }
 
   /**
@@ -235,8 +235,8 @@ public class  EventResource{
     return Optional.ofNullable(event)
             .map(eventMapper::eventToEventDTO)
             .map(EventDTO -> new ResponseEntity<>(
-                    EventDTO,
-                    HttpStatus.OK))
+              EventDTO,
+              HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
@@ -258,8 +258,8 @@ public class  EventResource{
 
     Organization organization = organizationService
             .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
+              .getOrganizationByOrganizationId()
+              .getId());
 
     if (organization == null) {
       return ResponseEntity.status(403).build();
@@ -376,7 +376,7 @@ public class  EventResource{
     return new ResponseEntity<>(eventDTO, HttpStatus.OK);
 
   }
-  //Enviar solo SCId
+
   /**
    * POST  /events/synchronization/kill
    */
@@ -384,17 +384,16 @@ public class  EventResource{
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<?> stopSync(@RequestParam(value = "eventId") Long eventId,
-      @RequestParam(value = "searchCriteriaId") Long searchCriteriaId) {
+  public ResponseEntity<?> stopSync(@RequestParam(value = "searchCriteriaId")
+      Long searchCriteriaId) {
 
-    Event event = eventRepository.findOne(eventId);
     SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
 
-    if (event == null || searchCriteria == null) {
+    if (searchCriteria.getEventByEventId() == null || searchCriteria == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    boolean killed = eventService.stopSync(event, searchCriteria);
+    boolean killed = eventService.stopSync(searchCriteria);
 
     if (killed) {
       return new ResponseEntity<>(HttpStatus.OK);
@@ -405,24 +404,44 @@ public class  EventResource{
   }
 
   /**
-   * POST  /events/synchronization/kill
+   * POST  /events/synchronization/kill/all
+   */
+  @RequestMapping(value = "/events/synchronization/kill/all",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> stopAllSync(@RequestParam(value = "eventId") Long eventId) {
+
+    Event event = eventRepository.findOne(eventId);
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    eventService.stopAllSync(event);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+
+  }
+
+  /**
+   * POST  /events/delay
    */
   @RequestMapping(value = "/events/delay",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<?> changeDelay(@RequestParam(value = "eventId") Long eventId,
-      @RequestParam(value = "searchCriteriaId") Long searchCriteriaId,
-         @RequestParam(value = "delay") int delay) {
+  public ResponseEntity<?> changeDelay(@RequestParam(value = "searchCriteriaId")
+      Long searchCriteriaId, @RequestParam(value = "delay") int delay) {
 
-    Event event = eventRepository.findOne(eventId);
     SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
 
-    if (event == null || searchCriteria == null) {
+    if (searchCriteria.getEventByEventId() == null || searchCriteria == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    boolean delayed = eventService.modifyDelay(event, searchCriteria, delay);
+    boolean delayed = eventService.modifyDelay(searchCriteria, delay);
 
     if (delayed) {
       return new ResponseEntity<>(HttpStatus.OK);
@@ -430,5 +449,26 @@ public class  EventResource{
       return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
+  }
+
+  /**
+   * POST  /events/delay-all
+   */
+  @RequestMapping(value = "/events/delay-all",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> delayAll(@RequestParam(value = "eventId") Long eventId,
+      @RequestParam(value = "delay") int delay) {
+
+    Event event = eventRepository.findOne(eventId);
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    eventService.delayAll(event, delay);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

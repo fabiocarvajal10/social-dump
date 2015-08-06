@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,7 @@ public class FetchExecutorService {
   @Inject
   private SocialNetworkBeanFactory socialNetworkFetchFactory;
 
-  private HashMap<String, FetchableInterface> fetchableMap = new HashMap<>();
+  private Map<String, FetchableInterface> fetchableMap = new HashMap<>();
 
   private ScheduledExecutorService scheduledExecutorService;
 
@@ -42,6 +43,21 @@ public class FetchExecutorService {
 
     List<SearchCriteria> scList = (List) event.getSearchCriteriasById();
 
+    scList.forEach(sc -> {
+        try {
+          FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
+              .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
+                  .getName().toLowerCase());
+
+          log.debug("Search Criteria {}", sc.getSearchCriteria());
+          socialNetworkFetch.prepareFetch(sc, event.getPostDelay());
+          addSchedule(socialNetworkFetch, event.getStartDate());
+          addToMap(event, socialNetworkFetch, sc);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      });
+    /*
     for (int i = 0; i < searchCriteriaQ; i++) {
       try {
         SearchCriteria searchCriteria = scList.get(i);
@@ -58,7 +74,7 @@ public class FetchExecutorService {
       } catch (Exception e) {
         e.printStackTrace();
       }
-    }
+    }*/
   }
 
   private void addSchedule(FetchableInterface socialNetworkFetch, DateTime startDate) {
@@ -74,8 +90,8 @@ public class FetchExecutorService {
 
   }
 
-  public boolean stopSynchronization(Event event, SearchCriteria searchCriteria) {
-    String key = buildKey(event, searchCriteria);
+  public boolean stopSynchronization(SearchCriteria searchCriteria) {
+    String key = buildKey(searchCriteria.getEventByEventId(), searchCriteria);
 
     if (fetchableMap.containsKey(key) && fetchableMap.get(key) != null) {
       fetchableMap.get(key).kill();
@@ -86,8 +102,15 @@ public class FetchExecutorService {
 
   }
 
-  public boolean modifyDelay(Event event, SearchCriteria searchCriteria, int delay) {
-    String key = buildKey(event, searchCriteria);
+  public void killAll(Event event) {
+
+    event.getSearchCriteriasById()
+      .forEach(sc -> fetchableMap.get(buildKey(event, sc)).kill());
+
+  }
+
+  public boolean modifyDelay(SearchCriteria searchCriteria, int delay) {
+    String key = buildKey(searchCriteria.getEventByEventId(), searchCriteria);
 
     if (fetchableMap.containsKey(key) && fetchableMap.get(key) != null) {
       fetchableMap.get(key).setDelay(delay);
@@ -95,6 +118,13 @@ public class FetchExecutorService {
     } else {
       return false;
     }
+
+  }
+
+  public void delayAll(Event event, int delay) {
+
+    event.getSearchCriteriasById()
+      .forEach(sc -> fetchableMap.get(buildKey(event, sc)).setDelay(delay));
 
   }
 

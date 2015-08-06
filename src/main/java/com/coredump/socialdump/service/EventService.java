@@ -28,6 +28,9 @@ public class EventService {
   private final Logger log = LoggerFactory.getLogger(EventService.class);
 
   @Inject
+  private EventRepository eventRepository;
+
+  @Inject
   private SearchCriteriaRepository searchCriteriaRepository;
 
   @Inject
@@ -55,11 +58,9 @@ public class EventService {
     fetchExecutorService.scheduleFetch(event);
   }
 
-  //Temporal
+  public boolean stopSync(SearchCriteria searchCriteria) {
 
-  public boolean stopSync(Event event, SearchCriteria searchCriteria) {
-
-    if (fetchExecutorService.stopSynchronization(event, searchCriteria)) {
+    if (fetchExecutorService.stopSynchronization(searchCriteria)) {
       GenericStatus genericStatus = genericStatusRepository.findOne((short) 2);
       searchCriteria.setGenericStatusByStatusId(genericStatus);
       searchCriteriaRepository.save(searchCriteria);
@@ -69,15 +70,26 @@ public class EventService {
     }
   }
 
-  public boolean modifyDelay(Event event, SearchCriteria searchCriteria, int delay) {
+  public void stopAllSync(Event event) {
+    fetchExecutorService.killAll(event);
+  }
 
-    if (fetchExecutorService.modifyDelay(event, searchCriteria, delay)) {
+  public boolean modifyDelay(SearchCriteria searchCriteria, int delay) {
+
+    if (fetchExecutorService.modifyDelay(searchCriteria, delay)) {
       return true;
     } else {
       return false;
     }
   }
 
+  public void delayAll(Event event, int delay) {
+    fetchExecutorService.delayAll(event, delay);
+    event.setPostDelay(delay);
+    eventRepository.save(event);
+  }
+
+  //Temporal
   private void insertScTest(Event event) {
     SearchCriteria sc = new SearchCriteria();
     sc.setEventByEventId(event);
