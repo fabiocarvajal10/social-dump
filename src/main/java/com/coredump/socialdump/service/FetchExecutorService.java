@@ -57,24 +57,6 @@ public class FetchExecutorService {
           e.printStackTrace();
         }
       });
-    /*
-    for (int i = 0; i < searchCriteriaQ; i++) {
-      try {
-        SearchCriteria searchCriteria = scList.get(i);
-        FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
-              .getSocialNetworkFetch(searchCriteria
-                    .getSocialNetworkBySocialNetworkId()
-                    .getName().toLowerCase());
-
-        log.debug("Search Criteria {}", searchCriteria.getSearchCriteria());
-
-        socialNetworkFetch.prepareFetch(searchCriteria, event.getPostDelay());
-        addSchedule(socialNetworkFetch, event.getStartDate());
-        addToMap(event, socialNetworkFetch, searchCriteria);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }*/
   }
 
   private void addSchedule(FetchableInterface socialNetworkFetch, DateTime startDate) {
