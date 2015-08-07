@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.print.DocFlavor;
+import javax.swing.plaf.TableHeaderUI;
 
 
 /**
@@ -45,7 +46,8 @@ public class InstagramFetch extends SocialNetworkFetch {
         new Token(ACCESS_TOKEN, getSocialNetworkApiCredential().getAppSecret());
     instagram = new Instagram(accessToken);
     List<SocialNetworkPost> postsList = new ArrayList<>();
-    while (true) {
+    Thread.currentThread().setName(this.getName());
+    while (this.getIsAlive()) {
       try {
         log.debug("Obteniendo grams de: {}...", getSearchCriteria().getSearchCriteria());
         TagMediaFeed mediaFeed =
@@ -60,8 +62,8 @@ public class InstagramFetch extends SocialNetworkFetch {
         getSocialNetworkPostRepository().save(postsList);
         super.notifyPublications(postsList);
         postsList.clear();
-        log.debug("Sleeping");
-        Thread.sleep(10000);
+        log.debug("Sleeping for " + this.getDelay() + " ms");
+        Thread.sleep(this.getDelay());
 
       } catch (InterruptedException e) {
         e.printStackTrace();

@@ -8,7 +8,6 @@ import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 import com.coredump.socialdump.web.rest.dto.SocialNetworkPostDTO;
 import com.coredump.socialdump.web.rest.mapper.SocialNetworkPostMapper;
-import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +113,7 @@ public class SocialNetworkPostResource {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<?> getPostsCountByOrg(
-    @RequestParam("organizationId") long organizationId) {
+      @RequestParam("organizationId") long organizationId) {
 
     List<SocialNetwork> postsList =
         socialNetworkPostRepository.findPostsSocialNetworkIdsByOrg(organizationId);
