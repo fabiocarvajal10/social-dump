@@ -108,19 +108,19 @@ public class  EventResource{
           method = RequestMethod.POST,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<Void> create(@Valid @RequestBody EventDTO eventDTO)
+  public ResponseEntity<EventDTO> create(@Valid @RequestBody EventDTO eventDTO)
           throws URISyntaxException {
     log.debug("REST request to save Event: {}", eventDTO.toString());
     if (eventDTO.getId() != null) {
       return ResponseEntity.badRequest()
             .header("Failure", "A new event cannot already have an ID")
-            .build();
+            .body(null);
     }
 
     if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
       return ResponseEntity.badRequest()
             .header("Failure", "End date can't be lower than start date")
-            .build();
+            .body(null);
     }
 
     Event event = eventMapper.eventDTOToEvent(eventDTO);
@@ -130,8 +130,10 @@ public class  EventResource{
     eventRepository.save(event);
 
     eventService.scheduleFetch(event);
-    return ResponseEntity.created(new URI("/api/events/"
-            + eventDTO.getId())) .build();
+
+
+    return ResponseEntity.created(new URI("/api/events/" + eventDTO.getId()))
+      .body(eventMapper.eventToEventDTO(event));
   }
 
   /**

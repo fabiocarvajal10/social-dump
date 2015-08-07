@@ -1,6 +1,11 @@
-/*
-
-*/
+@font-face{
+  font-family: 'DigitalDream';
+  src: url('../fonts/digitaldream/DIGITALDREAM-webfont.eot');
+  src: url('../fonts/digitaldream/DIGITALDREAM-webfont.eot?iefix') format('eot'),
+       url('../fonts/digitaldream/DIGITALDREAM-webfont.woff') format('woff'),
+       url('../fonts/digitaldream/DIGITALDREAM-webfont.ttf') format('truetype'),
+       url('../fonts/digitaldream/DIGITALDREAM-webfont.svg#webfont') format('svg');
+}
 
 html {
   background-color: #f0f3f4;
@@ -5189,4 +5194,40 @@ a.text-#000000:hover {
   99.9% {
     background-color: #7266ba;
   }
+}
+
+.digital-font {
+  font-family: 'DigitalDream';
+}
+
+.facebook-color {
+  color: #3b5998;
+}
+
+.twitter-color {
+  color: #00aced;
+}
+
+.instagram-color {
+  color: #517fa4;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.icon-block-overlay {
+  background-color: #666;
+  background-color: rgba(96, 96, 96, 0.5);
+  border-radius: 20px;
+  bottom: 0;
+  cursor: not-allowed;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.rel {
+  position: relative;
 }

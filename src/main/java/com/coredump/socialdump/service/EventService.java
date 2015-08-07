@@ -48,7 +48,7 @@ public class EventService {
 
 
   public void scheduleFetch(Event event) {
-    insertScTest(event);
+    // insertScTest(event);
     log.info("Preparing fetch of hashtags");
     event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
     //event.getSearchCriteriasById();

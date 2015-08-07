@@ -18,9 +18,45 @@
     </div>
 
     <div class="form-group">
+      <label for="field_hashtag"># Hashtag</label>
+      <input type="text" class="form-control" name="hashtag" id="field_hashtag"
+          ng-model="event.hashtag" required>
+
+      <div ng-show="editForm.hashtag.$invalid">
+        <p class="help-block"
+          ng-show="editForm.hashtag.$error.required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+
+    <label class="pointer rel" for="{{socialNetwork.name}}"
+           ng-repeat="socialNetwork in socialNetworks">
+      <div ng-bind-html="socialNetwork.icon"></div>
+      <input type="checkbox" name="{{socialNetwork.name}}"
+             id="{{socialNetwork.name}}" class="hide"
+             ng-model="socialNetworksDict[socialNetwork.name].selected"
+             checked="checked" />
+      <div class="icon-block-overlay"
+           ng-show="!!(socialNetworksDict[socialNetwork.name].selected)"></div>
+    </label>
+
+    <div class="form-group">
       <label for="field_startDate">Comienza</label>
-      <input type="date" class="form-control" name="startDate" id="field_startDate"
-          ng-model="event.startDate" required>
+      <div class="row">
+        <div class="col-lg-6">
+        <input type="date" class="form-control" name="startDate" id="field_startDate"
+            ng-model="event.startDate" required>
+        </div>
+
+        <div class="col-lg-6">
+          <select class="form-control digital-font" id="field_startTime"
+                  name="startTime" ng-model="event.startTime"
+                  ng-options="hour as hour for hour in hours"
+                  ng-change="changeStartTime(event.startTime)">
+          </select>
+        </div>`
+      </div>
 
       <div ng-show="editForm.startDate.$invalid">
         <p class="help-block"
@@ -29,18 +65,40 @@
         </p>
       </div>
     </div>
+
+
     <div class="form-group">
       <label for="field_endDate">Termina</label>
-      <input type="date" class="form-control" name="endDate" id="field_endDate"
-          ng-model="event.endDate" required>
+      <div class="row">
+
+        <div class="col-lg-6">
+          <input type="date" class="form-control" name="endDate" id="field_endDate"
+              ng-model="event.endDate"
+              ensure-date-greater-than="{{event.startDate.toUTCString()}}"
+              required>
+        </div>
+        <div class="col-lg-6">
+          <select class="form-control digital-font" id="field_endTime"selectedTemplate
+                  name="field_endTime" ng-model="event.endTime"
+                  ng-options="hour as hour for hour in hours"
+                  ng-change="changeEndTime(event.endTime)">
+          </select>
+        </div>
+      </div>
 
       <div ng-show="editForm.endDate.$invalid">
         <p class="help-block"
           ng-show="editForm.endDate.$error.required">
           Este campo es requerido.
         </p>
+        <p class="help-block"
+          ng-show="editForm.endDate.$error.dateGreaterThan">
+          El evento no puede terminar antes de que empiece.
+        </p>
       </div>
     </div>
+
+
     <div class="form-group">
       <label for="field_description">Descripción</label>
       <input type="text" class="form-control" name="description" id="field_description"
@@ -53,8 +111,26 @@
         </p>
       </div>
     </div>
+
+
     <div class="form-group">
-      <label for="field_postDelay">Demora para rechazar Posts</label>
+      <label for="field_type">Tipo</label>
+      <select class="form-control" id="field_type"
+              name="type" ng-model="event.typeId"
+              ng-options="eventType.id as eventType.name for eventType in eventTypes"
+              required>
+      </select>
+      <div ng-show="editForm.type.$invalid">
+        <p class="help-block"
+          ng-show="editForm.type.$error.required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="field_postDelay">Segundos de demora para rechazar Posts</label>
       <input type="number" class="form-control" name="postDelay" id="field_postDelay"
           ng-model="event.postDelay" required>
 
@@ -68,12 +144,6 @@
           Este campo solo acepta números.
         </p>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="field_type">Tipo</label>
-      <select class="form-control" id="field_type" name="type" ng-model="event.typeId"
-              ng-options="eventType.id as eventType.name for eventType in eventTypes">
-      </select>
     </div>
   </div>
   <div class="modal-footer">
