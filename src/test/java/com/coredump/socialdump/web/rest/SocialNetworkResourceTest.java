@@ -58,9 +58,13 @@ public class SocialNetworkResourceTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        SocialNetworkResource socialNetworkResource = new SocialNetworkResource();
-        ReflectionTestUtils.setField(socialNetworkResource, "socialNetworkRepository", socialNetworkRepository);
-        this.restSocialNetworkMockMvc = MockMvcBuilders.standaloneSetup(socialNetworkResource).setMessageConverters(jacksonMessageConverter).build();
+        SocialNetworkResource socialNetworkResource =
+            new SocialNetworkResource();
+        ReflectionTestUtils.setField(socialNetworkResource,
+            "socialNetworkRepository", socialNetworkRepository);
+        this.restSocialNetworkMockMvc =
+            MockMvcBuilders.standaloneSetup(socialNetworkResource)
+            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before
@@ -136,7 +140,7 @@ public class SocialNetworkResourceTest {
         restSocialNetworkMockMvc.perform(get("/api/socialNetworks"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[*].id").value(hasItem(socialNetwork.getId().intValue())))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(socialNetwork.getId())))
                 .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
                 .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
     }
@@ -151,7 +155,7 @@ public class SocialNetworkResourceTest {
         restSocialNetworkMockMvc.perform(get("/api/socialNetworks/{id}", socialNetwork.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(socialNetwork.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(socialNetwork.getId()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.url").value(DEFAULT_URL.toString()));
     }
@@ -175,7 +179,7 @@ public class SocialNetworkResourceTest {
         // Update the socialNetwork
         socialNetwork.setName(UPDATED_NAME);
         socialNetwork.setUrl(UPDATED_URL);
-        
+
 
         restSocialNetworkMockMvc.perform(put("/api/socialNetworks")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

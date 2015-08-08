@@ -2,6 +2,7 @@ package com.coredump.socialdump.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.SocialNetwork;
 import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
@@ -21,6 +22,7 @@ import javax.inject.Inject;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 /**
@@ -111,12 +113,16 @@ public class SocialNetworkPostResource {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<?> getPostsCountByOrg(
-    @RequestParam("organizationId") long organizationId) {
+      @RequestParam("organizationId") long organizationId) {
 
-    List<SocialNetworkPost> postsList =
+    List<SocialNetwork> postsList =
         socialNetworkPostRepository.findPostsSocialNetworkIdsByOrg(organizationId);
 
-    return null;
+    Map<String, Long> countList =
+        postsList.stream()
+          .collect(Collectors.groupingBy(p -> p.getName(), Collectors.counting()));
+
+    return new ResponseEntity<>(countList, HttpStatus.OK);
   }
 }
 

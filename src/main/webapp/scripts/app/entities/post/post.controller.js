@@ -34,7 +34,6 @@
 					});
 				
 				//playlist continuar con esto mas tarde
-				
 				function play(data) {
 					var toReproduce,
 					count = 1,

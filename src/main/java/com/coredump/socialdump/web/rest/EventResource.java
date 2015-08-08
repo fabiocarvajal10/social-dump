@@ -7,6 +7,7 @@ import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
+import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
@@ -51,6 +52,9 @@ public class  EventResource{
   private EventStatusRepository statusRepository;
 
   @Inject
+  private SearchCriteriaRepository searchCriteriaRepository;
+
+  @Inject
   private OrganizationService organizationService;
 
   @Inject
@@ -61,8 +65,8 @@ public class  EventResource{
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
-          .getOrganizationByOrganizationId()
-          .getId());
+      .getOrganizationByOrganizationId()
+      .getId());
   }
 
   private Organization validateOwner(Long id) {
@@ -130,7 +134,6 @@ public class  EventResource{
     eventRepository.save(event);
 
     eventService.scheduleFetch(event);
-
 
     return ResponseEntity.created(new URI("/api/events/" + eventDTO.getId()))
       .body(eventMapper.eventToEventDTO(event));
@@ -233,8 +236,8 @@ public class  EventResource{
     return Optional.ofNullable(event)
             .map(eventMapper::eventToEventDTO)
             .map(EventDTO -> new ResponseEntity<>(
-                    EventDTO,
-                    HttpStatus.OK))
+              EventDTO,
+              HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
@@ -256,8 +259,8 @@ public class  EventResource{
 
     Organization organization = organizationService
             .ownsOrganization(event
-                    .getOrganizationByOrganizationId()
-                    .getId());
+              .getOrganizationByOrganizationId()
+              .getId());
 
     if (organization == null) {
       return ResponseEntity.status(403).build();
@@ -373,5 +376,100 @@ public class  EventResource{
 
     return new ResponseEntity<>(eventDTO, HttpStatus.OK);
 
+  }
+
+  /**
+   * POST  /events/synchronization/kill
+   */
+  @RequestMapping(value = "/events/synchronization/kill",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> stopSync(@RequestParam(value = "searchCriteriaId")
+      Long searchCriteriaId) {
+
+    SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
+
+    if (searchCriteria.getEventByEventId() == null || searchCriteria == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    boolean killed = eventService.stopSync(searchCriteria);
+
+    if (killed) {
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+  }
+
+  /**
+   * POST  /events/synchronization/kill/all
+   */
+  @RequestMapping(value = "/events/synchronization/kill/all",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> stopAllSync(@RequestParam(value = "eventId") Long eventId) {
+
+    Event event = eventRepository.findOne(eventId);
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    eventService.stopAllSync(event);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+
+  }
+
+  /**
+   * POST  /events/delay
+   */
+  @RequestMapping(value = "/events/delay",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> changeDelay(@RequestParam(value = "searchCriteriaId")
+      Long searchCriteriaId, @RequestParam(value = "delay") int delay) {
+
+    SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
+
+    if (searchCriteria.getEventByEventId() == null || searchCriteria == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    boolean delayed = eventService.modifyDelay(searchCriteria, delay);
+
+    if (delayed) {
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+  }
+
+  /**
+   * POST  /events/delay-all
+   */
+  @RequestMapping(value = "/events/delay-all",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> delayAll(@RequestParam(value = "eventId") Long eventId,
+      @RequestParam(value = "delay") int delay) {
+
+    Event event = eventRepository.findOne(eventId);
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    eventService.delayAll(event, delay);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }
