@@ -12,7 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * Created by fabio on 13/07/15.
+ * Crado el 13/07/15.
+ * @author fabio
  */
 public interface EventRepository extends JpaRepository<Event, Long> {
   Page<Event> findAllByorganizationByOrganizationId(Pageable pageable,
@@ -56,4 +57,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.endDate <= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.endDate desc")
   Page<Event> findFinalizedEvents(Pageable pageable, @Param("orgId") Long orgId,
       @Param("date") DateTime date);
+
+  @Query("SELECT new map(e, new EventSummaryDTO(e.id,
+                                                (SELECT new snind.eventId),
+                                                (SELECT COUNT(*)
+                                                 FROM SocialNetworkPost s
+                                                 WHERE s.eventId = e.id ))
+          FROM Event e ")
+  HashMap<Event, EventSummaryDTO> findSummariesOf
 }

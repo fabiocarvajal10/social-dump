@@ -3,6 +3,7 @@ package com.coredump.socialdump.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
+import com.coredump.socialdump.service.GenericStatusService;
 import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
 import com.coredump.socialdump.web.rest.mapper.SearchCriteriaMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Controlador REST para manejar criterios de búsqueda.
+ * @author Esteban
  */
 @RestController
 @RequestMapping("/api")
@@ -48,6 +50,12 @@ public class SearchCriteriaResource {
    */
   @Inject
   private SearchCriteriaMapper searchCriteriaMapper;
+
+  /**
+   * Repository de estados.
+   */
+  @Inject
+  private GenericStatusService statusService;
 
   /**
    * POST  /search-criteria -> Crea un nuevo criterio de búsqueda.
@@ -83,10 +91,7 @@ public class SearchCriteriaResource {
             .header("Failure", "Social network doesn't exist").body(null);
     }
 
-    if (searchCriteria.getGenericStatusByStatusId() == null) {
-      return ResponseEntity.badRequest()
-            .header("Failure", "Status doesn't exist").body(null);
-    }
+    searchCriteria.setGenericStatusByStatusId(statusService.getActive());
 
     searchCriteriaRepository.save(searchCriteria);
 

@@ -38,6 +38,22 @@
           resolve: {
           }
         })
+        .state('dashboard.events', {
+          parent: 'home',
+          url: 'dashboard/events',
+          data: {
+            roles: ['ROLE_USER'],
+            pageTitle: 'Eventos'
+          },
+          views: {
+            '': {
+              templateUrl: 'scripts/app/entities/event/events-dashboard.html',
+              controller: 'EventController'
+            }
+          },
+          resolve: {
+          }
+        })
         .state('event.detail', {
           parent: 'home',
           url: 'event/{id}',

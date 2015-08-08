@@ -4,10 +4,10 @@
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
         ng-click="clear()">&times;</button>
-    <h4 class="modal-title" id="myEventLabel">
-      <span ng-hide="!!event.id">Crear</span>
-      <span ng-show="!!event.id">Modificar</span>
-      un Evento
+    <h4 class="modal-title" id="myEventLabel" ng-switch="!!event.id">
+      <span ng-switch-when="false">Crear un</span>
+      <span ng-switch-when="true">Modificar el</span>
+      Evento
     </h4>
   </div>
   <div class="modal-body">
@@ -17,29 +17,35 @@
           ng-model="event.id" readonly>
     </div>
 
+
     <div class="form-group">
       <label for="field_hashtag"># Hashtag</label>
       <input type="text" class="form-control" name="hashtag" id="field_hashtag"
           ng-model="event.hashtag" required>
-
-      <div ng-show="editForm.hashtag.$invalid">
-        <p class="help-block"
-          ng-show="editForm.hashtag.$error.required">
-          Este campo es requerido.
-        </p>
+      <div ng-show="editForm.$submitted || editForm.hashtag.$touched">
+        <div ng-show="editForm.hashtag.$invalid">
+          <p class="help-block"
+            ng-show="editForm.hashtag.$error.required">
+            Este campo es requerido.
+          </p>
+        </div>
       </div>
     </div>
 
-    <label class="pointer rel" for="{{socialNetwork.name}}"
-           ng-repeat="socialNetwork in socialNetworks">
-      <div ng-bind-html="socialNetwork.icon"></div>
-      <input type="checkbox" name="{{socialNetwork.name}}"
-             id="{{socialNetwork.name}}" class="hide"
-             ng-model="socialNetworksDict[socialNetwork.name].selected"
-             checked="checked" />
-      <div class="icon-block-overlay"
-           ng-show="!!(socialNetworksDict[socialNetwork.name].selected)"></div>
-    </label>
+    <div class="form-group">
+      <p>Redes sociales</p>
+      <label class="pointer rel" for="{{socialNetwork.name}}"
+             ng-repeat="socialNetwork in socialNetworks">
+        <div ng-bind-html="socialNetwork.icon"></div>
+        <input type="checkbox" name="{{socialNetwork.name}}"
+               id="{{socialNetwork.name}}" class="hide"
+               ng-model="socialNetworksDict[socialNetwork.name].selected"
+               checked="checked" />
+        <div class="icon-block-overlay"
+             ng-show="!!(socialNetworksDict[socialNetwork.name].selected)"></div>
+      </label>
+    </div>
+
 
     <div class="form-group">
       <label for="field_startDate">Comienza</label>
@@ -130,7 +136,7 @@
 
 
     <div class="form-group">
-      <label for="field_postDelay">Segundos de demora para rechazar Posts</label>
+      <label for="field_postDelay">Segundos de obtener para obtener Posts</label>
       <input type="number" class="form-control" name="postDelay" id="field_postDelay"
           ng-model="event.postDelay" required>
 

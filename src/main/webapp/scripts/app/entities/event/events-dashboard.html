@@ -1,0 +1,22 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Eventos</h1>
+</div>
+
+  <div class="panel wrapper">
+    <div class="row">
+      <div class="col-md-6 b-r b-light no-border-xs">
+        <span class="h4 font-thin m-t-none m-b-md text-muted">
+          Total de Publicaciones Obtenidas
+        </span>
+        <div class="row row-sm text-center">
+          <div class="col-xs-6" ng-repeat="postCount in postsCount">
+            <div class="panel padder-v item">
+              <div class="h1 text-info font-thin h1"> {{ postCount.cant }} </div>
+              <span class="text-muted text-xs"> {{ postCount.name }} </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
