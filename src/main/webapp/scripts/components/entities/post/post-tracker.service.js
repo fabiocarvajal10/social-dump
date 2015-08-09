@@ -3,7 +3,7 @@
  */
 'use strict';
 angular.module('socialdumpApp.posts')
-	.factory('PostTracker', function ($rootScope, $cookies, $http, $q) {
+	.factory('PostTracker', function($rootScope, $cookies, $http, $q) {
 		var stompClient = null;
 		var subscriber = null;
 		var listener = $q.defer();
@@ -11,8 +11,8 @@ angular.module('socialdumpApp.posts')
 		var alreadyConnectedOnce = false;
 
 		return {
-			connect: function () {
-				console.log("Connecting");
+			connect: function() {
+				console.log('Connecting');
 				var loc = window.location;
 				var url = '//' + loc.host + loc.pathname + 'websocket/eventposts';
 				var socket = new SockJS(url);
@@ -20,7 +20,7 @@ angular.module('socialdumpApp.posts')
 				var headers = {};
 				headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];
 				stompClient.connect(headers, function(frame) {
-					connected.resolve("success");
+					connected.resolve('success');
 					if (!alreadyConnectedOnce) {
 						alreadyConnectedOnce = true;
 					}
@@ -28,9 +28,9 @@ angular.module('socialdumpApp.posts')
 			},
 
 			subscribe: function() {
-				console.log("into service")
+				console.log('into service');
 				connected.promise.then(function() {
-					subscriber = stompClient.subscribe("/topic/eventPublications",
+					subscriber = stompClient.subscribe('/topic/eventPublications',
 						function(data) {
 							listener.notify(JSON.parse(data.body));
 						}

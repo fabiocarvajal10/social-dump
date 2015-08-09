@@ -3,7 +3,7 @@
  */
 'use strict';
 angular.module('socialdumpApp.posts')
-	.factory('PostService',[
+	.factory('PostService', [
 		'$resource', 'DateUtils',
 		function($resource, DateUtils) {
 			return $resource('api/social-network-posts/event/:id', {}, {

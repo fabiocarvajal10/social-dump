@@ -3,7 +3,7 @@
  */
 (function() {
 	'use strict';
-	angular.module('socialdumpApp.posts',[]);
+	angular.module('socialdumpApp.posts', []);
 	angular.module('socialdumpApp')
 		.config(function($stateProvider) {
 			$stateProvider
@@ -33,7 +33,7 @@
 							});
 						}
 					},
-					onEnter:['PostTracker', function(PostTracker) {
+					onEnter: ['PostTracker', function(PostTracker) {
 						//Loading existing data when entry
 						PostTracker.connect();
 						PostTracker.subscribe();

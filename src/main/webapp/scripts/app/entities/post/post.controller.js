@@ -1,13 +1,13 @@
 /**
  * Created by fabio on 7/17/15.
  */
-(function () {
+(function() {
 	'use strict';
 	angular.module('socialdumpApp.posts')
 	  .controller('PostController',
-	   	['$scope', '$timeout', '$stateParams', 
+	   	['$scope', '$timeout', '$stateParams',
 	   	'PostTracker', 'Cards', 'PostService', 'EventPublic',
-			function ($scope, $timeout, $stateParams, 
+			function($scope, $timeout, $stateParams, 
 				PostTracker, Cards, PostService, EventPublic) {
 			//This controller uses a websocket connection to receive posts from one event
 
@@ -27,12 +27,12 @@
 
 				//Loading existing data when entry
 				PostService
-					.query( {'id': $stateParams.id} )
+					.query({'id': $stateParams.id})
 					.$promise.then(function(data) {
-						play(data)
+						play(data);
 						//Cards.createCards(data, $scope);
 					});
-				
+
 				//playlist continuar con esto mas tarde
 				function play(data) {
 					var toReproduce,
@@ -40,39 +40,39 @@
 					size = data.length,
 					reproduce = function() {
 						//cleaning variable
-						toReproduce = []
-						if(count < size) {
+						toReproduce = [];
+						if (count < size) {
 							//adding new values
 							toReproduce.push(
-								data.shift(), 
-								data.shift(), 
+								data.shift(),
+								data.shift(),
 								data.shift());
 							//calling service that creates de cards
-							Cards.createCards(toReproduce, $scope)
+							Cards.createCards(toReproduce, $scope);
 							//Delay and recursive call in order to
 							//make it synchronous
 							$timeout(reproduce, 5000);
 						}
-						count+=3;
-					}
+						count += 3;
+					};
 					//executing function
 					reproduce();
 				}
-				
+
 				PostTracker.receive().then(null, null, function(posts) {
-					//console.log('Now we are getting posts')	
-					play(posts)
+					//console.log('Now we are getting posts')
+					play(posts);
 				});
 
 				/**
 				 * Update the filters array based on the given filter
 				 * $param filter: the name of a tab like 'work'
 				 */
-				$scope.filter = function(filter){
+				$scope.filter = function(filter) {
 					$scope.filters = [[['tabs', 'contains', filter]]];
 				};
 
-				$scope.isTabActive = function(tab){
+				$scope.isTabActive = function(tab) {
 					return $scope.filters && $scope.filters[0][0][2] === tab;
 				};
 
@@ -80,11 +80,11 @@
 				 * Update the rankers array based on the given ranker
 				 * $param ranker: the name of a card's property or a custom function
 				 */
-				$scope.orderBy = function(ranker){
-					$scope.rankers = [[ranker, "asc"]];
+				$scope.orderBy = function(ranker) {
+					$scope.rankers = [[ranker, 'asc']];
 				};
 
-				$scope.isRankerActive = function(ranker){
+				$scope.isRankerActive = function(ranker) {
 					return $scope.rankers && $scope.rankers[0][0] === ranker;
 				};
 
@@ -92,11 +92,11 @@
 				 * Delete a given card
 				 * $param index: the index of the card in the cards array
 				 */
-				$scope.deleteCard = function(id){
+				$scope.deleteCard = function(id) {
 					Cards.deleteCard(id, $scope.cards);
 				};
 
-				$scope.removeFirstCard = function(){
+				$scope.removeFirstCard = function() {
 					Cards.deleteCard($scope.filteredItems[0].id, $scope.cards);
 				};
 
@@ -105,8 +105,8 @@
 				 * Takes a card from the pile of cardsToAdd and prepend it to the list of
 				 * cards. Take a card belonging to the selected tab
 				 */
-				$scope.addCards = function(cardsToAdd){
-					Cards.addCards($scope.filters, cardsToAdd, $scope.cards)
+				$scope.addCards = function(cardsToAdd) {
+					Cards.addCards($scope.filters, cardsToAdd, $scope.cards);
 				};
 
 				//Refactorizar pasar a servicio
