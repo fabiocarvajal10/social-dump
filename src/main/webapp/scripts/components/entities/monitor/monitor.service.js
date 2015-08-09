@@ -20,10 +20,10 @@ angular.module('socialdumpApp.monitors')
          }).
          catch (function(error) {
            if (error.data === 'e-mail address already in use') {
-             error = 'Ya cuenta con un contacto de monitoreo' +
+             error = 'Ya cuenta con un contacto de monitoreo ' +
                      'con el mismo correo electrónico';
            }else {
-             error = 'Error inesperado al intentar crear' +
+             error = 'Error inesperado al intentar crear ' +
                      'el contacto de monitoreo';
            }
            q.reject(error);
@@ -52,8 +52,6 @@ angular.module('socialdumpApp.monitors')
        },
 
        update: function(monitorContact) {
-         monitorContact.organizationId =
-           monitorContact.organizationByOrganizationId.id;
          var q = $q.defer();
          $http({
            url: 'api/monitor-contacts/',
@@ -65,10 +63,10 @@ angular.module('socialdumpApp.monitors')
          }).
          catch (function(error) {
            if (error.data === 'e-mail address already in use') {
-             error = 'Ya cuenta con un contacto de monitoreo' +
+             error = 'Ya cuenta con un contacto de monitoreo ' +
                      'con el mismo correo electrónico';
            }else {
-             error = 'Error inesperado al intentar modificar' +
+             error = 'Error inesperado al intentar modificar ' +
                      'el contacto de monitoreo';
            }
            q.reject(error);

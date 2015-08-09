@@ -8,9 +8,12 @@ import com.coredump.socialdump.repository.OrganizationRepository;
 import com.coredump.socialdump.repository.TemporalAccessRepository;
 import com.coredump.socialdump.web.rest.dto.MonitorContactDTO;
 import com.coredump.socialdump.web.rest.mapper.MonitorContactMapper;
+import com.coredump.socialdump.web.rest.util.PaginationUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +29,10 @@ import javax.inject.Inject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing MonitorContacts.
@@ -112,11 +117,31 @@ public class MonitorContactResource {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
-  public List<MonitorContact> getAll(@RequestParam(value = "organizationId") Long organizationId) {
+  public ResponseEntity<List<MonitorContactDTO>> getAll(
+      @RequestParam(value = "page" , required = false) Integer offset,
+      @RequestParam(value = "per_page", required = false) Integer limit,
+      @RequestParam(value = "organizationId")
+        Long organizationId) throws URISyntaxException {
 
     Organization organization = organizationRepository.findOneForCurrentAndById(organizationId);
 
-    return monitorContactRepository.findAllByOrganizationByOrganizationId(organization);
+    if (organization == null) {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+    Page<MonitorContact> page  = monitorContactRepository
+        .findAllByOrganizationByOrganizationId(PaginationUtil.generatePageRequest(offset, limit),
+        organization
+    );
+
+    HttpHeaders headers = PaginationUtil
+        .generatePaginationHttpHeaders(page, "/api/monitor-contacts", offset, limit);
+
+    return new ResponseEntity<>(page
+              .getContent()
+              .stream()
+              .map(monitorContactMapper::monitorContactToMonitorContactDTO)
+              .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);
   }
 
   /**
