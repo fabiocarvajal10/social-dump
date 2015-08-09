@@ -30,20 +30,20 @@
     </head>
     <body ng-controller="AppCtrl">
 
-    <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view="content"></div>
-    <!--[if lt IE 9]>
-        <!--p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+        <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view="content"></div>
+        <!--[if lt IE 9]>
+            <!--p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+            <![endif]-->
 
-    <!--div ng-show="{{ENV === 'dev'}}" class="development" ng-cloak=""></div>
-        <div ui-view="navbar" ng-cloak=""></div>
-        <div class="container">
-            <div class="well" ui-view="content"></div>
-        </div>
+        <!--div ng-show="{{ENV === 'dev'}}" class="development" ng-cloak=""></div>
+            <div ui-view="navbar" ng-cloak=""></div>
+            <div class="container">
+                <div class="well" ui-view="content"></div>
+            </div>
 
-        <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
-        <script>
-            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
+            <script>
+                (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
             function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
             e=o.createElement(i);r=o.getElementsByTagName(i)[0];
             e.src='//www.google-analytics.com/analytics.js';
@@ -104,118 +104,117 @@
         <!-- endbuild -->
 
 
-    <!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
-    <!--configuration scripts-->
-    <script src="scripts/config/app.js"></script>
-    <script src="scripts/config/app.constants.js"></script>
-    <script src="scripts/config/config.js"></script>
-    <script src="scripts/config/config.lazyload.js"></script>
+        <!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
+        <!--configuration scripts-->
+        <script src="scripts/config/app.js"></script>
+        <script src="scripts/config/app.constants.js"></script>
+        <script src="scripts/config/config.js"></script>
+        <script src="scripts/config/config.lazyload.js"></script>
 
-    <!--components scripts-->
-    <!-- Services -->
-    <script src="scripts/components/util/ui-load.service.js"></script>
-    <script src="scripts/components/auth/auth.service.js"></script>
-    <script src="scripts/components/auth/principal.service.js"></script>
-    <script src="scripts/components/auth/authority.directive.js"></script>
-    <script src="scripts/components/auth/services/account.service.js"></script>
-    <script src="scripts/components/auth/services/activate.service.js"></script>
-    <script src="scripts/components/auth/services/password.service.js"></script>
-    <script src="scripts/components/auth/services/register.service.js"></script>
-    <script src="scripts/components/form/form.directive.js"></script>
-    <script src="scripts/components/form/pager.directive.js"></script>
-    <script src="scripts/components/form/pagination.directive.js"></script>
-    <script src="scripts/components/admin/audits.service.js"></script>
-    <script src="scripts/components/admin/logs.service.js"></script>
-    <script src="scripts/components/admin/configuration.service.js"></script>
-    <script src="scripts/components/admin/monitoring.service.js"></script>
-    <script src="scripts/components/navbar/navbar.directive.js"></script>
-    <script src="scripts/components/navbar/navbar.controller.js"></script>
-    <script src="scripts/components/user/user.service.js"></script>
-    <script src="scripts/components/util/truncate.filter.js"></script>
-    <script src="scripts/components/util/base64.service.js"></script>
-    <script src="scripts/components/util/parse-links.service.js"></script>
-    <script src="scripts/components/util/dateutil.service.js"></script>
-    <script src="scripts/components/account/account.service.js"></script>
-    <script src="scripts/components/entities/organization/organization.service.js"></script>
+        <!--components scripts-->
+        <!-- Services -->
+        <script src="scripts/components/util/ui-load.service.js"></script>
+        <script src="scripts/components/auth/auth.service.js"></script>
+        <script src="scripts/components/auth/principal.service.js"></script>
+        <script src="scripts/components/auth/authority.directive.js"></script>
+        <script src="scripts/components/auth/services/account.service.js"></script>
+        <script src="scripts/components/auth/services/activate.service.js"></script>
+        <script src="scripts/components/auth/services/password.service.js"></script>
+        <script src="scripts/components/auth/services/register.service.js"></script>
+        <script src="scripts/components/form/form.directive.js"></script>
+        <script src="scripts/components/form/pager.directive.js"></script>
+        <script src="scripts/components/form/pagination.directive.js"></script>
+        <script src="scripts/components/admin/audits.service.js"></script>
+        <script src="scripts/components/admin/logs.service.js"></script>
+        <script src="scripts/components/admin/configuration.service.js"></script>
+        <script src="scripts/components/admin/monitoring.service.js"></script>
+        <script src="scripts/components/navbar/navbar.directive.js"></script>
+        <script src="scripts/components/navbar/navbar.controller.js"></script>
+        <script src="scripts/components/user/user.service.js"></script>
+        <script src="scripts/components/util/truncate.filter.js"></script>
+        <script src="scripts/components/util/base64.service.js"></script>
+        <script src="scripts/components/util/parse-links.service.js"></script>
+        <script src="scripts/components/util/dateutil.service.js"></script>
+        <script src="scripts/components/account/account.service.js"></script>
+        <script src="scripts/components/entities/organization/organization.service.js"></script>
 
-    <!--application scripts-->
-    <script src="scripts/app/main/main.js"></script>
-    <script src="scripts/app/account/account.js"></script>
-    <script src="scripts/app/account/activate/activate.js"></script>
-    <script src="scripts/app/account/activate/activate.controller.js"></script>
-    <script src="scripts/app/account/login/login.js"></script>
-    <script src="scripts/app/account/login/login.controller.js"></script>
-    <script src="scripts/app/account/logout/logout.js"></script>
-    <script src="scripts/app/account/logout/logout.controller.js"></script>
-    <script src="scripts/app/account/password/password.js"></script>
-    <script src="scripts/app/account/password/password.controller.js"></script>
-    <script src="scripts/app/account/password/password.directive.js"></script>
-    <script src="scripts/app/account/register/register.js"></script>
-    <script src="scripts/app/account/register/register.controller.js"></script>
-    <script src="scripts/app/account/settings/settings.js"></script>
-    <script src="scripts/app/account/settings/settings.controller.js"></script>
-    <script src="scripts/app/account/reset/finish/reset.finish.controller.js"></script>
-    <script src="scripts/app/account/reset/finish/reset.finish.js"></script>
-    <script src="scripts/app/account/reset/request/reset.request.controller.js"></script>
-    <script src="scripts/app/account/reset/request/reset.request.js"></script>
-    <script src="scripts/app/admin/admin.js"></script>
-    <script src="scripts/app/admin/audits/audits.js"></script>
-    <script src="scripts/app/admin/audits/audits.controller.js"></script>
-    <script src="scripts/app/admin/configuration/configuration.js"></script>
-    <script src="scripts/app/admin/configuration/configuration.controller.js"></script>
-    <script src="scripts/app/admin/docs/docs.js"></script>
-    <script src="scripts/app/admin/health/health.js"></script>
-    <script src="scripts/app/admin/health/health.controller.js"></script>
-    <script src="scripts/app/admin/logs/logs.js"></script>
-    <script src="scripts/app/admin/logs/logs.controller.js"></script>
-    <script src="scripts/app/admin/metrics/metrics.js"></script>
-    <script src="scripts/app/admin/metrics/metrics.controller.js"></script>
-    <script src="scripts/app/entities/entity.js"></script>
-    <script src="scripts/app/entities/monitor/monitor.js"></script>
-    <script src="scripts/components/entities/monitor/monitor.service.js"></script>
-    <script src="scripts/app/entities/temporal-access/temporal-access.js"></script>
-    <script src="scripts/app/entities/organization/organization.js"></script>
-    <script src="scripts/app/entities/organization/organization.controller.js"></script>
-    <script src="scripts/app/account/access/access.js"></script>
-    <script src="scripts/app/error/error.js"></script>
-    <script src="scripts/app/main/main.controller.js"></script>
-    <!--component scripts-->
-    <script src="scripts/components/auth/provider/auth.xauth.service.js"></script>
-    <!--application scripts-->
-    <!--script src="scripts/app/admin/tracker/tracker.js"></script>
-    <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
-    <!--script src="scripts/components/tracker/tracker.service.js"></script-->
-    <script src="scripts/app/entities/event/event.js"></script>
-    <script src="scripts/app/entities/event/event.controller.js"></script>
-    <script src="scripts/app/entities/event/event-detail.controller.js"></script>
-    <script src="scripts/components/entities/event/event.service.js"></script>
+        <!--application scripts-->
+        <script src="scripts/app/main/main.js"></script>
+        <script src="scripts/app/account/account.js"></script>
+        <script src="scripts/app/account/activate/activate.js"></script>
+        <script src="scripts/app/account/activate/activate.controller.js"></script>
+        <script src="scripts/app/account/login/login.js"></script>
+        <script src="scripts/app/account/login/login.controller.js"></script>
+        <script src="scripts/app/account/logout/logout.js"></script>
+        <script src="scripts/app/account/logout/logout.controller.js"></script>
+        <script src="scripts/app/account/password/password.js"></script>
+        <script src="scripts/app/account/password/password.controller.js"></script>
+        <script src="scripts/app/account/password/password.directive.js"></script>
+        <script src="scripts/app/account/register/register.js"></script>
+        <script src="scripts/app/account/register/register.controller.js"></script>
+        <script src="scripts/app/account/settings/settings.js"></script>
+        <script src="scripts/app/account/settings/settings.controller.js"></script>
+        <script src="scripts/app/account/reset/finish/reset.finish.controller.js"></script>
+        <script src="scripts/app/account/reset/finish/reset.finish.js"></script>
+        <script src="scripts/app/account/reset/request/reset.request.controller.js"></script>
+        <script src="scripts/app/account/reset/request/reset.request.js"></script>
+        <script src="scripts/app/admin/admin.js"></script>
+        <script src="scripts/app/admin/audits/audits.js"></script>
+        <script src="scripts/app/admin/audits/audits.controller.js"></script>
+        <script src="scripts/app/admin/configuration/configuration.js"></script>
+        <script src="scripts/app/admin/configuration/configuration.controller.js"></script>
+        <script src="scripts/app/admin/docs/docs.js"></script>
+        <script src="scripts/app/admin/health/health.js"></script>
+        <script src="scripts/app/admin/health/health.controller.js"></script>
+        <script src="scripts/app/admin/logs/logs.js"></script>
+        <script src="scripts/app/admin/logs/logs.controller.js"></script>
+        <script src="scripts/app/admin/metrics/metrics.js"></script>
+        <script src="scripts/app/admin/metrics/metrics.controller.js"></script>
+        <script src="scripts/app/entities/entity.js"></script>
+        <script src="scripts/app/entities/monitor/monitor.js"></script>
+        <script src="scripts/components/entities/monitor/monitor.service.js"></script>
+        <script src="scripts/app/entities/temporal-access/temporal-access.js"></script>
+        <script src="scripts/app/entities/organization/organization.js"></script>
+        <script src="scripts/app/entities/organization/organization.controller.js"></script>
+        <script src="scripts/app/account/access/access.js"></script>
+        <script src="scripts/app/error/error.js"></script>
+        <script src="scripts/app/main/main.controller.js"></script>
+        <!--component scripts-->
+        <script src="scripts/components/auth/provider/auth.xauth.service.js"></script>
+        <!--application scripts-->
+        <!--script src="scripts/app/admin/tracker/tracker.js"></script>
+        <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
+        <!--script src="scripts/components/tracker/tracker.service.js"></script-->
+        <script src="scripts/app/entities/event/event.js"></script>
+        <script src="scripts/app/entities/event/event.controller.js"></script>
+        <script src="scripts/app/entities/event/event-detail.controller.js"></script>
+        <script src="scripts/components/entities/event/event.service.js"></script>
 
-    <script src="scripts/app/entities/eventType/eventType.js"></script>
-    <script src="scripts/app/entities/eventType/eventType.controller.js"></script>
-    <script src="scripts/app/entities/eventType/eventType-detail.controller.js"></script>
-    <script src="scripts/components/entities/eventType/eventType.service.js"></script>
-    <script src="scripts/app/entities/eventStatus/eventStatus.js"></script>
-    <script src="scripts/app/entities/eventStatus/eventStatus.controller.js"></script>
-    <script src="scripts/app/entities/eventStatus/eventStatus-detail.controller.js"></script>
-    <script src="scripts/components/entities/eventStatus/eventStatus.service.js"></script>
-    <script src="scripts/components/util/datetimepicker.directive.js"></script>
-    <script src="scripts/components/util/dateformat.directive.js"></script>
+        <script src="scripts/app/entities/eventType/eventType.js"></script>
+        <script src="scripts/app/entities/eventType/eventType.controller.js"></script>
+        <script src="scripts/app/entities/eventType/eventType-detail.controller.js"></script>
+        <script src="scripts/components/entities/eventType/eventType.service.js"></script>
+        <script src="scripts/app/entities/eventStatus/eventStatus.js"></script>
+        <script src="scripts/app/entities/eventStatus/eventStatus.controller.js"></script>
+        <script src="scripts/app/entities/eventStatus/eventStatus-detail.controller.js"></script>
+        <script src="scripts/components/entities/eventStatus/eventStatus.service.js"></script>
+        <script src="scripts/components/util/datetimepicker.directive.js"></script>
+        <script src="scripts/components/util/dateformat.directive.js"></script>
 
-    <script src="scripts/app/entities/searchCriteria/searchCriteria.js"></script>
-    <script src="scripts/app/entities/searchCriteria/searchCriteria.controller.js"></script>
-    <script src="scripts/app/entities/searchCriteria/searchCriteria-dialog.controller.js"></script>
-    <script src="scripts/app/entities/searchCriteria/searchCriteria-detail.controller.js"></script>
-    <script src="scripts/components/entities/searchCriteria/searchCriteria.service.js"></script>
-    <script src="scripts/app/entities/event/event-dialog.controller.js"></script>
-    <script src="scripts/components/entities/organization/organization.service.js"></script>
+        <script src="scripts/app/entities/searchCriteria/searchCriteria.js"></script>
+        <script src="scripts/app/entities/searchCriteria/searchCriteria.controller.js"></script>
+        <script src="scripts/app/entities/searchCriteria/searchCriteria-dialog.controller.js"></script>
+        <script src="scripts/app/entities/searchCriteria/searchCriteria-detail.controller.js"></script>
+        <script src="scripts/components/entities/searchCriteria/searchCriteria.service.js"></script>
+        <script src="scripts/app/entities/event/event-dialog.controller.js"></script>
+        <script src="scripts/components/entities/organization/organization.service.js"></script>
 
-    <script src="scripts/app/entities/post/post.js"></script>
+        <script src="scripts/app/entities/post/post.js"></script>
 
-    <script src="scripts/components/directives/image.directive.js"></script>
-    <script src="scripts/components/util/scroll.controller.js"></script>
+        <script src="scripts/components/directives/image.directive.js"></script>
+        <script src="scripts/components/util/scroll.controller.js"></script>
 
-    <!-- endbuild -->
+        <!-- endbuild -->
 
-
-</body>
+    </body>
 </html>
