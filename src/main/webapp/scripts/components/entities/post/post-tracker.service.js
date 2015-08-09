@@ -27,10 +27,10 @@ angular.module('socialdumpApp.posts')
 				});
 			},
 
-			subscribe: function() {
+			subscribe: function(eventId) {
 				console.log('into service');
 				connected.promise.then(function() {
-					subscriber = stompClient.subscribe('/topic/eventPublications',
+					subscriber = stompClient.subscribe(['/topic/eventPublications', eventId].join('/'),
 						function(data) {
 							listener.notify(JSON.parse(data.body));
 						}

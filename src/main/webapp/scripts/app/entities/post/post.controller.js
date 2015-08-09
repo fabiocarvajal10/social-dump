@@ -32,11 +32,9 @@
 						play(data);
 						//Cards.createCards(data, $scope);
 					});
-
-				//playlist continuar con esto mas tarde
 				function play(data) {
 					var toReproduce,
-					count = 1,
+					count = 0,
 					size = data.length,
 					reproduce = function() {
 						//cleaning variable
@@ -51,16 +49,16 @@
 							Cards.createCards(toReproduce, $scope);
 							//Delay and recursive call in order to
 							//make it synchronous
-							$timeout(reproduce, 5000);
+							$timeout(reproduce, 20000);
 						}
-						count += 3;
+						count += 10;
 					};
 					//executing function
 					reproduce();
 				}
 
 				PostTracker.receive().then(null, null, function(posts) {
-					//console.log('Now we are getting posts')
+					console.log('Now we are getting posts')
 					play(posts);
 				});
 

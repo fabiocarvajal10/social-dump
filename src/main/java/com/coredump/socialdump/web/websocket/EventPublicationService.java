@@ -53,7 +53,12 @@ public class EventPublicationService implements ApplicationListener<BrokerAvaila
   *
   * */
   public void showPost(List<SocialNetworkPost> postList) throws Exception {
-    String destination = "/topic/eventPublications";
+    long eventId = 0;
+    if (postList.size() > 0) {
+      eventId = postList.get(0).getEventByEventId().getId();
+    }
+
+    String destination = "/topic/eventPublications/" + eventId;
     List<SocialNetworkPostSocketDTO> dtoList = postList
           .stream()
           .map(postSocketMapper::SocialNetworkPostToSocialNetworkPostDTO)

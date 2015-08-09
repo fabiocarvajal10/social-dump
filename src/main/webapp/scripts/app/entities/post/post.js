@@ -33,10 +33,10 @@
 							});
 						}
 					},
-					onEnter: ['PostTracker', function(PostTracker) {
+					onEnter: ['PostTracker', '$stateParams', function(PostTracker, $stateParams) {
 						//Loading existing data when entry
 						PostTracker.connect();
-						PostTracker.subscribe();
+						PostTracker.subscribe($stateParams.id);
 					}],
 					onExit: function(PostTracker) {
 						PostTracker.unsubscribe();

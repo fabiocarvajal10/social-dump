@@ -6,7 +6,6 @@ angular.module('socialdumpApp.posts')
 	.service('Cards', function() {
 
 		this.createCards = function(posts, externalScope) {
-			console.log('createCards');
 			var cardsToAdd = [],
 				card = {},
 				scope = this;
