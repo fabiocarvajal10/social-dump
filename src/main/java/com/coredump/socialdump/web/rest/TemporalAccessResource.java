@@ -11,6 +11,7 @@ import com.coredump.socialdump.service.MailService;
 import com.coredump.socialdump.service.util.RandomUtil;
 import com.coredump.socialdump.web.rest.dto.TemporalAccessDTO;
 import com.coredump.socialdump.web.rest.mapper.TemporalAccessMapper;
+import com.coredump.socialdump.web.rest.util.ValidatorUtil;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -93,6 +94,9 @@ public class TemporalAccessResource {
         .getEndDate())) {
       return new ResponseEntity<>("Monitor cant access after the event",
         HttpStatus.CONFLICT);
+    } else if (ValidatorUtil
+        .isDateLower(temporalAccess.getEndDate(), temporalAccess.getStartDate())) {
+      return new ResponseEntity<>("End date cant be lower that start date", HttpStatus.CONFLICT);
     }
 
     temporalAccessRepository.save(temporalAccess);
