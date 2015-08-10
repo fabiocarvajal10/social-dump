@@ -10,7 +10,7 @@ angular.module('socialdumpApp.monitors', [])
         parent: 'home',
         url: 'monitors',
         data: {
-          roles: [],
+          roles: ['ROLE_USER'],
           pageTitle: 'Contactos de Monitoreo'
         },
         templateUrl: 'scripts/app/entities/monitor/monitors.html',
