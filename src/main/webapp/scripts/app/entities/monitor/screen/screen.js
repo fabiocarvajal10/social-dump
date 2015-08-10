@@ -11,7 +11,7 @@
           parent: '',
           url: '/event-monitor/:id',
           data: {
-            roles: ['ROLE_USER'],
+            roles: ['ROLE_USER', 'ROLE_MONITOR'],
             pageTitle: 'Post Tracker'
           },
           views: {

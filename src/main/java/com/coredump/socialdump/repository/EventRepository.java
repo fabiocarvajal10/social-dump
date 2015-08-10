@@ -49,7 +49,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Pageable pageable,
     @Param("orgId") Long orgId);
 
-  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.startDate >= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate asc")
+  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.startDate <= :date and e.endDate >= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate asc")
   Page<Event> findIncomingEvents(Pageable pageable, @Param("orgId") Long orgId,
       @Param("date") DateTime date);
 

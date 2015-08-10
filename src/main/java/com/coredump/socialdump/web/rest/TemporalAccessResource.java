@@ -102,7 +102,9 @@ public class TemporalAccessResource {
     temporalAccessRepository.save(temporalAccess);
 
     String baseUrl =
-        request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+        + "/#/access?key=" + temporalAccess.getId() + "&id="
+          + temporalAccess.getEventByEventId().getId();
 
     temporalAccess.setPassword(password);
 
