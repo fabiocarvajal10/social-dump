@@ -11,6 +11,7 @@ import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
+import com.coredump.socialdump.service.SearchCriteriaService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
@@ -62,6 +63,9 @@ public class  EventResource{
 
   @Inject
   private EventService eventService;
+
+  @Inject
+  private SearchCriteriaService searchCriteriaService;
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
@@ -130,8 +134,9 @@ public class  EventResource{
     Event event = eventMapper.eventDTOToEvent(eventDTO);
     event.setEventStatusByStatusId(eventStatusService.getActive());
 
-
     eventRepository.save(event);
+    event.setSearchCriteriasById(searchCriteriaService
+      .getSearchCriteriasFromStringList(event, eventDTO.getSearchCriterias()));
 
     eventService.scheduleFetch(event);
     return ResponseEntity.created(new URI("/api/events/"
@@ -413,12 +418,12 @@ public class  EventResource{
   public ResponseEntity<?> stopAllSync(@RequestParam(value = "eventId") Long eventId) {
 
     Event event = eventRepository.findOne(eventId);
-    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
 
     if (event == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
     eventService.stopAllSync(event);
 
     return new ResponseEntity<>(HttpStatus.OK);

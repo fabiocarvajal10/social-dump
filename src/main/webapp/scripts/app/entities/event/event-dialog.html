@@ -53,6 +53,72 @@
         </p>
       </div>
     </div>
+
+    <div class="form-group" ng-hide="!!event.id">
+      <div class="checkbox">
+        <label class="i-checks">
+          <input type="checkbox" name="accessChk" ng-model="sameHashtag">
+          <i></i> Seguir el mismo hashtag para todas las redes sociales
+        </label>
+      </div>
+    </div>
+    <div class="form-group" ng-hide="!sameHashtag || !!event.id">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-twitter"></i>
+          <i class="fa fa-instagram"></i>
+          <span class="h4"> &nbsp # </span>
+        </span>
+        <input type="text" class="form-control" name="allHashtags" ng-init="event.searchCriterias = []"
+            ng-model="event.searchCriterias[0]"
+            ng-change="event.searchCriterias[1] = event.searchCriterias[0]"
+            placeholder="Hashtag a seguir a seguir"
+            ng-required="sameHashtag || !!event.id">
+      </div>
+      <div class="has-error" ng-messages="editForm.allHashtags.$error"
+           ng-show="editForm.allHashtags.$touched">
+        <label class="control-label" ng-message="required">
+          Este campo es requerido
+        </label>
+      </div>
+    </div>
+    <div class="form-group" ng-show="!sameHashtag && !event.id">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-twitter"></i>
+          <span class="h4"> &nbsp # </span>
+        </span>
+        <input type="text" class="form-control" name="twitterHashtag"
+               ng-model="event.searchCriterias[0]"
+               placeholder="Hashtag a seguir en Twitter"
+               ng-required="!sameHashtag || !!event.id">
+      </div>
+      <div class="has-error" ng-messages="editForm.twitterHashtag.$error"
+           ng-show="editForm.twitterHashtag.$touched">
+        <label class="control-label" ng-message="required">
+          Este campo es requerido
+        </label>
+      </div>
+    </div>
+    <div class="form-group" ng-show="!sameHashtag && !event.id">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-instagram"></i>
+          <span class="h4"> &nbsp # </span>
+        </span>
+        <input type="text" class="form-control" name="instagramHashtag"
+               ng-model="event.searchCriterias[1]"
+               placeholder="Hashtag a seguir en Instagram"
+               ng-required="!sameHashtag || !!event.id">
+      </div>
+      <div class="has-error" ng-messages="editForm.instagramHashtag.$error"
+           ng-show="editForm.instagramHashtag.$touched">
+        <label class="control-label" ng-message="required">
+          Este campo es requerido
+        </label>
+      </div>
+    </div>
+
     <div class="form-group">
       <label for="field_postDelay">Demora para rechazar Posts</label>
       <input type="number" class="form-control" name="postDelay" id="field_postDelay"

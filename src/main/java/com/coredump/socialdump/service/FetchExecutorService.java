@@ -17,11 +17,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 
 /**
- * Created by Franz on 13/07/2015.
+ * Created by Francisco J. Milanés Sánchez on 13/07/2015.
  */
 @Service
 public class FetchExecutorService {
@@ -47,7 +46,7 @@ public class FetchExecutorService {
         try {
           FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
               .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
-                  .getName().toLowerCase());
+              .getName().toLowerCase());
 
           log.debug("Search Criteria {}", sc.getSearchCriteria());
           socialNetworkFetch.prepareFetch(sc, event.getPostDelay());
@@ -60,16 +59,15 @@ public class FetchExecutorService {
   }
 
   private void addSchedule(FetchableInterface socialNetworkFetch, DateTime startDate) {
-    log.debug("Scheduling {}", getEventStartDelay(startDate));
-    scheduledExecutorService.schedule(socialNetworkFetch, 1, TimeUnit.SECONDS);
+    log.debug("Scheduled to start in {} mins", getEventStartDelay(startDate));
+    scheduledExecutorService
+      .schedule(socialNetworkFetch, getEventStartDelay(startDate), TimeUnit.MINUTES);
   }
 
   private void addToMap(Event event, FetchableInterface socialNetworkFetch,
       SearchCriteria searchCriteria) {
-
     String key = buildKey(event, searchCriteria);
     fetchableMap.put(key, socialNetworkFetch);
-
   }
 
   public boolean stopSynchronization(SearchCriteria searchCriteria) {
@@ -85,10 +83,8 @@ public class FetchExecutorService {
   }
 
   public void killAll(Event event) {
-
     event.getSearchCriteriasById()
       .forEach(sc -> fetchableMap.get(buildKey(event, sc)).kill());
-
   }
 
   public boolean modifyDelay(SearchCriteria searchCriteria, int delay) {
@@ -104,17 +100,13 @@ public class FetchExecutorService {
   }
 
   public void delayAll(Event event, int delay) {
-
     event.getSearchCriteriasById()
       .forEach(sc -> fetchableMap.get(buildKey(event, sc)).setDelay(delay));
-
   }
 
   private long getEventStartDelay(DateTime startDate) {
-    DateTime now = DateTime.now();
-    Minutes diffMinutes = Minutes.minutesBetween(now, startDate);
-
-    return diffMinutes.getMinutes();
+    DateTime now = new DateTime();
+    return Minutes.minutesBetween(now, startDate).getMinutes();
   }
 
   private String buildKey(Event event, SearchCriteria searchCriteria) {
