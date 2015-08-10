@@ -11,7 +11,7 @@ angular.module('socialdumpApp.monitors')
           .then(function(data) {
             $scope.monitorContacts = data;
           })
-          .catch (function() {
+          .catch(function() {
 
           });
       };

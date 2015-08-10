@@ -14,27 +14,30 @@
         //console.log('Reproducing');
         var toReproduce,
         count = 0,
+        jump = 10,
         size = data.length,
         //Object that is going to handle the data
         reproducer = reproducerObject.reproducer,
         //Scope that is going to change
         scope = reproducerObject.scope,
+        //Template
+        template = reproducerObject.template,
         reproduce = function() {
           //cleaning variable
           toReproduce = [];
           if (count < size) {
             //adding new values
-            toReproduce.push(
-              data.shift(),
-              data.shift(),
-              data.shift());
+            for (var i = 0; i < jump; i++) {
+              toReproduce.push(data.shift());
+            }
             //calling the function handler
-            reproducer[reproducerObject.functionHandler](toReproduce, scope);
+            reproducer[reproducerObject.functionHandler](toReproduce,
+              scope, template);
             //Delay and recursive call in order to
             //make it synchronous
+            count += jump;
             $timeout(reproduce, 20000);
           }
-          count += 3;
         };
         //executing function
         reproduce();

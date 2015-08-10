@@ -3,6 +3,7 @@ package com.coredump.socialdump.web.websocket;
 import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 
+import com.coredump.socialdump.web.websocket.dto.RemovePostDTO;
 import com.coredump.socialdump.web.websocket.dto.SocialNetworkPostSocketDTO;
 import com.coredump.socialdump.web.websocket.mapper.SocialNetworkPostSocketMapper;
 import org.slf4j.Logger;
@@ -12,7 +13,11 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.core.MessageSendingOperations;
 
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,6 +34,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Controller
 public class EventPublicationService implements ApplicationListener<BrokerAvailabilityEvent> {
 
   private static final Logger log = LoggerFactory.getLogger(EventPublicationService.class);
@@ -65,6 +71,23 @@ public class EventPublicationService implements ApplicationListener<BrokerAvaila
           .collect(Collectors.toList());
     this.messagingTemplate.convertAndSend(destination, dtoList);
   }
+
+  @MessageMapping("/removePost")
+  public void removePost(RemovePostDTO removePostDTO) {
+    log.debug("Post Id to remove " + removePostDTO.getId());
+    String destination = "/topic/blockPost/" + removePostDTO.getEventId();
+    //checking if post exists
+    if ( removePostDTO.getId() != null
+          && socialNetworkPostRepository.findOne(removePostDTO.getId()) != null) {
+      //remove from database
+      socialNetworkPostRepository.delete(removePostDTO.getId());
+      //send update to clients
+
+      this.messagingTemplate.convertAndSend(destination, removePostDTO);
+    }
+  }
+
+
 
   @RequestMapping("/start")
   public String start() {

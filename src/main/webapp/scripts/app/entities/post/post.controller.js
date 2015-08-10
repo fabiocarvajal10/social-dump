@@ -13,6 +13,7 @@
         PostService, EventPublic) {
       //This controller uses a websocket
       //connection to receive posts from one event
+        var templateUrl = 'scripts/app/entities/post/partials/post-card.html';
         EventPublic.get({'id': $stateParams.id})
           .$promise.then(function(data) {
             $scope.event = data;
@@ -21,6 +22,7 @@
         var reproducerObject = {
           reproducer: Cards,
           scope: $scope,
+          template: templateUrl,
           functionHandler: 'createCards'
         };
 
@@ -41,13 +43,19 @@
         PostService
           .query({'id': $stateParams.id})
           .$promise.then(function(data) {
-            Playlist.play(data, reproducerObject);
-            //Cards.createCards(data, $scope);
+            //Playlist.play(data, reproducerObject);
+            Cards.createCards(data, $scope, templateUrl);
           });
 
-        PostTracker.receive().then(null, null, function(posts) {
+        PostTracker.receivePublic().then(null, null, function(posts) {
           //console.log('Now we are getting posts');
           Playlist.play(posts, reproducerObject);
+        });
+
+        PostTracker.receiveMonitor().then(null, null, function(toDelete) {
+          console.log('post do delete: ' + toDelete);
+          //Playlist.play(posts, reproducerObject);
+          Cards.deleteCard(toDelete.id, $scope.cards);
         });
 
         /**
@@ -72,18 +80,6 @@
 
         $scope.isRankerActive = function(ranker) {
           return $scope.rankers && $scope.rankers[0][0] === ranker;
-        };
-
-        /**
-         * Delete a given card
-         * $param index: the index of the card in the cards array
-         */
-        $scope.deleteCard = function(id) {
-          Cards.deleteCard(id, $scope.cards);
-        };
-
-        $scope.removeFirstCard = function() {
-          Cards.deleteCard($scope.filteredItems[0].id, $scope.cards);
         };
 
         /**

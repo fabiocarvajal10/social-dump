@@ -37,12 +37,13 @@
           onEnter: ['PostTracker', '$stateParams',
             function(PostTracker, $stateParams) {
             //Loading existing data when entry
-            PostTracker.connect();
-            PostTracker.subscribe($stateParams.id);
+            PostTracker.connect($stateParams.id);
+            PostTracker.subscribePublic();
+            PostTracker.subscribeMonitor();
           }],
-          onExit: function(PostTracker) {
+          onExit: ['PostTracker', function(PostTracker) {
             PostTracker.unsubscribe();
-          }
+          }]
         });
     });
 }());

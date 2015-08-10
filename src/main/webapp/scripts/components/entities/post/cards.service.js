@@ -4,22 +4,21 @@
 'use strict';
 angular.module('socialdumpApp.posts')
   .service('Cards', function() {
-    this.createCards = function(posts, externalScope) {
+    this.createCards = function(posts, externalScope, template) {
       var cardsToAdd = [],
-        card = {},
-        scope = this;
+        card = {};
       posts.forEach(function(post) {
-        card = scope.createCard(post);
+        card = createCard(post, template);
         cardsToAdd.push(card);
       });
       this.addCards(cardsToAdd, externalScope);
     };
 
-    this.createCard = function(post) {
+    var createCard = function(post, template) {
       var socialNetworkName = post.socialNetworkName.toLowerCase();
       return {
         'id': post.id,
-        'template': 'scripts/app/entities/post/partials/post-card.html',
+        'template': template,
         'tabs': ['home', socialNetworkName],
         'data': {
           'social': socialNetworkName,

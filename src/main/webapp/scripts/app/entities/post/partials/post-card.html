@@ -19,7 +19,7 @@
         <!--img  {{it.data.mediaUrl ? it.data.mediaUrl : 'img/avatar.png'}} ng-src="{{::it.data.mediaUrl}}media/?size=t">
         <div class="list-group" social-image="{{::it.data.mediaUrl}}media/"-->    
         <img ng-if="it.data.social === 'instagram'" ng-src="{{::it.data.mediaUrl}}media/" class="img-responsive">
-        <div class="panel-body">
+        <div class="panel-body" style="overflow: hidden; text-overflow: ellipsis;">
             <p>{{::it.data.body}}</p>
         </div>
 
