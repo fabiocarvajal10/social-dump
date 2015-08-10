@@ -27,15 +27,17 @@ angular.module('socialdumpApp.temporalAccess')
         }).
         catch (function(error) {
           if (error.data === 'e-mail address already in use') {
-            error = 'Ya cuenta con un contacto de monitoreo' +
+            error = 'Ya cuenta con un contacto de monitoreo ' +
                     ' con el mismo correo electrónico';
           }else if (error.data === 'Monitor cant access before the event') {
             error = 'El acceso temporal no puede iniciar antes del evento';
           }else if (error.data === 'Monitor cant access after the event') {
             error = 'El acceso temporal no puede finalizar después del evento';
+          }else if (error.data === 'End date cant be lower that start date') {
+            error = 'La fecha de fin no puede ser menor a la fecha de inicio';
           }else {
-            error = 'Error inesperado al intentar crear' +
-                    ' el contacto de monitoreo';
+            error = 'Error inesperado al intentar crear ' +
+                    'el contacto de monitoreo';
           }
           q.reject(error);
         });

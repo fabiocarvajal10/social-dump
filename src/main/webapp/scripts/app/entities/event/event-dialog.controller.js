@@ -7,7 +7,9 @@
       function($scope, $stateParams, $modalInstance, entity, Event,
                EventType, SearchCriteria, OrganizationService) {
         $scope.event = entity;
+
         $scope.eventTypes = EventType.query();
+        $scope.sameHashtag = true;
         $scope.load = function(id) {
           Event.get({id: id}, function(result) {
             $scope.event = result;
@@ -20,6 +22,7 @@
         };
 
         $scope.save = function() {
+          console.log($scope.event);
           if ($scope.event.id !== null) {
             Event.update($scope.event, onSaveFinished);
           } else {
