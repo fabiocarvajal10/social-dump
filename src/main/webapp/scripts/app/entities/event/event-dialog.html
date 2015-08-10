@@ -17,35 +17,33 @@
           ng-model="event.id" readonly>
     </div>
 
-
-    <div class="form-group">
-      <label for="field_hashtag"># Hashtag</label>
-      <input type="text" class="form-control" name="hashtag" id="field_hashtag"
-          ng-model="event.hashtag" required>
-      <div ng-show="editForm.$submitted || editForm.hashtag.$touched">
-        <div ng-show="editForm.hashtag.$invalid">
+    <div ng-show="!event.id">
+      <div class="form-group">
+        <label for="field_hashtag"># Hashtag</label>
+        <input type="text" class="form-control" name="hashtag" id="field_hashtag"
+            ng-model="event.hashtag" ng-required="!event.id">
+        <div ng-show="(editForm.$submitted || editForm.hashtag.$touched) && editForm.hashtag.$invalid">
           <p class="help-block"
             ng-show="editForm.hashtag.$error.required">
             Este campo es requerido.
           </p>
         </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <p>Redes sociales</p>
-      <label class="pointer rel" for="{{socialNetwork.name}}"
-             ng-repeat="socialNetwork in socialNetworks">
-        <div ng-bind-html="socialNetwork.icon"></div>
-        <input type="checkbox" name="{{socialNetwork.name}}"
-               id="{{socialNetwork.name}}" class="hide"
-               ng-model="socialNetworksDict[socialNetwork.name].selected"
-               checked="checked" />
-        <div class="icon-block-overlay"
-             ng-show="!!(socialNetworksDict[socialNetwork.name].selected)"></div>
-      </label>
+      <div class="form-group">
+        <p>Redes sociales</p>
+        <label class="pointer rel" for="{{socialNetwork.name}}"
+               ng-repeat="socialNetwork in socialNetworks">
+          <div ng-bind-html="socialNetwork.icon"></div>
+          <input type="checkbox" name="{{socialNetwork.name}}"
+                 id="{{socialNetwork.name}}" class="hide"
+                 ng-model="socialNetworksDict[socialNetwork.name].selected"
+                 checked="checked" />
+          <div class="icon-block-overlay"
+               ng-show="!!(socialNetworksDict[socialNetwork.name].selected)"></div>
+        </label>
+      </div>
     </div>
-
 
     <div class="form-group">
       <label for="field_startDate">Comienza</label>
@@ -64,7 +62,7 @@
         </div>`
       </div>
 
-      <div ng-show="editForm.startDate.$invalid">
+      <div ng-show="(editForm.$submitted || editForm.startDate.$touched) && editForm.startDate.$invalid">
         <p class="help-block"
           ng-show="editForm.startDate.$error.required">
           Este campo es requerido.
@@ -92,7 +90,8 @@
         </div>
       </div>
 
-      <div ng-show="editForm.endDate.$invalid">
+
+      <div ng-show="(editForm.$submitted || editForm.endDate.$touched) && editForm.endDate.$invalid">
         <p class="help-block"
           ng-show="editForm.endDate.$error.required">
           Este campo es requerido.
@@ -110,7 +109,7 @@
       <input type="text" class="form-control" name="description" id="field_description"
           ng-model="event.description" required>
 
-      <div ng-show="editForm.description.$invalid">
+      <div ng-show="(editForm.$submitted || editForm.description.$touched) && editForm.description.$invalid">
         <p class="help-block"
           ng-show="editForm.description.$error.required">
           Este campo es requerido.
@@ -126,7 +125,7 @@
               ng-options="eventType.id as eventType.name for eventType in eventTypes"
               required>
       </select>
-      <div ng-show="editForm.type.$invalid">
+      <div ng-show="(editForm.$submitted || editForm.type.$touched) && editForm.type.$invalid">
         <p class="help-block"
           ng-show="editForm.type.$error.required">
           Este campo es requerido.
@@ -140,7 +139,7 @@
       <input type="number" class="form-control" name="postDelay" id="field_postDelay"
           ng-model="event.postDelay" required>
 
-      <div ng-show="editForm.postDelay.$invalid">
+      <div ng-show="(editForm.$submitted || editForm.postDelay.$touched) && editForm.postDelay.$invalid">
         <p class="help-block"
           ng-show="editForm.postDelay.$error.required">
           Este campo es requerido.

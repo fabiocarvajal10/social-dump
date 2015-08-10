@@ -64,7 +64,7 @@ public class SocialNetworkPostResource {
     }
 
     List<SocialNetworkPost> posts = socialNetworkPostRepository
-          .findByeventByEventId(event);
+          .findByEventByEventId(event);
 
     return new ResponseEntity<>(posts
           .stream()

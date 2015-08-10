@@ -4,12 +4,14 @@ import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
 import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.joda.time.DateTime;
+
+import java.util.List;
+import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
-import java.util.Objects;
+
+import org.joda.time.DateTime;
 
 /**
  * Created by fabio on 13/07/15.

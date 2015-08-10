@@ -8,10 +8,12 @@ import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
+import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
+import com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
 import com.coredump.socialdump.web.rest.util.ValidatorUtil;
@@ -39,6 +41,9 @@ import javax.validation.Valid;
 
 /**
  * Created by fabio on 13/07/15.
+ * @author Esteban
+ * @author Fabio
+ * @author Francisco
  */
 @RestController
 @RequestMapping("/api")
@@ -62,6 +67,12 @@ public class  EventResource{
 
   @Inject
   private EventService eventService;
+
+  /**
+   * Repositorio de posts de redes sociales.
+   */
+  @Inject
+  private SocialNetworkPostRepository socialNetworkPostRepository;
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
@@ -472,4 +483,29 @@ public class  EventResource{
     eventService.delayAll(event, delay);
     return new ResponseEntity<>(HttpStatus.OK);
   }
+
+  /**
+   * GET  /events/{id}/summary -> gets the summary of an event.
+   * @param id Id del evento
+   * @return summary of an event
+   */
+  @RequestMapping(value = "/events/{id}/summary",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional(readOnly = true)
+  public ResponseEntity<List<EventSocialNetworkSummaryDTO>> getSummaryOfEvent(
+    @PathVariable long id) {
+
+    log.debug("REST request to get Summary of Event Organization : {}", id);
+
+    List<EventSocialNetworkSummaryDTO> list =
+      socialNetworkPostRepository.getSummariesOfEventGroupBySocialNetwork(id);
+
+    if(list.size() == 0)
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
 }
