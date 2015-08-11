@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <h4 class="modal-title m-n font-thin h3"> Eliminar Cuenta </h4>
+</div>
+<div class="modal-body">
+  <div class="m-b" ng-show="errorMessage.length">
+    <span class="label text-base bg-danger pos-rlt m-r">
+      {{ errorMessage }}
+    </span>
+  </div>
+  <div class="m-b">
+    <p class="h5"> ¿Desea eliminar definitivamente su cuenta? </p>
+    <div class="padder-v item">
+      <p class="h4 font-thin m-t-sm">
+        Una vez realizada la operación, esta no puede ser revertida
+      </p>
+    </div>
+
+    <form name="delForm" role="form">
+      <div class="form-group">
+        <label> Contraseña </label>
+        <input type="password" class="form-control" name="password" placeholder="Contraseña"
+               ng-model="password" required>
+        <div class="has-error" ng-messages="delForm.password.$error"
+             ng-show="delForm.password.$touched">
+          <label class="control-label" ng-message="required">
+            Debe ingresar su contraseña
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="delete(password)" ng-disabled="delForm.$invalid">
+    Eliminar Definitivamente
+  </button>
+  <button class="btn btn-warning" ng-click="cancel()"> Cancelar </button>
+</div>
