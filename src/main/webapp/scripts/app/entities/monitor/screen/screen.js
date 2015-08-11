@@ -8,7 +8,7 @@
     .config(function($stateProvider) {
       $stateProvider
         .state('monitor-screen', {
-          parent: '',
+          parent: 'site',
           url: '/event-monitor/:id',
           data: {
             roles: ['ROLE_USER'],
