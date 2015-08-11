@@ -4,12 +4,15 @@
 angular.module('socialdumpApp.monitors')
   .controller('MonitorCtrl',
     function($scope, MonitorService, $modal) {
+      $scope.totalItems = 0;
+      $scope.currentPage = 1;
       $scope.monitorContacts = [];
 
       $scope.init = function() {
-        MonitorService.getAll()
+        MonitorService.getAll($scope.currentPage, 8)
           .then(function(data) {
             $scope.monitorContacts = data;
+            $scope.totalItems = data.total;
           })
           .catch(function() {
 
@@ -43,6 +46,18 @@ angular.module('socialdumpApp.monitors')
       };
 
       $scope.init();
+
+      $scope.pageChanged = function() {
+        MonitorService.getAll($scope.currentPage, 8)
+          .then(function(data) {
+            $scope.monitorContacts.splice(0, $scope.monitorContacts.length);
+            $scope.monitorContacts = data;
+            $scope.totalItems = data.total;
+          })
+          .catch(function() {
+
+          });
+      };
 
       function getModalUrl(action) {
         var baseUrl = 'scripts/app/entities/monitor/partials/';
