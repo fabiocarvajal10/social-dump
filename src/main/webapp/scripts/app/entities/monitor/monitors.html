@@ -31,4 +31,9 @@
       </div>
     </div>
   </div>
+  <div class="pull-right" ng-hide="!monitorContacts.length || totalItems < 9">
+    <pagination direction-links="false" total-items="totalItems" ng-model="currentPage"
+                ng-change="pageChanged()" num-pages="smallnumPages" items-per-page="8"></pagination>
+  </div>
 </div>
+

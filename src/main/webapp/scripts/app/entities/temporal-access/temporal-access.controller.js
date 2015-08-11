@@ -4,20 +4,12 @@
 angular.module('socialdumpApp.temporalAccess')
   .controller('TemporalAccessCtrl',
     function($scope, TemporalAccessService, $modal) {
-
+    $scope.totalItems = 0;
+    $scope.currentPage = 1;
     $scope.gridTemporalAccesses = {};
 
     $scope.init = function() {
-      TemporalAccessService.getAll('e')
-        .then(function(data) {
-          if (data.length > 0) {
-            buildGrid(data);
-            buildMonitorNameField(data);
-          }
-        })
-        .catch (function(error) {
-
-        });
+      getGridData();
     };
 
     function buildMonitorNameField(data) {
@@ -89,11 +81,29 @@ angular.module('socialdumpApp.temporalAccess')
       });
     };
 
-    $scope.test = function(monitor) {
-      console.log(monitor);
+    $scope.init();
+
+    $scope.pageChanged = function() {
+      getGridData();
     };
 
-    $scope.init();
+    function getGridData() {
+
+      TemporalAccessService.getAll($scope.currentPage, 8)
+        .then(function(data) {
+          if (data.length > 0) {
+            buildGrid(data);
+            buildMonitorNameField(data);
+            $scope.totalItems = data.total;
+          } else if($scope.currentPage !== 1){
+            $scope.currentPage--;
+            getGridData();
+          }
+        })
+        .catch (function(error) {
+
+      });
+    }
 
     function getModalUrl(action) {
       var baseUrl = 'scripts/app/entities/temporal-access/partials/';

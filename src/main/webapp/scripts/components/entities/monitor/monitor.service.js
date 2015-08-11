@@ -32,16 +32,19 @@ angular.module('socialdumpApp.monitors')
          return q.promise;
        },
 
-       getAll: function() {
+       getAll: function(page, limit) {
          var q = $q.defer();
          $http({
            url: 'api/monitor-contacts',
            method: 'GET',
            params: {
+             'page': page,
+             'per_page': limit,
              'organizationId': OrganizationService.getCurrentOrgId()
            }
          }).
-         success(function(data) {
+         success(function(data, status, headers) {
+           data.total = parseInt(headers('X-Total-Count'));
            q.resolve(data);
          }).
          error(function(error) {

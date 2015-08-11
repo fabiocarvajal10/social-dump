@@ -6,10 +6,14 @@
     <i class="fa fa-plus">
     </i> Agregar
   </a>
-  <span class="label text-base bg-info pos-rlt m-r" ng-show="gridTemporalAccesses.length">
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="!gridTemporalAccesses.data.length">
     No ha habilitado ningún acceso temporal
   </span>
   <div class="table-responsive m-b-lg">
     <div ui-grid="gridTemporalAccesses"></div>
+  </div>
+  <div class="pull-right" ng-hide="!gridTemporalAccesses.data.length || totalItems < 9">
+    <pagination direction-links="false" total-items="totalItems" ng-model="currentPage"
+                ng-change="pageChanged()" num-pages="smallnumPages" items-per-page="8"></pagination>
   </div>
 </div>

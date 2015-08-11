@@ -13,22 +13,22 @@
   ${temporalAccess.eventByEventId.getDescription()})}">
 </p>
 <p th:text="#{email.temporalaccess.horaInicio(
-  ${temporalAccess.eventByEventId.getStartDate()})}">
+  ${#dates.format(temporalAccess.eventByEventId.getStartDate(), 'dd/MMM/yyyy HH:mm')})}">
 </p>
 <p th:text="#{email.temporalaccess.horaFin(
-  ${temporalAccess.eventByEventId.getEndDate()})}">
+  ${#dates.format(temporalAccess.eventByEventId.getEndDate(), 'dd/MMM/yyyy hh:mm')})}">
 </p>
 <p th:text="#{email.temporalaccess.password(
   ${temporalAccess.getPassword()})}">
 </p>
 <p>
-  <a th:href="@{|${baseUrl}/#/access?key=${temporalAccess.getId()}|}"
-     th:text="#{email.temporalaccess.enlace}">Activation Link</a>
+  <a th:href="@{|${baseUrl}|}"
+     th:text="#{email.temporalaccess.enlace}"> </a>
 </p>
 <p>
-  <span th:text="#{email.activation.text2}">Regards, </span>
+  <span th:text="#{email.activation.text2}"> </span>
   <br/>
-  <em th:text="#{email.signature}">JHipster.</em>
+  <em th:text="#{email.signature}"> </em>
 </p>
 </body>
 </html>

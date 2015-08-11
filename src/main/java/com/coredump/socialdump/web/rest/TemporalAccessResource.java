@@ -11,11 +11,14 @@ import com.coredump.socialdump.service.MailService;
 import com.coredump.socialdump.service.util.RandomUtil;
 import com.coredump.socialdump.web.rest.dto.TemporalAccessDTO;
 import com.coredump.socialdump.web.rest.mapper.TemporalAccessMapper;
+import com.coredump.socialdump.web.rest.util.PaginationUtil;
 import com.coredump.socialdump.web.rest.util.ValidatorUtil;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +31,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -102,7 +109,9 @@ public class TemporalAccessResource {
     temporalAccessRepository.save(temporalAccess);
 
     String baseUrl =
-        request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+        + "/#/access?key=" + temporalAccess.getId() + "&id="
+          + temporalAccess.getEventByEventId().getId();
 
     temporalAccess.setPassword(password);
 
@@ -118,10 +127,30 @@ public class TemporalAccessResource {
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public List<TemporalAccess> getAll(@RequestParam(value = "eventId") Long eventId) {
+  public ResponseEntity<List<TemporalAccess>> getAll(
+      @RequestParam(value = "page" , required = false) Integer offset,
+      @RequestParam(value = "per_page", required = false) Integer limit,
+      @RequestParam(value = "eventId") Long eventId) throws URISyntaxException {
+
     log.debug("REST request to get all TemporalAccesses");
     Event event = eventRepository.findOne(eventId);
-    return temporalAccessRepository.getAllByEventByEventId(event);
+
+    if (event == null) {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+    Page<TemporalAccess> page  = temporalAccessRepository
+        .findAllByEventByEventId(PaginationUtil.generatePageRequest(offset, limit),
+          event
+        );
+
+    HttpHeaders headers = PaginationUtil
+        .generatePaginationHttpHeaders(page, "/api/temporal-accesses", offset, limit);
+
+    return new ResponseEntity<>(page
+              .getContent()
+              .stream()
+              .collect(Collectors.toCollection(ArrayList::new)), headers, HttpStatus.OK);
   }
 
   /**
