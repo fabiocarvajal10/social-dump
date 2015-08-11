@@ -60,6 +60,22 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
+      getNewest: function() {
+        var q = $q.defer();
+        $http({
+          url: 'api/organizations/newest',
+          method: 'GET',
+        }).
+        success(function(data) {
+          q.resolve(data);
+        }).
+        error(function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+
       getIncomingEvents: function(organizationId) {
         var q = $q.defer();
         $http({

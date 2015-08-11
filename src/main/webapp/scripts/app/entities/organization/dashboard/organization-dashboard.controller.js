@@ -15,7 +15,7 @@ angular.module('socialdumpApp')
     $scope.showOrgError = false;
 
     $scope.init = function() {
-      OrganizationService.getAll()
+      OrganizationService.getNewest()
         .then(function(data) {
           $scope.organizations = data;
           if ($scope.organizations.length > 0) {
