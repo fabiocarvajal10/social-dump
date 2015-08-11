@@ -42,8 +42,8 @@ angular.module('socialdumpApp.monitors')
         monitorContacts.splice(index, 1);
         $modalInstance.close();
       })
-      .catch (function() {
-
+      .catch (function(error) {
+        $scope.errorMessage = error;
       });
     };
 

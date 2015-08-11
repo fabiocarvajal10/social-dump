@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h4 class="modal-title m-n font-thin h3"> Crear Organización </h4>
+</div>
+<div class="modal-body">
+  <div class="m-b" ng-show="errorMessage.length">
+    <span class="label text-base bg-danger pos-rlt m-r">
+      {{ errorMessage }}
+    </span>
+  </div>
+  <div class="m-b">
+    <form name="orgForm" role="form">
+      <div class="form-group">
+        <label> Nombre </label>
+        <input type="text" class="form-control" name="name" placeholder="Nombre de la organización"
+               ng-model="organization.name" required>
+        <div class="has-error" ng-messages="orgForm.name.$error"
+             ng-show="orgForm.name.$touched">
+          <label class="control-label" ng-message="required">
+            Debe ingresar el nombre de la organización
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-info" ng-click="createOrg(organization)" ng-disabled="orgForm.$invalid">
+    Agregar
+  </button>
+  <button class="btn btn-warning" ng-click="cancel()"> Cancelar </button>
+</div>
