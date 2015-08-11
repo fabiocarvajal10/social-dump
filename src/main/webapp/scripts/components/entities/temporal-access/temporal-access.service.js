@@ -45,17 +45,19 @@ angular.module('socialdumpApp.temporalAccess')
        return q.promise;
       },
 
-      getAll: function(eventId) {
+      getAll: function(page, limit) {
         var q = $q.defer();
         $http({
           url: 'api/temporal-accesses',
           method: 'GET',
           params: {
-          //ToDo Definir como se va a elegir la organización actual
-            'eventId': OrganizationService.getCurrentEventId()//parseInt(localStorageService.get('eventId'))
+            'page': page,
+            'per_page': limit,
+            'eventId': OrganizationService.getCurrentEventId()
           }
         }).
-        success(function(data) {
+        success(function(data, status, headers) {
+          data.total = parseInt(headers('X-Total-Count'));
           q.resolve(data);
         }).
         error(function(error) {
