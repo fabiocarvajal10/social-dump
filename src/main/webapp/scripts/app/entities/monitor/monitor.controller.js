@@ -20,7 +20,7 @@ angular.module('socialdumpApp.monitors')
       };
 
       $scope.open = function(monitorContact, index, action) {
-
+        checkMonitorsCant();
         var modalInstance = $modal.open({
           animation: true,
           templateUrl: getModalUrl(action),
@@ -39,15 +39,28 @@ angular.module('socialdumpApp.monitors')
         });
 
         modalInstance.result.then(function() {
-
+          checkMonitorsCant();
         }, function() {
 
         });
       };
 
+      function checkMonitorsCant() {
+        if($scope.monitorContacts.length === 0 && $scope.currentPage !== 1) {
+          $scope.currentPage--;
+          getMonitors();
+        } else if($scope.monitorContacts.length > 8) {
+          $scope.currentPage++;
+          getMonitors();
+        }
+      }
       $scope.init();
 
       $scope.pageChanged = function() {
+        getMonitors();
+      };
+
+      function getMonitors() {
         MonitorService.getAll($scope.currentPage, 8)
           .then(function(data) {
             $scope.monitorContacts.splice(0, $scope.monitorContacts.length);
@@ -57,8 +70,7 @@ angular.module('socialdumpApp.monitors')
           .catch(function() {
 
           });
-      };
-
+      }
       function getModalUrl(action) {
         var baseUrl = 'scripts/app/entities/monitor/partials/';
         var extension = '.html';
