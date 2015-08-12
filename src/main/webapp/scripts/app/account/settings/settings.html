@@ -5,7 +5,6 @@
   <div>
     <div class="row">
       <div class="col-md-8 col-md-offset-1">
-
         <div class="alert alert-success" ng-show="success">
           <strong> Se ha modificado su cuenta exitosamente</strong>
         </div>
@@ -19,7 +18,6 @@
         </div>
 
         <form name="stForm" role="form" novalidate ng-submit="save()" show-validation>
-
           <div class="form-group">
             <label> Nombre </label>
             <input type="text" class="form-control" name="firstName" placeholder="Nombre"
@@ -77,6 +75,9 @@
             Modificar
           </button>
         </form>
+        <button class="btn btn-danger" ng-click="open()">
+          Eliminar Cuenta
+        </button>
       </div>
     </div>
   </div>

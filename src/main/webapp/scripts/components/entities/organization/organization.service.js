@@ -12,7 +12,7 @@ angular.module('socialdumpApp')
           'name': organizationName,
           'ownerId': parseInt(localStorageService.get('userId'))
         };
-
+        var currentTime = new Date();
         var q = $q.defer();
         $http({
           url: 'api/organizations',
@@ -21,6 +21,7 @@ angular.module('socialdumpApp')
         }).
         success(function(data, status, headers) {
           organization.id = parseInt(headers('Location').match(/[0-9]+/g));
+          organization.createdAt = currentTime;
           currOrgId = organization.id;
           q.resolve(organization);
         }).
@@ -38,11 +39,32 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
-      getAll: function() {
+      getAll: function(page, limit) {
         var q = $q.defer();
         $http({
           url: 'api/organizations',
-          method: 'GET'
+          method: 'GET',
+          params: {
+            'page': page,
+            'per_page': limit
+          }
+        }).
+        success(function(data, status, headers) {
+          data.total = parseInt(headers('X-Total-Count'));
+          q.resolve(data);
+        }).
+        error(function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+
+      getNewest: function() {
+        var q = $q.defer();
+        $http({
+          url: 'api/organizations/newest',
+          method: 'GET',
         }).
         success(function(data) {
           q.resolve(data);
