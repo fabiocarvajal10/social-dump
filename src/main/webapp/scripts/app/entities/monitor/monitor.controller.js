@@ -3,20 +3,13 @@
  */
 angular.module('socialdumpApp.monitors')
   .controller('MonitorCtrl',
-    function($scope, MonitorService, $modal) {
+    function($scope, MonitorService, $modal, OrganizationService) {
       $scope.totalItems = 0;
       $scope.currentPage = 1;
       $scope.monitorContacts = [];
 
       $scope.init = function() {
-        MonitorService.getAll($scope.currentPage, 8)
-          .then(function(data) {
-            $scope.monitorContacts = data;
-            $scope.totalItems = data.total;
-          })
-          .catch(function() {
-
-          });
+        getMonitors();
       };
 
       $scope.open = function(monitorContact, index, action) {
@@ -54,6 +47,7 @@ angular.module('socialdumpApp.monitors')
           getMonitors();
         }
       }
+
       $scope.init();
 
       $scope.pageChanged = function() {
@@ -61,21 +55,27 @@ angular.module('socialdumpApp.monitors')
       };
 
       function getMonitors() {
-        MonitorService.getAll($scope.currentPage, 8)
-          .then(function(data) {
-            $scope.monitorContacts.splice(0, $scope.monitorContacts.length);
-            $scope.monitorContacts = data;
-            $scope.totalItems = data.total;
-          })
-          .catch(function() {
+        if (!isNaN(OrganizationService.getCurrentOrgId())){
+          MonitorService.getAll($scope.currentPage, 8)
+            .then(function (data) {
+              $scope.monitorContacts = data;
+              $scope.totalItems = data.total;
+            })
+            .catch(function () {
 
-          });
-      }
+            });
+        }
+      };
+
+      $scope.checkMonitorOrg = function() {
+        return isNaN(OrganizationService.getCurrentOrgId());
+      };
+
       function getModalUrl(action) {
         var baseUrl = 'scripts/app/entities/monitor/partials/';
         var extension = '.html';
         return baseUrl + action + extension;
-      }
+      };
 
     });
 
