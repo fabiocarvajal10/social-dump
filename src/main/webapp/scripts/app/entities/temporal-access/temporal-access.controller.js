@@ -3,13 +3,15 @@
  */
 angular.module('socialdumpApp.temporalAccess')
   .controller('TemporalAccessCtrl',
-    function($scope, TemporalAccessService, $modal) {
+    function($scope, TemporalAccessService, $modal, Event, OrganizationService, DateUtils) {
     $scope.totalItems = 0;
     $scope.currentPage = 1;
+    $scope.events = [];
+    $scope.selectedEvent = {};
     $scope.gridTemporalAccesses = {};
 
     $scope.init = function() {
-      getGridData();
+      //getGridData();
     };
 
     function buildMonitorNameField(data) {
@@ -70,12 +72,15 @@ angular.module('socialdumpApp.temporalAccess')
           },
           'gridRow': function() {
             return gridRow;
+          },
+          'selectedEvent': function() {
+            return $scope.selectedEvent;
           }
         }
       });
 
       modalInstance.result.then(function() {
-        $scope.init();
+        getGridData();
       }, function() {
 
       });
@@ -89,13 +94,13 @@ angular.module('socialdumpApp.temporalAccess')
 
     function getGridData() {
 
-      TemporalAccessService.getAll($scope.currentPage, 8)
+      TemporalAccessService.getAllByEventId($scope.currentPage, 8, $scope.selectedEvent.id)
         .then(function(data) {
-          if (data.length > 0) {
-            buildGrid(data);
-            buildMonitorNameField(data);
-            $scope.totalItems = data.total;
-          } else if($scope.currentPage !== 1){
+          buildGrid(data);
+          buildMonitorNameField(data);
+          $scope.totalItems = data.total;
+
+          if($scope.currentPage !== 1 && $scope.totalItems == 0){
             $scope.currentPage--;
             getGridData();
           }
@@ -103,11 +108,39 @@ angular.module('socialdumpApp.temporalAccess')
         .catch (function(error) {
 
       });
-    }
+    };
+
+    $scope.getEventOptions = function() {
+      Event.query({organizationId: OrganizationService.getCurrentOrgId()},
+        function(result) {
+          for (var i = 0; i < result.length; i++) {
+            $scope.events.push(result[i]);
+          }
+        });
+    };
+
+    $scope.loadAccesses = function(item, model) {
+      $scope.selectedEvent = item;
+      getGridData();
+    };
+
+    $scope.checkAddState = function() {
+      return ($scope.events.length === 0
+        || $scope.isSelectedEventEmpty() || $scope.checkSelectedEventEndDate());
+    };
+
+    $scope.isSelectedEventEmpty = function() {
+      return (Object.getOwnPropertyNames($scope.selectedEvent).length === 0);
+    };
+
+    $scope.checkSelectedEventEndDate = function() {
+      return DateUtils.isDateLowerThanNow($scope.selectedEvent.endDate);
+    };
 
     function getModalUrl(action) {
       var baseUrl = 'scripts/app/entities/temporal-access/partials/';
       var extension = '.html';
       return baseUrl + action + extension;
-    }
+    };
+
   });
