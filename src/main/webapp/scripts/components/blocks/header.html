@@ -24,26 +24,6 @@
       <!-- buttons -->
 
         <ul class="nav navbar-nav nav-pills navbar-right">
-            <li ui-sref-active="active">
-                <a ui-sref="home">
-                    <span class="glyphicon glyphicon-home"></span>
-                    <span>Home</span>
-                </a>
-            </li>
-            <li ui-sref-active="active" ng-switch-when="true" class="dropdown pointer">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                    <span>
-                                        <span class="glyphicon glyphicon-th-list"></span>
-                                        <span class="hidden-tablet">
-                                            Entities
-                                        </span>
-                                        <b class="caret"></b>
-                                    </span>
-                </a>
-                <ul class="dropdown-menu">
-                    <!-- JHipster will add entities to the menu here -->
-                </ul>
-            </li>
             <li ng-class="{active: $state.includes('account')}" class="dropdown pointer">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                     <span>
@@ -79,8 +59,6 @@
                 <ul class="dropdown-menu">
                     <li ui-sref-active="active"><a ui-sref="tracker"><span class="glyphicon glyphicon-eye-open"></span>
                         &nbsp;<span>User tracker</span></a></li>
-                    <li ui-sref-active="active"><a ui-sref="metrics"><span class="glyphicon glyphicon-dashboard"></span>
-                        &#xA0;<span>Metrics</span></a></li>
                     <li ui-sref-active="active"><a ui-sref="health"><span class="glyphicon glyphicon-heart"></span>
                         &#xA0;<span>Health</span></a></li>
                     <li ui-sref-active="active"><a ui-sref="configuration"><span class="glyphicon glyphicon-list-alt"></span>
