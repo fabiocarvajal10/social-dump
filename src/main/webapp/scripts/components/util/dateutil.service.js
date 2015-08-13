@@ -32,5 +32,9 @@
       this.defaultDateTimeFormat = function() {
         return defaultDateTimeFormat;
       };
+      this.isDateLowerThanNow = function(date) {
+        var now = new Date().toISOString();
+        return date < now;
+      }
     });
 }());

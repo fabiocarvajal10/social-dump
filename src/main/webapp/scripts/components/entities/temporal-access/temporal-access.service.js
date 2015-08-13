@@ -8,7 +8,6 @@ angular.module('socialdumpApp.temporalAccess')
     return {
       register: function(temporalAccess) {
         temporalAccess.organizationId = OrganizationService.getCurrentOrgId();
-        temporalAccess.eventId = OrganizationService.getCurrentEventId();
         temporalAccess.monitorContactId =
           temporalAccess.monitorContactByMonitorContactId.id;
         if (temporalAccess.allEvent) {
@@ -54,6 +53,28 @@ angular.module('socialdumpApp.temporalAccess')
             'page': page,
             'per_page': limit,
             'eventId': OrganizationService.getCurrentEventId()
+          }
+        }).
+        success(function(data, status, headers) {
+          data.total = parseInt(headers('X-Total-Count'));
+          q.resolve(data);
+        }).
+        error(function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+
+      getAllByEventId: function(page, limit, id) {
+        var q = $q.defer();
+        $http({
+          url: 'api/temporal-accesses',
+          method: 'GET',
+          params: {
+            'page': page,
+            'per_page': limit,
+            'eventId': id
           }
         }).
         success(function(data, status, headers) {
