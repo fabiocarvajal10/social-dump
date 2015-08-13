@@ -25,7 +25,7 @@ angular.module('socialdumpApp.access')
         password: $scope.password
       }).then(function() {
         $scope.authenticationError = false;
-        $location.path('monitor-screen/' + $scope.event);
+        $state.go('monitor-screen', {'id': $scope.event});
       }).catch (function(error) {
         $scope.authenticationError = true;
         $scope.errorMessage = error;
