@@ -140,23 +140,27 @@ angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts',
       .setMatchlist([/.*api.*/, /.*protected.*/], true);
 
     $urlRouterProvider.otherwise('/');
-    $stateProvider.state('site', {
-      'abstract': true,
-      views: {
-        'navbar@': {
-          templateUrl: 'scripts/components/blocks/header.html',
-          controller: 'NavbarController'
-        }
-      },
-      resolve: {
-        authorize: ['Auth',
-          function(Auth) {
-            return Auth.authorize();
+    $stateProvider
+      .state('site', {
+        'abstract': true,
+        views: {
+          'navbar@': {
+            templateUrl: 'scripts/components/blocks/header.html',
+            controller: 'NavbarController'
+          },
+          'aside@': {
+            templateUrl: 'scripts/components/blocks/aside.html',
+            controller: 'AsideController'
           }
-        ]
-      }
-    });
-
+        },
+        resolve: {
+          authorize: ['Auth',
+            function(Auth) {
+              return Auth.authorize();
+            }
+          ]
+        }
+      })
     $httpProvider.interceptors.push('authInterceptor');
 
   })

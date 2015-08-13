@@ -25,7 +25,7 @@ angular.module('socialdumpApp')
           currOrgId = organization.id;
           q.resolve(organization);
         }).
-        catch (function(error) {
+        catch(function(error) {
           var err = error.data.exception;
           if (err ===
               'org.springframework.dao.DataIntegrityViolationException') {
@@ -127,7 +127,7 @@ angular.module('socialdumpApp')
         success(function(data) {
           q.resolve(organization);
         }).
-        catch (function(error) {
+        catch(function(error) {
           var err = error.data.exception;
           if (err === 'org.springframework.dao.DataIntegrityViolationException') {
             err = 'Ya cuenta con una organización del mismo nombre';
@@ -150,7 +150,7 @@ angular.module('socialdumpApp')
         success(function(data) {
           q.resolve(data);
         }).
-        catch (function(error) {
+        catch(function(error) {
           var err = error.data.exception;
           if (err ===
               'org.springframework.dao.DataIntegrityViolationException') {
@@ -175,14 +175,14 @@ angular.module('socialdumpApp')
         success(function(data) {
           q.resolve(data);
         }).
-        catch (function(error) {
+        catch(function(error) {
           q.reject(error);
         });
 
         return q.promise;
       },
 
-      setCurrentOrgId: function(organizationId){
+      setCurrentOrgId: function(organizationId) {
         localStorageService.set('orgId', organizationId);
       },
 
@@ -190,7 +190,7 @@ angular.module('socialdumpApp')
         return parseInt(localStorageService.get('eventId'));
       },
 
-      setCurrentEventId: function(eventId){
+      setCurrentEventId: function(eventId) {
         localStorageService.set('eventId', eventId);
       },
 
