@@ -144,7 +144,7 @@ angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts',
       'abstract': true,
       views: {
         'navbar@': {
-          templateUrl: 'scripts/components/navbar/navbar.html',
+          templateUrl: 'scripts/components/blocks/header.html',
           controller: 'NavbarController'
         }
       },

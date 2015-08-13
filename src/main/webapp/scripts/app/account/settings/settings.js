@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('socialdumpApp.settings', [])
-  .config(function ($stateProvider) {
+  .config(function($stateProvider) {
     $stateProvider
       .state('settings', {
         parent: 'home',
