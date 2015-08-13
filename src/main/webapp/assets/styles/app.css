@@ -1230,7 +1230,7 @@ html.bg {
   padding: 10px 20px;
   font-weight: normal;
   text-transform: none;
-  -webkit-transition: background-color 0.2s ease-in-out 0s;
+  -webkit-transition: background-color 0.3s ease-in-out 0s;
           transition: background-color 0.2s ease-in-out 0s;
 }
 
@@ -5235,4 +5235,43 @@ a.text-#000000:hover {
 
 .bg-white-only {
   background-color: #757575; 
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-color: #F44336 !important;
+    color: #FFFFFF;
+}
+
+.bg-info {
+    color: #FFFFFF;
+    background-color: #757575;
+}
+
+span.arrow.top.hidden-folded.arrow-info {
+      border-bottom-color: #757575;
+}
+
+.arrow.top.arrow-info:after {
+    border-bottom-color: #757575;
+}
+
+.bg-black .text-lt {
+    color: #FFFFFF !important;
+}
+
+.bg-black .caret {
+    border-top-color: #F44336;
+    border-bottom-color: #F44336;
+}
+
+.bg-black .text-muted {
+    color: #F44336 !important;
+}
+
+.bg-black{
+    color: #000;    
+}
+
+.bg-black a:hover {
+    color: #F44336;
 }

@@ -4,7 +4,9 @@
 'use strict';
 
 angular.module('socialdumpApp')
-  .factory('OrganizationService', function($http, $q, localStorageService) {
+  .factory('OrganizationService', function($rootScope, $http, 
+      $q, localStorageService) {
+
     var currOrgId = 1;
     return {
       register: function(organizationName) {
@@ -23,6 +25,9 @@ angular.module('socialdumpApp')
           organization.id = parseInt(headers('Location').match(/[0-9]+/g));
           organization.createdAt = currentTime;
           currOrgId = organization.id;
+          $rootScope
+            .$broadcast('newOrganization',
+              { 'newOrganization': organization });
           q.resolve(organization);
         }).
         catch(function(error) {
@@ -125,6 +130,9 @@ angular.module('socialdumpApp')
           }
         }).
         success(function(data) {
+          $rootScope
+            .$broadcast('updatedOrganization',
+              { 'updatedOrganization': organization });
           q.resolve(organization);
         }).
         catch(function(error) {
@@ -148,6 +156,9 @@ angular.module('socialdumpApp')
           data: id
         }).
         success(function(data) {
+          $rootScope
+            .$broadcast('deletedOrganization',
+              { 'deletedOrganization': id });
           q.resolve(data);
         }).
         catch(function(error) {

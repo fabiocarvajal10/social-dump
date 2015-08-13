@@ -149,8 +149,7 @@ angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts',
             controller: 'NavbarController'
           },
           'aside@': {
-            templateUrl: 'scripts/components/blocks/aside.html',
-            controller: 'AsideController'
+            templateUrl: 'scripts/components/blocks/aside.html'
           }
         },
         resolve: {
@@ -160,7 +159,7 @@ angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts',
             }
           ]
         }
-      })
+      });
     $httpProvider.interceptors.push('authInterceptor');
 
   })
