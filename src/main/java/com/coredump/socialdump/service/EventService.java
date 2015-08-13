@@ -1,9 +1,11 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.EventStatus;
 import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
+import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.GenericStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
 
@@ -39,7 +41,16 @@ public class EventService {
   @Inject
   private FetchExecutorService fetchExecutorService;
 
-  public List<String>  getSearchCriterias(Event event) {
+  @Inject
+  private TemporalAccessService temporalAccessService;
+
+  @Inject
+  private EventStatusRepository statusRepository;
+
+  @Inject
+  private SearchCriteriaService searchCriteriaService;
+
+  public List<String> getSearchCriterias(Event event) {
     return  searchCriteriaRepository.findAllByEventByEventId(event)
           .stream()
           .map(SearchCriteria::getSearchCriteria)
@@ -81,6 +92,19 @@ public class EventService {
   public void delayAll(Event event, int delay) {
     fetchExecutorService.delayAll(event, delay);
     event.setPostDelay(delay);
+    eventRepository.save(event);
+  }
+
+  public void cancelEvent(Event event) {
+
+    EventStatus status = statusRepository.findOneByStatus("Cancelado");
+    event.setEventStatusByStatusId(status);
+
+
+    searchCriteriaService.inactivateAll(event);
+    temporalAccessService.deleteTemporalAccesses(event);
+
+
     eventRepository.save(event);
   }
 

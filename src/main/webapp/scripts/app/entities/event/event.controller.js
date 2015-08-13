@@ -68,6 +68,22 @@
             });
         };
 
+        $scope.cancel = function(id) {
+          Event.get({id: id}, function(result) {
+            $scope.event = result;
+            $('#cancelEventConfirmation').modal('show');
+          });
+        };
+
+        $scope.confirmCancel = function(id) {
+          Event.cancel({id: id},
+            function() {
+              $scope.reset();
+              $('#cancelEventConfirmation').modal('hide');
+              $scope.clear();
+            });
+        };
+
         $scope.refresh = function() {
           $scope.reset();
           $scope.clear();
@@ -145,6 +161,11 @@
                 '    ng-click="grid.appScope.delete(row.entity[\'id\'])"' +
                 '    class="btn btn-danger btn-sm">' +
                 '  <span class="glyphicon glyphicon-remove-circle"></span>' +
+                '</button>' +
+                '<button type="submit"' +
+                '    ng-click="grid.appScope.cancel(row.entity[\'id\'])"' +
+                '    class="btn btn-warning btn-sm">' +
+                '  <i class="fa fa-toggle-on"></i>' +
                 '</button>'
             }
           ]

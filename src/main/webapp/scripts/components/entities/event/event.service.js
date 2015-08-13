@@ -42,6 +42,11 @@
                 DateUtils.convertLocaleDateToServer(data.activatedAt);
               return angular.toJson(data);
             }
+          },
+          'cancel': {
+            method: 'POST',
+            params: {id: '@id'},
+            url: 'api/events/cancel'
           }
         });
       }]);

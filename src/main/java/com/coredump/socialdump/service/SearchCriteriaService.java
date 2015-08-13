@@ -1,6 +1,7 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.GenericStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -67,6 +69,15 @@ public class SearchCriteriaService {
     }
 
     return sc;
+  }
+
+  public void inactivateAll(Event event) {
+    GenericStatus genericStatus = genericStatusRepository.findOne((short)2);
+    searchCriteriaRepository.findAllByEventByEventId(event)
+        .forEach( sc -> {
+            sc.setGenericStatusByStatusId(genericStatus);
+            searchCriteriaRepository.save(sc);
+          });
   }
 }
 
