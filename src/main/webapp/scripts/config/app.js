@@ -1,12 +1,15 @@
 'use strict';
 
-angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts', 'socialdumpApp.monitors',
-  'socialdumpApp.temporalAccess', 'socialdumpApp.access', 'socialdumpApp.settings',
+angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts',
+  'socialdumpApp.monitors', 'socialdumpApp.temporalAccess',
+  'socialdumpApp.access', 'socialdumpApp.settings',
   'socialdumpApp.organizations', 'ngAnimate', 'ngAria', 'ngMessages',
-  'ngSanitize', 'ngTouch', 'ngStorage', 'LocalStorageModule', 'ngResource', 'ngCookies',
+  'ngSanitize', 'ngTouch', 'ngStorage', 'LocalStorageModule',
+  'ngResource', 'ngCookies', 'ngCacheBuster', 'infinite-scroll',
   'ngCacheBuster', 'infinite-scroll', 'ui.grid', 'ui.grid.resizeColumns',
-  'ui.bootstrap', 'ui.bootstrap.modal', 'ui.bootstrap.datetimepicker', 'ui.bootstrap.pagination',
-  'ui.utils', 'ui.load', 'ui.jq', 'ui.select', 'oc.lazyLoad', 'pascalprecht.translate',
+  'ui.bootstrap', 'ui.bootstrap.modal', 'ui.bootstrap.datetimepicker',
+  'ui.bootstrap.pagination', 'ui.utils', 'ui.load', 'ui.jq',
+  'ui.select', 'oc.lazyLoad', 'pascalprecht.translate',
   'ngMaterial', 'ui.date', 'dynamicLayout'])
   .controller('AppCtrl', [
     '$scope', '$translate', '$localStorage', '$window',
