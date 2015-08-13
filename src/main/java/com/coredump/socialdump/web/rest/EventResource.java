@@ -482,7 +482,7 @@ public class  EventResource{
    */
   @RequestMapping(value = "/events/cancel",
       method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+      produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
   public ResponseEntity<?> cancel(@RequestParam(value = "id") Long id) {
 
@@ -495,6 +495,10 @@ public class  EventResource{
 
     if (event.getEventStatusByStatusId().getId() == 2) {
       return new ResponseEntity<>("The event is already inactive", HttpStatus.CONFLICT);
+    }
+
+    if (ValidatorUtil.isDateLower(event.getEndDate(), now)) {
+      return new ResponseEntity<>("The event already ended", HttpStatus.CONFLICT);
     }
 
     if (!ValidatorUtil.isDateLower(now, event.getStartDate())) {

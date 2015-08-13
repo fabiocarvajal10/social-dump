@@ -3,8 +3,8 @@
 
   angular.module('socialdumpApp')
     .factory('Event', [
-      '$resource', 'DateUtils', 'EventType', 'EventStatus',
-      function($resource, DateUtils, EventType, EventStatus) {
+      '$resource', 'DateUtils', 'EventType', 'EventStatus', '$q',
+      function($resource, DateUtils, EventType, EventStatus, $q) {
         return $resource('api/events/:id', {}, {
           'query': { method: 'GET', isArray: true},
           'get': {
@@ -46,7 +46,22 @@
           'cancel': {
             method: 'POST',
             params: {id: '@id'},
-            url: 'api/events/cancel'
+            url: 'api/events/cancel',
+            interceptor: {
+              responseError: function(error) {
+                var errorMessage = '';
+
+                if(error.data === 'Cant cancel a started event') {
+                  errorMessage = 'El evento ya inició. No puede ser cancelado';
+                } else if (error.data === 'The event already ended') {
+                  errorMessage = 'El evento ya ha finalizado';
+                } else {
+                  errorMessage = 'Error inesperado al intentar cancelar el evento'
+                }
+
+                return $q.reject(errorMessage);
+              }
+            }
           }
         });
       }]);

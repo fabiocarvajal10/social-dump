@@ -68,19 +68,22 @@
             });
         };
 
-        $scope.cancel = function(id) {
+        $scope.cancelEvent = function(id) {
           Event.get({id: id}, function(result) {
+            $scope.errorMessage = '';
             $scope.event = result;
             $('#cancelEventConfirmation').modal('show');
           });
         };
 
-        $scope.confirmCancel = function(id) {
-          Event.cancel({id: id},
-            function() {
+        $scope.confirmCancelEvent = function(id) {
+          Event.cancel({id: id})
+            .$promise.then(function() {
               $scope.reset();
               $('#cancelEventConfirmation').modal('hide');
               $scope.clear();
+            }, function(error) {
+              $scope.errorMessage = error;
             });
         };
 
@@ -163,7 +166,7 @@
                 '  <span class="glyphicon glyphicon-remove-circle"></span>' +
                 '</button>' +
                 '<button type="submit"' +
-                '    ng-click="grid.appScope.cancel(row.entity[\'id\'])"' +
+                '    ng-click="grid.appScope.cancelEvent(row.entity[\'id\'])"' +
                 '    class="btn btn-warning btn-sm">' +
                 '  <i class="fa fa-toggle-on"></i>' +
                 '</button>'
