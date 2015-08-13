@@ -15,6 +15,8 @@ public interface TemporalAccessRepository extends JpaRepository<TemporalAccess, 
 
   Page<TemporalAccess> findAllByEventByEventId(Pageable page, Event event);
 
+  List<TemporalAccess> findAllByEventByEventId(Event event);
+
   Optional<TemporalAccess> findOneById(Long id);
 
   TemporalAccess findOneByIdAndEmail(Long id, String email);

@@ -1,6 +1,7 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Authority;
+import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.domain.User;
 import com.coredump.socialdump.repository.TemporalAccessRepository;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -58,6 +60,10 @@ public class TemporalAccessService {
 
   public void setTemporalAccessId(Long id) {
     temporalAccessId = id;
+  }
+
+  public void deleteTemporalAccesses(Event event) {
+    temporalAccessRepository.delete(temporalAccessRepository.findAllByEventByEventId(event));
   }
 }
 
