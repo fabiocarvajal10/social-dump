@@ -7,6 +7,8 @@ angular.module('socialdumpApp')
       return {
         'responseError': function(rejection) {
           var modal = $injector.get('UtilInterceptorService');
+          var modalStack = $injector.get('$modalStack');
+          modalStack.dismissAll('cancel');
           var status = rejection.status;
           var createMessage = function(title, body) {
             return {
