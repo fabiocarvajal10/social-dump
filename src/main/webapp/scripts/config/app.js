@@ -144,12 +144,13 @@ angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts',
       .state('site', {
         'abstract': true,
         views: {
+          'aside@': {
+            templateUrl: 'scripts/components/blocks/aside.html',
+            controller: 'AsideController'
+          },
           'navbar@': {
             templateUrl: 'scripts/components/blocks/header.html',
             controller: 'NavbarController'
-          },
-          'aside@': {
-            templateUrl: 'scripts/components/blocks/aside.html'
           }
         },
         resolve: {

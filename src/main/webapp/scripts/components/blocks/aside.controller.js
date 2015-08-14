@@ -1,45 +1,58 @@
 'use strict';
 
 angular.module('socialdumpApp')
-  .controller('AsideController', ['$scope', '$location',
+  .controller('AsideController', ['$rootScope', '$scope', '$location',
     'OrganizationService',
-    function($scope, $location, OrganizationService) {
-      $scope.currentOrg = null;
+    function($rootScope, $scope, $location, OrganizationService) {
+      $rootScope.currentOrg = null;
       $scope.orgz = [];
+
+      function broadcastOrgChange() {
+        $rootScope
+          .$broadcast('currentOrganizationChange');
+      }
 
       $scope.init = function() {
         OrganizationService.getAll(null, 15).then(function(data) {
           $scope.orgz = data;
-          $scope.currentOrg = data[0];
+          $rootScope.currentOrg = data[0];
+          broadcastOrgChange()
         });
       };
 
-      $scope.change = function(index) {
-        $scope.currentOrg = data[index];
+      $scope.onChange = function(id) {
+        var tmp = null;
+        $scope.orgz.forEach(function(element, index, array) {
+          if (element.id === id) {
+            tmp = $scope.currentOrg;
+            $rootScope.currentOrg = element;
+            broadcastOrgChange()
+          }
+        });
       };
 
-      $scope.$on('newOrganization', function(event, args) {
+      $rootScope.$on('newOrganization', function(event, args) {
         var newOrg = args.newOrganization;
         $scope.orgz.push(newOrg);
       });
 
-      $scope.$on('updatedOrganization', function(event, args) {
+      $rootScope.$on('updatedOrganization', function(event, args) {
         var updatedOrg = args.updatedOrganization;
         $scope.orgz.forEach(function(element, index, array) {
           if (element.id === updatedOrg.id) array[index] = updatedOrg;
         });
-        if ($scope.currentOrg.id === updatedOrg.id) {
-          $scope.currentOrg = updatedOrg;
+        if ($rootScope.currentOrg.id === updatedOrg.id) {
+          $rootScope.currentOrg = updatedOrg;
         }
       });
 
-      $scope.$on('deletedOrganization', function(event, args) {
+      $rootScope.$on('deletedOrganization', function(event, args) {
         var deletedOrg = args.deletedOrganization;
         $scope.orgz.forEach(function(element, index, array) {
           if (element.id === deletedOrg) array.splice(index, 1);
         });
-        if ($scope.currentOrg.id === deletedOrg) {
-          $scope.currentOrg = $scope.orgz[0];
+        if ($rootScope.currentOrg.id === deletedOrg) {
+          $rootScope.currentOrg = $scope.orgz[0];
         }
       });
 

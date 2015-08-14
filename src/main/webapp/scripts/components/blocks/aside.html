@@ -21,8 +21,8 @@
             <span class="arrow top hidden-folded arrow-info"></span>
             <span> <b>Organizaciones</b> </span>
           </li>
-          <li ng-repeat="org in orgz">
-            <a ng-show="org.name !== currentOrg.name" > {{org.name}} </a>
+          <li ng-repeat="org in orgz" ng-click="onChange(org.id)">
+            <a ng-show="org.name !== currentOrg.name"> {{org.name}} </a>
           </li>
           <li class="divider"></li>
           <li>

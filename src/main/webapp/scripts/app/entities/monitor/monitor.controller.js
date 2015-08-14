@@ -2,13 +2,19 @@
  * Created by Franz on 23/07/2015.
  */
 angular.module('socialdumpApp.monitors')
-  .controller('MonitorCtrl',
-    function($scope, MonitorService, $modal) {
+  .controller('MonitorCtrl', ['$rootScope', '$scope',
+    'MonitorService', '$modal',
+    function($rootScope, $scope, MonitorService, $modal) {
       $scope.totalItems = 0;
       $scope.currentPage = 1;
       $scope.monitorContacts = [];
 
-      $scope.init = function() {
+      $rootScope
+        .$on('currentOrganizationChange', function(event, args) {
+          $scope.load();
+        });
+
+      $scope.load = function() {
         MonitorService.getAll($scope.currentPage, 8)
           .then(function(data) {
             $scope.monitorContacts = data;
@@ -46,15 +52,14 @@ angular.module('socialdumpApp.monitors')
       };
 
       function checkMonitorsCant() {
-        if($scope.monitorContacts.length === 0 && $scope.currentPage !== 1) {
+        if ($scope.monitorContacts.length === 0 && $scope.currentPage !== 1) {
           $scope.currentPage--;
           getMonitors();
-        } else if($scope.monitorContacts.length > 8) {
+        } else if ($scope.monitorContacts.length > 8) {
           $scope.currentPage++;
           getMonitors();
         }
       }
-      $scope.init();
 
       $scope.pageChanged = function() {
         getMonitors();
@@ -77,5 +82,6 @@ angular.module('socialdumpApp.monitors')
         return baseUrl + action + extension;
       }
 
-    });
+    }
+  ]);
 

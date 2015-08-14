@@ -5275,3 +5275,20 @@ span.arrow.top.hidden-folded.arrow-info {
 .bg-black a:hover {
     color: #F44336;
 }
+
+span.label.text-base.bg-dark.lter.pos-rlt.m-r.ng-binding {
+  color: #FFFFFF;
+  background-color: #757575;
+}
+
+.arrow.right.arrow-dark:after {
+    border-left-color: #757575;
+}
+
+i.glyphicon.glyphicon-align-justify {
+    color: #fff;
+}
+
+i.glyphicon.glyphicon-cog {
+    color: #fff;
+}

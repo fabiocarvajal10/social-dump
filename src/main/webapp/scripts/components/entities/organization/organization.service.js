@@ -27,7 +27,14 @@ angular.module('socialdumpApp')
           currOrgId = organization.id;
           $rootScope
             .$broadcast('newOrganization',
-              { 'newOrganization': organization });
+              {
+                'newOrganization':
+                {
+                  'id': organization.id,
+                  'name': organizationName
+                }
+              }
+            );
           q.resolve(organization);
         }).
         catch(function(error) {
@@ -132,7 +139,14 @@ angular.module('socialdumpApp')
         success(function(data) {
           $rootScope
             .$broadcast('updatedOrganization',
-              { 'updatedOrganization': organization });
+              {
+                'updatedOrganization':
+                  {
+                    'id': organization.id,
+                    'name': organization.name
+                  } 
+              }
+            );
           q.resolve(organization);
         }).
         catch(function(error) {
@@ -192,7 +206,7 @@ angular.module('socialdumpApp')
 
         return q.promise;
       },
-
+      /*
       setCurrentOrgId: function(organizationId) {
         localStorageService.set('orgId', organizationId);
       },
@@ -208,6 +222,6 @@ angular.module('socialdumpApp')
       getCurrentOrgId: function() {
         return parseInt(localStorageService.get('orgId'));
       }
-
+      */
      };
    });
