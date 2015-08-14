@@ -8,6 +8,7 @@ angular.module('socialdumpApp')
       $scope.orgz = [];
 
       function broadcastOrgChange() {
+        console.log('Broadcasting');
         $rootScope
           .$broadcast('currentOrganizationChange');
       }
