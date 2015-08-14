@@ -6,7 +6,7 @@
 angular.module('socialdumpApp.temporalAccess')
   .controller('TemporalAccessDetailCtrl',
     function($scope, TemporalAccessService, $modalInstance, MonitorService,
-        gridTA, gridRow) {
+        gridTA, gridRow, selectedEvent) {
 
       $scope.temporalAccess = {};
       $scope.monitorContacts = [];
@@ -30,6 +30,7 @@ angular.module('socialdumpApp.temporalAccess')
       };
 
       $scope.createTA = function() {
+        $scope.temporalAccess.eventId = selectedEvent.id;
         TemporalAccessService.register($scope.temporalAccess)
         .then(function(data) {
           gridTA.data.push(data);

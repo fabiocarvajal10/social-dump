@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -176,5 +177,25 @@ public class OrganizationResource {
 
     organizationRepository.delete(id);
     return ResponseEntity.ok().build();
+  }
+
+  /**
+   * GET  /organizations -> get the last 5 created organizations.
+   */
+  @RequestMapping(value = "/organizations/newest",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional(readOnly = true)
+  public ResponseEntity<List<OrganizationDTO>> getNewestOrganizations() throws URISyntaxException {
+
+
+    return new ResponseEntity<>(organizationRepository.findAllForCurrentUserOrderByCreatedAtDesc()
+              .stream()
+              .limit(5)
+              .map(organizationMapper::organizationToOrganizationDTO)
+              .collect(Collectors.toCollection(ArrayList::new)),
+              new HttpHeaders(),
+              HttpStatus.OK);
   }
 }

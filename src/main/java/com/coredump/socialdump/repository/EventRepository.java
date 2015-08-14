@@ -12,9 +12,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
+ * Repositorio de Eventos registrados por usuarios que serán utilizados como
+ * base para la obtención de Posts de las redes sociales.
  * Crado el 13/07/15.
  * @author Fabio
  * @author Esteban Trejos
+ * @author Francisco
+ * @see com.coredump.socialdump.domain.Event Eventos de usuarios
  */
 public interface EventRepository extends JpaRepository<Event, Long> {
   Page<Event> findAllByorganizationByOrganizationId(Pageable pageable,
@@ -58,15 +62,15 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Pageable pageable,
     @Param("orgId") Long orgId);
 
-  @Query(value =
-    "FROM Event e " +
-    "WHERE e.organizationByOrganizationId.id = :orgId " +
-    "  AND e.startDate >= :date " +
-    "  AND e.eventStatusByStatusId.id !=" +
-      "(SELECT s.id " +
-       "FROM EventStatus s " +
-       "WHERE s.status = 'Cancelado')" +
-       "ORDER BY e.startDate ASC")
+  @Query(
+    "FROM Event e "
+    + "WHERE e.organizationByOrganizationId.id = :orgId"
+    + "  AND e.startDate <= :date AND e.endDate >= :date"
+    + "  AND e.eventStatusByStatusId.id != ("
+    + "   SELECT s.id"
+    + "   FROM EventStatus s"
+    + "   WHERE s.status = 'Cancelado')"
+    + "   ORDER by e.startDate ASC")
   Page<Event> findIncomingEvents(Pageable pageable, @Param("orgId") Long orgId,
                                  @Param("date") DateTime date);
 

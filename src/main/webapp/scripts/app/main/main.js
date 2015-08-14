@@ -7,7 +7,7 @@ angular.module('socialdumpApp')
         parent: 'site',
         url: '/',
         data: {
-          roles: []
+          roles: ['ROLE_USER']
         },
         views: {
           'content@': {

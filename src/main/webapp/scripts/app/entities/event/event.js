@@ -66,7 +66,8 @@
           },
           views: {
             'detail-tab-content': {
-              templateUrl: 'scripts/app/entities/event/event-detail-summary.html'
+              templateUrl:
+                'scripts/app/entities/event/event-detail-summary.html'
             }
           }
         })

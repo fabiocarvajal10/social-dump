@@ -114,7 +114,7 @@ div.white-background {
 
 #nav-public{
 	color: #f8f8f8;
-	border-bottom-width: 4px;
+	border-bottom-width: 1.9px;
 	border-color:  #e74c3c;
 }
 
@@ -251,4 +251,5 @@ img.pull-left.thumb-sm.avatar.b-3x.m-r.post-profile {
 
 }
 
-/*Recordar hacer lista de reproduccion de cartas*/
+
+

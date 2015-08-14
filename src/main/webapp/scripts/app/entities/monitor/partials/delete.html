@@ -2,6 +2,11 @@
   <h4 class="modal-title m-n font-thin h3"> Confirmar eliminación </h4>
 </div>
 <div class="modal-body">
+  <div class="m-b" ng-show="errorMessage.length">
+    <span class="label text-base bg-danger pos-rlt m-r">
+      {{ errorMessage }}
+    </span>
+  </div>
   <p class="h5"> ¿Desea eliminar al contacto de monitoreo? </p>
   <div class="padder-v item wrapper">
     <p class="h3 text-info font-thin m-t-sm"> {{ monitorContact.firstName }} </p>

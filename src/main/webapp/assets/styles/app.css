@@ -3752,10 +3752,6 @@ fieldset[disabled] .i-checks input + i:before {
   background-color: #fff;
 }
 
-.bg-white-only {
-  background-color: #fff;
-}
-
 .bg-white-opacity {
   background-color: rgba(255, 255, 255, 0.5);
 }
@@ -5250,4 +5246,23 @@ a.text-#000000:hover {
 
 .app-footer.wrapper.b-t.bg-light.ng-scope {
   background-color: #fff;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #fff;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    background-color: transparent;
+    color: #E0E0E0;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #E0E0E0;
+    background-color: transparent;
+}
+
+
+.bg-white-only {
+  background-color: #757575; 
 }

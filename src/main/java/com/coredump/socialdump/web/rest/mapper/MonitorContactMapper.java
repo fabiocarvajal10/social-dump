@@ -21,7 +21,11 @@ public abstract class MonitorContactMapper {
 
   @Mapping(source = "organizationId", target = "organizationByOrganizationId")
   public abstract MonitorContact monitorContactDTOToMonitorContact(MonitorContactDTO
-      monitorContactDTO);
+        monitorContactDTO);
+
+  @Mapping(source = "organizationByOrganizationId.id", target = "organizationId")
+  public abstract MonitorContactDTO monitorContactToMonitorContactDTO(MonitorContact
+      monitorContact);
 
   public Organization organizationFromId(Long id) {
     if (id == null) {

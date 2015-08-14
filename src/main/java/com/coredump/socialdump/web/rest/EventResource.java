@@ -12,6 +12,7 @@ import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
+import com.coredump.socialdump.service.SearchCriteriaService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
@@ -40,6 +41,8 @@ import javax.validation.Valid;
 
 
 /**
+ * Controlador REST encargado de procesar las solicitudes provenientes de
+ * los consumidores del API.
  * Created by fabio on 13/07/15.
  * @author Esteban
  * @author Fabio
@@ -73,6 +76,13 @@ public class  EventResource{
    */
   @Inject
   private SocialNetworkPostRepository socialNetworkPostRepository;
+
+  /**
+  * Servicio que maneja lógica de obtención de criterios de búsqueda de la base
+  * de datos.
+  */
+  @Inject
+  private SearchCriteriaService searchCriteriaService;
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
@@ -141,8 +151,9 @@ public class  EventResource{
     Event event = eventMapper.eventDTOToEvent(eventDTO);
     event.setEventStatusByStatusId(eventStatusService.getActive());
 
-
     eventRepository.save(event);
+    event.setSearchCriteriasById(searchCriteriaService
+      .getSearchCriteriasFromStringList(event, eventDTO.getSearchCriterias()));
 
     eventService.scheduleFetch(event);
 
@@ -425,12 +436,12 @@ public class  EventResource{
   public ResponseEntity<?> stopAllSync(@RequestParam(value = "eventId") Long eventId) {
 
     Event event = eventRepository.findOne(eventId);
-    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
 
     if (event == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
     eventService.stopAllSync(event);
 
     return new ResponseEntity<>(HttpStatus.OK);
@@ -506,6 +517,51 @@ public class  EventResource{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
+  /**
+   * Cancel  /events/cancel -> cancel the event
+   */
+  @RequestMapping(value = "/events/cancel",
+      method = RequestMethod.POST,
+      produces = MediaType.TEXT_PLAIN_VALUE)
+  @Timed
+  public ResponseEntity<?> cancel(@RequestParam(value = "id") Long id) {
+
+    Event event = eventRepository.findOne(id);
+    DateTime now = new DateTime();
+
+    if (event == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    if (event.getEventStatusByStatusId().getId() == 2) {
+      return new ResponseEntity<>("The event is already inactive", HttpStatus.CONFLICT);
+    }
+
+    if (ValidatorUtil.isDateLower(event.getEndDate(), now)) {
+      return new ResponseEntity<>("The event already ended", HttpStatus.CONFLICT);
+    }
+
+    if (!ValidatorUtil.isDateLower(now, event.getStartDate())) {
+      return new ResponseEntity<>("Cant cancel a started event", HttpStatus.CONFLICT);
+    }
+
+    Organization organization = organizationService
+        .ownsOrganization(event.getOrganizationByOrganizationId().getId());
+
+    if (organization == null) {
+      return ResponseEntity.status(403).build();
+    }
+
+    if (validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+    eventService.cancelEvent(event);
+
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
 }

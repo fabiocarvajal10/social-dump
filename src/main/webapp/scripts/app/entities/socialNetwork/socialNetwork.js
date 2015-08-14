@@ -5,7 +5,7 @@
     .config(function($stateProvider) {
       $stateProvider
         .state('socialNetwork', {
-          parent: 'entity',
+          parent: 'home',
           url: '/socialNetworks',
           data: {
             roles: ['ROLE_USER', 'ROLE_ADMIN'],
@@ -22,7 +22,7 @@
           }
         })
         .state('socialNetwork.detail', {
-          parent: 'entity',
+          parent: 'home',
           url: '/socialNetwork/{id}',
           data: {
             roles: ['ROLE_USER', 'ROLE_ADMIN'],

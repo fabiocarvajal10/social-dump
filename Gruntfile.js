@@ -9,6 +9,8 @@ var parseVersionFromBuildGradle = function() {
     return versionRegex.exec(buildGradle)[1];
 };
 
+grunt.loadNpmTasks('grunt-gjslint');
+
 // usemin custom step
 var useminAutoprefixer = {
     name: 'autoprefixer',
@@ -107,9 +109,9 @@ module.exports = function (grunt) {
             },
             server: '.tmp'
         },
-        jshint: {
+        gjslint: {
             options: {
-                jshintrc: '.jshintrc'
+                gjslintrc: '.gjslintrc'
             },
             all: [
                 'Gruntfile.js',
@@ -118,6 +120,22 @@ module.exports = function (grunt) {
                 'src/main/webapp/scripts/components/**/*.js'
             ]
         },
+    	fixjsstyle: {
+    		options: {
+    			flags: [
+    				'--disable 220' //ignore error code 220 from gjslint 
+    			],
+    	  		reporter: {
+                    name: 'console'
+                }
+            },
+    		all: [
+            	'Gruntfile.js',
+            	'src/main/webapp/scripts/app.js',
+            	'src/main/webapp/scripts/app/**/*.js',
+            	'src/main/webapp/scripts/components/**/*.js'
+        	]
+    	},
         compass: {
             options: {
                 sassDir: 'src/main/scss',

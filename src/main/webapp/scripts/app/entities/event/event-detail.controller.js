@@ -3,10 +3,7 @@
 angular.module('socialdumpApp')
   .controller('EventDetailController', [
     '$scope', '$rootScope', '$stateParams', 'entity', 'Event', 'DateUtils',
-    // '$state', '$window',
     function($scope, $rootScope, $stateParams, entity, Event, DateUtils) {
-             // $state, $window) {
-      // var tabFactory = function(heading, uiSref, active, select) {
       var tabFactory = function(heading, uiSref) {
         return {
           heading: heading,
@@ -14,12 +11,22 @@ angular.module('socialdumpApp')
         };
       };
 
+      $scope.colors = [];
+      for (var color in $scope.app.color) {
+        if (!$scope.app.color.hasOwnProperty(color)) {
+          continue;
+        }
+        $scope.colors.push($scope.app.color[color]);
+      }
+
+      $scope.pieChartOptions = {
+        type: 'pie', height: 126, sliceColors: $scope.colors};
+
       $scope.event = entity;
       $scope.tabs = [];
       $scope.tabs.push(tabFactory('Reciente', 'event.detail.summary'));
       $scope.tabs.push(tabFactory('Detalles', 'event.detail.list'));
-      $scope.tabs.push(tabFactory('Posts', 'public-posts({id: ' +
-        $scope.event.id + '})'));
+      $scope.tabs.push(tabFactory('Posts', 'public-posts({id: event.id})'));
       $scope.defaultDateTimeFormat = DateUtils.defaultDateTimeFormat();
       $scope.load = function(id) {
         Event.getWithSummary({id: id}, function(result) {

@@ -11,10 +11,11 @@
       $scope.event = entity;
       $scope.hours = DateUtils.halfHoursOfTheDay24Format();
       $scope.event.postDelay = 60;
-
+      $scope.sameHashtag = true;
       $scope.todayMidnight = DateUtils.todayMidnight();
-
       $scope.minStartDate = DateUtils.todayMidnight();
+      $scope.socialNetworksDict = {};
+      $scope.event.searchCriterias = [];
 
       var initDateTime = function() {
         var today = DateUtils.toNextHalfHour(new Date());
@@ -38,8 +39,6 @@
 
       $scope.eventTypes = EventType.query();
 
-      $scope.socialNetworksDict = {};
-
       $scope.socialNetworks = SocialNetwork.query(function() {
         for (var i = 0; i < $scope.socialNetworks.length; i++) {
           $scope.socialNetworksDict[$scope.socialNetworks[i].id] =
@@ -58,16 +57,16 @@
       };
 
       var onSaveFinished = function(result) {
-        var searchCriteria = {
-          eventId: result.id,
-          searchCriteria: $scope.event.description
-        };
-        for (var i = 0; i < $scope.socialNetworks.length; i++) {
-          if (!!$scope.socialNetworks[i].selected) {
-            searchCriteria.socialNetworkId = $scope.socialNetworks[i].id;
-            SearchCriteria.save(searchCriteria);
-          }
-        }
+        // var searchCriteria = {
+        //   eventId: result.id,
+        //   searchCriteria: $scope.event.description
+        // };
+        // for (var i = 0; i < $scope.socialNetworks.length; i++) {
+        //   if (!!$scope.socialNetworks[i].selected) {
+        //     searchCriteria.socialNetworkId = $scope.socialNetworks[i].id;
+        //     SearchCriteria.save(searchCriteria);
+        //   }
+        // }
         $scope.$emit('socialdumpApp:eventUpdate', result);
         $modalInstance.close(result);
       };

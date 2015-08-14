@@ -57,7 +57,7 @@
 
       /**
       * Añade media hora a una fecha
-      * @param date Objeto Javascript fecha
+      * @param {Date} date Objeto Javascript fecha
       */
       this.toNextHalfHour = function(date) {
         if (!date) {
@@ -73,7 +73,7 @@
 
       /**
       * Devuelve una fecha en texto, formato de 24 horas
-      * @param date Objeto Javascript fecha
+      * @param {Date} date Objeto Javascript fecha
       */
       this.toHourMinutesString = function(date) {
         if (!date) {
@@ -84,7 +84,8 @@
 
       /**
       * Devuelve las horas de una cadena de texto.
-      * @param timeString tiempo en formato texto. Solo tiempo, no incluye días.
+      * @param {String} timeString tiempo en formato texto. Solo tiempo, no
+      *   incluye días.
       */
       this.hoursOfString = function(timeString) {
         if (!timeString) {
@@ -95,7 +96,8 @@
 
       /**
       * Devuelve los minutos de una cadena de texto.
-      * @param timeString tiempo en formato texto. Solo tiempo, no incluye días.
+      * @param {String} timeString tiempo en formato texto. Solo tiempo, no
+      *   incluye días.
       */
       this.minutesOfString = function(timeString) {
         if (!timeString) {
@@ -106,7 +108,8 @@
 
       /**
       * Determina si una fecha termina en una media hora exacta.
-      * @param timeString tiempo en formato texto. Solo tiempo, no incluye días.
+      * @param {String} timeString tiempo en formato texto. Solo tiempo, no
+      *   incluye días.
       */
       this.isExactHalfHour = function(timeString) {
         if (!timeString) {
@@ -121,7 +124,7 @@
 
       /**
       * Obtiene la siguiente media hora más cercana.
-      * @param date Objeto fecha.
+      * @param {Date} date Objeto fecha.
       */
       this.nextHalfHour = function(date) {
         if (!date) {
@@ -145,6 +148,11 @@
         today.setSeconds(0);
         today.setMilliseconds(0);
         return today;
+      };
+
+      this.isDateLowerThanNow = function(date) {
+        var now = new Date().toISOString();
+        return date < now;
       };
     });
 }());

@@ -10,24 +10,23 @@
          <i class="icon-pie-chart"></i>
       </span>
       <div class="text-center wrapper m-b-sm">
-        <div ui-refresh="data" ui-jq="sparkline" ui-options="
-        {{::event.summary.snSummariesTotal}},
-        {
-          type:'pie',
-          height:126,
-          sliceColors:['#7266ba','#23b7e5','#fad733']
-        }
-        " class="sparkline inline"></div>
+        <div ui-refresh="data" ui-jq="sparkline"
+             ui-options="{{::event.summary.snSummariesTotal}}, {{::pieChartOptions}}"
+             class="sparkline inline"></div>
       </div>
       <ul class="list-group no-radius">
         <li class="list-group-item"
             ng-repeat="snSummary in event.summary.snSummaries track by $index">
-          <span class="pull-right">{{::snSummary.total}}</span>
-          <span class="label bg-primary">{{::$index + 1}}</span>
-          {{::snSummary.socialNetworkName}}
+          <strong class="pull-right">{{::snSummary.total}}</strong>
+          <span class="label" ng-style="{'background-color': colors[$index]}">
+            {{::$index + 1}}
+          </span>&nbsp;
+          <span>
+            {{::snSummary.socialNetworkName}}
+          </span>
         </li>
         <li class="list-group-item">
-          <span class="pull-right">{{::event.summary.grandTotal}}</span>
+          <strong class="pull-right">{{::event.summary.grandTotal}}</strong>
           En total
         </li>
       </ul>

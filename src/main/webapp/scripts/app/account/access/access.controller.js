@@ -7,12 +7,14 @@ angular.module('socialdumpApp.access')
   .controller('AccessController', function($rootScope, $scope, $state,
       AuthServerProvider, $location) {
     $scope.id = 0;
+    $scope.event = 0;
     $scope.user = {};
     $scope.errors = {};
     $scope.errorMessage = '';
 
     $scope.init = function() {
       $scope.id = $location.search().key;
+      $scope.event = $location.search().id;
     };
 
     $scope.login = function(event) {
@@ -23,8 +25,7 @@ angular.module('socialdumpApp.access')
         password: $scope.password
       }).then(function() {
         $scope.authenticationError = false;
-        //ToDo Pantalla monitor
-        $state.go('home');
+        $state.go('monitor-screen', {'id': $scope.event});
       }).catch (function(error) {
         $scope.authenticationError = true;
         $scope.errorMessage = error;

@@ -9,17 +9,22 @@
         {{ errorMessage }}
       </div>
       <div class="list-group list-group-sm">
-        <div class="list-group-item">
-          <input type="text" placeholder="Correo Electrónico" class="form-control no-border"
-                 name="username" ng-model="username" required>
+        <div class="list-group-item white-background">
+          <input type="email" class="form-control no-border" name="email" placeholder="Correo electrónico"
+                 ng-model="username" ng-maxlength="100" required>
         </div>
-        <div class="has-error" ng-messages="loginForm.username.$error"
-             ng-show="loginForm.username.$touched">
+        <div class="has-error" ng-messages="loginForm.email.$error" ng-show="loginForm.email.$touched">
           <label class="control-label" ng-message="required">
             Debe ingresar un correo electrónico
           </label>
+          <label class="control-label" ng-message="email">
+            El correo electrónico ingresado no es válido
+          </label>
+          <label class="control-label" ng-message="minlength">
+            El correo electrónico debe tener como mínimo 100 carácteres
+          </label>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="password" placeholder="Contraseña" class="form-control no-border"
                  name="password" ng-model="password" required>
         </div>

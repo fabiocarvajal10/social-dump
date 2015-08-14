@@ -1,22 +1,24 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.EventStatus;
 import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
+import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.GenericStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
-import com.coredump.socialdump.repository.SocialNetworkRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 /**
  * Service class for managing Events.
@@ -34,15 +36,21 @@ public class EventService {
   private SearchCriteriaRepository searchCriteriaRepository;
 
   @Inject
-  private SocialNetworkRepository socialNetworkRepository;
-
-  @Inject
   private GenericStatusRepository genericStatusRepository;
 
   @Inject
   private FetchExecutorService fetchExecutorService;
 
-  public List<String>  getSearchCriterias(Event event) {
+  @Inject
+  private TemporalAccessService temporalAccessService;
+
+  @Inject
+  private EventStatusRepository statusRepository;
+
+  @Inject
+  private SearchCriteriaService searchCriteriaService;
+
+  public List<String> getSearchCriterias(Event event) {
     return  searchCriteriaRepository.findAllByEventByEventId(event)
           .stream()
           .map(SearchCriteria::getSearchCriteria)
@@ -51,10 +59,8 @@ public class EventService {
 
 
   public void scheduleFetch(Event event) {
-    // insertScTest(event);
     log.info("Preparing fetch of hashtags");
     event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
-    //event.getSearchCriteriasById();
     fetchExecutorService.scheduleFetch(event);
   }
 
@@ -89,28 +95,17 @@ public class EventService {
     eventRepository.save(event);
   }
 
-  //Temporal
-  private void insertScTest(Event event) {
-    SearchCriteria sc = new SearchCriteria();
-    sc.setEventByEventId(event);
-    sc.setSearchCriteria(event.getDescription());
-    sc.setSocialNetworkBySocialNetworkId(socialNetworkRepository.getOne(1));
-    sc.setGenericStatusByStatusId(genericStatusRepository.getOne((short) 1));
-    searchCriteriaRepository.save(sc);
+  public void cancelEvent(Event event) {
 
-    SearchCriteria sc2 = new SearchCriteria();
-    sc2.setEventByEventId(event);
-    sc2.setSearchCriteria(event.getDescription());
-    sc2.setSocialNetworkBySocialNetworkId(socialNetworkRepository.getOne(2));
-    sc2.setGenericStatusByStatusId(genericStatusRepository.getOne((short) 1));
-    searchCriteriaRepository.save(sc2);
+    EventStatus status = statusRepository.findOneByStatus("Cancelado");
+    event.setEventStatusByStatusId(status);
 
-    SearchCriteria sc3 = new SearchCriteria();
-    sc2.setEventByEventId(event);
-    sc2.setSearchCriteria(event.getDescription());
-    sc2.setSocialNetworkBySocialNetworkId(socialNetworkRepository.getOne(3));
-    sc2.setGenericStatusByStatusId(genericStatusRepository.getOne((short) 1));
-    searchCriteriaRepository.save(sc2);
+
+    searchCriteriaService.inactivateAll(event);
+    temporalAccessService.deleteTemporalAccesses(event);
+
+
+    eventRepository.save(event);
   }
 
 }

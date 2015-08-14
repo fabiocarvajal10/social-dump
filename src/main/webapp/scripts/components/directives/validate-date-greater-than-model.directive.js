@@ -2,6 +2,8 @@
 * Validación de campos tipo fecha.
 * Se valida que sea menor que un modelo dado.
 * El modelo debe ser parte del Scope.
+* @param {String} validateDateGreaterThanModel nombre del modelo al cual debe
+*   ser mayor.
 * @author Esteban
 */
 (function() {
@@ -14,16 +16,14 @@
           require: 'ngModel',
           link: function(scope, ele, attrs, ctrl) {
             var callback = function() {
-              var sourceModel = ObjectUtils.propertyOfNestedSequence(scope,
-                attrs.ngModel);
+              ctrl.$validate();
+              ctrl.$setDirty();
+            };
+
+            ctrl.$validators.dateGreaterThanModel = function() {
               var comparison = ObjectUtils.propertyOfNestedSequence(scope,
                 attrs.validateDateGreaterThanModel);
-              if (sourceModel > comparison) {
-                ctrl.$setValidity('dateGreaterThanModel', true);
-              } else {
-                ctrl.$setValidity('dateGreaterThanModel', false);
-                ctrl.$setDirty();
-              }
+              return ctrl.$$rawModelValue > comparison;
             };
 
             scope.$watch(attrs.ngModel, callback);

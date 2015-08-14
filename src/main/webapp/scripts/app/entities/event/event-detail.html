@@ -10,8 +10,8 @@
   </div>
 
   <tabset justified="true">
-    <tab ng-repeat="tab in tabs" heading="{{tab.heading}}"
-         ng-attr-ui-sref="{{tab.uiSref}}">
+    <tab ng-repeat="tab in tabs" heading="{{::tab.heading}}"
+         ng-attr-ui-sref="{{::tab.uiSref}}">
       <div ui-view="detail-tab-content"></div>
     </tab>
   </tabset>

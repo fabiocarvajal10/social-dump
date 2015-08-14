@@ -8,6 +8,9 @@
   angular.module('socialdumpApp')
     .service('EventStatusUI', function() {
 
+      /**
+      * Sufijos de clases CSS de Bootstrap correspondientes a un estado.
+      */
       var bootstrapClassSuffixes = {
         'Activo': 'success',
         'Cancelado': 'error',
