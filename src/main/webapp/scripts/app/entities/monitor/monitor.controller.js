@@ -11,18 +11,11 @@ angular.module('socialdumpApp.monitors')
 
       $rootScope
         .$on('currentOrganizationChange', function(event, args) {
-          $scope.load();
+          getMonitors();
         });
 
-      $scope.load = function() {
-        MonitorService.getAll($scope.currentPage, 8)
-          .then(function(data) {
-            $scope.monitorContacts = data;
-            $scope.totalItems = data.total;
-          })
-          .catch(function() {
-
-          });
+      $scope.init = function() {
+        getMonitors();
       };
 
       $scope.open = function(monitorContact, index, action) {
@@ -66,21 +59,27 @@ angular.module('socialdumpApp.monitors')
       };
 
       function getMonitors() {
-        MonitorService.getAll($scope.currentPage, 8)
-          .then(function(data) {
-            $scope.monitorContacts.splice(0, $scope.monitorContacts.length);
-            $scope.monitorContacts = data;
-            $scope.totalItems = data.total;
-          })
-          .catch(function() {
+        if (!isNaN(OrganizationService.getCurrentOrgId())) {
+          MonitorService.getAll($scope.currentPage, 8)
+            .then(function(data) {
+              $scope.monitorContacts = data;
+              $scope.totalItems = data.total;
+            })
+            .catch(function() {
 
-          });
-      }
+            });
+        }
+      };
+
+      $scope.checkMonitorOrg = function() {
+        return isNaN(OrganizationService.getCurrentOrgId());
+      };
+
       function getModalUrl(action) {
         var baseUrl = 'scripts/app/entities/monitor/partials/';
         var extension = '.html';
         return baseUrl + action + extension;
-      }
+      };
 
     }
   ]);

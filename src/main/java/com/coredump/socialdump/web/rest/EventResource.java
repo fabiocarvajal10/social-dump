@@ -476,4 +476,50 @@ public class  EventResource{
     eventService.delayAll(event, delay);
     return new ResponseEntity<>(HttpStatus.OK);
   }
+
+  /**
+   * Cancel  /events/cancel -> cancel the event
+   */
+  @RequestMapping(value = "/events/cancel",
+      method = RequestMethod.POST,
+      produces = MediaType.TEXT_PLAIN_VALUE)
+  @Timed
+  public ResponseEntity<?> cancel(@RequestParam(value = "id") Long id) {
+
+    Event event = eventRepository.findOne(id);
+    DateTime now = new DateTime();
+
+    if (event == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    if (event.getEventStatusByStatusId().getId() == 2) {
+      return new ResponseEntity<>("The event is already inactive", HttpStatus.CONFLICT);
+    }
+
+    if (ValidatorUtil.isDateLower(event.getEndDate(), now)) {
+      return new ResponseEntity<>("The event already ended", HttpStatus.CONFLICT);
+    }
+
+    if (!ValidatorUtil.isDateLower(now, event.getStartDate())) {
+      return new ResponseEntity<>("Cant cancel a started event", HttpStatus.CONFLICT);
+    }
+
+    Organization organization = organizationService
+        .ownsOrganization(event.getOrganizationByOrganizationId().getId());
+
+    if (organization == null) {
+      return ResponseEntity.status(403).build();
+    }
+
+    if (validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+    eventService.cancelEvent(event);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
 }

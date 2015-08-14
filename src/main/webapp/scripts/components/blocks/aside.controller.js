@@ -16,7 +16,7 @@ angular.module('socialdumpApp')
         OrganizationService.getAll(null, 15).then(function(data) {
           $scope.orgz = data;
           $rootScope.currentOrg = data[0];
-          broadcastOrgChange()
+          broadcastOrgChange();
         });
       };
 
@@ -26,7 +26,7 @@ angular.module('socialdumpApp')
           if (element.id === id) {
             tmp = $scope.currentOrg;
             $rootScope.currentOrg = element;
-            broadcastOrgChange()
+            broadcastOrgChange();
           }
         });
       };
