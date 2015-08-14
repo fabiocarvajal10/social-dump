@@ -10,22 +10,6 @@
                ParseLinks, OrganizationService, DateUtils) {
         $scope.defaultDateTimeFormat = DateUtils.defaultDateTimeFormat();
         var dateTimeFormat = 'date: \'' + $scope.defaultDateTimeFormat + '\'';
-        var buttonsTemplate =
-          '<button type="submit"' +
-          '    ui-sref="event.detail({id:id})"' +
-          '    class="btn btn-info btn-sm">' +
-          '  <span class="glyphicon glyphicon-eye-open"></span>' +
-          '</button>' +
-          '<button type="submit"' +
-          '    ui-sref="event.edit({id:id})"' +
-          '    class="btn btn-primary btn-sm">' +
-          '  <span class="glyphicon glyphicon-pencil"></span>' +
-          '</button>' +
-          '<button type="submit"' +
-          '    ng-click="delete(id)"' +
-          '    class="btn btn-danger btn-sm">' +
-          '  <span class="glyphicon glyphicon-remove-circle"></span>' +
-          '</button>';
         $scope.events = [];
         $scope.page = 1;
         $scope.loadAll = function() {
@@ -79,60 +63,45 @@
         };
 
         $scope.gridOptions = {
-          // rowHeight: 36,
           enableColumnResizing: true,
           width: '*',
           data: $scope.events,
           columnDefs: [
             {
-              // cellClass: 'col-sm-2',
               field: 'id',
               displayName: 'ID',
               visible: false
             },
             {
-              // cellClass: 'col-sm-2',
               field: 'description',
               displayName: 'Descripción'
             },
             {
-              // cellClass: 'col-sm-2',
               field: 'startDate',
               displayName: 'Comienza',
               cellFilter: dateTimeFormat
             },
             {
-              // cellClass: 'col-sm-2',
               field: 'endDate',
               displayName: 'Termina',
               cellFilter: dateTimeFormat
             },
-            // {
-            //   // cellClass: 'col-sm-2',
-            //   field: 'activatedAt',
-            //   displayName: 'Activado el',
-            //   cellFilter: dateTimeFormat
-            // },
             {
-              // cellClass: 'col-sm-1',
               field: 'status.status',
               displayName: 'Estado'
             },
             {
-              // cellClass: 'col-sm-1',
               field: 'type.name',
               displayName: 'Tipo'
             },
             {
-              // cellClass: 'col-sm-2',
-              // field: 'icons',
               name: 'icons',
               displayName: '',
               enableHiding: false,
               enableSorting: false,
-              // width: 80,
-              cellTemplate: '<button type="submit"' +
-                '    ui-sref="event.detail({id:row.entity[\'id\']})"' +
+              cellTemplate:
+                '<button type="submit"' +
+                '    ui-sref="event.detail.summary({id:row.entity[\'id\']})"' +
                 '    class="btn btn-info btn-sm">' +
                 '  <span class="glyphicon glyphicon-eye-open"></span>' +
                 '</button>' +

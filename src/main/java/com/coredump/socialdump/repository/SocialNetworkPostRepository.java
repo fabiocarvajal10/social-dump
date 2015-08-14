@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Repositorio JPA de posts de redes sociales.
- * Especificación para la implementación generada por Spring.
+ * Especificación para la implementación dinámica generada por Spring.
  * @author Esteban
  * @author Fabio
  */
@@ -42,12 +42,12 @@ public interface SocialNetworkPostRepository extends
    * @return todos los Posts
    */
   @Query(value =
-    "Select p.socialNetworkBySocialNetworkId " +
-    "From SocialNetworkPost p " +
-    "Where p.eventByEventId.id in " +
-      "(Select e.id " +
-       "From Event e " +
-      "Where e.organizationByOrganizationId.id = :orgId)")
+    "SELECT p.socialNetworkBySocialNetworkId " +
+    "FROM SocialNetworkPost p " +
+    "WHERE p.eventByEventId.id IN " +
+    "  (SELECT e.id " +
+    "   FROM Event e " +
+    "   WHERE e.organizationByOrganizationId.id = :orgId)")
   List<SocialNetwork> findPostsSocialNetworkIdsByOrg(@Param("orgId") Long orgId);
 
   /**
@@ -57,12 +57,13 @@ public interface SocialNetworkPostRepository extends
    */
   @Query(value =
     "SELECT "
-      + "new com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO("
-      + "s.eventByEventId.id, s.socialNetworkBySocialNetworkId.id,"
-      + "COUNT(*)) "
+    + "  new com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO("
+    + "  s.eventByEventId.id, s.socialNetworkBySocialNetworkId.id,"
+    + "  s.socialNetworkBySocialNetworkId.name, COUNT(*)) "
     + "FROM SocialNetworkPost s "
     + "WHERE s.eventByEventId.id = :eventId "
-    + "GROUP BY s.socialNetworkBySocialNetworkId.id "
+    + "GROUP BY s.socialNetworkBySocialNetworkId.id,"
+    + "         s.socialNetworkBySocialNetworkId.name "
     + "ORDER BY s.socialNetworkBySocialNetworkId.id")
   List<EventSocialNetworkSummaryDTO> getSummariesOfEventGroupBySocialNetwork(
     @Param("eventId") long eventId);

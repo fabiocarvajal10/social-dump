@@ -25,9 +25,12 @@ import javax.inject.Inject;
 
 /**
  * Recolector de Posts de Facebook.
+ * @author Esteban
+ * El API de Facebook fue cerrado para buscar por Posts.
  */
 @Service("facebook")
 @Scope("prototype")
+@Deprecated
 public class FacebookFetch extends SocialNetworkFetch {
 
   /**

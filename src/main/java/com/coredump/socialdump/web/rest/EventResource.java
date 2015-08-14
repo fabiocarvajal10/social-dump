@@ -485,11 +485,11 @@ public class  EventResource{
   }
 
   /**
-   * GET  /events/{id}/summary -> gets the summary of an event.
+   * GET  /events/{id}/sn-summary -> gets the summary of an event.
    * @param id Id del evento
    * @return summary of an event
    */
-  @RequestMapping(value = "/events/{id}/summary",
+  @RequestMapping(value = "/events/{id}/sn-summary",
     method = RequestMethod.GET,
     produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed

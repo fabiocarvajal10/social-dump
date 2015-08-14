@@ -11,9 +11,11 @@
       $scope.event = entity;
       $scope.hours = DateUtils.halfHoursOfTheDay24Format();
       $scope.event.postDelay = 60;
-      $scope.Date = function(date) {
-        return new Date(date);
-      };
+
+      $scope.todayMidnight = DateUtils.todayMidnight();
+
+      $scope.minStartDate = DateUtils.todayMidnight();
+
       var initDateTime = function() {
         var today = DateUtils.toNextHalfHour(new Date());
         $scope.event.startDate = today;
@@ -39,10 +41,10 @@
       $scope.socialNetworksDict = {};
 
       $scope.socialNetworks = SocialNetwork.query(function() {
-        console.log(JSON.stringify($scope.socialNetworks));
         for (var i = 0; i < $scope.socialNetworks.length; i++) {
-          $scope.socialNetworksDict[$scope.socialNetworks[i].name] =
+          $scope.socialNetworksDict[$scope.socialNetworks[i].id] =
             $scope.socialNetworks[i];
+          $scope.socialNetworks[i].selected = true;
           SocialNetworkIcon.iconForSocialNetwork($scope.socialNetworks[i]);
         }
       });
@@ -50,14 +52,15 @@
       $scope.load = function(id) {
         Event.get({id: id}, function(result) {
           $scope.event = result;
+          $scope.minStartDate = ($scope.event.status.status === 'Pendiente') ?
+            $scope.todayMidnight : null;
         });
       };
 
-      var onSaveFinished = function(result) { // TODO
+      var onSaveFinished = function(result) {
         var searchCriteria = {
           eventId: result.id,
-          statusId: 1,
-          searchCriteria: $scope.hashtag
+          searchCriteria: $scope.event.description
         };
         for (var i = 0; i < $scope.socialNetworks.length; i++) {
           if (!!$scope.socialNetworks[i].selected) {

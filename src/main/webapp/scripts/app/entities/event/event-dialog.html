@@ -4,12 +4,14 @@
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
         ng-click="clear()">&times;</button>
-    <h4 class="modal-title" id="myEventLabel" ng-switch="!!event.id">
-      <span ng-switch-when="false">Crear un</span>
-      <span ng-switch-when="true">Modificar el</span>
-      Evento
+    <h4 class="modal-title" id="myEventLabel">
+      <span ng-if="!event.id">Crear un</span>
+      <span ng-if="!!event.id">Modificar el</span>
+      evento
     </h4>
   </div>
+
+
   <div class="modal-body">
     <div class="form-group hide">
       <label>ID</label>
@@ -17,40 +19,44 @@
           ng-model="event.id" readonly>
     </div>
 
-    <div ng-show="!event.id">
-      <div class="form-group">
-        <label for="field_hashtag"># Hashtag</label>
-        <input type="text" class="form-control" name="hashtag" id="field_hashtag"
-            ng-model="event.hashtag" ng-required="!event.id">
-        <div ng-show="(editForm.$submitted || editForm.hashtag.$touched) && editForm.hashtag.$invalid">
-          <p class="help-block"
-            ng-show="editForm.hashtag.$error.required">
-            Este campo es requerido.
-          </p>
-        </div>
-      </div>
+    <div class="form-group">
+      <label for="field_description"># Hashtag</label>
+      <input type="text" class="form-control" name="description" id="field_description"
+          ng-model="event.description" required>
 
-      <div class="form-group">
-        <p>Redes sociales</p>
-        <label class="pointer rel" for="{{socialNetwork.name}}"
-               ng-repeat="socialNetwork in socialNetworks">
-          <div ng-bind-html="socialNetwork.icon"></div>
-          <input type="checkbox" name="{{socialNetwork.name}}"
-                 id="{{socialNetwork.name}}" class="hide"
-                 ng-model="socialNetworksDict[socialNetwork.name].selected"
-                 checked="checked" />
-          <div class="icon-block-overlay"
-               ng-show="!!(socialNetworksDict[socialNetwork.name].selected)"></div>
-        </label>
+      <div ng-show="(editForm.$submitted || editForm.description.$touched) && editForm.description.$invalid">
+        <p class="help-block"
+          ng-show="editForm.description.$error.required">
+          Este campo es requerido.
+        </p>
       </div>
+    </div>
+
+    <div class="form-group" ng-if="!event.id">
+      <p>Redes sociales</p>
+      <label class="pointer rel" for="{{::socialNetwork.name}}"
+             ng-repeat="socialNetwork in socialNetworks"
+             tooltip="{{::socialNetwork.name}}">
+        <div ng-bind-html="socialNetwork.icon"></div>
+        <input type="checkbox" name="{{::socialNetwork.name}}"
+               id="{{::socialNetwork.name}}" class="hide"
+               ng-model="socialNetworksDict[socialNetwork.id].selected" />
+        <div class="icon-block-overlay"
+             ng-show="!(socialNetworksDict[socialNetwork.id].selected)"></div>
+      </label>
     </div>
 
     <div class="form-group">
       <label for="field_startDate">Comienza</label>
       <div class="row">
         <div class="col-lg-6">
-        <input type="date" class="form-control" name="startDate" id="field_startDate"
-            ng-model="event.startDate" required>
+          <input ui-date class="form-control" name="startDate"
+                 id="field_startDate"
+                 ng-attr-validate-date-greater-than="{{minStartDate.toUTCString() || undefined}}"
+                 ng-model="event.startDate"
+                 ng-enabled="!!minStartDate"
+                 ng-change="validateDates()"
+                 required>
         </div>
 
         <div class="col-lg-6">
@@ -59,13 +65,19 @@
                   ng-options="hour as hour for hour in hours"
                   ng-change="changeStartTime(event.startTime)">
           </select>
-        </div>`
+        </div>
       </div>
 
       <div ng-show="(editForm.$submitted || editForm.startDate.$touched) && editForm.startDate.$invalid">
         <p class="help-block"
           ng-show="editForm.startDate.$error.required">
           Este campo es requerido.
+        </p>
+        <p class="help-block"
+          ng-show="editForm.startDate.$error.dateGreaterThan">
+          <p ng-if="!event.id">
+            No se permite la creación de eventos anteriores a la fecha actual.
+          </p>
         </p>
       </div>
     </div>
@@ -76,14 +88,14 @@
       <div class="row">
 
         <div class="col-lg-6">
-          <input type="date" class="form-control" name="endDate" id="field_endDate"
+          <input ui-date class="form-control" name="endDate" id="field_endDate"
               ng-model="event.endDate"
-              ensure-date-greater-than="{{event.startDate.toUTCString()}}"
+              validate-date-greater-than-model="event.startDate"
               required>
         </div>
         <div class="col-lg-6">
-          <select class="form-control digital-font" id="field_endTime"selectedTemplate
-                  name="field_endTime" ng-model="event.endTime"
+          <select class="form-control digital-font" id="field_endTime"
+                  name="endTime" ng-model="event.endTime"
                   ng-options="hour as hour for hour in hours"
                   ng-change="changeEndTime(event.endTime)">
           </select>
@@ -97,22 +109,12 @@
           Este campo es requerido.
         </p>
         <p class="help-block"
-          ng-show="editForm.endDate.$error.dateGreaterThan">
-          El evento no puede terminar antes de que empiece.
+          ng-show="editForm.endDate.$error.dateGreaterThanModel">
+          El evento debe terminar después de que inicie.
         </p>
-      </div>
-    </div>
-
-
-    <div class="form-group">
-      <label for="field_description">Descripción</label>
-      <input type="text" class="form-control" name="description" id="field_description"
-          ng-model="event.description" required>
-
-      <div ng-show="(editForm.$submitted || editForm.description.$touched) && editForm.description.$invalid">
         <p class="help-block"
-          ng-show="editForm.description.$error.required">
-          Este campo es requerido.
+          ng-show="editForm.endDate.$error.dateGreaterThanValue">
+          El evento debe terminar después de la fecha y hora actual.
         </p>
       </div>
     </div>
@@ -135,9 +137,11 @@
 
 
     <div class="form-group">
-      <label for="field_postDelay">Segundos de obtener para obtener Posts</label>
-      <input type="number" class="form-control" name="postDelay" id="field_postDelay"
-          ng-model="event.postDelay" required>
+      <label for="field_postDelay">Segundos de demora para obtener para obtener Posts</label>
+      <input type="number" class="form-control"
+             name="postDelay" id="field_postDelay"
+             min="20" max="180"
+             ng-model="event.postDelay" required>
 
       <div ng-show="(editForm.$submitted || editForm.postDelay.$touched) && editForm.postDelay.$invalid">
         <p class="help-block"
@@ -148,6 +152,23 @@
           ng-show="editForm.postDelay.$error.number">
           Este campo solo acepta números.
         </p>
+        <p class="help-block"
+          ng-show="editForm.postDelay.$error.min">
+          El mínimo son 20 segundos.
+        </p>
+        <p class="help-block"
+          ng-show="editForm.postDelay.$error.max">
+          El máximo son 180 segundos.
+        </p>
+      </div>
+
+      <div class="form-group" ng-show="!event.id">
+        <div class="checkbox">
+          <label class="i-checks">
+            <input type="checkbox" name="activate" ng-model="event.activate">
+            <i></i>Activar ahora mismo
+          </label>
+        </div>
       </div>
     </div>
   </div>

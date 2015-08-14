@@ -14,7 +14,7 @@
           views: {
             'content@': {
               templateUrl:
-                'scripts/app/entities/eventStatus/eventStatuses.html',
+                'scripts/app/entities/event-status/event-statuses.html',
               controller: 'EventStatusController'
             }
           },
@@ -31,7 +31,7 @@
           views: {
             'content@': {
               templateUrl:
-                'scripts/app/entities/eventStatus/eventStatus-detail.html',
+                'scripts/app/entities/event-status/eventStatus-detail.html',
               controller: 'EventStatusDetailController'
             }
           },
