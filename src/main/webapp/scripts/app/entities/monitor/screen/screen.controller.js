@@ -158,8 +158,6 @@
 
         var toasterClickHandler = function(restoreCard) {
             $scope.deleting = false;
-            console.log('restoring')
-            console.log(restoreCard)
             $scope.cards.unshift(restoreCard);
             toaster.clear();
           };

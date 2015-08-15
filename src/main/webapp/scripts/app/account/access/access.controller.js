@@ -26,7 +26,7 @@ angular.module('socialdumpApp.access')
       }).then(function() {
         $scope.authenticationError = false;
         $state.go('monitor-screen', {'id': $scope.event});
-      }).catch (function(error) {
+      }).catch(function(error) {
         $scope.authenticationError = true;
         $scope.errorMessage = error;
       });
