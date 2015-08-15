@@ -1,0 +1,26 @@
+<ul class="list-group panel">
+  <li class="list-group-item row">
+    <strong class="col col-xs-3">Empieza: </strong>
+    <span class="col col-xs-9">{{::event.startDate | date: defaultDateTimeFormat}}</span>
+  </li>
+  <li class="list-group-item row">
+    <strong class="col col-xs-3">Termina: </strong>
+    <span class="col col-xs-9">{{::event.endDate | date: defaultDateTimeFormat}}</span>
+  </li>
+  <li class="list-group-item row" ng-show="!!event.activatedAt">
+    <strong class="col col-xs-3">Activo desde: </strong>
+    <span class="col col-xs-9">{{::event.activatedAt | date: defaultDateTimeFormat}} </pan>
+  </li>
+  <li class="list-group-item row">
+    <strong class="col col-xs-3">Estado: </strong>
+    <span class="col col-xs-9">{{::event.status.status}}</span>
+  </li>
+  <li class="list-group-item row">
+    <strong class="col col-xs-3">Tipo: </strong>
+    <span class="col col-xs-9">{{::event.type.name}} </span>
+  </li>
+  <li class="list-group-item row">
+    <strong class="col col-xs-3">Demora para obtener Posts: </strong>
+    <span class="col col-xs-9" tooltip="Segundos">{{::event.postDelay}}</span>
+  </li>
+</ul>

@@ -12,7 +12,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * Created by fabio on 13/07/15.
+ * Repositorio de Eventos registrados por usuarios que serán utilizados como
+ * base para la obtención de Posts de las redes sociales.
+ * Crado el 13/07/15.
+ * @author Fabio
+ * @author Esteban Trejos
+ * @author Francisco
+ * @see com.coredump.socialdump.domain.Event Eventos de usuarios
  */
 public interface EventRepository extends JpaRepository<Event, Long> {
   Page<Event> findAllByorganizationByOrganizationId(Pageable pageable,
@@ -41,19 +47,43 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    * Devuelve todas los eventos de una organización, ordenado por fecha de
    * inicio de manera descendiente, sin incluir eventos cancelados.
    * @param pageable objeto paginable que indica la paginación deseada
-   * @param organization organización
+   * @param orgId organización
    * @return objeto página con eventos
    */
-  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate desc")
+  @Query(value =
+    "FROM Event e " +
+    "WHERE e.organizationByOrganizationId.id = :orgId " +
+    "  and e.eventStatusByStatusId.id !=" +
+      "(SELECT s.id " +
+       "FROM EventStatus s " +
+       "WHERE s.status = 'Cancelado')" +
+       "ORDER BY e.startDate DESC")
   Page<Event> findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
     Pageable pageable,
     @Param("orgId") Long orgId);
 
-  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.startDate <= :date and e.endDate >= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate asc")
+  @Query(
+    "FROM Event e "
+    + "WHERE e.organizationByOrganizationId.id = :orgId"
+    + "  AND e.startDate <= :date AND e.endDate >= :date"
+    + "  AND e.eventStatusByStatusId.id != ("
+    + "   SELECT s.id"
+    + "   FROM EventStatus s"
+    + "   WHERE s.status = 'Cancelado')"
+    + "   ORDER by e.startDate ASC")
   Page<Event> findIncomingEvents(Pageable pageable, @Param("orgId") Long orgId,
-      @Param("date") DateTime date);
+                                 @Param("date") DateTime date);
 
-  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.endDate <= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.endDate desc")
+  @Query(value =
+    "FROM Event e " +
+    "WHERE e.organizationByOrganizationId.id = :orgId " +
+    "  AND e.endDate <= :date " +
+    "  AND e.eventStatusByStatusId.id !=" +
+        "(SELECT s.id " +
+         "FROM EventStatus s " +
+         "WHERE s.status = 'Cancelado') " +
+         "ORDER BY e.endDate DESC")
   Page<Event> findFinalizedEvents(Pageable pageable, @Param("orgId") Long orgId,
-      @Param("date") DateTime date);
+                                  @Param("date") DateTime date);
+
 }

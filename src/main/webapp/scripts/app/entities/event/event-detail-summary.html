@@ -1,0 +1,35 @@
+<div ng-if="!event.summary.postsAvailable" class="row">
+  <div class="m-l-sm col-xs-5">
+    <p class="alert alert-warning">Todavía no se han obtenido posts.</p>
+  </div>
+</div>
+<div ng-if="event.summary.postsAvailable" class="row">
+  <div class="col-sm-6">
+    <div class="panel wrapper">
+      <span href class="text-muted m-t-sm m-l inline">
+         <i class="icon-pie-chart"></i>
+      </span>
+      <div class="text-center wrapper m-b-sm">
+        <div ui-refresh="data" ui-jq="sparkline"
+             ui-options="{{::event.summary.snSummariesTotal}}, {{::pieChartOptions}}"
+             class="sparkline inline"></div>
+      </div>
+      <ul class="list-group no-radius">
+        <li class="list-group-item"
+            ng-repeat="snSummary in event.summary.snSummaries track by $index">
+          <strong class="pull-right">{{::snSummary.total}}</strong>
+          <span class="label" ng-style="{'background-color': colors[$index]}">
+            {{::$index + 1}}
+          </span>&nbsp;
+          <span>
+            {{::snSummary.socialNetworkName}}
+          </span>
+        </li>
+        <li class="list-group-item">
+          <strong class="pull-right">{{::event.summary.grandTotal}}</strong>
+          En total
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

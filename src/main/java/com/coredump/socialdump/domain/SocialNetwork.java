@@ -16,6 +16,7 @@ public class SocialNetwork implements Serializable {
   private Collection<SearchCriteria> searchCriteriasById;
   private Collection<SocialNetworkApiCredential> socialNetworkApiCredentialsById;
   private Collection<SocialNetworkPost> socialNetworkPostsById;
+  private GenericStatus status;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -97,5 +98,23 @@ public class SocialNetwork implements Serializable {
 
   public void setSocialNetworkPostsById(Collection<SocialNetworkPost> socialNetworkPostsById) {
     this.socialNetworkPostsById = socialNetworkPostsById;
+  }
+
+  /**
+   * Devuelve el estado
+   * @return estado
+   */
+  @ManyToOne
+  @JoinColumn(name = "statusId", referencedColumnName = "id", nullable = false)
+  public GenericStatus getGenericStatusByStatusId() {
+    return status;
+  }
+
+  /**
+   * Asigna el estado
+   * @param status estado
+   */
+  public void setGenericStatusByStatusId(GenericStatus status) {
+    this.status = status;
   }
 }

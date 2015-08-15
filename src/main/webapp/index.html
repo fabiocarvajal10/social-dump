@@ -12,6 +12,7 @@
         <!-- endbower -->
         <!-- endbuild -->
         <!-- build:css assets/styles/main.css -->
+        <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
         <link rel="stylesheet" href="libs/jquery/bootstrap/dist/css/bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="assets/animate.css/animate.css" type="text/css" />
         <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" type="text/css" />
@@ -62,6 +63,7 @@
         <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
         <script src="bower_components/json3/lib/json3.js"></script>
         <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="libs/jquery/jquery.sparkline/dist/jquery.sparkline.retina.js"></script>
         <!-- Angular -->
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -138,6 +140,8 @@
         <script src="scripts/components/util/base64.service.js"></script>
         <script src="scripts/components/util/parse-links.service.js"></script>
         <script src="scripts/components/util/dateutil.service.js"></script>
+        <script src="scripts/components/util/objectutil.service.js"></script>
+        <script src="scripts/components/util/trusted.filter.js"></script>
         <script src="scripts/components/account/account.service.js"></script>
         <script src="scripts/components/entities/organization/organization.service.js"></script>
 
@@ -189,15 +193,17 @@
         <script src="scripts/app/entities/event/event.controller.js"></script>
         <script src="scripts/app/entities/event/event-detail.controller.js"></script>
         <script src="scripts/components/entities/event/event.service.js"></script>
+        <script src="scripts/components/entities/event/event-sn-summary.service.js"></script>
 
         <script src="scripts/app/entities/eventType/eventType.js"></script>
         <script src="scripts/app/entities/eventType/eventType.controller.js"></script>
         <script src="scripts/app/entities/eventType/eventType-detail.controller.js"></script>
         <script src="scripts/components/entities/eventType/eventType.service.js"></script>
-        <script src="scripts/app/entities/eventStatus/eventStatus.js"></script>
-        <script src="scripts/app/entities/eventStatus/eventStatus.controller.js"></script>
-        <script src="scripts/app/entities/eventStatus/eventStatus-detail.controller.js"></script>
-        <script src="scripts/components/entities/eventStatus/eventStatus.service.js"></script>
+        <script src="scripts/app/entities/event-status/event-status.js"></script>
+        <script src="scripts/app/entities/event-status/event-status.controller.js"></script>
+        <script src="scripts/app/entities/event-status/event-status-detail.controller.js"></script>
+        <script src="scripts/components/entities/event-status/event-status.service.js"></script>
+        <script src="scripts/components/entities/event-status/event-status-ui.service.js"></script>
         <script src="scripts/components/util/datetimepicker.directive.js"></script>
         <script src="scripts/components/util/dateformat.directive.js"></script>
 
@@ -214,8 +220,17 @@
         <script src="scripts/app/entities/monitor/screen/screen.js"></script>
 
         <script src="scripts/components/directives/image.directive.js"></script>
+        <script src="scripts/components/directives/validate-date-greater-than-value.directive.js"></script>
+        <script src="scripts/components/directives/validate-date-greater-than-model.directive.js"></script>
+        <script src="scripts/components/directives/validate-control.directive.js"></script>
         <script src="scripts/components/util/scroll.controller.js"></script>
 
+        <script src="scripts/app/entities/socialNetwork/socialNetwork.js"></script>
+        <script src="scripts/app/entities/socialNetwork/socialNetwork.controller.js"></script>
+        <script src="scripts/app/entities/socialNetwork/socialNetwork-dialog.controller.js"></script>
+        <script src="scripts/app/entities/socialNetwork/socialNetwork-detail.controller.js"></script>
+        <script src="scripts/components/entities/socialNetwork/socialNetwork.service.js"></script>
+        <script src="scripts/components/entities/socialNetwork/socialNetworkIcon.service.js"></script>
         <!-- endbuild -->
 
     </body>

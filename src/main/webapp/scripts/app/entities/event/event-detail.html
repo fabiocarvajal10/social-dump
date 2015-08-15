@@ -1,41 +1,24 @@
 <div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3"><span>Evento #</span> {{::event.id}}</h1>
-  <small class="text-muted">{{::event.description}}</small>
+  <h1 class="m-n font-thin h3"><span>Evento <strong>#{{::event.description}}</strong></span>
 </div>
 
 <div class="wrapper-md">
-  <!-- <div class="table-responsive"> -->
-    <ul class="list-group panel wrapper">
-<!--       <tbody> -->
-        <li class="list-group-item row">
-          <strong class="col col-xs-3">Empieza: </strong>
-          <span class="col col-xs-9">{{::event.startDate | date: defaultDateTimeFormat}}</span>
-        </li>
-        <li class="list-group-item row">
-          <strong class="col col-xs-3">Termina: </strong>
-          <span class="col col-xs-9">{{::event.endDate | date: defaultDateTimeFormat}}</span>
-        </li>
-        <li class="list-group-item row" ng-show="!!event.activatedAt">
-          <strong class="col col-xs-3">Activo desde: </strong>
-          <span class="col col-xs-9">{{::event.activatedAt | date: defaultDateTimeFormat}} </span>
-        </li>
-        <li class="list-group-item row">
-          <strong class="col col-xs-3">Estado: </strong>
-          <span class="col col-xs-9">{{::event.status.status}} </span>
-        </li>
-        <li class="list-group-item row">
-          <strong class="col col-xs-3">Tipo: </strong>
-          <span class="col col-xs-9">{{::event.type.name}} </span>
-        </li>
-        <li class="list-group-item row">
-          <strong class="col col-xs-3">Demora para aprobar Posts: </strong>
-          <span class="col col-xs-9">{{::event.postDelay}} </span>
-        </li>
-    </ul>
+  <div class="row">
+    <div class="col-sm-6">
+      <div ng-bind-html="event.status.message"></div>
+    </div>
+  </div>
+
+  <tabset justified="true">
+    <tab ng-repeat="tab in tabs" heading="{{::tab.heading}}"
+         ng-attr-ui-sref="{{::tab.uiSref}}">
+      <div ui-view="detail-tab-content"></div>
+    </tab>
+  </tabset>
 
   <button type="submit"
-      ui-sref="event.list"
-      class="btn btn-info">
+          ui-sref="event.list"
+          class="btn btn-info m-t-sm">
     <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Atrás</span>
   </button>
 </div>

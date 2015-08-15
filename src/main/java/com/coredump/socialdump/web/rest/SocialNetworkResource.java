@@ -39,7 +39,7 @@ public class SocialNetworkResource {
   @Timed
   public List<SocialNetwork> getAll() {
     log.debug("REST request to get all SocialNetworks");
-    return socialNetworkRepository.findAll();
+    return socialNetworkRepository.findAllActive();
   }
 
   /**

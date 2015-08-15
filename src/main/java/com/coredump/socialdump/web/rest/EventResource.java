@@ -8,11 +8,13 @@ import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
+import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.service.SearchCriteriaService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
+import com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
 import com.coredump.socialdump.web.rest.util.ValidatorUtil;
@@ -39,7 +41,12 @@ import javax.validation.Valid;
 
 
 /**
+ * Controlador REST encargado de procesar las solicitudes provenientes de
+ * los consumidores del API.
  * Created by fabio on 13/07/15.
+ * @author Esteban
+ * @author Fabio
+ * @author Francisco
  */
 @RestController
 @RequestMapping("/api")
@@ -64,6 +71,16 @@ public class  EventResource{
   @Inject
   private EventService eventService;
 
+  /**
+   * Repositorio de posts de redes sociales.
+   */
+  @Inject
+  private SocialNetworkPostRepository socialNetworkPostRepository;
+
+  /**
+  * Servicio que maneja lógica de obtención de criterios de búsqueda de la base
+  * de datos.
+  */
   @Inject
   private SearchCriteriaService searchCriteriaService;
 
@@ -116,19 +133,19 @@ public class  EventResource{
           method = RequestMethod.POST,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<Void> create(@Valid @RequestBody EventDTO eventDTO)
+  public ResponseEntity<EventDTO> create(@Valid @RequestBody EventDTO eventDTO)
           throws URISyntaxException {
     log.debug("REST request to save Event: {}", eventDTO.toString());
     if (eventDTO.getId() != null) {
       return ResponseEntity.badRequest()
             .header("Failure", "A new event cannot already have an ID")
-            .build();
+            .body(null);
     }
 
     if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
       return ResponseEntity.badRequest()
             .header("Failure", "End date can't be lower than start date")
-            .build();
+            .body(null);
     }
 
     Event event = eventMapper.eventDTOToEvent(eventDTO);
@@ -139,8 +156,9 @@ public class  EventResource{
       .getSearchCriteriasFromStringList(event, eventDTO.getSearchCriterias()));
 
     eventService.scheduleFetch(event);
-    return ResponseEntity.created(new URI("/api/events/"
-      + eventDTO.getId())) .build();
+
+    return ResponseEntity.created(new URI("/api/events/" + eventDTO.getId()))
+      .body(eventMapper.eventToEventDTO(event));
   }
 
   /**
@@ -475,6 +493,30 @@ public class  EventResource{
 
     eventService.delayAll(event, delay);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  /**
+   * GET  /events/{id}/sn-summary -> gets the summary of an event.
+   * @param id Id del evento
+   * @return summary of an event
+   */
+  @RequestMapping(value = "/events/{id}/sn-summary",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  @Transactional(readOnly = true)
+  public ResponseEntity<List<EventSocialNetworkSummaryDTO>> getSummaryOfEvent(
+    @PathVariable long id) {
+
+    log.debug("REST request to get Summary of Event Organization : {}", id);
+
+    List<EventSocialNetworkSummaryDTO> list =
+      socialNetworkPostRepository.getSummariesOfEventGroupBySocialNetwork(id);
+
+    if(list.size() == 0)
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    return new ResponseEntity<>(list, HttpStatus.OK);
   }
 
   /**

@@ -1,6 +1,11 @@
-/*
-
-*/
+@font-face{
+  font-family: 'DigitalDream';
+  src: url('../fonts/digitaldream/DIGITALDREAM-webfont.eot');
+  src: url('../fonts/digitaldream/DIGITALDREAM-webfont.eot?iefix') format('eot'),
+       url('../fonts/digitaldream/DIGITALDREAM-webfont.woff') format('woff'),
+       url('../fonts/digitaldream/DIGITALDREAM-webfont.ttf') format('truetype'),
+       url('../fonts/digitaldream/DIGITALDREAM-webfont.svg#webfont') format('svg');
+}
 
 html {
   background-color: #f0f3f4;
@@ -5210,8 +5215,33 @@ a.text-#000000:hover {
   }
 }
 
+.digital-font {
+  font-family: 'DigitalDream';
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.icon-block-overlay {
+  background-color: #333;
+  background-color: rgba(96, 96, 96, 0.7);
+  border-radius: 20px;
+  bottom: 0;
+  cursor: not-allowed;
+  left: 0;
+  margin: 2px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.rel {
+  position: relative;
+}
+
 .dropdown.wrapper {
-  padding-bottom: 11px; 
+  padding-bottom: 11px;
 }
 
 .app-footer.wrapper.b-t.bg-light.ng-scope {

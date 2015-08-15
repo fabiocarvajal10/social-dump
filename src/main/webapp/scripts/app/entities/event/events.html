@@ -3,13 +3,11 @@
 </div>
 
 <div class="wrapper-md">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <button class="btn btn-primary" ui-sref="event.new">
-          <span class="glyphicon glyphicon-flash"></span> <span>Crear un nuevo Evento</span>
-        </button>
-      </div>
+  <div class="m-b-sm row">
+    <div class="col-md-4">
+      <button class="btn btn-primary" ui-sref="event.new">
+        <span class="glyphicon glyphicon-flash"></span><span>Crear un nuevo Evento</span>
+      </button>
     </div>
   </div>
 
@@ -70,45 +68,5 @@
 
   <div class="table-responsive">
     <div ui-grid="gridOptions" ui-grid-resize-columns></div>
-<!--     <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Descripción</th>
-          <th>Comienza</th>
-          <th>Termina</th>
-          <th>Activado el</th>
-          <th>Estado</th>
-          <th>Tipo</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
-        <tr ng-repeat="event in events">
-          <td>{{event.description}}</td>
-          <td>{{event.startDate | date: defaultDateTimeFormat}}</td>
-          <td>{{event.endDate | date: defaultDateTimeFormat}}</td>
-          <td>{{event.activatedAt | date: defaultDateTimeFormat}}</td>
-          <td>{{event.status.status}}</td>
-          <td>{{event.type.name}}</td>
-          <td>
-            <button type="submit"
-                ui-sref="event.detail({id:event.id})"
-                class="btn btn-info btn-sm">
-              <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> Ver</span>
-            </button>
-            <button type="submit"
-                ui-sref="event.edit({id:event.id})"
-                class="btn btn-primary btn-sm">
-              <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Editar</span>
-            </button>
-            <button type="submit"
-                ng-click="delete(event.id)"
-                class="btn btn-danger btn-sm">
-              <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Eliminar</span>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
 </div>

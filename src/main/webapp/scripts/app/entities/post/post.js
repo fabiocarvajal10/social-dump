@@ -93,7 +93,7 @@
           }
         });
         /*.state('PostDetail', {
-          parent: 'entity',
+          parent: 'home',
           url: '/post/:id',
           data: {
             roles: [],
