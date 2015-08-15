@@ -5,10 +5,14 @@ import com.coredump.socialdump.domain.SearchCriteria;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SearchCriteriaRepository
   extends JpaRepository<SearchCriteria, Long> {
 
   List<SearchCriteria> findAllByEventByEventId(Event event);
+
+  SearchCriteria findOneBySearchCriteriaAndEventByEventId(String searchCriteria,
+      Event event);
 }
 

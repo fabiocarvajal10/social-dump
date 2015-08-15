@@ -389,23 +389,40 @@ public class  EventResource{
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<?> stopSync(@RequestParam(value = "searchCriteriaId")
-      Long searchCriteriaId) {
+    public ResponseEntity<?> stopSync(@RequestParam(value = "eventId") Long eventId,
+      @RequestParam(value = "searchCriteria") String searchCriteria) {
 
-    SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
+    Event event = eventRepository.findOne(eventId);
 
-    if (searchCriteria.getEventByEventId() == null || searchCriteria == null) {
+    if (event == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    Organization organization = organizationService
+      .ownsOrganization(event.getOrganizationByOrganizationId().getId());
+
+    if (organization == null) {
+      return ResponseEntity.status(403).build();
+    }
+
+    if (validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    SearchCriteria sc =
+      searchCriteriaRepository.findOneBySearchCriteriaAndEventByEventId(searchCriteria, event);
+
+    if (sc != null) {
+      boolean killed = eventService.stopSync(sc);
+
+      if (killed) {
+        return new ResponseEntity<>(HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+      }
+    } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    boolean killed = eventService.stopSync(searchCriteria);
-
-    if (killed) {
-      return new ResponseEntity<>(HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    }
-
   }
 
   /**

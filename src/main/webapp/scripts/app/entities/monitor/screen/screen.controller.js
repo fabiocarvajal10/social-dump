@@ -7,10 +7,10 @@
     .controller('MonitorScreenController',
       ['$scope', '$stateParams', 'Playlist',
       'PostTracker', 'Cards', 'PostService',
-      'EventPublic',
-      function($scope, $stateParams, 
-        Playlist, PostTracker, Cards, 
-        PostService, EventPublic) {
+      'EventPublic', '$modal',
+      function($scope, $stateParams,
+        Playlist, PostTracker, Cards,
+        PostService, EventPublic, $modal) {
       //This controller uses a websocket
       //connection to receive posts from one event
         var templateUrl = 'scripts/app/entities/monitor/screen/partials/post-cards-monitor.html';
@@ -105,6 +105,33 @@
         $scope.addCards = function(cardsToAdd) {
           Cards.addCards($scope.filters, cardsToAdd, $scope.cards);
         };
+
+        /**
+         *Opens a confirmation modal. Takes the search criteria
+         * to be unsync
+         */
+        $scope.openUnsyncModal = function(searchCriteria) {
+          var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: 'scripts/app/entities/monitor/screen/partials/unsync.modal.html',
+            controller: 'UnsyncDetailController',
+            resolve: {
+              'event': function() {
+                return $scope.event;
+              },
+              'searchCriteria': function() {
+                return searchCriteria;
+              }
+            }
+          });
+
+          modalInstance.result.then(function() {
+
+          }, function() {
+
+          });
+        };
+
       }]
     );
 })();
