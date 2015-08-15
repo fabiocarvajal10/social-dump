@@ -5,12 +5,18 @@
   'use strict';
   angular.module('socialdumpApp.monitor-screen')
     .controller('UnsyncDetailController',
-    ['$scope', '$modalInstance', 'event', 'searchCriteria',
-     function($scope, $modalInstance, event, searchCriteria) {
+    ['$scope', '$modalInstance', 'event', 'searchCriteria', 'Event',
+     function($scope, $modalInstance, event, searchCriteria, Event) {
 
        $scope.confirmUnsync = function() {
          var index = event.searchCriterias.indexOf(searchCriteria);
-         $modalInstance.close();
+         Event.stopSync({
+           'eventId': event.id,
+           'searchCriteria': searchCriteria
+         }, function(){
+           event.searchCriterias.splice(index, 1);
+           $modalInstance.close();
+         });
        };
 
        $scope.cancel = function() {
