@@ -106,7 +106,6 @@ angular.module('socialdumpApp.temporalAccess')
               buildGrid(data);
               buildMonitorNameField(data);
               $scope.totalItems = data.total;
-
               if ($scope.currentPage !== 1 && $scope.totalItems == 0) {
                 $scope.currentPage--;
                 getGridData();
@@ -122,9 +121,7 @@ angular.module('socialdumpApp.temporalAccess')
         if (!isOrgEmpty()) {
           Event.query({organizationId: $rootScope.currentOrg.id},
             function(result) {
-              for (var i = 0; i < result.length; i++) {
-                $scope.events.push(result[i]);
-              }
+              $scope.events = result;
             });
         }
       };
