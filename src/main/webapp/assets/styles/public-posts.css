@@ -127,7 +127,10 @@ div.white-background {
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus{
-	background-color: #f8f8f8;
+    background-color: #727272;
+
+}
+
 }
 
 /*

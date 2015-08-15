@@ -13,6 +13,7 @@ angular.module('socialdumpApp')
     $scope.uptOrg = {};
     $scope.isUptOrg = false;
     $scope.showOrgError = false;
+    $scope.currentOrg = '';
 
     $scope.init = function() {
       OrganizationService.getNewest()
@@ -77,6 +78,7 @@ angular.module('socialdumpApp')
         .then(function(data) {
           //OrganizationService.setCurrentOrgId(organization.id);
           $scope.incomingEventsByOrg = data;
+          $scope.currentOrg = organization.name
         })
         .catch(function(error) {
 
@@ -99,10 +101,6 @@ angular.module('socialdumpApp')
         .catch(function(error) {
 
       });
-    };
-
-    $scope.changeEvent = function(event) {
-      OrganizationService.setCurrentEventId(event.id);
     };
 
     function processPostCount(postCount) {

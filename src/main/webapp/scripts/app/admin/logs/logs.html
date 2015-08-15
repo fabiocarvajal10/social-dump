@@ -1,15 +1,17 @@
-<div>
-    <h2>Logs</h2>
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Logs</h1>
+</div>
 
-    <p>There are {{ loggers.length }} loggers.</p>
+<div class="wrapper-md">
+    <p>Hay {{ loggers.length }} loggers.</p>
 
     <span>Filter</span> <input type="text" ng-model="filter" class="form-control">
 
     <table class="table table-condensed table-striped table-bordered table-responsive">
         <thead>
         <tr title="click to order">
-            <th ng-click="predicate = 'name'; reverse=!reverse"><span>Name</span></th>
-            <th ng-click="predicate = 'level'; reverse=!reverse"><span>Level</span></th>
+            <th ng-click="predicate = 'name'; reverse=!reverse"><span>Nombre</span></th>
+            <th ng-click="predicate = 'level'; reverse=!reverse"><span>Nivel</span></th>
         </tr>
         </thead>
 

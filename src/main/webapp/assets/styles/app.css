@@ -5322,3 +5322,8 @@ i.glyphicon.glyphicon-align-justify {
 i.glyphicon.glyphicon-cog {
     color: #fff;
 }
+
+.m-b.ng-scope a:hover {
+  text-decoration: underline;
+  color: #0288D1;
+}
