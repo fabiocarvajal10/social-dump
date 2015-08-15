@@ -1,5 +1,4 @@
 <div class="dynamic-layout-item dynamic-layout-col-4 bootcards-cards">
-
     <div class="panel panel-default">
         <img class="pull-left thumb-sm avatar b-3x m-r post-profile" ng-src="{{::it.data.profileImage}}" alt="Profile"/>
         <div class="panel-heading header clearfix">
@@ -9,7 +8,7 @@
             <i ></i>
         </div>
         <div class="btn-group  m-b-sm" style="margin-left: 1px;margin-top:-1px; margin-bottom:1px;">
-            <a class="btn btn-default pull-right btn-danger" ng-click='externalScope().deleteCard(it.id)'>
+            <a class="btn btn-default pull-right btn-danger" ng-click='externalScope().onRemoveCard(it.id)'>
                <span class="glyphicon glyphicon-ban-circle"></span>
             </a>
             <a class="btn btn-default pull-right btn-info" ng-if="it.data.profileUrl === null" href="{{::it.data.mediaUrl}}"  target="_blank"> 

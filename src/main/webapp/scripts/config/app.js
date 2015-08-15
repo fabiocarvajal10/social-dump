@@ -10,7 +10,7 @@ angular.module('socialdumpApp', ['ui.router', 'socialdumpApp.posts',
   'ui.bootstrap', 'ui.bootstrap.modal', 'ui.bootstrap.datetimepicker',
   'ui.bootstrap.pagination', 'ui.utils', 'ui.load', 'ui.jq',
   'ui.select', 'oc.lazyLoad', 'pascalprecht.translate',
-  'ngMaterial', 'ui.date', 'dynamicLayout'])
+  'ngMaterial', 'ui.date', 'dynamicLayout', 'toaster'])
   .controller('AppCtrl', [
     '$scope', '$translate', '$localStorage', '$window',
     function($scope, $translate, $localStorage, $window) {

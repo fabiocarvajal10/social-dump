@@ -27,7 +27,6 @@
                   name: 'socialdumpApp.posts',
                   files: ['scripts/components/entities/post/post.service.js',
                     'scripts/components/entities/post/post-tracker.service.js',
-                    //'scripts/components/entities/monitor/monitor-post-tracker.js'
                     'scripts/components/entities/post/cards.service.js',
                     'scripts/components/entities/post/event-public.service.js',
                     'scripts/components/util/playlist.service.js'

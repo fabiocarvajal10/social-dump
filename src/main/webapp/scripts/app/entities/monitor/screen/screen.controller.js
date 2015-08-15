@@ -7,18 +7,26 @@
     .controller('MonitorScreenController',
       ['$scope', '$stateParams', 'Playlist',
       'PostTracker', 'Cards', 'PostService',
-      'EventPublic',
+      'EventPublic', 'toaster',
       function($scope, $stateParams, 
         Playlist, PostTracker, Cards, 
-        PostService, EventPublic) {
-      //This controller uses a websocket
-      //connection to receive posts from one event
+        PostService, EventPublic, toaster) {
+      /**This controller uses a websocket
+      *connection to receive posts from one event
+      **/
+        //Template for the cards of the monitor
         var templateUrl = 'scripts/app/entities/monitor/screen/partials/post-cards-monitor.html';
+
+        //Get the data of the event
         EventPublic.get({'id': $stateParams.id})
           .$promise.then(function(data) {
             $scope.event = data;
         });
 
+        /**Object that is going to have
+        *data that is going to be reproduce by the
+        *"Playlist" service
+        **/
         var reproducerObject = {
           reproducer: Cards,
           scope: $scope,
@@ -26,6 +34,7 @@
           functionHandler: 'createCards'
         };
 
+        //Stores the cards that are going to be displayed
         $scope.cards = [];
         $scope.filters = [[['tabs',
           'contains',
@@ -33,6 +42,9 @@
           'twitter',
           'instagram']]];
         $scope.rankers = null;
+
+        //Checks if a post is deleted
+        $scope.deleting = false;
 
         $scope.isDropdownOpen = {
           orderBy: false,
@@ -47,17 +59,20 @@
             Cards.createCards(data, $scope, templateUrl);
           });
 
+        /**Websocket listener response
+        *callback: displays all the posts and send the info
+        *to the Playlist service
+        **/
         PostTracker.receivePublic().then(null, null, function(posts) {
           //console.log('Now we are getting posts');
           Playlist.play(posts, reproducerObject);
         });
 
+        //Tracks the post that is going to be deleted
         PostTracker.receiveMonitor().then(null, null, function(toDelete) {
           //console.log('Now we are getting posts');
-          console.log('Removing a post');
-          console.log(toDelete.id);
-
-          //Playlist.play(posts, reproducerObject);
+          //console.log('Removing a post');
+          //console.log(toDelete.id);
         });
         /**
          * Update the filters array based on the given filter
@@ -88,12 +103,7 @@
          * $param index: the index of the card in the cards array
          */
         $scope.deleteCard = function(id) {
-          Cards.deleteCard(id, $scope.cards);
           PostTracker.removePost(id);
-        };
-
-        $scope.removeFirstCard = function() {
-          Cards.deleteCard($scope.filteredItems[0].id, $scope.cards);
         };
 
         /**
@@ -105,6 +115,67 @@
         $scope.addCards = function(cardsToAdd) {
           Cards.addCards($scope.filters, cardsToAdd, $scope.cards);
         };
+
+        //Cancels the deleting of a post
+        $scope.cancel = function() {
+          $scope.deleted === false;
+        };
+
+        /**Executes when removing a post
+        *Receives the id of the post that is going to be deleted
+        **/
+        $scope.onRemoveCard = function(id) {
+          if ($scope.deleting === false) {
+            var currentCard = null;
+            $scope.cards.forEach(function(card, index, array) {
+              if (id === card.id) { 
+                currentCard = card;
+                array.splice(index, 1);
+              }
+            });
+          
+            $scope.deleting = true;
+
+            toaster.pop(
+              {
+                type: 'warning',
+                title: 'Deshacer eliminación',
+                body: 'Click para deshacer',
+                timeout: 10000,
+                bodyOutputType: 'trustedHtml',
+                id: '',
+                showCloseButton: false,
+                clickHandler: function(element) {
+                  toasterClickHandler(currentCard);
+                },
+                onHideCallback: function() {
+                  closeToaster(id);
+                }
+              }
+            );
+          }
+        };
+
+        var toasterClickHandler = function(restoreCard) {
+            $scope.deleting = false;
+            console.log('restoring')
+            console.log(restoreCard)
+            $scope.cards.unshift(restoreCard);
+            toaster.clear();
+          };
+
+        var closeToaster = function(id) {
+          if ($scope.deleting === true) {
+            $scope.deleteCard(id);
+            toaster.pop({
+              title: 'Eliminado',
+              body: '',
+              timeout: 125
+            });
+            $scope.deleting = false;
+          }
+        };
       }]
     );
 })();
+

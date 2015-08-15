@@ -16,7 +16,10 @@
                     <h5 class="graff">{{::event.description}}
                     <!--Replace for event #hashtag-->
                         <p class="hash">
-                            <small data-ng-repeat="hashtag in event.searchCriterias">{{::hashtag}}</small>
+                            <small data-ng-repeat="hashtag in event.searchCriterias">
+                               <small ng-if="hashtag[0] === '#'"> {{::hashtag}} </small>
+                               <small ng-if="hashtag[0] !== '#'"> #{{::hashtag}} </small>
+                            </small>
                         </p>
                     </h5>
                 </b>
@@ -41,6 +44,11 @@
     </div>
 
 </nav>
+
+<!-- toaster directive -->
+  <toaster-container toaster-options="{'position-class': 'toast-bottom-right'}">
+  </toaster-container>
+<!-- / toaster directive -->
 
 <div class="container wrapper-post">
     
