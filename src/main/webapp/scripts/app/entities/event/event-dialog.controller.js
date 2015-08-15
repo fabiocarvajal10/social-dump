@@ -2,11 +2,11 @@
   'use strict';
 
   angular.module('socialdumpApp').controller('EventDialogController', [
-    '$scope', '$stateParams', '$modalInstance', 'entity', 'Event',
-    'EventType', 'SearchCriteria', 'OrganizationService', 'DateUtils',
+    '$rootScope', '$scope', '$stateParams', '$modalInstance', 'entity', 'Event',
+    'EventType', 'SearchCriteria', 'DateUtils',
     'SocialNetwork', 'SocialNetworkIcon',
-    function($scope, $stateParams, $modalInstance, entity, Event,
-             EventType, SearchCriteria, OrganizationService, DateUtils,
+    function($rootScope, $scope, $stateParams, $modalInstance, entity,
+             Event, EventType, SearchCriteria, DateUtils,
              SocialNetwork, SocialNetworkIcon) {
       $scope.event = entity;
       $scope.hours = DateUtils.halfHoursOfTheDay24Format();
@@ -75,7 +75,7 @@
         if ($scope.event.id !== null) {
           Event.update($scope.event, onSaveFinished);
         } else {
-          $scope.event.organizationId = OrganizationService.getCurrentOrgId();
+          $scope.event.organizationId = $rootScope.currentOrg.id;
           Event.save($scope.event, onSaveFinished);
         }
       };

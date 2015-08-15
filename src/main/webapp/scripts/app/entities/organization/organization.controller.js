@@ -50,10 +50,10 @@
        };
 
        function checkOrgsCant() {
-         if($scope.organizations.length === 0 && $scope.currentPage !== 1) {
+         if ($scope.organizations.length === 0 && $scope.currentPage !== 1) {
            $scope.currentPage--;
            getOrganizations();
-         } else if($scope.organizations.length > 12) {
+         } else if ($scope.organizations.length > 12) {
            $scope.currentPage++;
            getOrganizations();
          }

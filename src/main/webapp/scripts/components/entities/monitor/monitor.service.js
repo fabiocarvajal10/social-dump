@@ -4,10 +4,11 @@
 'use strict';
 
 angular.module('socialdumpApp.monitors')
-  .factory('MonitorService', function($http, $q, OrganizationService) {
+  .factory('MonitorService', ['$http', '$q', '$rootScope',
+    function($http, $q, $rootScope) {
      return {
        register: function(monitorContact) {
-         monitorContact.organizationId = OrganizationService.getCurrentOrgId();
+         monitorContact.organizationId = $rootScope.currentOrg.id;
          var q = $q.defer();
          $http({
            url: 'api/monitor-contacts',
@@ -18,7 +19,7 @@ angular.module('socialdumpApp.monitors')
            monitorContact.id = parseInt(data);
            q.resolve(monitorContact);
          }).
-         catch (function(error) {
+         catch(function(error) {
            if (error.data === 'e-mail address already in use') {
              error = 'Ya cuenta con un contacto de monitoreo ' +
                      'con el mismo correo electrónico';
@@ -40,7 +41,7 @@ angular.module('socialdumpApp.monitors')
            params: {
              'page': page,
              'per_page': limit,
-             'organizationId': OrganizationService.getCurrentOrgId()
+             'organizationId': $rootScope.currentOrg.id
            }
          }).
          success(function(data, status, headers) {
@@ -64,7 +65,7 @@ angular.module('socialdumpApp.monitors')
          success(function(data) {
           q.resolve(monitorContact);
          }).
-         catch (function(error) {
+         catch(function(error) {
            if (error.data === 'e-mail address already in use') {
              error = 'Ya cuenta con un contacto de monitoreo ' +
                      'con el mismo correo electrónico';
@@ -88,13 +89,14 @@ angular.module('socialdumpApp.monitors')
          success(function(data) {
           q.resolve(data);
          }).
-         catch (function(error) {
+         catch(function(error) {
           var err = 'Error al eliminar el contacto de monitoreo';
           q.reject(err);
          });
 
          return q.promise;
-       }
-     };
-   });
+        }
+      };
+    }
+  ]);
 

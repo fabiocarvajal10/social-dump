@@ -4,10 +4,11 @@
 'use strict';
 
 angular.module('socialdumpApp.temporalAccess')
-  .factory('TemporalAccessService', function($http, $q, OrganizationService) {
+  .factory('TemporalAccessService', ['$http', '$q', '$rootScope',
+    function($http, $q, $rootScope) {
     return {
       register: function(temporalAccess) {
-        temporalAccess.organizationId = OrganizationService.getCurrentOrgId();
+        temporalAccess.organizationId = $rootScope.currentOrg.id;
         temporalAccess.monitorContactId =
           temporalAccess.monitorContactByMonitorContactId.id;
         if (temporalAccess.allEvent) {
@@ -24,7 +25,7 @@ angular.module('socialdumpApp.temporalAccess')
           temporalAccess.id = parseInt(data);
           q.resolve(temporalAccess);
         }).
-        catch (function(error) {
+        catch(function(error) {
           if (error.data === 'e-mail address already in use') {
             error = 'Ya cuenta con un contacto de monitoreo ' +
                     ' con el mismo correo electrónico';
@@ -52,7 +53,7 @@ angular.module('socialdumpApp.temporalAccess')
           params: {
             'page': page,
             'per_page': limit,
-            'eventId': OrganizationService.getCurrentEventId()
+            'eventId': $rootScope.currentOrg.id
           }
         }).
         success(function(data, status, headers) {
@@ -98,7 +99,7 @@ angular.module('socialdumpApp.temporalAccess')
         success(function(data) {
           q.resolve(data);
         }).
-        catch (function(error) {
+        catch(function(error) {
           var err = 'Error al eliminar el acceso temporal';
           q.reject(err);
         });
@@ -106,4 +107,5 @@ angular.module('socialdumpApp.temporalAccess')
         return q.promise;
       }
      };
-    });
+    }
+  ]);
