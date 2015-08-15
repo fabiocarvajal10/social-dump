@@ -7,10 +7,10 @@
     .controller('MonitorScreenController',
       ['$scope', '$stateParams', 'Playlist',
       'PostTracker', 'Cards', 'PostService',
-      'EventPublic', 'toaster',
-      function($scope, $stateParams, 
-        Playlist, PostTracker, Cards, 
-        PostService, EventPublic, toaster) {
+      'EventPublic', 'toaster', '$modal',
+      function($scope, $stateParams,
+        Playlist, PostTracker, Cards,
+        PostService, EventPublic, toaster, $modal) {
       /**This controller uses a websocket
       *connection to receive posts from one event
       **/
@@ -128,12 +128,12 @@
           if ($scope.deleting === false) {
             var currentCard = null;
             $scope.cards.forEach(function(card, index, array) {
-              if (id === card.id) { 
+              if (id === card.id) {
                 currentCard = card;
                 array.splice(index, 1);
               }
             });
-          
+
             $scope.deleting = true;
 
             toaster.pop(
@@ -172,6 +172,32 @@
             });
             $scope.deleting = false;
           }
+        };
+
+        /**
+         *Opens a confirmation modal. Takes the search criteria
+         * to be unsync
+         */
+        $scope.openUnsyncModal = function(searchCriteria) {
+          var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: 'scripts/app/entities/monitor/screen/partials/unsync.modal.html',
+            controller: 'UnsyncDetailController',
+            resolve: {
+              'event': function() {
+                return $scope.event;
+              },
+              'searchCriteria': function() {
+                return searchCriteria;
+              }
+            }
+          });
+
+          modalInstance.result.then(function() {
+
+          }, function() {
+
+          });
         };
       }]
     );

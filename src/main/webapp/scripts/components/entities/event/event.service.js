@@ -109,6 +109,19 @@
                 return $q.reject(errorMessage);
               }
             }
+          },
+          'stopSync': {
+            method: 'POST',
+            params: {
+              eventId: '@eventId',
+              searchCriteria: '@searchCriteria'
+            },
+            url: 'api/events/synchronization/kill/',
+            interceptor: {
+              responseError: function(error) {
+                return $q.reject(error);
+              }
+            }
           }
         });
       }]);
