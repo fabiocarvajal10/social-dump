@@ -81,9 +81,9 @@
           'save': {
             method: 'POST',
             transformRequest: function(data) {
-              data.startDate =
+              /*data.startDate =
                 DateUtils.convertLocaleDateToServer(data.startDate);
-              data.endDate = DateUtils.convertLocaleDateToServer(data.endDate);
+              data.endDate = DateUtils.convertLocaleDateToServer(data.endDate);*/
               data.activatedAt =
                 DateUtils.convertLocaleDateToServer(data.activatedAt);
               return angular.toJson(data);
