@@ -14,7 +14,7 @@ angular.module('socialdumpApp.temporalAccess', [])
           pageTitle: 'Accesos Temporales'
         },
         templateUrl: 'scripts/app/entities/temporal-access/temporal-access.html',
-        controller: 'TemporalAccessCtrl',
+        controller: 'TemporalAccessController',
         resolve: {
           store: function($ocLazyLoad) {
             return $ocLazyLoad.load({

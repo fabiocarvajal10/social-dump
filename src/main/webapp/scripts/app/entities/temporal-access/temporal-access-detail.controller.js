@@ -4,7 +4,9 @@
 'use strict';
 
 angular.module('socialdumpApp.temporalAccess')
-  .controller('TemporalAccessDetailCtrl',
+  .controller('TemporalAccessDetailController', ['$scope', 'TemporalAccessService',
+        '$modalInstance', 'MonitorService',
+        'gridTA', 'gridRow', 'selectedEvent',
     function($scope, TemporalAccessService, $modalInstance, MonitorService,
         gridTA, gridRow, selectedEvent) {
 
@@ -62,4 +64,5 @@ angular.module('socialdumpApp.temporalAccess')
       };
 
       $scope.init();
-  });
+    }
+  ]);

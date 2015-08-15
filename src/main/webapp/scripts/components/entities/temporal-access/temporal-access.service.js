@@ -4,8 +4,8 @@
 'use strict';
 
 angular.module('socialdumpApp.temporalAccess')
-  .factory('TemporalAccessService', '$http', '$q', '$rootScope',
-    [function($http, $q, $rootScope) {
+  .factory('TemporalAccessService', ['$http', '$q', '$rootScope',
+    function($http, $q, $rootScope) {
     return {
       register: function(temporalAccess) {
         temporalAccess.organizationId = $rootScope.currentOrg.id;
@@ -53,7 +53,7 @@ angular.module('socialdumpApp.temporalAccess')
           params: {
             'page': page,
             'per_page': limit,
-            'eventId': OrganizationService.getCurrentEventId()
+            'eventId': $rootScope.currentOrg.id
           }
         }).
         success(function(data, status, headers) {

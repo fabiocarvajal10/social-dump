@@ -4,7 +4,7 @@
   angular.module('socialdumpApp', [
     'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ui.bootstrap.modal',
     'ui.bootstrap.pagination', 'ui.date', 'ui.grid', 'ui.grid.resizeColumns',
-    'ui.jq', 'ui.load', 'ui.router', 'ui.select', 'ui.utils', 'toaster'
+    'ui.jq', 'ui.load', 'ui.router', 'ui.select', 'ui.utils', 'toaster',
     'dynamicLayout', 'infinite-scroll', 'LocalStorageModule', 'ngAnimate',
     'ngAria', 'ngCacheBuster', 'ngCookies', 'ngMaterial', 'ngMessages',
     'ngResource', 'ngSanitize', 'ngStorage', 'ngTouch', 'oc.lazyLoad',
