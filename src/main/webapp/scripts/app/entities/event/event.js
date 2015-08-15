@@ -8,7 +8,7 @@
           abstract: true,
           parent: 'home',
           url: 'events',
-          template: '<ui-view/>',
+          template: '<ui-view></ui-view>',
           data: {
             roles: ['ROLE_USER'],
             pageTitle: 'Eventos'
@@ -40,7 +40,7 @@
         })
         .state('event.detail', {
           parent: 'home',
-          url: 'events/{id}',
+          url: 'event/{id}/detail',
           data: {
             roles: ['ROLE_USER'],
             pageTitle: 'Evento'
@@ -53,12 +53,39 @@
           },
           resolve: {
             entity: ['$stateParams', 'Event', function($stateParams, Event) {
-              return Event.get({id: $stateParams.id});
+              return Event.getWithSummary({id: $stateParams.id});
             }]
           }
         })
+        .state('event.detail.summary', {
+          parent: 'event.detail',
+          url: '/summary',
+          data: {
+            roles: ['ROLE_USER'],
+            pageTitle: 'Evento'
+          },
+          views: {
+            'detail-tab-content': {
+              templateUrl:
+                'scripts/app/entities/event/event-detail-summary.html'
+            }
+          }
+        })
+        .state('event.detail.list', {
+          parent: 'event.detail',
+          url: '/list',
+          data: {
+            roles: ['ROLE_USER'],
+            pageTitle: 'Evento'
+          },
+          views: {
+            'detail-tab-content': {
+              templateUrl: 'scripts/app/entities/event/event-detail-list.html'
+            }
+          }
+        })
         .state('event.new', {
-          parent: 'event.list',
+          parent: 'event',
           url: '/new',
           data: {
             roles: ['ROLE_USER']

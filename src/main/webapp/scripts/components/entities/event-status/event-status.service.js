@@ -10,7 +10,8 @@
           transformResponse: function(data) {
             data = angular.fromJson(data);
             return data;
-          }
+          },
+          cache: true
         },
         'update': { method: 'PUT' }
       });

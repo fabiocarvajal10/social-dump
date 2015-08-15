@@ -14,5 +14,8 @@ public interface SearchCriteriaRepository
 
   SearchCriteria findOneBySearchCriteriaAndEventByEventId(String searchCriteria,
       Event event);
+
+  List<SearchCriteria> findAllBySearchCriteria(String searchCriteria);
+
 }
 

@@ -129,7 +129,7 @@ dependencies {
     compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
     compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version
     compile 'org.springframework.social:spring-social-web:1.1.0.RELEASE'
-    compile 'org.springframework.social:spring-social-facebook:2.0.1.RELEASE'
+    compile 'com.restfb:restfb:1.14.0'
     compile 'org.springframework.social:spring-social-twitter:1.1.0.RELEASE'
     compile 'com.sachinhandiekar:jInstagram:1.0.10'
 
