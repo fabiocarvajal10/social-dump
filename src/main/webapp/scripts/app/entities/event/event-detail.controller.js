@@ -29,9 +29,13 @@ angular.module('socialdumpApp')
       $scope.tabs.push(tabFactory('Posts', 'public-posts({id: event.id})'));
       $scope.defaultDateTimeFormat = DateUtils.defaultDateTimeFormat();
       $scope.load = function(id) {
-        Event.getWithSummary({id: id}, function(result) {
+        var success = function(result) {
           $scope.event = result;
-        });
+        };
+        var failure = function(result) {
+          console.log('fail');
+        };
+        Event.getWithSummary({'id': id}, success, failure);
       };
 
       $rootScope.$on('socialdumpApp:eventUpdate', function(event, result) {
