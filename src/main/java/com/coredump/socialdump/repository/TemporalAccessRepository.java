@@ -4,6 +4,7 @@ import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.TemporalAccess;
 
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,8 @@ public interface TemporalAccessRepository extends JpaRepository<TemporalAccess, 
   Long deleteByMonitorContactByMonitorContactId(MonitorContact monitorContact);
 
   List<TemporalAccess> getAllByEventByEventId(Event event);
+
+  List<TemporalAccess> getAllByEventByEventIdAndStartDateAndEndDate(Event event,
+      DateTime starDate, DateTime endDate);
+
 }

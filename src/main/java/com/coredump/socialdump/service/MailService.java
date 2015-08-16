@@ -111,4 +111,16 @@ public class MailService {
     String subject = messageSource.getMessage("email.temporalaccess.title", null, locale);
     sendEmail(temporalAccess.getEmail(), subject, content, false, true);
   }
+
+  @Async
+  public void temporalAccessNewDate(TemporalAccess temporalAccess, String baseUrl) {
+    log.debug("Sending password reset e-mail to '{}'", temporalAccess.getEmail());
+    Locale locale = Locale.forLanguageTag("en");
+    Context context = new Context(locale);
+    context.setVariable("temporalAccess", temporalAccess);
+    context.setVariable("baseUrl", baseUrl);
+    String content = templateEngine.process("newAccessDateEmail", context);
+    String subject = messageSource.getMessage("email.taNewDate.title", null, locale);
+    sendEmail(temporalAccess.getEmail(), subject, content, false, true);
+  }
 }
