@@ -13,6 +13,7 @@ import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.service.SearchCriteriaService;
+import com.coredump.socialdump.service.TemporalAccessService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
@@ -36,6 +37,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
@@ -83,6 +85,9 @@ public class  EventResource{
   */
   @Inject
   private SearchCriteriaService searchCriteriaService;
+
+  @Inject
+  private TemporalAccessService temporalAccessService;
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
@@ -168,8 +173,8 @@ public class  EventResource{
           method = RequestMethod.PUT,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<Void> update(@Valid @RequestBody EventDTO eventDTO)
-          throws URISyntaxException {
+  public ResponseEntity<Void> update(@Valid @RequestBody EventDTO eventDTO,
+      HttpServletRequest request) throws URISyntaxException {
     log.debug("REST request to update Event {}: ",
             eventDTO.toString());
 
@@ -191,8 +196,12 @@ public class  EventResource{
             .build();
     }
 
+    DateTime oldStartDate = event.getStartDate();
+    DateTime oldEndDate = event.getEndDate();
+
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
+    temporalAccessService.updateAccessDates(event, oldStartDate, oldEndDate, request);
 
     return ResponseEntity.ok().build();
   }
