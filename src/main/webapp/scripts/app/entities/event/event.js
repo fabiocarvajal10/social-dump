@@ -52,9 +52,24 @@
             }
           },
           resolve: {
-            entity: ['$stateParams', 'Event', function($stateParams, Event) {
-              return Event.getWithSummary({id: $stateParams.id});
-            }]
+            entity: ['$stateParams', 'Event', '$state',
+              function($stateParams, Event, $state) {
+                var success = function(result) {
+                  return result;
+                };
+                var failure = function(error) {
+                  if (error.status === 404) {
+                    $state.go('404');
+                  }
+                  if (error.status === 403) {
+                    $state.go('accessdenied');
+                  }
+                };
+
+                return Event.getWithSummary({id: $stateParams.id},
+                  success, failure);
+              }
+            ]
           }
         })
         .state('event.detail.summary', {
