@@ -8,7 +8,6 @@ angular.module('socialdumpApp')
         'responseError': function(rejection) {
           var modal = $injector.get('UtilInterceptorService');
           var modalStack = $injector.get('$modalStack');
-          modalStack.dismissAll('cancel');
           var status = rejection.status;
           var createMessage = function(title, body) {
             return {
@@ -22,6 +21,7 @@ angular.module('socialdumpApp')
                   modal.openNoInternet();
                   break;
             case 500:
+                  modalStack.dismissAll('cancel');
                   modal.open(createMessage('Error al completar su solicitud',
                     'Algo ha salido mal. En este momento no se puede completar su solicitud. ' +
                     'Por favor inténtelo después'));

@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('socialdumpApp')
-  .factory('OrganizationService', function($rootScope, $http, 
+  .factory('OrganizationService', function($rootScope, $http,
       $q, localStorageService) {
 
     var currOrgId = 1;
@@ -38,9 +38,8 @@ angular.module('socialdumpApp')
           q.resolve(organization);
         }).
         catch(function(error) {
-          var err = error.data.exception;
-          if (err ===
-              'org.springframework.dao.DataIntegrityViolationException') {
+          var err = error.headers('Failure');
+          if (err === 'Organization name already in use') {
             err = 'Ya cuenta con una organización del mismo nombre';
           }else {
             err = 'Error inesperado al intentar crear la organización';
@@ -144,17 +143,17 @@ angular.module('socialdumpApp')
                   {
                     'id': organization.id,
                     'name': organization.name
-                  } 
+                  }
               }
             );
           q.resolve(organization);
         }).
         catch(function(error) {
-          var err = error.data.exception;
-          if (err === 'org.springframework.dao.DataIntegrityViolationException') {
+          var err = error.headers('Failure');
+          if (err === 'Organization name already in use') {
             err = 'Ya cuenta con una organización del mismo nombre';
           }else {
-            err = 'Error inesperado al intentar modificar la organización';
+            err = 'Error inesperado al intentar crear la organización';
           }
           q.reject(err);
         });

@@ -74,8 +74,17 @@ public class OrganizationResource {
     }
     organizationDTO.setCreatedAt(DateTime.now());
 
-    Organization organization = organizationMapper
-            .organizationDTOToOrganization(organizationDTO);
+    Organization organization =
+      organizationRepository.findOneForCurrentUserAndName(organizationDTO.getName());
+
+    if (organization != null) {
+      return ResponseEntity.badRequest()
+        .header("Failure",
+          "Organization name already in use")
+        .build();
+    }
+
+    organization = organizationMapper.organizationDTOToOrganization(organizationDTO);
 
     organizationRepository.save(organization);
 
@@ -98,6 +107,16 @@ public class OrganizationResource {
     Organization organization = organizationService.ownsOrganization(id);
     if (organization == null) {
       return ResponseEntity.notFound().build();
+    }
+
+    organization =
+      organizationRepository.findOneForCurrentUserAndName(name);
+
+    if (organization != null) {
+      return ResponseEntity.badRequest()
+        .header("Failure",
+          "Organization name already in use")
+        .build();
     }
 
     organization.setName(name);
