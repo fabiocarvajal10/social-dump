@@ -35,7 +35,9 @@
                 },
                 {
                   name: 'socialdumpApp.monitor-screen',
-                  files: ['scripts/app/entities/monitor/screen/screen.controller.js']
+                  files: ['scripts/app/entities/monitor/screen/screen.controller.js',
+                    'scripts/components/entities/monitor/owner.service.js'
+                  ]
                 }
 
               ]);

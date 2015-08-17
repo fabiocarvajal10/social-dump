@@ -122,6 +122,13 @@
                 return $q.reject(error);
               }
             }
+          },
+          'validateOwnership': {
+            method: 'POST',
+            params: {
+              id: '@id'
+            },
+            url: 'api/events/owner/validate/'
           }
         });
       }]);
