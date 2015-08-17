@@ -4,17 +4,18 @@
 angular.module('socialdumpApp.temporalAccess')
   .controller('TemporalAccessController', ['$rootScope',
       '$scope', 'TemporalAccessService',
-      '$modal', 'Event', 'DateUtils',
-    function($rootScope, $scope, TemporalAccessService, 
-        $modal, Event, DateUtils) {
+      '$modal', 'Event', 'DateUtils', 'MonitorService',
+    function($rootScope, $scope, TemporalAccessService,
+        $modal, Event, DateUtils, MonitorService) {
       $scope.totalItems = 0;
       $scope.currentPage = 1;
       $scope.events = [];
+      $scope.monitors = [];
       $scope.selectedEvent = {};
       $scope.gridTemporalAccesses = {};
 
       $scope.init = function() {
-        //getGridData();
+        checkMonitors();
       };
 
       $rootScope
@@ -133,7 +134,8 @@ angular.module('socialdumpApp.temporalAccess')
 
       $scope.checkAddState = function() {
         return ($scope.events.length === 0 ||
-          $scope.isSelectedEventEmpty() || $scope.checkSelectedEventEndDate());
+          $scope.isSelectedEventEmpty() || $scope.checkSelectedEventEndDate() ||
+            $scope.monitors.length === 0);
       };
 
       $scope.isSelectedEventEmpty = function() {
@@ -153,6 +155,16 @@ angular.module('socialdumpApp.temporalAccess')
       function isOrgEmpty() {
           return $rootScope.currentOrg === null ||
               $rootScope.currentOrg === undefined;
+      };
+
+      function checkMonitors(){
+        MonitorService.getAll()
+          .then(function(data) {
+            $scope.monitors = data;
+          })
+          .catch(function(error) {
+
+          })
       };
 
     }
