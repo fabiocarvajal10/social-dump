@@ -36,9 +36,9 @@ angular.module('socialdumpApp')
                 data: cred
               }).
               success(function(data) {
+                Principal.identity(true);
                 localStorageService.set('token', data);
                 q.resolve(data);
-                Principal.authenticate(true);
               }).
               catch(function(error) {
                 if(error.data === 'Monitor cant access before defined time'){
