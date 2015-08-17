@@ -158,10 +158,8 @@ angular.module('socialdumpApp.temporalAccess')
       };
 
       function checkMonitors(){
-        console.log('dfd');
         MonitorService.getAll()
           .then(function(data) {
-                         console.log(data);
             $scope.monitors = data;
           })
           .catch(function(error) {
