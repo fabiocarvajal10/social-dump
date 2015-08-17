@@ -29,4 +29,5 @@ public interface TemporalAccessRepository extends JpaRepository<TemporalAccess, 
   List<TemporalAccess> getAllByEventByEventIdAndStartDateAndEndDate(Event event,
       DateTime starDate, DateTime endDate);
 
+  TemporalAccess findOneByIdAndEventByEventId(Long id, Event event);
 }

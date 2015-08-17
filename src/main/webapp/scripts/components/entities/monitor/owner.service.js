@@ -6,16 +6,28 @@
 
   angular.module('socialdumpApp')
     .factory('OwnerService', ['$rootScope', '$q', 'Event', '$state',
-      function($rootScope, $q, Event, $state) {
+      'localStorageService', 'TemporalAccessService',
+      function($rootScope, $q, Event, $state, localStorageService,
+          TemporalAccessService) {
         return {
           'validate': function(eventId){
-            if ($rootScope.tempAccessId === undefined || $rootScope.tempAccessId === null) {
+            if (localStorageService.get('tempAccessId') === undefined
+                || localStorageService.get('tempAccessId') === null) {
               Event.validateOwnership({id:eventId})
                 .$promise.then(function(data) {
 
                 }, function() {
                   $state.go('dashboard');
                 });
+            } else {
+              TemporalAccessService.validate(eventId)
+              .then(function(data){
+
+              })
+              .catch(function(error){
+                localStorageService.clearAll();
+                $state.go('access');
+              });
             }
           }
         };

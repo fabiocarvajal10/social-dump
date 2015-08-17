@@ -167,5 +167,6 @@ angular.module('socialdumpApp.temporalAccess')
           })
       };
 
+      $scope.init();
     }
   ]);
