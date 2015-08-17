@@ -590,4 +590,26 @@ public class  EventResource{
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /**
+   * Validate Ownership /events/owner/validate -> validates the event owner
+   */
+  @RequestMapping(value = "/events/owner/validate",
+      method = RequestMethod.POST,
+      produces = MediaType.TEXT_PLAIN_VALUE)
+  @Timed
+  public ResponseEntity<?> validateOwnerhsip(@RequestParam(value = "id") Long id) {
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    if (validateOwner(event) == null) {
+      return new ResponseEntity<>("Cant access the event", HttpStatus.FORBIDDEN);
+    }
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
 }

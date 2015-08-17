@@ -7,15 +7,17 @@
     .controller('MonitorScreenController',
       ['$scope', '$stateParams', 'Playlist',
       'PostTracker', 'Cards', 'PostService',
-      'EventPublic', 'toaster', '$modal',
+      'EventPublic', 'toaster', '$modal', 'OwnerService',
       function($scope, $stateParams,
         Playlist, PostTracker, Cards,
-        PostService, EventPublic, toaster, $modal) {
+        PostService, EventPublic, toaster, $modal, OwnerService) {
       /**This controller uses a websocket
       *connection to receive posts from one event
       **/
         //Template for the cards of the monitor
         var templateUrl = 'scripts/app/entities/monitor/screen/partials/post-cards-monitor.html';
+
+        OwnerService.validate($stateParams.id);
 
         //Get the data of the event
         EventPublic.get({'id': $stateParams.id})
@@ -198,6 +200,8 @@
           }, function() {
 
           });
+
+          $scope.init();
         };
       }]
     );
