@@ -4,8 +4,8 @@
 'use strict';
 
 angular.module('socialdumpApp.temporalAccess')
-  .factory('TemporalAccessService', ['$http', '$q', '$rootScope',
-    function($http, $q, $rootScope) {
+  .factory('TemporalAccessService', ['$http', '$q', '$rootScope', 'localStorageService',
+    function($http, $q, $rootScope, localStorageService) {
     return {
       register: function(temporalAccess) {
         temporalAccess.organizationId = $rootScope.currentOrg.id;
@@ -102,6 +102,26 @@ angular.module('socialdumpApp.temporalAccess')
         catch(function(error) {
           var err = 'Error al eliminar el acceso temporal';
           q.reject(err);
+        });
+
+        return q.promise;
+      },
+
+      'validate': function(eventId) {
+        var q = $q.defer();
+        $http({
+          url: 'api/temporal-accesses/validate',
+          method: 'GET',
+          params: {
+            'id': localStorageService.get('tempAccessId'),
+            'eventId': eventId
+          }
+        })
+        .success(function(data) {
+          q.resolve(data);
+        })
+        .error(function (error) {
+          q.reject(error);
         });
 
         return q.promise;

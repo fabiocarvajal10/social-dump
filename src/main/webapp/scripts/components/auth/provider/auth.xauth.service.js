@@ -23,8 +23,8 @@ angular.module('socialdumpApp')
             },
 
             access: function(credentials) {
-              var cred = "id=" + credentials.id + "&username=" + credentials.username + "&password="
-                       + credentials.password;
+              var cred = "id=" + credentials.id + "&eventId=" + credentials.eventId + "&username=" +
+                         credentials.username + "&password=" + credentials.password;
               var q = $q.defer();
               $http({
                 headers: {

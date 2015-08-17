@@ -4,7 +4,11 @@
     <div class="wrapper text-center">
       <strong> Acceso Temporal de Monitor </strong>
     </div>
-    <form name="loginForm" role="form" ng-submit="login($event)" novalidate>
+    <div class="alert alert-danger" ng-show="noKeys()">
+      <p> Por favor revise que haya seguido correctamente el enlace enviado a
+        su correo e intente de nuevo </p>
+    </div>
+    <form name="loginForm" role="form" ng-submit="login($event)" ng-hide="noKeys()" novalidate>
       <div class="alert alert-danger" ng-show="authenticationError">
         {{ errorMessage }}
       </div>
