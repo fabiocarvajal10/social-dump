@@ -29,14 +29,14 @@
                                     <span>
                                         <span class=" icon  icon-user"></span>
                                         <span class="hidden-tablet">
-                                            Account
+                                            {{ userFirstName }}
                                         </span>
                                         <b class="caret"></b>
                                     </span>
                 </a>
                 <ul class="dropdown-menu">
                     <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="settings"><span class="glyphicon glyphicon-wrench"></span>
-                        &#xA0;<span>Settings</span></a></li>
+                        &#xA0;<span>Ajustes</span></a></li>
                     <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="password"><span class="glyphicon glyphicon-lock"></span>
                         &#xA0;<span>Contraseña</span></a></li>
                     <li ui-sref-active="active" ng-switch-when="true"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span>
