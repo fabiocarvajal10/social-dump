@@ -24,4 +24,7 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
   @Query("select organization from Organization organization where organization.userByOwnerId.login = ?#{principal.username} order by organization.createdAt desc")
   List<Organization> findAllForCurrentUserOrderByCreatedAtDesc();
 
+  @Query("select organization from Organization organization where organization.userByOwnerId.login = ?#{principal.username} and organization.name = :orgName")
+  Organization findOneForCurrentUserAndName(@Param("orgName")String organizationName);
+
 }
