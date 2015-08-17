@@ -119,6 +119,7 @@ public class OrganizationResource {
         .build();
     }
 
+    organization = organizationRepository.findOne(id);
     organization.setName(name);
     organizationRepository.save(organization);
 
