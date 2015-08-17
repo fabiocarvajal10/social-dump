@@ -28,14 +28,11 @@
 
         <div class="m-l-xxl m-t-sm" has-role="ROLE_USER" style="float:right">
           <button class="btn btn-sm btn-icon btn-danger m-r-sm"
-                ng-click="openUnsyncModal(event.searchCriterias[0])"
-                ng-hide="!event.searchCriterias[0]">
-            <i class="fa fa-twitter fa-2x"></i>
-          </button>
-          <button class="btn btn-sm btn-icon btn-danger"
-                ng-click="openUnsyncModal(event.searchCriterias[1])"
-                ng-hide="!event.searchCriterias[1]">
-            <i class="fa fa-instagram fa-2x"></i>
+                data-ng-repeat="hashtag in event.searchCriterias"
+                ng-click="openUnsyncModal(hashtag)"
+                ng-hide="!hashtag">
+            <i ng-show="hashtag[0] === '#'" class="fa fa-twitter fa-2x"></i>
+            <i ng-show="hashtag[0] !== '#'" class="fa fa-instagram fa-2x"></i>
           </button>
         </div>
 
