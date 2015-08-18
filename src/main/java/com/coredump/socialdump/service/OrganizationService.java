@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by fabio on 14/07/15.
+ * Created by Fabio Carvajal Segura on 14/07/15.
  * Service class for managing organizations.
  */
 @Service
@@ -22,6 +22,11 @@ public class OrganizationService {
   @Inject
   private OrganizationRepository organizationRepository;
 
+  /**
+   * Método que verifica si un usuario es un dueño de una organización
+   * @param orgId id de la organización
+   * @return si el usuario es dueño, retorna la organización. En caso contrario retorna null
+   */
   @Transactional(readOnly = true)
   public Organization ownsOrganization(Long orgId) {
     log.debug("Validating organization owner");
