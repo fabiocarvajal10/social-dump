@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 
 /**
  * Created by Franz on 13/07/2015.
@@ -25,20 +24,18 @@ public class TwitterFetch extends SocialNetworkFetch {
 
   private final Logger log = LoggerFactory.getLogger(TwitterFetch.class);
 
-  private TwitterTemplate twitterTemplate;
-
   public TwitterFetch() {
     super();
   }
 
   /**
-   * Main thread
+   * Método que ejecuta el hilo.
    */
   @Override
   public void run() {
     String appId = getSocialNetworkApiCredential().getAppId();
     String appSecret = getSocialNetworkApiCredential().getAppSecret();
-    twitterTemplate = new TwitterTemplate(appId, appSecret);
+    TwitterTemplate twitterTemplate = new TwitterTemplate(appId, appSecret);
     List<SocialNetworkPost> postsList = new ArrayList<>();
     Thread.currentThread().setName(this.getName());
     while (this.getIsAlive()) {
@@ -74,9 +71,9 @@ public class TwitterFetch extends SocialNetworkFetch {
   }
 
   /**
-   *
-   * @param tweet
-   * @return
+   * Método que convierte un tweet a un SocialNetworkPost.
+   * @param tweet post extraído de la red social
+   * @return el post procesado
    */
   private SocialNetworkPost processTweet(Tweet tweet) {
     log.debug("Procesando tweets");

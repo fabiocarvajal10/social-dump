@@ -30,7 +30,9 @@ public abstract class OrganizationMapper {
   public abstract Organization organizationDTOToOrganization(OrganizationDTO organizationDTO);
 
   /**
-   *
+   * Obtiene un User por un id.
+   * @param id id del user
+   * @return User
    */
   public User userFromId(Long id) {
     if (id == null) {

@@ -46,7 +46,9 @@ public abstract class SocialNetworkPostMapper {
         SocialNetworkPostDTO postDTO);
 
   /**
-   *
+   * Obtiene un SocialNetwork por un id.
+   * @param id id del SocialNetwork
+   * @return SocialNetwork
    */
   public SocialNetwork socialNetworkPostFromId(Integer id) {
     if (id == null) {
@@ -54,8 +56,11 @@ public abstract class SocialNetworkPostMapper {
     }
     return socialNetworkRepository.findOne(id);
   }
+
   /**
-   *
+   * Obtiene un Event por un id.
+   * @param id id del Event
+   * @return Event
    */
   public Event eventFromId(Long id) {
     if (id == null) {
@@ -63,8 +68,11 @@ public abstract class SocialNetworkPostMapper {
     }
     return eventRepository.findOne(id);
   }
+
   /**
-   *
+   * Obtiene un SearchCriteria por un id.
+   * @param id id del SearchCriteria
+   * @return SearchCriteria
    */
   public SearchCriteria searchCriteriaFromId(Long id) {
     if (id == null) {
