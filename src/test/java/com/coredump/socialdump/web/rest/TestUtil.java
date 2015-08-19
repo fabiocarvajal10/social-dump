@@ -9,6 +9,9 @@ import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -43,5 +46,17 @@ public class TestUtil {
                 .withZoneUTC())));
         mapper.registerModule(module);
         return mapper.writeValueAsBytes(object);
+    }
+
+    /**
+     * Logs in a user.
+     * @param username
+     * @param password
+     */
+    public static void login(String username, String password) {
+      SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+      securityContext.setAuthentication(
+        new UsernamePasswordAuthenticationToken(username, password));
+      SecurityContextHolder.setContext(securityContext);
     }
 }

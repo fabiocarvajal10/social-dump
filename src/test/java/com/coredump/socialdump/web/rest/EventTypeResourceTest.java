@@ -41,9 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EventTypeResourceTest {
 
     private static final String DEFAULT_NAME = "SAMPLE_TEXT";
-    private static final String UPDATED_NAME = "UPDATED_TEXT";
     private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
-    private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
 
     @Inject
     private EventTypeRepository eventTypeRepository;
@@ -77,7 +75,7 @@ public class EventTypeResourceTest {
         int databaseSizeBeforeCreate = eventTypeRepository.findAll().size();
 
         // Create the EventType
-        restEventTypeMockMvc.perform(post("/api/eventTypes")
+        restEventTypeMockMvc.perform(post("/api/event-types")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(eventType)))
                 .andExpect(status().isCreated());
@@ -99,7 +97,7 @@ public class EventTypeResourceTest {
         eventType.setName(null);
 
         // Create the EventType, which fails.
-        restEventTypeMockMvc.perform(post("/api/eventTypes")
+        restEventTypeMockMvc.perform(post("/api/event-types")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(eventType)))
                 .andExpect(status().isBadRequest());
@@ -118,7 +116,7 @@ public class EventTypeResourceTest {
         eventType.setDescription(null);
 
         // Create the EventType, which fails.
-        restEventTypeMockMvc.perform(post("/api/eventTypes")
+        restEventTypeMockMvc.perform(post("/api/event-types")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(eventType)))
                 .andExpect(status().isBadRequest());
@@ -135,7 +133,7 @@ public class EventTypeResourceTest {
         eventTypeRepository.saveAndFlush(eventType);
 
         // Get all the eventTypes
-        restEventTypeMockMvc.perform(get("/api/eventTypes"))
+        restEventTypeMockMvc.perform(get("/api/event-types"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(eventType.getId().intValue())))
@@ -150,7 +148,7 @@ public class EventTypeResourceTest {
         eventTypeRepository.saveAndFlush(eventType);
 
         // Get the eventType
-        restEventTypeMockMvc.perform(get("/api/eventTypes/{id}", eventType.getId()))
+        restEventTypeMockMvc.perform(get("/api/event-types/{id}", eventType.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(eventType.getId().intValue()))
@@ -162,49 +160,7 @@ public class EventTypeResourceTest {
     @Transactional
     public void getNonExistingEventType() throws Exception {
         // Get the eventType
-        restEventTypeMockMvc.perform(get("/api/eventTypes/{id}", Long.MAX_VALUE))
+        restEventTypeMockMvc.perform(get("/api/event-types/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateEventType() throws Exception {
-        // Initialize the database
-        eventTypeRepository.saveAndFlush(eventType);
-
-		int databaseSizeBeforeUpdate = eventTypeRepository.findAll().size();
-
-        // Update the eventType
-        eventType.setName(UPDATED_NAME);
-        eventType.setDescription(UPDATED_DESCRIPTION);
-        restEventTypeMockMvc.perform(put("/api/eventTypes")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(eventType)))
-                .andExpect(status().isOk());
-
-        // Validate the EventType in the database
-        List<EventType> eventTypes = eventTypeRepository.findAll();
-        assertThat(eventTypes).hasSize(databaseSizeBeforeUpdate);
-        EventType testEventType = eventTypes.get(eventTypes.size() - 1);
-        assertThat(testEventType.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testEventType.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void deleteEventType() throws Exception {
-        // Initialize the database
-        eventTypeRepository.saveAndFlush(eventType);
-
-		int databaseSizeBeforeDelete = eventTypeRepository.findAll().size();
-
-        // Get the eventType
-        restEventTypeMockMvc.perform(delete("/api/eventTypes/{id}", eventType.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
-
-        // Validate the database is empty
-        List<EventType> eventTypes = eventTypeRepository.findAll();
-        assertThat(eventTypes).hasSize(databaseSizeBeforeDelete - 1);
     }
 }

@@ -77,15 +77,15 @@ public class EventStatusResourceTest {
         int databaseSizeBeforeCreate = eventStatusRepository.findAll().size();
 
         // Create the EventStatus
-        restEventStatusMockMvc.perform(post("/api/eventStatuss")
+        restEventStatusMockMvc.perform(post("/api/event-statuses")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(eventStatus)))
                 .andExpect(status().isCreated());
 
         // Validate the EventStatus in the database
-        List<EventStatus> eventStatuss = eventStatusRepository.findAll();
-        assertThat(eventStatuss).hasSize(databaseSizeBeforeCreate + 1);
-        EventStatus testEventStatus = eventStatuss.get(eventStatuss.size() - 1);
+        List<EventStatus> eventStatuses = eventStatusRepository.findAll();
+        assertThat(eventStatuses).hasSize(databaseSizeBeforeCreate + 1);
+        EventStatus testEventStatus = eventStatuses.get(eventStatuses.size() - 1);
         assertThat(testEventStatus.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testEventStatus.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
@@ -99,7 +99,7 @@ public class EventStatusResourceTest {
         eventStatus.setStatus(null);
 
         // Create the EventStatus, which fails.
-        restEventStatusMockMvc.perform(post("/api/eventStatuss")
+        restEventStatusMockMvc.perform(post("/api/event-statuses")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(eventStatus)))
                 .andExpect(status().isBadRequest());
@@ -118,7 +118,7 @@ public class EventStatusResourceTest {
         eventStatus.setDescription(null);
 
         // Create the EventStatus, which fails.
-        restEventStatusMockMvc.perform(post("/api/eventStatuss")
+        restEventStatusMockMvc.perform(post("/api/event-statuses")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(eventStatus)))
                 .andExpect(status().isBadRequest());
@@ -135,7 +135,7 @@ public class EventStatusResourceTest {
         eventStatusRepository.saveAndFlush(eventStatus);
 
         // Get all the eventStatuss
-        restEventStatusMockMvc.perform(get("/api/eventStatuss"))
+        restEventStatusMockMvc.perform(get("/api/event-statuses"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(eventStatus.getId().intValue())))
@@ -150,7 +150,7 @@ public class EventStatusResourceTest {
         eventStatusRepository.saveAndFlush(eventStatus);
 
         // Get the eventStatus
-        restEventStatusMockMvc.perform(get("/api/eventStatuss/{id}", eventStatus.getId()))
+        restEventStatusMockMvc.perform(get("/api/event-statuses/{id}", eventStatus.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(eventStatus.getId().intValue()))
@@ -162,49 +162,7 @@ public class EventStatusResourceTest {
     @Transactional
     public void getNonExistingEventStatus() throws Exception {
         // Get the eventStatus
-        restEventStatusMockMvc.perform(get("/api/eventStatuss/{id}", Long.MAX_VALUE))
+        restEventStatusMockMvc.perform(get("/api/event-statuses/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateEventStatus() throws Exception {
-        // Initialize the database
-        eventStatusRepository.saveAndFlush(eventStatus);
-
-		int databaseSizeBeforeUpdate = eventStatusRepository.findAll().size();
-
-        // Update the eventStatus
-        eventStatus.setStatus(UPDATED_STATUS);
-        eventStatus.setDescription(UPDATED_DESCRIPTION);
-        restEventStatusMockMvc.perform(put("/api/eventStatuss")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(eventStatus)))
-                .andExpect(status().isOk());
-
-        // Validate the EventStatus in the database
-        List<EventStatus> eventStatuss = eventStatusRepository.findAll();
-        assertThat(eventStatuss).hasSize(databaseSizeBeforeUpdate);
-        EventStatus testEventStatus = eventStatuss.get(eventStatuss.size() - 1);
-        assertThat(testEventStatus.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testEventStatus.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void deleteEventStatus() throws Exception {
-        // Initialize the database
-        eventStatusRepository.saveAndFlush(eventStatus);
-
-		int databaseSizeBeforeDelete = eventStatusRepository.findAll().size();
-
-        // Get the eventStatus
-        restEventStatusMockMvc.perform(delete("/api/eventStatuss/{id}", eventStatus.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
-
-        // Validate the database is empty
-        List<EventStatus> eventStatuss = eventStatusRepository.findAll();
-        assertThat(eventStatuss).hasSize(databaseSizeBeforeDelete - 1);
     }
 }

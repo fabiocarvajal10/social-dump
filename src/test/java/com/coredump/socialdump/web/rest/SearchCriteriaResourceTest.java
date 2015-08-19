@@ -1,7 +1,10 @@
 package com.coredump.socialdump.web.rest;
 
 import com.coredump.socialdump.Application;
+import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SearchCriteria;
+import com.coredump.socialdump.domain.SocialNetwork;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.web.rest.mapper.SearchCriteriaMapper;
 
@@ -66,6 +69,15 @@ public class SearchCriteriaResourceTest {
     public void initTest() {
         searchCriteria = new SearchCriteria();
         searchCriteria.setSearchCriteria(DEFAULT_SEARCH_CRITERIA);
+        SocialNetwork sn = new SocialNetwork();
+        sn.setId(1);
+        searchCriteria.setSocialNetworkBySocialNetworkId(sn);
+        Event e = new Event();
+        e.setId(1L);
+        searchCriteria.setEventByEventId(e);
+        GenericStatus gs = new GenericStatus();
+        gs.setId((short)1);
+        searchCriteria.setGenericStatusByStatusId(gs);
     }
 
     @Test
@@ -74,7 +86,7 @@ public class SearchCriteriaResourceTest {
         int databaseSizeBeforeCreate = searchCriteriaRepository.findAll().size();
 
         // Create the SearchCriteria
-        restSearchCriteriaMockMvc.perform(post("/api/searchCriterias")
+        restSearchCriteriaMockMvc.perform(post("/api/search-criterias")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(searchCriteria)))
                 .andExpect(status().isCreated());
@@ -94,7 +106,7 @@ public class SearchCriteriaResourceTest {
         searchCriteria.setSearchCriteria(null);
 
         // Create the SearchCriteria, which fails.
-        restSearchCriteriaMockMvc.perform(post("/api/searchCriterias")
+        restSearchCriteriaMockMvc.perform(post("/api/search-criterias")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(searchCriteria)))
                 .andExpect(status().isBadRequest());
@@ -110,10 +122,10 @@ public class SearchCriteriaResourceTest {
         searchCriteriaRepository.saveAndFlush(searchCriteria);
 
         // Get all the searchCriterias
-        restSearchCriteriaMockMvc.perform(get("/api/searchCriterias"))
+        restSearchCriteriaMockMvc.perform(get("/api/search-criterias"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                //.andExpect(jsonPath("$.[*].id").value(hasItem(searchCriteria.getId().intValue())))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(searchCriteria.getId())))
                 .andExpect(jsonPath("$.[*].searchCriteria").value(hasItem(DEFAULT_SEARCH_CRITERIA.toString())));
     }
 
@@ -124,10 +136,10 @@ public class SearchCriteriaResourceTest {
         searchCriteriaRepository.saveAndFlush(searchCriteria);
 
         // Get the searchCriteria
-        restSearchCriteriaMockMvc.perform(get("/api/searchCriterias/{id}", searchCriteria.getId()))
+        restSearchCriteriaMockMvc.perform(get("/api/search-criterias/{id}", searchCriteria.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            //.andExpect(jsonPath("$.id").value(searchCriteria.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(searchCriteria.getId()))
             .andExpect(jsonPath("$.searchCriteria").value(DEFAULT_SEARCH_CRITERIA.toString()));
     }
 
@@ -135,7 +147,7 @@ public class SearchCriteriaResourceTest {
     @Transactional
     public void getNonExistingSearchCriteria() throws Exception {
         // Get the searchCriteria
-        restSearchCriteriaMockMvc.perform(get("/api/searchCriterias/{id}", Long.MAX_VALUE))
+        restSearchCriteriaMockMvc.perform(get("/api/search-criterias/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -149,7 +161,7 @@ public class SearchCriteriaResourceTest {
 
         // Update the searchCriteria
         searchCriteria.setSearchCriteria(UPDATED_SEARCH_CRITERIA);
-        restSearchCriteriaMockMvc.perform(put("/api/searchCriterias")
+        restSearchCriteriaMockMvc.perform(put("/api/search-criterias")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(searchCriteria)))
                 .andExpect(status().isOk());
@@ -170,7 +182,7 @@ public class SearchCriteriaResourceTest {
 		int databaseSizeBeforeDelete = searchCriteriaRepository.findAll().size();
 
         // Get the searchCriteria
-        restSearchCriteriaMockMvc.perform(delete("/api/searchCriterias/{id}", searchCriteria.getId())
+        restSearchCriteriaMockMvc.perform(delete("/api/search-criterias/{id}", searchCriteria.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 

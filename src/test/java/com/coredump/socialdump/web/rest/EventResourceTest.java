@@ -2,7 +2,12 @@ package com.coredump.socialdump.web.rest;
 
 import com.coredump.socialdump.Application;
 import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.EventStatus;
+import com.coredump.socialdump.domain.EventType;
+import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.EventRepository;
+import com.coredump.socialdump.service.EventStatusService;
+import com.coredump.socialdump.repository.UserRepository;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 
 import org.joda.time.DateTime;
@@ -10,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.hasItem;
+
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -23,10 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.joda.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -67,13 +74,25 @@ public class EventResourceTest {
 
     private Event event;
 
+    @Inject
+    private UserRepository userRepository;
+
+    @Mock
+    private EventStatusService mockEventStatusService;
+
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
         EventResource eventResource = new EventResource();
-        ReflectionTestUtils.setField(eventResource, "eventRepository", eventRepository);
-        ReflectionTestUtils.setField(eventResource, "eventMapper", eventMapper);
-        this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource).build();
+      ReflectionTestUtils.setField(eventResource, "eventRepository", eventRepository);
+      ReflectionTestUtils.setField(eventResource, "eventMapper", eventMapper);
+
+      EventStatus es = new EventStatus();
+      es.setId((short)1);
+
+      doReturn(es).when(mockEventStatusService).getActive();
+      ReflectionTestUtils.setField(eventResource, "eventStatusService", mockEventStatusService);
+      this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource).build();
     }
 
     @Before
@@ -84,6 +103,15 @@ public class EventResourceTest {
         event.setDescription(DEFAULT_DESCRIPTION);
         event.setActivatedAt(DEFAULT_ACTIVATED_AT);
         event.setPostDelay(DEFAULT_POST_DELAY);
+        Organization o = new Organization();
+        o.setId(1L);
+        event.setOrganizationByOrganizationId(o);
+        EventStatus es = new EventStatus();
+        es.setId((short) 1);
+        event.setEventStatusByStatusId(es);
+        EventType et = new EventType();
+        et.setId(1);
+        event.setEventTypeByEventTypeId(et);
     }
 
     @Test
@@ -117,8 +145,8 @@ public class EventResourceTest {
 
         // Create the Event, which fails.
         restEventMockMvc.perform(post("/api/events")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(event)))
+          .contentType(TestUtil.APPLICATION_JSON_UTF8)
+          .content(TestUtil.convertObjectToJsonBytes(event)))
                 .andExpect(status().isBadRequest());
 
         List<Event> events = eventRepository.findAll();
@@ -226,7 +254,7 @@ public class EventResourceTest {
         // Initialize the database
         eventRepository.saveAndFlush(event);
 
-		int databaseSizeBeforeUpdate = eventRepository.findAll().size();
+        int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
         // Update the event
         event.setStartDate(UPDATED_START_DATE);
@@ -256,11 +284,13 @@ public class EventResourceTest {
         // Initialize the database
         eventRepository.saveAndFlush(event);
 
-		int databaseSizeBeforeDelete = eventRepository.findAll().size();
+        int databaseSizeBeforeDelete = eventRepository.findAll().size();
+
+        TestUtil.login(userRepository.findOne(1L).getLogin(), "password");
 
         // Get the event
         restEventMockMvc.perform(delete("/api/events/{id}", event.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
+          .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
         // Validate the database is empty

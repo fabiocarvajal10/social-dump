@@ -76,13 +76,13 @@ public class UserService {
 
   public Optional<User> requestPasswordReset(String mail) {
     return userRepository.findOneByEmail(mail)
-        .filter(user -> user.getActivated() == true)
-        .map(user -> {
-            user.setResetKey(RandomUtil.generateResetKey());
-            user.setResetDate(DateTime.now());
-            userRepository.save(user);
-            return user;
-          });
+      .filter(user -> user.getActivated() == true)
+      .map(user -> {
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(DateTime.now());
+        userRepository.save(user);
+        return user;
+      });
   }
 
   public User createUserInformation(String login, String password, String firstName,
@@ -125,11 +125,11 @@ public class UserService {
 
   public void changePassword(String password) {
     userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u-> {
-        String encryptedPassword = passwordEncoder.encode(password);
-        u.setPassword(encryptedPassword);
-        userRepository.save(u);
-        log.debug("Changed password for User: {}", u);
-      });
+      String encryptedPassword = passwordEncoder.encode(password);
+      u.setPassword(encryptedPassword);
+      userRepository.save(u);
+      log.debug("Changed password for User: {}", u);
+    });
   }
 
   @Transactional(readOnly = true)
@@ -137,7 +137,7 @@ public class UserService {
     Optional<User> currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
     if (!currentUser.isPresent()) {
       currentUser =
-          temporalAccessService.userForTemporalAccess(SecurityUtils.getCurrentLogin());
+        temporalAccessService.userForTemporalAccess(SecurityUtils.getCurrentLogin());
     }
     currentUser.get().getAuthorities().size(); // eagerly load the association
     return currentUser.get();

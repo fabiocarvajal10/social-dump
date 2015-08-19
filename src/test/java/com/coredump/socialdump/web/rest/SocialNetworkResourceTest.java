@@ -1,6 +1,7 @@
 package com.coredump.socialdump.web.rest;
 
 import com.coredump.socialdump.Application;
+import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SocialNetwork;
 import com.coredump.socialdump.repository.SocialNetworkRepository;
 
@@ -61,7 +62,7 @@ public class SocialNetworkResourceTest {
         SocialNetworkResource socialNetworkResource =
             new SocialNetworkResource();
         ReflectionTestUtils.setField(socialNetworkResource,
-            "socialNetworkRepository", socialNetworkRepository);
+          "socialNetworkRepository", socialNetworkRepository);
         this.restSocialNetworkMockMvc =
             MockMvcBuilders.standaloneSetup(socialNetworkResource)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -72,6 +73,9 @@ public class SocialNetworkResourceTest {
         socialNetwork = new SocialNetwork();
         socialNetwork.setName(DEFAULT_NAME);
         socialNetwork.setUrl(DEFAULT_URL);
+        GenericStatus gs = new GenericStatus();
+        gs.setId((short) 1);
+        socialNetwork.setGenericStatusByStatusId(gs);
     }
 
     @Test
@@ -81,7 +85,7 @@ public class SocialNetworkResourceTest {
 
         // Create the SocialNetwork
 
-        restSocialNetworkMockMvc.perform(post("/api/socialNetworks")
+        restSocialNetworkMockMvc.perform(post("/api/social-networks")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(socialNetwork)))
                 .andExpect(status().isCreated());
@@ -89,7 +93,7 @@ public class SocialNetworkResourceTest {
         // Validate the SocialNetwork in the database
         List<SocialNetwork> socialNetworks = socialNetworkRepository.findAll();
         assertThat(socialNetworks).hasSize(databaseSizeBeforeCreate + 1);
-        SocialNetwork testSocialNetwork = socialNetworks.get(socialNetworks.size() - 1);
+      SocialNetwork testSocialNetwork = socialNetworks.get(socialNetworks.size() - 1);
         assertThat(testSocialNetwork.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testSocialNetwork.getUrl()).isEqualTo(DEFAULT_URL);
     }
@@ -103,7 +107,7 @@ public class SocialNetworkResourceTest {
 
         // Create the SocialNetwork, which fails.
 
-        restSocialNetworkMockMvc.perform(post("/api/socialNetworks")
+        restSocialNetworkMockMvc.perform(post("/api/social-networks")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(socialNetwork)))
                 .andExpect(status().isBadRequest());
@@ -121,7 +125,7 @@ public class SocialNetworkResourceTest {
 
         // Create the SocialNetwork, which fails.
 
-        restSocialNetworkMockMvc.perform(post("/api/socialNetworks")
+        restSocialNetworkMockMvc.perform(post("/api/social-networks")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(socialNetwork)))
                 .andExpect(status().isBadRequest());
@@ -137,25 +141,25 @@ public class SocialNetworkResourceTest {
         socialNetworkRepository.saveAndFlush(socialNetwork);
 
         // Get all the socialNetworks
-        restSocialNetworkMockMvc.perform(get("/api/socialNetworks"))
+        restSocialNetworkMockMvc.perform(get("/api/social-networks"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(socialNetwork.getId())))
-                .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-                .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
+          .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+          .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
     }
 
     @Test
     @Transactional
     public void getSocialNetwork() throws Exception {
-        // Initialize the database
+      // Initialize the database
         socialNetworkRepository.saveAndFlush(socialNetwork);
 
         // Get the socialNetwork
-        restSocialNetworkMockMvc.perform(get("/api/socialNetworks/{id}", socialNetwork.getId()))
+        restSocialNetworkMockMvc.perform(get("/api/social-networks/{id}", socialNetwork.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(socialNetwork.getId()))
+          .andExpect(jsonPath("$.id").value(socialNetwork.getId()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.url").value(DEFAULT_URL.toString()));
     }
@@ -163,52 +167,9 @@ public class SocialNetworkResourceTest {
     @Test
     @Transactional
     public void getNonExistingSocialNetwork() throws Exception {
-        // Get the socialNetwork
-        restSocialNetworkMockMvc.perform(get("/api/socialNetworks/{id}", Long.MAX_VALUE))
+      // Get the socialNetwork
+      restSocialNetworkMockMvc.perform(get("/api/social-networks/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    @Transactional
-    public void updateSocialNetwork() throws Exception {
-        // Initialize the database
-        socialNetworkRepository.saveAndFlush(socialNetwork);
-
-		int databaseSizeBeforeUpdate = socialNetworkRepository.findAll().size();
-
-        // Update the socialNetwork
-        socialNetwork.setName(UPDATED_NAME);
-        socialNetwork.setUrl(UPDATED_URL);
-
-
-        restSocialNetworkMockMvc.perform(put("/api/socialNetworks")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(socialNetwork)))
-                .andExpect(status().isOk());
-
-        // Validate the SocialNetwork in the database
-        List<SocialNetwork> socialNetworks = socialNetworkRepository.findAll();
-        assertThat(socialNetworks).hasSize(databaseSizeBeforeUpdate);
-        SocialNetwork testSocialNetwork = socialNetworks.get(socialNetworks.size() - 1);
-        assertThat(testSocialNetwork.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testSocialNetwork.getUrl()).isEqualTo(UPDATED_URL);
-    }
-
-    @Test
-    @Transactional
-    public void deleteSocialNetwork() throws Exception {
-        // Initialize the database
-        socialNetworkRepository.saveAndFlush(socialNetwork);
-
-		int databaseSizeBeforeDelete = socialNetworkRepository.findAll().size();
-
-        // Get the socialNetwork
-        restSocialNetworkMockMvc.perform(delete("/api/socialNetworks/{id}", socialNetwork.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
-
-        // Validate the database is empty
-        List<SocialNetwork> socialNetworks = socialNetworkRepository.findAll();
-        assertThat(socialNetworks).hasSize(databaseSizeBeforeDelete - 1);
-    }
 }

@@ -7,7 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 /**
- * Created by fabio on 09/07/15.
+ * Estados genéricos para las entidades que lo necesiten.
+ * Created by fabio on 09/07/15
+ * @autor Fabio
  */
 @Entity
 public class GenericStatus implements Serializable {
