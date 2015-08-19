@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('socialdumpApp')
-    .config(function ($stateProvider) {
+    .config(function($stateProvider) {
         $stateProvider
             .state('admin', {
                 abstract: true,
-                parent: 'site'
+                parent: 'home',
+                url: 'super',
+                template: '<ui-view></ui-view>'
             });
     });

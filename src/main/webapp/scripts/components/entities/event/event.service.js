@@ -81,9 +81,9 @@
           'save': {
             method: 'POST',
             transformRequest: function(data) {
-              data.startDate =
+              /*data.startDate =
                 DateUtils.convertLocaleDateToServer(data.startDate);
-              data.endDate = DateUtils.convertLocaleDateToServer(data.endDate);
+              data.endDate = DateUtils.convertLocaleDateToServer(data.endDate);*/
               data.activatedAt =
                 DateUtils.convertLocaleDateToServer(data.activatedAt);
               return angular.toJson(data);
@@ -109,6 +109,26 @@
                 return $q.reject(errorMessage);
               }
             }
+          },
+          'stopSync': {
+            method: 'POST',
+            params: {
+              eventId: '@eventId',
+              searchCriteria: '@searchCriteria'
+            },
+            url: 'api/events/synchronization/kill/',
+            interceptor: {
+              responseError: function(error) {
+                return $q.reject(error);
+              }
+            }
+          },
+          'validateOwnership': {
+            method: 'POST',
+            params: {
+              id: '@id'
+            },
+            url: 'api/events/owner/validate/'
           }
         });
       }]);

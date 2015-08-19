@@ -11,8 +11,8 @@
           parent: 'site',
           url: '/event-monitor/:id',
           data: {
-            roles: [],
-            pageTitle: 'Post Tracker'
+            roles: ['ROLE_USER', 'ROLE_MONITOR'],
+            pageTitle: 'Monitoreo'
           },
           views: {
             'content@': {
@@ -27,15 +27,21 @@
                   name: 'socialdumpApp.posts',
                   files: ['scripts/components/entities/post/post.service.js',
                     'scripts/components/entities/post/post-tracker.service.js',
-                    //'scripts/components/entities/monitor/monitor-post-tracker.js'
                     'scripts/components/entities/post/cards.service.js',
                     'scripts/components/entities/post/event-public.service.js',
-                    'scripts/components/util/playlist.service.js'
+                    'scripts/components/util/playlist.service.js',
+                    'scripts/app/entities/monitor/screen/unsync-detail.controller.js'
                   ]
                 },
                 {
                   name: 'socialdumpApp.monitor-screen',
-                  files: ['scripts/app/entities/monitor/screen/screen.controller.js']
+                  files: ['scripts/app/entities/monitor/screen/screen.controller.js',
+                    'scripts/components/entities/monitor/owner.service.js'
+                  ]
+                },
+                {
+                  name: 'socialdumpApp.temporalAccess',
+                  files: ['scripts/components/entities/temporal-access/temporal-access.service.js']
                 }
 
               ]);

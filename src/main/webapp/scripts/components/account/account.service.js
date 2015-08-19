@@ -3,8 +3,8 @@
   angular.module('socialdumpApp')
     .factory(
       'AccountService', [
-        '$http', '$q', 'localStorageService',
-        function($http, $q, localStorageService) {
+        '$http', '$q', 'localStorageService', '$rootScope',
+        function($http, $q, localStorageService, $rootScope) {
          return {
            getUserId: function() {
              var q = $q.defer();
@@ -13,6 +13,13 @@
                method: 'GET'
              }).
              success(function(data) {
+               var loggedUser = {
+                 login: data.login,
+                 firstName: data.firstName,
+                 lastName: data.lastName,
+                 email: data.email
+               }
+               localStorageService.set('loggedUser', loggedUser);
                q.resolve(data.id.toString());
              }).
              catch (function(error) {

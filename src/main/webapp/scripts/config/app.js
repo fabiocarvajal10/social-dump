@@ -4,7 +4,7 @@
   angular.module('socialdumpApp', [
     'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ui.bootstrap.modal',
     'ui.bootstrap.pagination', 'ui.date', 'ui.grid', 'ui.grid.resizeColumns',
-    'ui.jq', 'ui.load', 'ui.router', 'ui.select', 'ui.utils',
+    'ui.jq', 'ui.load', 'ui.router', 'ui.select', 'ui.utils', 'toaster',
     'dynamicLayout', 'infinite-scroll', 'LocalStorageModule', 'ngAnimate',
     'ngAria', 'ngCacheBuster', 'ngCookies', 'ngMaterial', 'ngMessages',
     'ngResource', 'ngSanitize', 'ngStorage', 'ngTouch', 'oc.lazyLoad',
@@ -92,9 +92,25 @@
 
       });
 
+       $rootScope.$on('$stateChangeStart', function(event, toState, toParams,
+                                                      fromState, fromParams) {
+
+         var requireOrg = ['event.list', 'event.detail', 'event.detail.summary',
+                           'event.detail.list', 'event.new', 'event.new', 'event.edit',
+                           'monitors', 'accesses'];
+
+         if(requireOrg.indexOf(toState.name) > -1 && ($rootScope.currentOrg === null ||
+               $rootScope.currentOrg === undefined)) {
+
+           event.preventDefault();
+           $state.go('dashboard');
+         }
+       });
+
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams,
                                                      fromState, fromParams) {
         var titleKey = 'Social Dump';
+        var appName = ' - Social Dump';
 
         $rootScope.previousStateName = fromState.name;
         $rootScope.previousStateParams = fromParams;
@@ -102,7 +118,7 @@
         //Set the page title key to the one configured in state or use default
         // one
         if (toState.data.pageTitle) {
-          titleKey = toState.data.pageTitle;
+          titleKey = toState.data.pageTitle + appName;
         }
         $window.document.title = titleKey;
       });

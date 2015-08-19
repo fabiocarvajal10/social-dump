@@ -7,17 +7,21 @@
     <i class="fa fa-plus">
     </i> Agregar
   </a>
-  <span class="label text-base bg-info pos-rlt m-r" ng-show="events.length === 0">
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="monitors.length === 0">
+    No posee ningún contacto de monitoreo
+  </span>
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="events.length === 0
+      && monitors.length > 0">
     No ha creado ningún evento
   </span>
   <span class="label text-base bg-info pos-rlt m-r"
       ng-show="gridTemporalAccesses.data.length === 0 && !isSelectedEventEmpty()
         && !checkSelectedEventEndDate()">
-    No ha habilitado ningún acceso temporal
+    No ha habilitado ningún acceso temporal. Evento activo
   </span>
   <span class="label text-base bg-info pos-rlt m-r"
       ng-show="checkSelectedEventEndDate()">
-    No habilitó ningún acceso temporal para este evento
+    No habilitó ningún acceso temporal para este evento. Evento Finalizado
   </span>
   <ui-select ng-init="getEventOptions()" ng-model="event" on-select="loadAccesses($item, $model)"
              theme="bootstrap" ng-required="true" ng-disabled="events.length === 0">

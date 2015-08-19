@@ -3,7 +3,7 @@ package com.coredump.socialdump.service;
 import com.coredump.socialdump.domain.SearchCriteria;
 
 /**
- * Created by Franz on 15/07/2015.
+ * Created by Francisco Milanés Sánchez on 15/07/2015.
  */
 public interface FetchableInterface extends Runnable{
 

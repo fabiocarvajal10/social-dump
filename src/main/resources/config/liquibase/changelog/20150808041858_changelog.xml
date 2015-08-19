@@ -8,7 +8,4 @@
     <changeSet author="esteban (generated)" id="1439029152450-2">
         <addForeignKeyConstraint baseColumnNames="statusId" baseTableName="SocialNetwork" constraintName="FK_fm5s0414xue29v3ui8cynljcq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="GenericStatus"/>
     </changeSet>
-    <changeSet author="esteban (generated)" id="1439029152450-3">
-        <dropTable tableName="A"/>
-    </changeSet>
 </databaseChangeLog>

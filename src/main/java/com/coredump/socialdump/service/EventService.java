@@ -50,6 +50,11 @@ public class EventService {
   @Inject
   private SearchCriteriaService searchCriteriaService;
 
+  /**
+   *
+   * @param event
+   * @return
+   */
   public List<String> getSearchCriterias(Event event) {
     return  searchCriteriaRepository.findAllByEventByEventId(event)
           .stream()
@@ -57,13 +62,21 @@ public class EventService {
           .collect(Collectors.toCollection(ArrayList::new));
   }
 
-
+  /**
+   *
+   * @param event
+   */
   public void scheduleFetch(Event event) {
     log.info("Preparing fetch of hashtags");
     event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
     fetchExecutorService.scheduleFetch(event);
   }
 
+  /**
+   *
+   * @param searchCriteria
+   * @return
+   */
   public boolean stopSync(SearchCriteria searchCriteria) {
 
     if (fetchExecutorService.stopSynchronization(searchCriteria)) {
@@ -76,10 +89,20 @@ public class EventService {
     }
   }
 
+  /**
+   *
+   * @param event
+   */
   public void stopAllSync(Event event) {
     fetchExecutorService.killAll(event);
   }
 
+  /**
+   *
+   * @param searchCriteria
+   * @param delay
+   * @return
+   */
   public boolean modifyDelay(SearchCriteria searchCriteria, int delay) {
 
     if (fetchExecutorService.modifyDelay(searchCriteria, delay)) {
@@ -89,12 +112,21 @@ public class EventService {
     }
   }
 
+  /**
+   *
+   * @param event
+   * @param delay
+   */
   public void delayAll(Event event, int delay) {
     fetchExecutorService.delayAll(event, delay);
     event.setPostDelay(delay);
     eventRepository.save(event);
   }
 
+  /**
+   *
+   * @param event
+   */
   public void cancelEvent(Event event) {
 
     EventStatus status = statusRepository.findOneByStatus("Cancelado");

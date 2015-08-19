@@ -45,7 +45,10 @@ public class SocialNetworkPostResource {
   private SocialNetworkPostMapper socialNetworkPostMapper;
 
   /**
-   * GET  /social-network-posts -> get all SocialNetworkPosts.
+   * GET  /social-network-posts -> get all SocialNetworkPost
+   * @param id
+   * @return
+   * @throws URISyntaxException
    */
   @RequestMapping(value = "/social-network-posts/event/{id}",
         method = RequestMethod.GET,
@@ -75,6 +78,8 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
+   * @param id
+   * @return
    */
   @RequestMapping(value = "/social-network-posts/recent/{id}",
         method = RequestMethod.GET,
@@ -91,6 +96,8 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
+   * @param id
+   * @return
    */
   @RequestMapping(value = "/social-network-posts/{id}",
           method = RequestMethod.GET,
@@ -107,6 +114,8 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
+   * @param organizationId
+   * @return
    */
   @RequestMapping(value = "/social-network-posts/count",
       method = RequestMethod.GET,

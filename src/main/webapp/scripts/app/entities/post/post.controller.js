@@ -43,8 +43,8 @@
         PostService
           .query({'id': $stateParams.id})
           .$promise.then(function(data) {
-            //Playlist.play(data, reproducerObject);
-            Cards.createCards(data, $scope, templateUrl);
+            Playlist.play(data, reproducerObject);
+            //Cards.createCards(data, $scope, templateUrl);
           });
 
         PostTracker.receivePublic().then(null, null, function(posts) {

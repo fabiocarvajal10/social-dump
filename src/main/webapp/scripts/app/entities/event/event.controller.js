@@ -4,25 +4,33 @@
   angular.module('socialdumpApp')
   .controller(
     'EventController', [
-      '$scope', 'Event', 'EventStatus', 'EventType', 'ParseLinks',
-      'OrganizationService', 'DateUtils',
-      function($scope, Event, EventStatus, EventType, // SearchCriteria,
-               ParseLinks, OrganizationService, DateUtils) {
+      '$rootScope', '$scope', 'Event', 'EventStatus', 'EventType',
+      'ParseLinks', 'DateUtils',
+      function($rootScope, $scope, Event, EventStatus, EventType,
+          ParseLinks, DateUtils) {
         $scope.defaultDateTimeFormat = DateUtils.defaultDateTimeFormat();
         var dateTimeFormat = 'date: \'' + $scope.defaultDateTimeFormat + '\'';
         $scope.events = [];
         $scope.page = 1;
+
+        $rootScope
+          .$on('currentOrganizationChange', function(event, args) {
+            $scope.reset();
+          });
+
         $scope.loadAll = function() {
-          Event.query({page: $scope.page, per_page: 20,
-                       organizationId: OrganizationService.getCurrentOrgId()},
-            function(result, headers) {
-              $scope.links = ParseLinks.parse(headers('link'));
-              for (var i = 0; i < result.length; i++) {
-                result[i].status = EventStatus.get({id: result[i].statusId});
-                result[i].type = EventType.get({id: result[i].typeId});
-                $scope.events.push(result[i]);
-              }
-            });
+          if (!isOrgEmpty()) {
+            Event.query({page: $scope.page, per_page: 20,
+                         organizationId: $rootScope.currentOrg.id},
+              function(result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                for (var i = 0; i < result.length; i++) {
+                  result[i].status = EventStatus.get({id: result[i].statusId});
+                  result[i].type = EventType.get({id: result[i].typeId});
+                  $scope.events.push(result[i]);
+                }
+              });
+          }
         };
         $scope.reset = function() {
           $scope.page = 1;
@@ -34,7 +42,6 @@
           $scope.page = page;
           $scope.loadAll();
         };
-        $scope.loadAll();
 
         $scope.delete = function(id) {
           Event.get({id: id}, function(result) {
@@ -142,5 +149,14 @@
             }
           ]
         };
+
+        function isOrgEmpty() {
+            return $rootScope.currentOrg === null ||
+                $rootScope.currentOrg === undefined;
+        };
+
+        $scope.loadAll();
+
+
       }]);
 }());

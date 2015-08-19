@@ -4,7 +4,9 @@
 'use strict';
 
 angular.module('socialdumpApp.temporalAccess')
-  .controller('TemporalAccessDetailCtrl',
+  .controller('TemporalAccessDetailController', ['$scope', 'TemporalAccessService',
+        '$modalInstance', 'MonitorService',
+        'gridTA', 'gridRow', 'selectedEvent',
     function($scope, TemporalAccessService, $modalInstance, MonitorService,
         gridTA, gridRow, selectedEvent) {
 
@@ -24,7 +26,7 @@ angular.module('socialdumpApp.temporalAccess')
             $scope.monitorContacts = data;
             $scope.temporalAccess.allEvent = true;
           })
-          .catch (function() {
+          .catch(function() {
 
           });
       };
@@ -36,7 +38,7 @@ angular.module('socialdumpApp.temporalAccess')
           gridTA.data.push(data);
           $modalInstance.close();
         })
-        .catch (function(error) {
+        .catch(function(error) {
           $scope.errorMessage = error;
         });
       };
@@ -48,7 +50,7 @@ angular.module('socialdumpApp.temporalAccess')
           gridTA.data.splice(index, 1);
           $modalInstance.close();
         })
-        .catch (function(error) {
+        .catch(function(error) {
           $scope.errorMessage = error;
         });
       };
@@ -62,4 +64,5 @@ angular.module('socialdumpApp.temporalAccess')
       };
 
       $scope.init();
-  });
+    }
+  ]);

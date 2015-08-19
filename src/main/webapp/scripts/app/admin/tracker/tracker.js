@@ -1,5 +1,5 @@
 angular.module('socialdumpApp')
-    .config(function ($stateProvider) {
+    .config(function($stateProvider) {
         $stateProvider
             .state('tracker', {
                 parent: 'admin',
@@ -9,7 +9,7 @@ angular.module('socialdumpApp')
                     pageTitle: 'Real-time user activities'
                 },
                 views: {
-                    'content@': {
+                    '': {
                         templateUrl: 'scripts/app/admin/tracker/tracker.html',
                         controller: 'TrackerController'
                     }

@@ -62,6 +62,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Pageable pageable,
     @Param("orgId") Long orgId);
 
+  /**
+   * Devuelve todos los eventos en desarrollo de una organización
+   * @param pageable Objeto paginable
+   * @param orgId Id de la organización de la cual se quieren buscar los eventos
+   * @param date Fecha actual
+   * @return Lista con todos los eventos en desarollo
+   */
   @Query(
     "FROM Event e "
     + "WHERE e.organizationByOrganizationId.id = :orgId"
@@ -74,6 +81,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   Page<Event> findIncomingEvents(Pageable pageable, @Param("orgId") Long orgId,
                                  @Param("date") DateTime date);
 
+  /**
+   * Devuelve todos los eventos que han finalizado de una organización
+   * @param pageable Objeto paginable
+   * @param orgId  Id de la organización
+   * @param date Fecha actual
+   * @return Lista con todos los eventos finalizados
+   */
   @Query(value =
     "FROM Event e " +
     "WHERE e.organizationByOrganizationId.id = :orgId " +

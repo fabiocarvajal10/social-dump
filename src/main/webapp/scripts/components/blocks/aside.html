@@ -1,4 +1,4 @@
-<div ng-cloak class="aside-wrap">
+<div ng-cloak class="aside-wrap" ng-controller="AsideController">
   <!-- if you want to use a custom scroll when aside fixed, use the slimScroll
     <div class="navi-wrap" ui-jq="slimScroll" ui-options="{height:'100%', size:'8px'}">
   -->
@@ -9,7 +9,7 @@
         <a href class="dropdown-toggle hidden-folded" dropdown-toggle>
           <span class="clear">
             <span class="block m-t-sm">
-              <strong class="font-bold text-lt"> DEFCON </strong>
+              <strong class="font-bold text-lt"> {{currentOrg.name}} </strong>
               <b class="caret"></b>
             </span>
             <!--<span class="text-muted text-xs block">Art Director</span>-->
@@ -19,20 +19,14 @@
         <ul class="dropdown-menu animated fadeInRight w hidden-folded">
           <li class="wrapper b-b m-b-sm bg-info m-t-n-xs">
             <span class="arrow top hidden-folded arrow-info"></span>
-            <span> Definir </span>
+            <span> <b>Organizaciones</b> </span>
           </li>
-          <li>
-            <a href> Evento 1 </a>
-          </li>
-          <li>
-            <a > Evento 2 </a>
-          </li>
-          <li>
-            <a href> Evento 3 </a>
+          <li ng-repeat="org in orgz" ng-click="onChange(org.id)">
+            <a ng-show="org.name !== currentOrg.name"> {{org.name}} </a>
           </li>
           <li class="divider"></li>
           <li>
-            <a href> Ver Todos </a>
+            <a ui-sref="organizations"> Ver Todos </a>
           </li>
         </ul>
         <!-- / dropdown -->

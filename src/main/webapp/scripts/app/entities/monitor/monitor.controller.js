@@ -2,15 +2,17 @@
  * Created by Franz on 23/07/2015.
  */
 angular.module('socialdumpApp.monitors')
-  .controller('MonitorCtrl',
-    function($scope, MonitorService, $modal, OrganizationService) {
+  .controller('MonitorCtrl', ['$rootScope', '$scope',
+    'MonitorService', '$modal',
+    function($rootScope, $scope, MonitorService, $modal) {
       $scope.totalItems = 0;
       $scope.currentPage = 1;
       $scope.monitorContacts = [];
 
-      $scope.init = function() {
-        getMonitors();
-      };
+      $rootScope
+        .$on('currentOrganizationChange', function(event, args) {
+          getMonitors();
+        });
 
       $scope.open = function(monitorContact, index, action) {
         checkMonitorsCant();
@@ -38,37 +40,27 @@ angular.module('socialdumpApp.monitors')
         });
       };
 
-      function checkMonitorsCant() {
-        if($scope.monitorContacts.length === 0 && $scope.currentPage !== 1) {
-          $scope.currentPage--;
-          getMonitors();
-        } else if($scope.monitorContacts.length > 8) {
-          $scope.currentPage++;
-          getMonitors();
-        }
-      }
-
-      $scope.init();
-
       $scope.pageChanged = function() {
         getMonitors();
       };
 
+
+      function isOrgEmpty() {
+        return $rootScope.currentOrg === null ||
+            $rootScope.currentOrg === undefined;
+      };
+
       function getMonitors() {
-        if (!isNaN(OrganizationService.getCurrentOrgId())){
+        if (!isOrgEmpty()) {
           MonitorService.getAll($scope.currentPage, 8)
-            .then(function (data) {
+            .then(function(data) {
               $scope.monitorContacts = data;
               $scope.totalItems = data.total;
             })
-            .catch(function () {
+            .catch(function() {
 
             });
         }
-      };
-
-      $scope.checkMonitorOrg = function() {
-        return isNaN(OrganizationService.getCurrentOrgId());
       };
 
       function getModalUrl(action) {
@@ -77,5 +69,17 @@ angular.module('socialdumpApp.monitors')
         return baseUrl + action + extension;
       };
 
-    });
+      function checkMonitorsCant() {
+        if ($scope.monitorContacts.length === 0 && $scope.currentPage !== 1) {
+          $scope.currentPage--;
+          getMonitors();
+        } else if ($scope.monitorContacts.length > 8) {
+          $scope.currentPage++;
+          getMonitors();
+        }
+      }
+
+      getMonitors();
+    }
+  ]);
 

@@ -1,7 +1,7 @@
 <div style="padding-top: 70px;">
 <!--Nav Bar-->
 <nav class="navbar navbar-default navbar-fixed-top" id="nav-public">
-    
+
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-right navbar-toggle btn navbar-btn" ng-init="navCollapsed = true"
@@ -11,18 +11,31 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="#" style="width: 400px;">
                 <b>
                     <h5 class="graff">{{::event.description}}
                     <!--Replace for event #hashtag-->
                         <p class="hash">
-                            <small data-ng-repeat="hashtag in event.searchCriterias">{{::hashtag}}</small>
+                            <small data-ng-repeat="hashtag in event.searchCriterias">
+                               <small ng-if="hashtag[0] === '#'"> {{::hashtag}} </small>
+                               <small ng-if="hashtag[0] !== '#'"> #{{::hashtag}} </small>
+                            </small>
                         </p>
                     </h5>
                 </b>
             </a><!--Replace for event name-->
         </div>
-        
+
+        <div class="m-l-xxl m-t-sm" has-role="ROLE_USER" style="float:right">
+          <button class="btn btn-sm btn-icon btn-danger m-r-sm"
+                data-ng-repeat="hashtag in event.searchCriterias"
+                ng-click="openUnsyncModal(hashtag)"
+                ng-hide="!hashtag">
+            <i ng-show="hashtag[0] === '#'" class="fa fa-twitter fa-2x"></i>
+            <i ng-show="hashtag[0] !== '#'" class="fa fa-instagram fa-2x"></i>
+          </button>
+        </div>
+
         <div collapse="navCollapsed" class="collapse navbar-collapse navbar-right">
           <ul class="nav navbar-nav ng-scope">
             <li ng-class="{active: isTabActive('home')}" ng-click="filter('home')">
@@ -37,15 +50,20 @@
             </li>
           </ul>
         </div>
-        
+
     </div>
 
 </nav>
 
+<!-- toaster directive -->
+  <toaster-container toaster-options="{'position-class': 'toast-bottom-right'}">
+  </toaster-container>
+<!-- / toaster directive -->
+
 <div class="container wrapper-post">
-    
+
     <div dynamic-layout items="cards" filters="filters" rankers="rankers" ></div>
-        
+
 </div>
 
 </div>
@@ -75,7 +93,7 @@ ssss
         <div class="col-xs-4 padder-v text-muted b-r" ng-class="{active: isTabActive('home')}" ng-click="filter('home')">
         <a class="fa fa-home block fa-2x btn-all"></a>
         </div>
-        
+
         <div class="col-xs-4 padder-v text-muted b-r" ng-class="{active: isTabActive('twitter')}" ng-click="filter('twitter')">
             <a class="fa fa-twitter-square block  fa-2x btn-twitter"></a>
         </div>
@@ -84,5 +102,5 @@ ssss
             <a class="fa fa-instagram block fa-2x btn-instagram"></a>
         </div>
     </div>
-</div--> 
+</div-->
 

@@ -1,7 +1,7 @@
-<div>
-
-    <h2>Health Check</h2>
-
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Salud del sistema</h1>
+</div>
+<div class="wrapper-md">
     <div class="modal fade" id="showHealthModal" tabindex="-1" role="dialog" aria-labelledby="showHealthLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -20,12 +20,12 @@
                     </div>
                     <div class="modal-body">
                         <div ng-show="currentHealth.details">
-                            <h4>Properties</h4>
+                            <h4>Propiedades</h4>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="col-md-6 text-left">Name</th>
-                                        <th class="col-md-6 text-left">Value</th>
+                                        <th class="col-md-6 text-left">Nombre</th>
+                                        <th class="col-md-6 text-left">Valor</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,7 +54,7 @@
     <table id="healthCheck" class="table table-striped">
         <thead>
             <tr>
-                <th class="col-md-7">Service Name</th>
+                <th class="col-md-7">Servicio</th>
                 <th class="col-md-2 text-center">Status</th>
                 <th class="col-md-2 text-center">Details</th>
                 <th class="col-md-1 text-center"></th>
