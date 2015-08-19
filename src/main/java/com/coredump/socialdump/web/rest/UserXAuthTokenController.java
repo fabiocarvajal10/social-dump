@@ -1,8 +1,10 @@
 package com.coredump.socialdump.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.domain.User;
+import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.TemporalAccessRepository;
 import com.coredump.socialdump.repository.UserRepository;
 import com.coredump.socialdump.security.xauth.Token;
@@ -51,6 +53,9 @@ public class UserXAuthTokenController {
   private TemporalAccessService temporalAccessService;
 
   @Inject
+  private EventRepository eventRepository;
+
+  @Inject
   private UserRepository userRepository;
 
   @Inject
@@ -79,7 +84,7 @@ public class UserXAuthTokenController {
       method = RequestMethod.POST)
   @Timed
   public ResponseEntity<?> authorizeTemporalAccess(@RequestParam Long id,
-      @RequestParam String username, @RequestParam String password) {
+      @RequestParam Long eventId, @RequestParam String username, @RequestParam String password) {
 
     DateTime now = new DateTime();
     TemporalAccess temporalAccess = null;
@@ -93,9 +98,12 @@ public class UserXAuthTokenController {
     UserDetails details =
         this.userDetailsService.loadUserByUsername(username);
 
-    temporalAccess = temporalAccessRepository.findOne(id);
+    Event event = eventRepository.findOne(eventId);
+    temporalAccess = temporalAccessRepository.findOneByIdAndEventByEventId(id, event);
 
-    if (now.isBefore(temporalAccess.getStartDate())) {
+    if (temporalAccess == null) {
+      return new ResponseEntity<>("Temporal Access not found", HttpStatus.CONFLICT);
+    } else if (now.isBefore(temporalAccess.getStartDate())) {
       return new ResponseEntity<>("Monitor cant access before defined time",
         HttpStatus.CONFLICT);
     } else if (now.isAfter(temporalAccess.getEndDate())) {
@@ -110,7 +118,7 @@ public class UserXAuthTokenController {
   }
 
   @RequestMapping(value = "/delete",
-    method = RequestMethod.POST)
+      method = RequestMethod.POST)
   @Timed
   public ResponseEntity<?> deleteAccount(@RequestParam Long id,
       @RequestParam String password) {

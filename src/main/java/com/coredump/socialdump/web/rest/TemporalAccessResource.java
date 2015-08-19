@@ -188,5 +188,38 @@ public class TemporalAccessResource {
     }
 
   }
+
+  /**
+   * Validate access /temporal-accesses/validate -> validates the event owner
+   */
+  @RequestMapping(value = "/temporal-accesses/validate",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<?> valiadate(@RequestParam(value = "id") Long id,
+      @RequestParam(value = "eventId") Long eventId) {
+
+    TemporalAccess temporalAccess = null;
+    Event event = eventRepository.findOne(eventId);
+
+    if (event == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    temporalAccess = temporalAccessRepository.findOneByIdAndEventByEventId(id, event);
+    DateTime now = new DateTime();
+
+    if (temporalAccess == null) {
+      return new ResponseEntity<>("Temporal Access not found", HttpStatus.CONFLICT);
+    } else if (now.isBefore(temporalAccess.getStartDate())) {
+      return new ResponseEntity<>("Monitor cant access before defined time",
+        HttpStatus.CONFLICT);
+    } else if (now.isAfter(temporalAccess.getEndDate())) {
+      return new ResponseEntity<>("Monitor cant access after defined time",
+        HttpStatus.CONFLICT);
+    }
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }
 

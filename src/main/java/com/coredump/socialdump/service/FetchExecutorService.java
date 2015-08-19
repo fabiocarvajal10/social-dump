@@ -34,6 +34,10 @@ public class FetchExecutorService {
 
   private ScheduledExecutorService scheduledExecutorService;
 
+  /**
+   *
+   * @param event
+   */
   public void scheduleFetch(Event event) {
     int searchCriteriaQ = event.getSearchCriteriasById().size();
 
@@ -58,18 +62,34 @@ public class FetchExecutorService {
       });
   }
 
+  /**
+   *
+   * @param socialNetworkFetch
+   * @param startDate
+   */
   private void addSchedule(FetchableInterface socialNetworkFetch, DateTime startDate) {
     log.debug("Scheduled to start in {} mins", getEventStartDelay(startDate));
     scheduledExecutorService
       .schedule(socialNetworkFetch, getEventStartDelay(startDate), TimeUnit.MINUTES);
   }
 
+  /**
+   *
+   * @param event
+   * @param socialNetworkFetch
+   * @param searchCriteria
+   */
   private void addToMap(Event event, FetchableInterface socialNetworkFetch,
       SearchCriteria searchCriteria) {
     String key = buildKey(event, searchCriteria);
     fetchableMap.put(key, socialNetworkFetch);
   }
 
+  /**
+   *
+   * @param searchCriteria
+   * @return
+   */
   public boolean stopSynchronization(SearchCriteria searchCriteria) {
     String key = buildKey(searchCriteria.getEventByEventId(), searchCriteria);
 
@@ -82,11 +102,21 @@ public class FetchExecutorService {
 
   }
 
+  /**
+   *
+   * @param event
+   */
   public void killAll(Event event) {
     event.getSearchCriteriasById()
       .forEach(sc -> fetchableMap.get(buildKey(event, sc)).kill());
   }
 
+  /**
+   * 
+   * @param searchCriteria
+   * @param delay
+   * @return
+   */
   public boolean modifyDelay(SearchCriteria searchCriteria, int delay) {
     String key = buildKey(searchCriteria.getEventByEventId(), searchCriteria);
 

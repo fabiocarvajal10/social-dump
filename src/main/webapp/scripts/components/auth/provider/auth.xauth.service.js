@@ -23,8 +23,8 @@ angular.module('socialdumpApp')
             },
 
             access: function(credentials) {
-              var cred = "id=" + credentials.id + "&username=" + credentials.username + "&password="
-                       + credentials.password;
+              var cred = "id=" + credentials.id + "&eventId=" + credentials.eventId + "&username=" +
+                         credentials.username + "&password=" + credentials.password;
               var q = $q.defer();
               $http({
                 headers: {
@@ -36,9 +36,9 @@ angular.module('socialdumpApp')
                 data: cred
               }).
               success(function(data) {
+                Principal.identity(true);
                 localStorageService.set('token', data);
                 q.resolve(data);
-                Principal.authenticate(true);
               }).
               catch(function(error) {
                 if(error.data === 'Monitor cant access before defined time'){

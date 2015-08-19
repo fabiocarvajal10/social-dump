@@ -13,6 +13,7 @@ import com.coredump.socialdump.service.EventService;
 import com.coredump.socialdump.service.EventStatusService;
 import com.coredump.socialdump.service.OrganizationService;
 import com.coredump.socialdump.service.SearchCriteriaService;
+import com.coredump.socialdump.service.TemporalAccessService;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
@@ -36,6 +37,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
@@ -83,6 +85,9 @@ public class  EventResource{
   */
   @Inject
   private SearchCriteriaService searchCriteriaService;
+
+  @Inject
+  private TemporalAccessService temporalAccessService;
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
@@ -168,8 +173,8 @@ public class  EventResource{
           method = RequestMethod.PUT,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<Void> update(@Valid @RequestBody EventDTO eventDTO)
-          throws URISyntaxException {
+  public ResponseEntity<Void> update(@Valid @RequestBody EventDTO eventDTO,
+      HttpServletRequest request) throws URISyntaxException {
     log.debug("REST request to update Event {}: ",
             eventDTO.toString());
 
@@ -191,8 +196,12 @@ public class  EventResource{
             .build();
     }
 
+    DateTime oldStartDate = event.getStartDate();
+    DateTime oldEndDate = event.getEndDate();
+
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
+    temporalAccessService.updateAccessDates(event, oldStartDate, oldEndDate, request);
 
     return ResponseEntity.ok().build();
   }
@@ -407,23 +416,40 @@ public class  EventResource{
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<?> stopSync(@RequestParam(value = "searchCriteriaId")
-      Long searchCriteriaId) {
+    public ResponseEntity<?> stopSync(@RequestParam(value = "eventId") Long eventId,
+      @RequestParam(value = "searchCriteria") String searchCriteria) {
 
-    SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
+    Event event = eventRepository.findOne(eventId);
 
-    if (searchCriteria.getEventByEventId() == null || searchCriteria == null) {
+    if (event == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    Organization organization = organizationService
+      .ownsOrganization(event.getOrganizationByOrganizationId().getId());
+
+    if (organization == null) {
+      return ResponseEntity.status(403).build();
+    }
+
+    if (validateOwner(event) == null) {
+      return ResponseEntity.status(403).body(null);
+    }
+
+    SearchCriteria sc =
+      searchCriteriaRepository.findOneBySearchCriteriaAndEventByEventId(searchCriteria, event);
+
+    if (sc != null) {
+      boolean killed = eventService.stopSync(sc);
+
+      if (killed) {
+        return new ResponseEntity<>(HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+      }
+    } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    boolean killed = eventService.stopSync(searchCriteria);
-
-    if (killed) {
-      return new ResponseEntity<>(HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    }
-
   }
 
   /**
@@ -560,6 +586,28 @@ public class  EventResource{
 
     event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
     eventService.cancelEvent(event);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  /**
+   * Validate Ownership /events/owner/validate -> validates the event owner
+   */
+  @RequestMapping(value = "/events/owner/validate",
+      method = RequestMethod.POST,
+      produces = MediaType.TEXT_PLAIN_VALUE)
+  @Timed
+  public ResponseEntity<?> validateOwnerhsip(@RequestParam(value = "id") Long id) {
+
+    Event event = eventRepository.findOne(id);
+
+    if (event == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    if (validateOwner(event) == null) {
+      return new ResponseEntity<>("Cant access the event", HttpStatus.FORBIDDEN);
+    }
 
     return new ResponseEntity<>(HttpStatus.OK);
   }

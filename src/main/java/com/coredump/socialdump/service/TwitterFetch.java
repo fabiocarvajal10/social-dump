@@ -31,6 +31,9 @@ public class TwitterFetch extends SocialNetworkFetch {
     super();
   }
 
+  /**
+   * Main thread
+   */
   @Override
   public void run() {
     String appId = getSocialNetworkApiCredential().getAppId();
@@ -70,6 +73,11 @@ public class TwitterFetch extends SocialNetworkFetch {
     }
   }
 
+  /**
+   *
+   * @param tweet
+   * @return
+   */
   private SocialNetworkPost processTweet(Tweet tweet) {
     log.debug("Procesando tweets");
     SocialNetworkPost post = new SocialNetworkPost();

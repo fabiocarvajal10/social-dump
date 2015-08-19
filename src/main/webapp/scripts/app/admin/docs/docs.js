@@ -12,7 +12,7 @@
         pageTitle: 'API'
       },
       views: {
-        'content@': {
+        '': {
         templateUrl: 'scripts/app/admin/docs/docs.html'
         }
       }
