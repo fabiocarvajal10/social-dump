@@ -26,6 +26,11 @@ public abstract class MonitorContactMapper {
   public abstract MonitorContactDTO monitorContactToMonitorContactDTO(MonitorContact
                                                                         monitorContact);
 
+  /**
+   * Obtiene una organization por un id.
+   * @param id id del organization
+   * @return Organization
+   */
   public Organization organizationFromId(Long id) {
     if (id == null) {
       return null;

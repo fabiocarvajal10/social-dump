@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
+
 /**
  * REST controller for managing SocialNetworkPosts.
  */
@@ -44,11 +47,10 @@ public class SocialNetworkPostResource {
   private SocialNetworkPostMapper socialNetworkPostMapper;
 
   /**
-   * GET  /social-network-posts -> get all SocialNetworkPost
-   *
-   * @param id
-   * @return
-   * @throws URISyntaxException
+   * GET  /social-network-posts -> get all SocialNetworkPost.
+   * @param id id del evento
+   * @return Posts que pertenecen al evento
+   * @throws URISyntaxException error en la sintaxis del url
    */
   @RequestMapping(value = "/social-network-posts/event/{id}",
     method = RequestMethod.GET,
@@ -78,9 +80,8 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
-   *
-   * @param id
-   * @return
+   * @param id identificador del post
+   * @return SocialNetworkPost
    */
   @RequestMapping(value = "/social-network-posts/recent/{id}",
     method = RequestMethod.GET,
@@ -98,8 +99,8 @@ public class SocialNetworkPostResource {
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
    *
-   * @param id
-   * @return
+   * @param id identificador del social-network-post
+   * @return SocialNetworkPost
    */
   @RequestMapping(value = "/social-network-posts/{id}",
     method = RequestMethod.GET,
@@ -117,8 +118,8 @@ public class SocialNetworkPostResource {
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
    *
-   * @param organizationId
-   * @return
+   * @param organizationId organización a consultar
+   * @return Cantidad  de posts de la organización
    */
   @RequestMapping(value = "/social-network-posts/count",
     method = RequestMethod.GET,
@@ -132,7 +133,7 @@ public class SocialNetworkPostResource {
 
     Map<String, Long> countList =
       postsList.stream()
-        .collect(Collectors.groupingBy(p -> p.getName(), Collectors.counting()));
+        .collect(Collectors.groupingBy(SocialNetwork::getName, Collectors.counting()));
 
     return new ResponseEntity<>(countList, HttpStatus.OK);
   }

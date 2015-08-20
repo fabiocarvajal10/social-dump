@@ -42,6 +42,11 @@ public abstract class EventMapper {
     @Mapping(source = "typeId", target = "eventTypeByEventTypeId")})
   public abstract Event eventDTOToEvent(EventDTO eventDTO);
 
+  /**
+   * Obtiene un eventStatus por un id.
+   * @param id id del eventStatus
+   * @return EventStatus
+   */
   public EventStatus eventStatusFromId(Short id) {
     if (id == null) {
       return null;
@@ -49,6 +54,11 @@ public abstract class EventMapper {
     return eventStatusRepository.findOne(id);
   }
 
+  /**
+   * Obtiene una organization por un id.
+   * @param id id del organization
+   * @return Organization
+   */
   public Organization organizationFromId(Long id) {
     if (id == null) {
       return null;
@@ -56,6 +66,11 @@ public abstract class EventMapper {
     return organizationRepository.findOne(id);
   }
 
+  /**
+   * Obtiene un EventType por un id.
+   * @param id id del EventType
+   * @return EventType
+   */
   public EventType eventTypeFromId(Integer id) {
     if (id == null) {
       return null;

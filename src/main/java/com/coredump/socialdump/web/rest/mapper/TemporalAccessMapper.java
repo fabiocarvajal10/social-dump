@@ -34,6 +34,11 @@ public abstract class TemporalAccessMapper {
     @Mapping(source = "monitorContactId", target = "monitorContactByMonitorContactId")})
   public abstract TemporalAccess temporalAccessDTOToTemporalAccess(TemporalAccessDTO temporalAccessDTO);
 
+  /**
+   * Obtiene una Event por un id.
+   * @param id id del Event
+   * @return Event
+   */
   public Event eventFromId(Long id) {
     if (id == null) {
       return null;
@@ -42,6 +47,11 @@ public abstract class TemporalAccessMapper {
     return eventRepository.findOne(id);
   }
 
+  /**
+   * Obtiene una MonitorContact por un id.
+   * @param id id del MonitorContact
+   * @return MonitorContact
+   */
   public MonitorContact monitorContactFromId(Long id) {
     if (id == null) {
       return null;
@@ -50,6 +60,11 @@ public abstract class TemporalAccessMapper {
     return monitorContactRepository.findOne(id);
   }
 
+  /**
+   * Obtiene una GenericStatus por un id.
+   * @param id id del GenericStatus
+   * @return GenericStatus
+   */
   public GenericStatus genericStatusFromId(Short id) {
     if (id == null) {
       return null;

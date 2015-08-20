@@ -5,6 +5,7 @@ import com.coredump.socialdump.web.rest.dto.EventTypeDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+
 /**
  * Mapper for the entity EventType and its DTO EventTypeDTO.
  *
@@ -12,6 +13,7 @@ import org.mapstruct.Mapping;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface EventTypeMapper {
+  EventTypeDTO eventTypeToEventTypeDTO(EventType eventType);
 
   /**
    * Traduce objetos de dominio a objetos limpios para

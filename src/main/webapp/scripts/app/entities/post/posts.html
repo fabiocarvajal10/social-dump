@@ -11,19 +11,18 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#" style="width: 400px;">
+            <a style="display:inline-block;" class="navbar-brand" href="#" style="width: 400px;">
                 <b>
                     <h5 class="graff">{{::event.description}}
-                    <!--Replace for event #hashtag-->
-                        <p class="hash">
-                            <small data-ng-repeat="hashtag in event.searchCriterias">
-                               <small ng-if="hashtag[0] === '#'"> {{::hashtag}} </small>
-                               <small ng-if="hashtag[0] !== '#'"> #{{::hashtag}} </small>
-                            </small>
-                        </p>
+                        <p class="hash" style="display:inline-block; color:#000" data-ng-repeat="hashtag in event.searchCriterias">
+                            <small ng-if="hashtag[0] === '#'"> {{::hashtag}} </small>
+                            <small ng-if="hashtag[0] !== '#'"> #{{::hashtag}} </small>
+                        </p> 
                     </h5>
-                </b>
+                    <!--Replace for event #hashtag-->        
+                </b>  
             </a><!--Replace for event name-->
+                  
         </div>
         
         <div collapse="navCollapsed" class="collapse navbar-collapse navbar-right">

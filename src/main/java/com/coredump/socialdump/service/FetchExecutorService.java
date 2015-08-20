@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Francisco J. Milanés Sánchez on 13/07/2015.
  */
 @Service
+
 public class FetchExecutorService {
 
   private final Logger log = LoggerFactory.getLogger(FetchExecutorService.class);
@@ -32,7 +33,9 @@ public class FetchExecutorService {
   private ScheduledExecutorService scheduledExecutorService;
 
   /**
-   * @param event
+   * Agenda la extracción de datos de las redes sociales.
+   *
+   * @param event evento al que se va a agendar
    */
   public void scheduleFetch(Event event) {
     int searchCriteriaQ = event.getSearchCriteriasById().size();
@@ -40,7 +43,7 @@ public class FetchExecutorService {
     scheduledExecutorService = Executors
       .newScheduledThreadPool(searchCriteriaQ);
 
-    List<SearchCriteria> scList = (List) event.getSearchCriteriasById();
+    List<SearchCriteria> scList = (List<SearchCriteria>) event.getSearchCriteriasById();
 
     scList.forEach(sc -> {
       try {
@@ -59,8 +62,10 @@ public class FetchExecutorService {
   }
 
   /**
-   * @param socialNetworkFetch
-   * @param startDate
+   * Agrega un agendador, para la extracción de datos.
+   *
+   * @param socialNetworkFetch red social de la que se va a extraer
+   * @param startDate fecha en la que se empieza a extraer datos
    */
   private void addSchedule(FetchableInterface socialNetworkFetch, DateTime startDate) {
     log.debug("Scheduled to start in {} mins", getEventStartDelay(startDate));
@@ -69,9 +74,12 @@ public class FetchExecutorService {
   }
 
   /**
-   * @param event
-   * @param socialNetworkFetch
-   * @param searchCriteria
+   * Anade un nuevo campo al Map fechableMap.
+   *
+   * @param event evento al que se le va a agregar un criterio de busqueda
+   * @param socialNetworkFetch red social de la que se van a extraer datos
+   * @param searchCriteria criterio que va a utilizar el
+   *                       servicio para extraer los posts de una red social
    */
   private void addToMap(Event event, FetchableInterface socialNetworkFetch,
                         SearchCriteria searchCriteria) {
@@ -80,8 +88,11 @@ public class FetchExecutorService {
   }
 
   /**
-   * @param searchCriteria
-   * @return
+   * Método que detiene la sincronización del eventoa una red social
+   * detiene la extracción de datos.
+   *
+   * @param searchCriteria criterio por el que se va a realizar la búsqueda
+   * @return valor booleano indicando el resultado de la stop
    */
   public boolean stopSynchronization(SearchCriteria searchCriteria) {
     String key = buildKey(searchCriteria.getEventByEventId(), searchCriteria);
@@ -96,7 +107,9 @@ public class FetchExecutorService {
   }
 
   /**
-   * @param event
+   * Detiene los hilos encargados de traer los datos de las redes sociales.
+   *
+   * @param event evento que va detener extracción posts
    */
   public void killAll(Event event) {
     event.getSearchCriteriasById()
@@ -104,9 +117,11 @@ public class FetchExecutorService {
   }
 
   /**
-   * @param searchCriteria
-   * @param delay
-   * @return
+   * Modifica el tiempo por los que se extraen los posts.
+   *
+   * @param searchCriteria criterio de búsqueda que se va modificar
+   * @param delay indica los segundos de retraso
+   * @return delay modificado
    */
   public boolean modifyDelay(SearchCriteria searchCriteria, int delay) {
     String key = buildKey(searchCriteria.getEventByEventId(), searchCriteria);
@@ -120,21 +135,36 @@ public class FetchExecutorService {
 
   }
 
+  /**
+   * Método encargado de retrasar el tiempo en el
+   * que se extrae un conjunto de datos de las redes.
+   * @param event evento a modificar
+   * @param delay segundos de retraso
+   */
   public void delayAll(Event event, int delay) {
     event.getSearchCriteriasById()
       .forEach(sc -> fetchableMap.get(buildKey(event, sc)).setDelay(delay));
   }
 
+  /**
+   * Método que devuelve la diferencia va a empezar la extracción de datos.
+   * @param startDate fecha de inicio
+   * @return diferencia entre la fecha de inicio del evento y la actual
+   */
   private long getEventStartDelay(DateTime startDate) {
     DateTime now = new DateTime();
     return Minutes.minutesBetween(now, startDate).getMinutes();
   }
 
+  /**
+   * Método que crea el key con el que se va a insertar el searchCriteria.
+   * @param event evento que maneja los criterios de búsqueda
+   * @param searchCriteria criterio de búsqueda a insertar
+   * @return un key para identificar el criterio de búsqueda
+   */
   private String buildKey(Event event, SearchCriteria searchCriteria) {
-    String key = event.getId().toString()
-      + event.getOrganizationByOrganizationId().getId().toString()
-      + searchCriteria.getSocialNetworkBySocialNetworkId().getName();
-
-    return key;
+    return event.getId().toString()
+        + event.getOrganizationByOrganizationId().getId().toString()
+        + searchCriteria.getSocialNetworkBySocialNetworkId().getName();
   }
 }

@@ -36,10 +36,19 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
 
   }
 
+  /**
+   * Método que retorna un SearchCriteria.
+   * @return SearchCriteria
+   */
   public SearchCriteria getSearchCriteria() {
     return searchCriteria;
   }
 
+  /**
+   * Método que prepara el fecth de datos.
+   * @param searchCriteria criterio de búsqueda
+   * @param delay tiempo de retraso para el delay
+   */
   public void prepareFetch(SearchCriteria searchCriteria, int delay) {
     this.searchCriteria = searchCriteria;
     this.setSocialNetworkApiCrededential();
@@ -47,6 +56,7 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     this.delay = (delay * 1000);
     this.setName(searchCriteria);
   }
+
 
   public SocialNetworkApiCredential getSocialNetworkApiCredential() {
     return socialNetworkApiCredential;
@@ -56,6 +66,8 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     return socialNetworkPostRepository;
   }
 
+  /** Método que se encarga de asignar credenciales.
+   */
   public void setSocialNetworkApiCrededential() {
     if (getSearchCriteria() != null) {
       socialNetworkApiCredential =
@@ -65,10 +77,18 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     }
   }
 
+  /**
+   * Método que modifical el campo setIsAlive
+   * para determinar si se debe detener la extracción de datos.
+   */
   public void kill() {
     setIsAlive(false);
   }
 
+  /**
+   * Método que evalúa si el servicio de extracción está activo.
+   * @return booleano indicando si el servicio está activo
+   */
   protected boolean getIsAlive() {
     return this.alive;
   }
