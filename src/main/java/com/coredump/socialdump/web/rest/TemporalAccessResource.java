@@ -99,7 +99,7 @@ public class TemporalAccessResource {
     }
 
     temporalAccessRepository.save(temporalAccess);
-
+    temporalAccess = temporalAccessRepository.findAll().stream().reduce((a, b) -> b).get();
     String baseUrl =
       request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
         + "/#/access?key=" + temporalAccess.getId() + "&id="
