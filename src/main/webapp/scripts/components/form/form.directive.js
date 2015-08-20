@@ -6,7 +6,7 @@ angular.module('socialdumpApp')
         return {
             restrict: 'A',
             require: 'form',
-            link: function (scope, element) {
+            link: function(scope, element) {
                 element.find('.form-group').each(function() {
                     var $formGroup = $(this);
                     var $inputs = $formGroup.find('input[ng-model],textarea[ng-model],select[ng-model]');

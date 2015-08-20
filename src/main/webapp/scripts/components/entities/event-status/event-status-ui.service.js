@@ -15,6 +15,7 @@
         'Activo': 'success',
         'Cancelado': 'error',
         'Inactivo': 'warning',
+        'Finalizado': 'warning',
         'Pendiente': 'info'
       };
 

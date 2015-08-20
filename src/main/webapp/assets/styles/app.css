@@ -5438,3 +5438,7 @@ i.glyphicon.glyphicon-cog {
   text-decoration: underline;
   color: #0288D1;
 }
+
+button.btn.btn-sm.ng-scope {
+    margin-left: 5px;
+}

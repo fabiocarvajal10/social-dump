@@ -261,10 +261,12 @@ img.pull-left.thumb-sm.avatar.b-3x.m-r.post-profile {
 }
 
 .graff{
-	font-size: 1em
+	font-size: 16px;
 }
 
 
-a.fa.fa-th-large.fa-2x.btn-all {
+a.fa.fa-th-large.fa-2x.btn-all, 
+a.fa.fa-twitter-square.fa-2x.btn-twitter,
+a.fa.fa-instagram.fa-2x.btn-instagram {
 	background-color: #f8f8f8;
 }

@@ -119,8 +119,6 @@
                   }
                 }
               }).result.then(function(result) {
-                $state.go('event.list', null, { reload: true });
-              }, function() {
                 $state.go('event.list');
               });
           }]
@@ -143,8 +141,6 @@
                 }]
               }
             }).result.then(function(result) {
-              $state.go('event.list', null, { reload: true });
-            }, function() {
               $state.go('event.list');
             });
           }]

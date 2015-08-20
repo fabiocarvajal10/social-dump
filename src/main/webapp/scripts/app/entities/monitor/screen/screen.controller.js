@@ -23,6 +23,11 @@
         EventPublic.get({'id': $stateParams.id})
           .$promise.then(function(data) {
             $scope.event = data;
+            $scope.event.searchCriterias
+              .forEach(function(element, index, array) {
+                if (element[0] === '#') array[index] = element.slice(1);
+                if (array[index] === array[index - 1]) array.splice(index, 1);
+              });
         });
 
         /**Object that is going to have

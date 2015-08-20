@@ -70,7 +70,7 @@
             ng-model="event.searchCriterias[0]"
             ng-change="event.searchCriterias[1] = event.searchCriterias[0]"
             placeholder="Hashtag a seguir"
-            ng-required="sameHashtag || !!event.id">
+            ng-required="sameHashtag && !event.id">
       </div>
 
       <div ng-show="(editForm.$submitted || editForm.allHashtags.$touched) && editForm.allHashtags.$invalid"
@@ -92,7 +92,7 @@
         <input type="text" class="form-control" name="twitterHashtag"
                ng-model="event.searchCriterias[0]"
                placeholder="Hashtag a seguir en Twitter"
-               ng-required="!sameHashtag || !!event.id">
+               ng-required="!sameHashtag && !event.id">
       </div>
 
       <div ng-show="(editForm.$submitted || editForm.twitterHashtag.$touched) && editForm.twitterHashtag.$invalid"
@@ -114,7 +114,7 @@
         <input type="text" class="form-control" name="instagramHashtag"
                ng-model="event.searchCriterias[1]"
                placeholder="Hashtag a seguir en Instagram"
-               ng-required="!sameHashtag || !!event.id">
+               ng-required="!sameHashtag && !event.id">
       </div>
       <div ng-show="(editForm.$submitted || editForm.instagramHashtag.$touched) && editForm.instagramHashtag.$invalid"
            ng-messages="editForm.instagramHashtag.$error">

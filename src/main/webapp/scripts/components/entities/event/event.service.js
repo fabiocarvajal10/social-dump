@@ -38,6 +38,11 @@
           });
         };
         var addEventStatusMessage = function(event) {
+          if (event.endDate < new Date()) {
+            event.status.status = 'Finalizado';
+          } else if (event.startDate > new Date()) {
+            event.status.status = 'Pendiente';
+          }
           if (event && event.status) {
             event.status.message =
               EventStatusUI.messageForStatus(event.status.status, true);
