@@ -11,13 +11,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a style="display:inline-block;" class="navbar-brand" href="#" style="width: 400px;">
+            <a class="navbar-brand" href="#" >
                 <b>
                     <h5 class="graff">{{::event.description}}
-                        <p class="hash" style="display:inline-block; color:#000" data-ng-repeat="hashtag in event.searchCriterias">
-                            <small ng-if="hashtag[0] === '#'"> {{::hashtag}} </small>
-                            <small ng-if="hashtag[0] !== '#'"> #{{::hashtag}} </small>
-                        </p> 
+                        <p class="hash">
+                            <small data-ng-repeat="hashtag in event.searchCriterias">
+                                <small ng-if="hashtag[0] === '#'">{{::hashtag}}</small>
+                                <small ng-if="hashtag[0] !== '#'">#{{::hashtag}}</small>
+                            </small>
+                        </p>
                     </h5>
                     <!--Replace for event #hashtag-->        
                 </b>  

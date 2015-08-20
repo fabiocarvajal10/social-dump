@@ -68,6 +68,7 @@
         //   }
         // }
         $scope.$emit('socialdumpApp:eventUpdate', result);
+        $rootScope.$broadcast('socialdumpApp:eventAdded', result);
         $modalInstance.close(result);
       };
 

@@ -18,6 +18,26 @@
             $scope.reset();
           });
 
+        $rootScope
+          .$on('socialdumpApp:eventAdded', function(event, data) {
+            data.status = EventStatus.get({id: data.statusId});
+            data.type = EventType.get({id: data.typeId});
+            var index = findOnList(data.id);
+            if (index === -1) {
+              $scope.events.push(data);
+            } else {
+              $scope.events[index] = data;
+            }
+          });
+
+        function findOnList(eventId) {
+          var index = -1;
+          $scope.events.forEach(function(element, i, array) {
+            if (element.id === eventId) return index = i;
+          });
+          return index;
+        }
+
         $scope.loadAll = function() {
           if (!isOrgEmpty()) {
             Event.query({page: $scope.page, per_page: 20,
@@ -32,12 +52,14 @@
               });
           }
         };
+
         $scope.reset = function() {
           $scope.page = 1;
           $scope.events = [];
           $scope.loadAll();
           $scope.gridOptions.data = $scope.events;
         };
+
         $scope.loadPage = function(page) {
           $scope.page = page;
           $scope.loadAll();
@@ -156,7 +178,5 @@
         };
 
         $scope.loadAll();
-
-
       }]);
 }());
