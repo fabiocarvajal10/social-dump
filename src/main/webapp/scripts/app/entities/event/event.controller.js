@@ -153,7 +153,7 @@
                 '    class="btn btn-info btn-sm">' +
                 '  <span class="glyphicon glyphicon-eye-open"></span>' +
                 '</button>' +
-                '<button type="submit"' +
+                '<button type="submit" ng-hide="grid.appScope.checkDate(row.entity.startDate)"' +
                 '    ui-sref="event.edit({id:row.entity[\'id\']})"' +
                 '    class="btn btn-primary btn-sm">' +
                 '  <span class="glyphicon glyphicon-pencil"></span>' +
@@ -163,13 +163,17 @@
                 '    class="btn btn-danger btn-sm">' +
                 '  <span class="glyphicon glyphicon-remove-circle"></span>' +
                 '</button>' +
-                '<button type="submit"' +
+                '<button type="submit" ng-hide="grid.appScope.checkDate(row.entity.startDate)"' +
                 '    ng-click="grid.appScope.cancelEvent(row.entity[\'id\'])"' +
                 '    class="btn btn-warning btn-sm">' +
                 '  <i class="fa fa-toggle-on"></i>' +
                 '</button>'
             }
           ]
+        };
+
+        $scope.checkDate = function(date) {
+          return DateUtils.isDateLowerThanNow(date);
         };
 
         function isOrgEmpty() {
