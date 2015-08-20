@@ -74,7 +74,7 @@ public class EventType implements Serializable {
 
   @Override
   public int hashCode() {
-    int result = id;
+    int result = (id == null) ? 0 : id;
     result = 31 * result + (name != null ? name.hashCode() : 0);
     result = 31 * result + (description != null ? description.hashCode() : 0);
     return result;

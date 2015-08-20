@@ -22,7 +22,10 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
    * @param pageable objeto paginable que indica la paginación deseada
    * @return las organizaciones del usuario conectado
    */
-  @Query("select organization from Organization organization where organization.userByOwnerId.login = ?#{principal.username}")
+  @Query(value =
+    "SELECT  organization "
+    + "FROM  Organization organization "
+    + "WHERE organization.userByOwnerId.login = ?#{principal.username}")
   Page<Organization> findAllForCurrentUser(Pageable pageable);
 
   /**
@@ -31,7 +34,11 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
    * @param idOrg Identificador de la organización que se dea obtener
    * @return un organización
    */
-  @Query("select organization from Organization organization where organization.userByOwnerId.login = ?#{principal.username} and organization.id = :idOrg")
+  @Query(value =
+    "SELECT  organization "
+    + "FROM  Organization organization "
+    + "WHERE organization.userByOwnerId.login = ?#{principal.username} "
+    + "  AND organization.id = :idOrg")
   Organization findOneForCurrentAndById(@Param("idOrg") Long idOrg);
 
   /**
@@ -39,7 +46,11 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
    *
    * @return lista de organizaciones de un usuario ordenadas de forma descendente
    */
-  @Query("select organization from Organization organization where organization.userByOwnerId.login = ?#{principal.username} order by organization.createdAt desc")
+  @Query(value =
+    "SELECT  organization "
+    + "FROM  Organization organization "
+    + "WHERE organization.userByOwnerId.login = ?#{principal.username} "
+    + "ORDER BY organization.createdAt DESC")
   List<Organization> findAllForCurrentUserOrderByCreatedAtDesc();
 
   /**
@@ -48,7 +59,11 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
    * @param organizationName nombre de la organizacion
    * @return Organizacion
    */
-  @Query("select organization from Organization organization where organization.userByOwnerId.login = ?#{principal.username} and organization.name = :orgName")
+  @Query(value =
+    "SELECT  organization "
+    + "FROM  Organization organization "
+    + "WHERE organization.userByOwnerId.login = ?#{principal.username} "
+    + "  AND organization.name = :orgName")
   Organization findOneForCurrentUserAndName(@Param("orgName") String organizationName);
 
 }

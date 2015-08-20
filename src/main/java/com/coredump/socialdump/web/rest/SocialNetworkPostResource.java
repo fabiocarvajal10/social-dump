@@ -48,6 +48,7 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts -> get all SocialNetworkPost.
+   *
    * @param id id del evento
    * @return Posts que pertenecen al evento
    * @throws URISyntaxException error en la sintaxis del url
@@ -80,6 +81,7 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
+   *
    * @param id identificador del post
    * @return SocialNetworkPost
    */

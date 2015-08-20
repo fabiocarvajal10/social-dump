@@ -6,6 +6,8 @@ import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.domain.SocialNetwork;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
+import com.coredump.socialdump.service.GenericStatusService;
+import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
 import com.coredump.socialdump.web.rest.mapper.SearchCriteriaMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +32,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 /**
  * Test class for the SearchCriteriaResource REST controller.
  *
@@ -51,17 +52,28 @@ public class SearchCriteriaResourceTest {
   @Inject
   private SearchCriteriaMapper searchCriteriaMapper;
 
+  @Inject
+  private GenericStatusService statusService;
+
   private MockMvc restSearchCriteriaMockMvc;
 
   private SearchCriteria searchCriteria;
+
+  private SearchCriteriaDTO searchCriteriaDTO;
 
   @PostConstruct
   public void setup() {
     MockitoAnnotations.initMocks(this);
     SearchCriteriaResource searchCriteriaResource = new SearchCriteriaResource();
-    ReflectionTestUtils.setField(searchCriteriaResource, "searchCriteriaRepository", searchCriteriaRepository);
-    ReflectionTestUtils.setField(searchCriteriaResource, "searchCriteriaMapper", searchCriteriaMapper);
-    this.restSearchCriteriaMockMvc = MockMvcBuilders.standaloneSetup(searchCriteriaResource).build();
+    ReflectionTestUtils.setField(searchCriteriaResource,
+      "searchCriteriaRepository", searchCriteriaRepository);
+    ReflectionTestUtils.setField(searchCriteriaResource, "searchCriteriaMapper",
+      searchCriteriaMapper);
+    ReflectionTestUtils.setField(searchCriteriaResource, "statusService",
+      statusService);
+
+    this.restSearchCriteriaMockMvc =
+      MockMvcBuilders.standaloneSetup(searchCriteriaResource).build();
   }
 
   @Before
@@ -75,8 +87,15 @@ public class SearchCriteriaResourceTest {
     e.setId(1L);
     searchCriteria.setEventByEventId(e);
     GenericStatus gs = new GenericStatus();
-    gs.setId((short) 1);
+    gs.setId((short)1);
     searchCriteria.setGenericStatusByStatusId(gs);
+
+
+    searchCriteriaDTO = new SearchCriteriaDTO();
+    searchCriteriaDTO.setEventId(1L);
+    searchCriteriaDTO.setStatusId((short)1);
+    searchCriteriaDTO.setSearchCriteria(DEFAULT_SEARCH_CRITERIA);
+    searchCriteriaDTO.setSocialNetworkId(1L);
   }
 
   @Test
@@ -87,7 +106,7 @@ public class SearchCriteriaResourceTest {
     // Create the SearchCriteria
     restSearchCriteriaMockMvc.perform(post("/api/search-criteria")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(searchCriteria)))
+      .content(TestUtil.convertObjectToJsonBytes(searchCriteriaDTO)))
       .andExpect(status().isCreated());
 
     // Validate the SearchCriteria in the database
@@ -102,16 +121,16 @@ public class SearchCriteriaResourceTest {
   public void checkSearchCriteriaIsRequired() throws Exception {
     int databaseSizeBeforeTest = searchCriteriaRepository.findAll().size();
     // set the field null
-    searchCriteria.setSearchCriteria(null);
+    searchCriteriaDTO.setSearchCriteria(null);
 
     // Create the SearchCriteria, which fails.
     restSearchCriteriaMockMvc.perform(post("/api/search-criteria")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(searchCriteria)))
+      .content(TestUtil.convertObjectToJsonBytes(searchCriteriaDTO)))
       .andExpect(status().isBadRequest());
 
-    List<SearchCriteria> searchCriteria = searchCriteriaRepository.findAll();
-    assertThat(searchCriteria).hasSize(databaseSizeBeforeTest);
+    List<SearchCriteria> searchCriteriaList = searchCriteriaRepository.findAll();
+    assertThat(searchCriteriaList).hasSize(databaseSizeBeforeTest);
   }
 
   @Test
@@ -155,21 +174,24 @@ public class SearchCriteriaResourceTest {
   public void updateSearchCriteria() throws Exception {
     // Initialize the database
     searchCriteriaRepository.saveAndFlush(searchCriteria);
+    searchCriteriaDTO.setId(searchCriteria.getId());
 
     int databaseSizeBeforeUpdate = searchCriteriaRepository.findAll().size();
 
     // Update the searchCriteria
-    searchCriteria.setSearchCriteria(UPDATED_SEARCH_CRITERIA);
+    searchCriteriaDTO.setSearchCriteria(UPDATED_SEARCH_CRITERIA);
     restSearchCriteriaMockMvc.perform(put("/api/search-criteria")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(searchCriteria)))
+      .content(TestUtil.convertObjectToJsonBytes(searchCriteriaDTO)))
       .andExpect(status().isOk());
 
     // Validate the SearchCriteria in the database
-    List<SearchCriteria> searchCriteria = searchCriteriaRepository.findAll();
-    assertThat(searchCriteria).hasSize(databaseSizeBeforeUpdate);
-    SearchCriteria testSearchCriteria = searchCriteria.get(searchCriteria.size() - 1);
-    assertThat(testSearchCriteria.getSearchCriteria()).isEqualTo(UPDATED_SEARCH_CRITERIA);
+    List<SearchCriteria> searchCriteriaList = searchCriteriaRepository.findAll();
+    assertThat(searchCriteriaList).hasSize(databaseSizeBeforeUpdate);
+    SearchCriteria testSearchCriteria =
+      searchCriteriaList.get(searchCriteriaList.size() - 1);
+    assertThat(testSearchCriteria.getSearchCriteria())
+      .isEqualTo(UPDATED_SEARCH_CRITERIA);
   }
 
   @Test

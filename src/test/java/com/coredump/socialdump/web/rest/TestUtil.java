@@ -9,17 +9,29 @@ import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-
+import javax.inject.Inject;
 /**
  * Utility class for testing REST controllers.
  */
+@Service
 public class TestUtil {
+
+  @Inject
+  private UserDetailsService userDetailsService;
+
+  @Inject
+  private AuthenticationManager authenticationManager;
 
   /**
    * MediaType for JSON UTF8
@@ -61,4 +73,24 @@ public class TestUtil {
       new UsernamePasswordAuthenticationToken(username, password));
     SecurityContextHolder.setContext(securityContext);
   }
+
+
+  /**
+   * Logs in a user from the database.
+   *
+   * @param username
+   * @param password
+   */
+  public void loginFromDB(String username, String password) {
+    UsernamePasswordAuthenticationToken token =
+      new UsernamePasswordAuthenticationToken(username, password);
+    Authentication authentication =
+      authenticationManager.authenticate(token);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    UserDetails details =
+      userDetailsService.loadUserByUsername(username);
+
+  }
+
 }

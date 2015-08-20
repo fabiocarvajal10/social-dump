@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @Entity
 public class TemporalAccess implements Serializable {
-  private long id;
+  private Long id;
   private String email;
 
   @JsonIgnore
@@ -34,11 +34,11 @@ public class TemporalAccess implements Serializable {
   @Id
   @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -127,7 +127,8 @@ public class TemporalAccess implements Serializable {
 
   @Override
   public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
+    int result = (id == null) ? 0 : id.intValue();
+    result = (int) (result ^ (result >>> 32));
     result = 31 * result + (email != null ? email.hashCode() : 0);
     result = 31 * result + (password != null ? password.hashCode() : 0);
     result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);

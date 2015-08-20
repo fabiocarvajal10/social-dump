@@ -111,56 +111,13 @@ public class SocialNetworkPostResourceTest {
 
   @Test
   @Transactional
-  public void createSocialNetworkPost() throws Exception {
-    int databaseSizeBeforeCreate = socialNetworkPostRepository.findAll().size();
-
-    // Create the SocialNetworkPost
-
-    restSocialNetworkPostMockMvc.perform(post("/api/social-network-posts")
-      .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(socialNetworkPost)))
-      .andExpect(status().isCreated());
-
-    // Validate the SocialNetworkPost in the database
-    List<SocialNetworkPost> socialNetworkPosts = socialNetworkPostRepository.findAll();
-    assertThat(socialNetworkPosts).hasSize(databaseSizeBeforeCreate + 1);
-    SocialNetworkPost testSocialNetworkPost = socialNetworkPosts.get(socialNetworkPosts.size() - 1);
-    assertThat(testSocialNetworkPost.getCreatedAt().equals(DEFAULT_CREATED_AT));
-    assertThat(testSocialNetworkPost.getSnUserId()).isEqualTo(DEFAULT_SN_USER_ID);
-    assertThat(testSocialNetworkPost.getSnUserEmail()).isEqualTo(DEFAULT_SN_USER_EMAIL);
-    assertThat(testSocialNetworkPost.getBody()).isEqualTo(DEFAULT_BODY);
-    assertThat(testSocialNetworkPost.getMediaUrl()).isEqualTo(DEFAULT_MEDIA_URL);
-    assertThat(testSocialNetworkPost.getFullName()).isEqualTo(DEFAULT_FULL_NAME);
-    assertThat(testSocialNetworkPost.getProfileImage()).isEqualTo(DEFAULT_PROFILE_IMAGE);
-    assertThat(testSocialNetworkPost.getProfileUrl()).isEqualTo(DEFAULT_PROFILE_URL);
-  }
-
-  @Test
-  @Transactional
-  public void checkCreatedAtIsRequired() throws Exception {
-    int databaseSizeBeforeTest = socialNetworkPostRepository.findAll().size();
-    // set the field null
-    socialNetworkPost.setCreatedAt(null);
-
-    // Create the SocialNetworkPost, which fails.
-
-    restSocialNetworkPostMockMvc.perform(post("/api/social-network-posts")
-      .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(socialNetworkPost)))
-      .andExpect(status().isBadRequest());
-
-    List<SocialNetworkPost> socialNetworkPosts = socialNetworkPostRepository.findAll();
-    assertThat(socialNetworkPosts).hasSize(databaseSizeBeforeTest);
-  }
-
-  @Test
-  @Transactional
   public void getAllSocialNetworkPosts() throws Exception {
     // Initialize the database
     socialNetworkPostRepository.saveAndFlush(socialNetworkPost);
 
     // Get all the socialNetworkPosts
-    restSocialNetworkPostMockMvc.perform(get("/api/social-network-posts"))
+    restSocialNetworkPostMockMvc.perform(get("/api/social-network-posts/event",
+      socialNetworkPost.getId()))
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.[*].id").value(hasItem(socialNetworkPost.getId())))
@@ -203,59 +160,4 @@ public class SocialNetworkPostResourceTest {
       .andExpect(status().isNotFound());
   }
 
-  @Test
-  @Transactional
-  public void updateSocialNetworkPost() throws Exception {
-    // Initialize the database
-    socialNetworkPostRepository.saveAndFlush(socialNetworkPost);
-
-    int databaseSizeBeforeUpdate = socialNetworkPostRepository.findAll().size();
-
-    // Update the socialNetworkPost
-    socialNetworkPost.setCreatedAt(UPDATED_CREATED_AT);
-    socialNetworkPost.setSnUserId(UPDATED_SN_USER_ID);
-    socialNetworkPost.setSnUserEmail(UPDATED_SN_USER_EMAIL);
-    socialNetworkPost.setBody(UPDATED_BODY);
-    socialNetworkPost.setMediaUrl(UPDATED_MEDIA_URL);
-    socialNetworkPost.setFullName(UPDATED_FULL_NAME);
-    socialNetworkPost.setProfileImage(UPDATED_PROFILE_IMAGE);
-    socialNetworkPost.setProfileUrl(UPDATED_PROFILE_URL);
-
-
-    restSocialNetworkPostMockMvc.perform(put("/api/social-network-posts")
-      .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(socialNetworkPost)))
-      .andExpect(status().isOk());
-
-    // Validate the SocialNetworkPost in the database
-    List<SocialNetworkPost> socialNetworkPosts = socialNetworkPostRepository.findAll();
-    assertThat(socialNetworkPosts).hasSize(databaseSizeBeforeUpdate);
-    SocialNetworkPost testSocialNetworkPost = socialNetworkPosts.get(socialNetworkPosts.size() - 1);
-    assertThat(testSocialNetworkPost.getCreatedAt().equals(UPDATED_CREATED_AT));
-    assertThat(testSocialNetworkPost.getSnUserId()).isEqualTo(UPDATED_SN_USER_ID);
-    assertThat(testSocialNetworkPost.getSnUserEmail()).isEqualTo(UPDATED_SN_USER_EMAIL);
-    assertThat(testSocialNetworkPost.getBody()).isEqualTo(UPDATED_BODY);
-    assertThat(testSocialNetworkPost.getMediaUrl()).isEqualTo(UPDATED_MEDIA_URL);
-    assertThat(testSocialNetworkPost.getFullName()).isEqualTo(UPDATED_FULL_NAME);
-    assertThat(testSocialNetworkPost.getProfileImage()).isEqualTo(UPDATED_PROFILE_IMAGE);
-    assertThat(testSocialNetworkPost.getProfileUrl()).isEqualTo(UPDATED_PROFILE_URL);
-  }
-
-  @Test
-  @Transactional
-  public void deleteSocialNetworkPost() throws Exception {
-    // Initialize the database
-    socialNetworkPostRepository.saveAndFlush(socialNetworkPost);
-
-    int databaseSizeBeforeDelete = socialNetworkPostRepository.findAll().size();
-
-    // Get the socialNetworkPost
-    restSocialNetworkPostMockMvc.perform(delete("/api/social-network-posts/{id}", socialNetworkPost.getId())
-      .accept(TestUtil.APPLICATION_JSON_UTF8))
-      .andExpect(status().isOk());
-
-    // Validate the database is empty
-    List<SocialNetworkPost> socialNetworkPosts = socialNetworkPostRepository.findAll();
-    assertThat(socialNetworkPosts).hasSize(databaseSizeBeforeDelete - 1);
-  }
 }

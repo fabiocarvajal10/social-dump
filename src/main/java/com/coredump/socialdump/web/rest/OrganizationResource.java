@@ -69,7 +69,8 @@ public class OrganizationResource {
     organizationDTO.setCreatedAt(DateTime.now());
 
     Organization organization =
-      organizationRepository.findOneForCurrentUserAndName(organizationDTO.getName());
+      organizationRepository
+        .findOneForCurrentUserAndName(organizationDTO.getName());
 
     if (organization != null) {
       return ResponseEntity.badRequest()
@@ -78,7 +79,8 @@ public class OrganizationResource {
         .build();
     }
 
-    organization = organizationMapper.organizationDTOToOrganization(organizationDTO);
+    organization = organizationMapper
+      .organizationDTOToOrganization(organizationDTO);
 
     organizationRepository.save(organization);
 

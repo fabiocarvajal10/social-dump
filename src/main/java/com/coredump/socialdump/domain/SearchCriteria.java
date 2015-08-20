@@ -14,7 +14,7 @@ public class SearchCriteria implements Serializable {
   /**
    * Identificador
    */
-  private long id;
+  private Long id;
 
   /**
    * Criterio de búsqueda actual
@@ -49,7 +49,7 @@ public class SearchCriteria implements Serializable {
   @Id
   @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
@@ -58,7 +58,7 @@ public class SearchCriteria implements Serializable {
    *
    * @param id identificador
    */
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -110,7 +110,11 @@ public class SearchCriteria implements Serializable {
    */
   @Override
   public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
+    int tmpId = 0;
+    if (id != null) {
+      tmpId = id.intValue();
+    }
+    int result = (tmpId ^ (tmpId >>> 32));
     result = 31 * result + (searchCriteria != null ? searchCriteria.hashCode() : 0);
     return result;
   }

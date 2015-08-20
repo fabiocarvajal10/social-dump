@@ -6,6 +6,8 @@ import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.TemporalAccessRepository;
+import com.coredump.socialdump.service.GenericStatusService;
+import com.coredump.socialdump.web.rest.dto.TemporalAccessDTO;
 import com.coredump.socialdump.web.rest.mapper.TemporalAccessMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -19,6 +21,7 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -72,9 +75,17 @@ public class TemporalAccessResourceTest {
   @Inject
   private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
+  @Inject
+  private PasswordEncoder passwordEncoder;
+
+  @Inject
+  private GenericStatusService genericStatusService;
+
   private MockMvc restTemporalAccessMockMvc;
 
   private TemporalAccess temporalAccess;
+
+  private TemporalAccessDTO temporalAccessDTO;
 
   @Inject
   private TemporalAccessMapper temporalAccessMapper;
@@ -92,6 +103,10 @@ public class TemporalAccessResourceTest {
       "temporalAccessMapper", temporalAccessMapper);
     ReflectionTestUtils.setField(temporalAccessResource,
       "eventRepository", eventRepository);
+    ReflectionTestUtils.setField(temporalAccessResource,
+      "passwordEncoder", passwordEncoder);
+    ReflectionTestUtils.setField(temporalAccessResource,
+      "genericStatusService", genericStatusService);
     this.restTemporalAccessMockMvc = MockMvcBuilders
       .standaloneSetup(temporalAccessResource)
       .setMessageConverters(jacksonMessageConverter).build();
@@ -105,6 +120,15 @@ public class TemporalAccessResourceTest {
     temporalAccess.setCreatedAt(DEFAULT_CREATED_AT);
     temporalAccess.setStartDate(DEFAULT_START_DATE);
     temporalAccess.setEndDate(DEFAULT_END_DATE);
+
+    temporalAccessDTO = new TemporalAccessDTO();
+    temporalAccessDTO.setEmail(DEFAULT_EMAIL);
+    temporalAccessDTO.setPassword(DEFAULT_PASSWORD);
+    temporalAccessDTO.setCreatedAt(DEFAULT_CREATED_AT);
+    temporalAccessDTO.setStartDate(DEFAULT_START_DATE);
+    temporalAccessDTO.setEndDate(DEFAULT_END_DATE);
+    temporalAccessDTO.setEventId(1L);
+    temporalAccessDTO.setMonitorContactId(1L);
 
     Event e = new Event();
     e.setId(1L);
@@ -124,7 +148,7 @@ public class TemporalAccessResourceTest {
 
     restTemporalAccessMockMvc.perform(post("/api/temporal-accesses")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(temporalAccess)))
+      .content(TestUtil.convertObjectToJsonBytes(temporalAccessDTO)))
       .andExpect(status().isCreated());
 
     // Validate the TemporalAccess in the database
@@ -148,7 +172,7 @@ public class TemporalAccessResourceTest {
     restTemporalAccessMockMvc.perform(get("/api/temporal-accesses?eventId=1"))
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(temporalAccess.getId())))
+      .andExpect(jsonPath("$.[*].id").value(hasItem(temporalAccess.getId().intValue())))
       .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
       .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())))
       .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT_STR)))

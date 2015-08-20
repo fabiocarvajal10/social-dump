@@ -4,6 +4,9 @@ import com.coredump.socialdump.Application;
 import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.MonitorContactRepository;
+import com.coredump.socialdump.repository.OrganizationRepository;
+import com.coredump.socialdump.repository.TemporalAccessRepository;
+import com.coredump.socialdump.web.rest.dto.MonitorContactDTO;
 import com.coredump.socialdump.web.rest.mapper.MonitorContactMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,18 +60,32 @@ public class MonitorContactResourceTest {
   private MonitorContactMapper monitorContactMapper;
 
   @Inject
+  private TemporalAccessRepository temporalAccessRepository;
+
+  @Inject
+  private OrganizationRepository organizationRepository;
+
+  @Inject
   private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
   private MockMvc restMonitorContactMockMvc;
 
   private MonitorContact monitorContact;
 
+  private MonitorContactDTO monitorContactDTO;
+
   @PostConstruct
   public void setup() {
     MockitoAnnotations.initMocks(this);
     MonitorContactResource monitorContactResource = new MonitorContactResource();
-    ReflectionTestUtils.setField(monitorContactResource, "monitorContactRepository", monitorContactRepository);
-    ReflectionTestUtils.setField(monitorContactResource, "monitorContactMapper", monitorContactMapper);
+    ReflectionTestUtils.setField(monitorContactResource,
+      "monitorContactRepository", monitorContactRepository);
+    ReflectionTestUtils.setField(monitorContactResource,
+      "monitorContactMapper", monitorContactMapper);
+    ReflectionTestUtils.setField(monitorContactResource,
+      "temporalAccessRepository", temporalAccessRepository);
+    ReflectionTestUtils.setField(monitorContactResource,
+      "organizationRepository", organizationRepository);
     this.restMonitorContactMockMvc =
       MockMvcBuilders.standaloneSetup(monitorContactResource)
         .setMessageConverters(jacksonMessageConverter).build();
@@ -84,6 +101,14 @@ public class MonitorContactResourceTest {
     monitorContact.setLastName(DEFAULT_LAST_NAME);
     monitorContact.setEmail(DEFAULT_EMAIL);
     monitorContact.setPhone(DEFAULT_PHONE);
+
+
+    monitorContactDTO = new MonitorContactDTO();
+    monitorContactDTO.setOrganizationId(org.getId());
+    monitorContactDTO.setFirstName(DEFAULT_FIRST_NAME);
+    monitorContactDTO.setLastName(DEFAULT_LAST_NAME);
+    monitorContactDTO.setEmail(DEFAULT_EMAIL);
+    monitorContactDTO.setPhone(DEFAULT_PHONE);
   }
 
   @Test
@@ -95,7 +120,7 @@ public class MonitorContactResourceTest {
 
     restMonitorContactMockMvc.perform(post("/api/monitor-contacts")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(monitorContact)))
+      .content(TestUtil.convertObjectToJsonBytes(monitorContactDTO)))
       .andExpect(status().isCreated());
 
     // Validate the MonitorContact in the database
@@ -151,14 +176,19 @@ public class MonitorContactResourceTest {
     monitorContactRepository.saveAndFlush(monitorContact);
 
     // Get all the monitorContacts
-    restMonitorContactMockMvc.perform(get("/api/monitor-contacts"))
+    restMonitorContactMockMvc.perform(get(
+      "/api/monitor-contacts?organizationId=", 1))
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.[*].id").value(hasItem(monitorContact.getId())))
-      .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
-      .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
-      .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
-      .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())));
+      .andExpect(jsonPath("$.[*].firstName").value(
+        hasItem(DEFAULT_FIRST_NAME.toString())))
+      .andExpect(jsonPath("$.[*].lastName").value(
+        hasItem(DEFAULT_LAST_NAME.toString())))
+      .andExpect(jsonPath("$.[*].email").value(
+        hasItem(DEFAULT_EMAIL.toString())))
+      .andExpect(jsonPath("$.[*].phone").value(
+        hasItem(DEFAULT_PHONE.toString())));
   }
 
   @Test
@@ -168,7 +198,8 @@ public class MonitorContactResourceTest {
     monitorContactRepository.saveAndFlush(monitorContact);
 
     // Get the monitorContact
-    restMonitorContactMockMvc.perform(get("/api/monitor-contacts/{id}", monitorContact.getId()))
+    restMonitorContactMockMvc.perform(get("/api/monitor-contacts/{id}",
+      monitorContact.getId()))
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.id").value(monitorContact.getId()))
@@ -182,7 +213,8 @@ public class MonitorContactResourceTest {
   @Transactional
   public void getNonExistingMonitorContact() throws Exception {
     // Get the monitorContact
-    restMonitorContactMockMvc.perform(get("/api/monitor-contacts/{id}", Long.MAX_VALUE))
+    restMonitorContactMockMvc.perform(get("/api/monitor-contacts/{id}",
+      Long.MAX_VALUE))
       .andExpect(status().isNotFound());
   }
 
@@ -195,15 +227,16 @@ public class MonitorContactResourceTest {
     int databaseSizeBeforeUpdate = monitorContactRepository.findAll().size();
 
     // Update the monitorContact
-    monitorContact.setFirstName(UPDATED_FIRST_NAME);
-    monitorContact.setLastName(UPDATED_LAST_NAME);
-    monitorContact.setEmail(UPDATED_EMAIL);
-    monitorContact.setPhone(UPDATED_PHONE);
+    monitorContactDTO.setId(monitorContact.getId());
+    monitorContactDTO.setFirstName(UPDATED_FIRST_NAME);
+    monitorContactDTO.setLastName(UPDATED_LAST_NAME);
+    monitorContactDTO.setEmail(UPDATED_EMAIL);
+    monitorContactDTO.setPhone(UPDATED_PHONE);
 
 
     restMonitorContactMockMvc.perform(put("/api/monitor-contacts")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(monitorContact)))
+      .content(TestUtil.convertObjectToJsonBytes(monitorContactDTO)))
       .andExpect(status().isOk());
 
     // Validate the MonitorContact in the database
@@ -225,7 +258,8 @@ public class MonitorContactResourceTest {
     int databaseSizeBeforeDelete = monitorContactRepository.findAll().size();
 
     // Get the monitorContact
-    restMonitorContactMockMvc.perform(delete("/api/monitor-contacts/{id}", monitorContact.getId())
+    restMonitorContactMockMvc.perform(delete("/api/monitor-contacts/{id}",
+      monitorContact.getId())
       .accept(TestUtil.APPLICATION_JSON_UTF8))
       .andExpect(status().isOk());
 

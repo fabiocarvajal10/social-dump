@@ -81,8 +81,6 @@ public class GenericStatusResourceTest {
   @Test
   @Transactional
   public void getAllGenericStatuses() throws Exception {
-    // Initialize the database
-    genericStatusRepository.saveAndFlush(genericStatus);
 
     // Get all the generic-statuses
     restGenericStatusMockMvc.perform(get("/api/generic-statuses"))
@@ -96,11 +94,9 @@ public class GenericStatusResourceTest {
   @Test
   @Transactional
   public void getGenericStatus() throws Exception {
-    // Initialize the database
-    genericStatusRepository.saveAndFlush(genericStatus);
-
     // Get the genericStatus
-    restGenericStatusMockMvc.perform(get("/api/generic-statuses/{id}", genericStatus.getId()))
+    restGenericStatusMockMvc.perform(get("/api/generic-statuses/{id}",
+                                         genericStatus.getId()))
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.id").value(genericStatus.getId()))

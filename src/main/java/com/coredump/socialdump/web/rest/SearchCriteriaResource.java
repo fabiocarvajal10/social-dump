@@ -77,6 +77,7 @@ public class SearchCriteriaResource {
       searchCriteriaDTO.getId());
 
     if (searchCriteriaDTO.getId() != null) {
+      log.debug("Un nuevo criterio de búsqueda no puede tener un ID");
       return ResponseEntity.badRequest()
         .header("Failure", "Un nuevo criterio de búsqueda no puede tener un ID")
         .body(null);
@@ -86,10 +87,12 @@ public class SearchCriteriaResource {
       .searchCriteriaDTOToSearchCriteria(searchCriteriaDTO);
 
     if (searchCriteria.getEventByEventId() == null) {
+      log.debug("Event doesn't exist");
       return ResponseEntity.badRequest()
         .header("Failure", "Event doesn't exist").body(null);
     }
     if (searchCriteria.getSocialNetworkBySocialNetworkId() == null) {
+      log.debug("Social network doesn't exist");
       return ResponseEntity.badRequest()
         .header("Failure", "Social network doesn't exist").body(null);
     }

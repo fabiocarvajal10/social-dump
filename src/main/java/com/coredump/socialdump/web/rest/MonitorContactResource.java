@@ -59,24 +59,25 @@ public class MonitorContactResource {
     MonitorContact monitorContact =
       monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
 
-    String missingReqProperty =
-    (monitorContactDTO.getFirstName() == null ||
-      monitorContactDTO.getFirstName().length() == 0) ? "First name" :
-      (monitorContactDTO.getLastName() == null ||
-        monitorContactDTO.getLastName().length() == 0) ? "Last name" :
-        null;
+    if (monitorContactDTO.getFirstName() == null ||
+        monitorContactDTO.getFirstName().length() == 0) {
+      return ResponseEntity.badRequest().build();
+    }
 
-    if (missingReqProperty != null) {
-      new ResponseEntity<>(missingReqProperty + " cannot be null", HttpStatus.BAD_REQUEST);
+    if (monitorContactDTO.getLastName() == null ||
+        monitorContactDTO.getLastName().length() == 0) {
+      return ResponseEntity.badRequest().build();
     }
 
     return monitorContactRepository
       .findOneByEmailAndOrganizationByOrganizationId(monitorContact.getEmail(),
         monitorContact.getOrganizationByOrganizationId())
-      .map(monitor -> new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT))
+      .map(monitor -> new ResponseEntity<>("e-mail address already in use",
+        HttpStatus.CONFLICT))
       .orElseGet(() -> {
         monitorContactRepository.save(monitorContact);
-        return new ResponseEntity<>(Long.toString(monitorContact.getId()), HttpStatus.CREATED);
+        return new ResponseEntity<>(Long.toString(monitorContact.getId()),
+        HttpStatus.CREATED);
       });
   }
 
@@ -103,7 +104,8 @@ public class MonitorContactResource {
           monitorContactRepository.save(monitorContact);
           return new ResponseEntity<>(HttpStatus.OK);
         } else {
-          return new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT);
+          return new ResponseEntity<>("e-mail address already in use",
+            HttpStatus.CONFLICT);
         }
       })
       .orElseGet(() -> {
@@ -133,9 +135,8 @@ public class MonitorContactResource {
     }
 
     Page<MonitorContact> page = monitorContactRepository
-      .findAllByOrganizationByOrganizationId(PaginationUtil.generatePageRequest(offset, limit),
-        organization
-      );
+      .findAllByOrganizationByOrganizationId(
+        PaginationUtil.generatePageRequest(offset, limit), organization);
 
     HttpHeaders headers = PaginationUtil
       .generatePaginationHttpHeaders(page, "/api/monitor-contacts", offset, limit);
