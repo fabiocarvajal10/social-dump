@@ -8,7 +8,6 @@ import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 import com.coredump.socialdump.web.rest.dto.SocialNetworkPostDTO;
 import com.coredump.socialdump.web.rest.mapper.SocialNetworkPostMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.inject.Inject;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
@@ -25,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * REST controller for managing SocialNetworkPosts.
  */
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 public class SocialNetworkPostResource {
 
   private final Logger log = LoggerFactory
-        .getLogger(SocialNetworkPostResource.class);
+    .getLogger(SocialNetworkPostResource.class);
 
   @Inject
   private SocialNetworkPostRepository socialNetworkPostRepository;
@@ -46,17 +45,18 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts -> get all SocialNetworkPost
+   *
    * @param id
    * @return
    * @throws URISyntaxException
    */
   @RequestMapping(value = "/social-network-posts/event/{id}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<List<SocialNetworkPostDTO>> getAll(
-        @PathVariable Long id)
-        throws URISyntaxException {
+    @PathVariable Long id)
+    throws URISyntaxException {
 
     log.debug("REST request to get all SocialNetworkPosts");
 
@@ -67,26 +67,27 @@ public class SocialNetworkPostResource {
     }
 
     List<SocialNetworkPost> posts = socialNetworkPostRepository
-          .findByEventByEventId(event);
+      .findByEventByEventId(event);
 
     return new ResponseEntity<>(posts
-          .stream()
-          .map(socialNetworkPostMapper::socialNetworkPostToSocialNetworkPostDTO)
-          .collect(Collectors.toCollection(LinkedList::new)),
-          new HttpHeaders(), HttpStatus.OK);
+      .stream()
+      .map(socialNetworkPostMapper::socialNetworkPostToSocialNetworkPostDTO)
+      .collect(Collectors.toCollection(LinkedList::new)),
+      new HttpHeaders(), HttpStatus.OK);
   }
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
+   *
    * @param id
    * @return
    */
   @RequestMapping(value = "/social-network-posts/recent/{id}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<SocialNetworkPost> getRecentPosts(
-        @PathVariable long id) {
+    @PathVariable long id) {
     log.debug("REST request to get SocialNetworkPosts : {}", id);
     return Optional.ofNullable(socialNetworkPostRepository.findOne(id))
       .map(SocialNetworkPost ->
@@ -96,40 +97,42 @@ public class SocialNetworkPostResource {
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
+   *
    * @param id
    * @return
    */
   @RequestMapping(value = "/social-network-posts/{id}",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<SocialNetworkPost> get(
-        @PathVariable long id) {
+    @PathVariable long id) {
     log.debug("REST request to get SocialNetworkPosts : {}", id);
     return Optional.ofNullable(socialNetworkPostRepository.findOne(id))
-            .map(SocialNetworkPost ->
-              new ResponseEntity<>(SocialNetworkPost, HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+      .map(SocialNetworkPost ->
+        new ResponseEntity<>(SocialNetworkPost, HttpStatus.OK))
+      .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   /**
    * GET  /social-network-posts/:id -> get the "id" generic status.
+   *
    * @param organizationId
    * @return
    */
   @RequestMapping(value = "/social-network-posts/count",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<?> getPostsCountByOrg(
-      @RequestParam("organizationId") long organizationId) {
+    @RequestParam("organizationId") long organizationId) {
 
     List<SocialNetwork> postsList =
-        socialNetworkPostRepository.findPostsSocialNetworkIdsByOrg(organizationId);
+      socialNetworkPostRepository.findPostsSocialNetworkIdsByOrg(organizationId);
 
     Map<String, Long> countList =
-        postsList.stream()
-          .collect(Collectors.groupingBy(p -> p.getName(), Collectors.counting()));
+      postsList.stream()
+        .collect(Collectors.groupingBy(p -> p.getName(), Collectors.counting()));
 
     return new ResponseEntity<>(countList, HttpStatus.OK);
   }

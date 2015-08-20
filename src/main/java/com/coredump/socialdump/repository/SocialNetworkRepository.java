@@ -11,7 +11,7 @@ public interface SocialNetworkRepository
 
   @Query(value =
     "FROM SocialNetwork " +
-    "WHERE genericStatusByStatusId.id = (" +
+      "WHERE genericStatusByStatusId.id = (" +
       "SELECT id FROM GenericStatus WHERE status = 'Activo')")
   List<SocialNetwork> findAllActive();
 }

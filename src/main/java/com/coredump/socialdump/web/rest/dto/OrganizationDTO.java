@@ -2,19 +2,13 @@ package com.coredump.socialdump.web.rest.dto;
 
 import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
 import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import org.joda.time.DateTime;
 
-import java.io.Serializable;
-
-import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-
+import java.util.Objects;
 
 
 /**
@@ -36,13 +30,14 @@ public class OrganizationDTO {
   private Long ownerId;
   private String ownerLogin;
 
+  public Long getId() {
+    return id;
+  }
+
   public void setId(Long id) {
     this.id = id;
   }
 
-  public Long getId() {
-    return id;
-  }
   public String getName() {
     return name;
   }
@@ -51,12 +46,12 @@ public class OrganizationDTO {
     this.name = name;
   }
 
-  public void setCreatedAt(DateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
   public DateTime getCreatedAt() {
     return createdAt;
+  }
+
+  public void setCreatedAt(DateTime createdAt) {
+    this.createdAt = createdAt;
   }
 
   public String getOwnerLogin() {
@@ -86,7 +81,7 @@ public class OrganizationDTO {
 
     OrganizationDTO organizationDTO = (OrganizationDTO) object;
 
-    if ( ! Objects.equals(id, organizationDTO.id)) {
+    if (!Objects.equals(id, organizationDTO.id)) {
       return false;
     }
     return true;
@@ -100,8 +95,8 @@ public class OrganizationDTO {
   @Override
   public String toString() {
     return "OrganizationDTO{"
-            + "name='" + name + '\''
-            + ", createdAt=" + createdAt
-            + '}';
+      + "name='" + name + '\''
+      + ", createdAt=" + createdAt
+      + '}';
   }
 }

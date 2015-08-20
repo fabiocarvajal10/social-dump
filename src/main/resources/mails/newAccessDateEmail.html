@@ -2,29 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title th:text="#{email.temporalaccess.title}">JHipster activation</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 <p th:text="#{email.activation.greeting(
   ${temporalAccess.monitorContactByMonitorContactId.getFirstName()})}">
   Dear
 </p>
+
 <p th:text="#{email.taNewDate.text1(
   ${temporalAccess.eventByEventId.getDescription()})}">
 </p>
+
 <p th:text="#{email.taNewDate.horaInicio(
   ${#dates.format(temporalAccess.eventByEventId.getStartDate(), 'dd/MMM/yyyy HH:mm')})}">
 </p>
+
 <p th:text="#{email.taNewDate.horaFin(
   ${#dates.format(temporalAccess.eventByEventId.getEndDate(), 'dd/MMM/yyyy hh:mm')})}">
 </p>
+
 <p th:text="#{email.taNewDate.password(
   ${temporalAccess.getPassword()})}">
 </p>
+
 <p>
   <a th:href="@{|${baseUrl}|}"
      th:text="#{email.temporalaccess.enlace}"> </a>
 </p>
+
 <p>
   <span th:text="#{email.activation.text2}"> </span>
   <br/>

@@ -10,15 +10,12 @@ import com.coredump.socialdump.repository.UserRepository;
 import com.coredump.socialdump.security.xauth.Token;
 import com.coredump.socialdump.security.xauth.TokenProvider;
 import com.coredump.socialdump.service.TemporalAccessService;
-
 import org.joda.time.DateTime;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,9 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Random;
-
 import javax.inject.Inject;
+import java.util.Random;
 
 
 @RestController
@@ -62,41 +58,41 @@ public class UserXAuthTokenController {
   private PasswordEncoder passwordEncoder;
 
   @RequestMapping(value = "/authenticate",
-      method = RequestMethod.POST)
+    method = RequestMethod.POST)
   @Timed
   public Token authorize(@RequestParam String username,
                          @RequestParam String password) {
 
     UsernamePasswordAuthenticationToken token =
-        new UsernamePasswordAuthenticationToken(username, password);
+      new UsernamePasswordAuthenticationToken(username, password);
     Authentication authentication =
-        this.authenticationManager.authenticate(token);
+      this.authenticationManager.authenticate(token);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     UserDetails details =
-        this.userDetailsService.loadUserByUsername(username);
+      this.userDetailsService.loadUserByUsername(username);
 
     return tokenProvider.createToken(details);
 
   }
 
   @RequestMapping(value = "/access",
-      method = RequestMethod.POST)
+    method = RequestMethod.POST)
   @Timed
   public ResponseEntity<?> authorizeTemporalAccess(@RequestParam Long id,
-      @RequestParam Long eventId, @RequestParam String username, @RequestParam String password) {
+                                                   @RequestParam Long eventId, @RequestParam String username, @RequestParam String password) {
 
     DateTime now = new DateTime();
     TemporalAccess temporalAccess = null;
 
     temporalAccessService.setTemporalAccessId(id);
     UsernamePasswordAuthenticationToken token =
-        new UsernamePasswordAuthenticationToken(username, password);
+      new UsernamePasswordAuthenticationToken(username, password);
     Authentication authentication =
-        this.authenticationManager.authenticate(token);
+      this.authenticationManager.authenticate(token);
     SecurityContextHolder.getContext().setAuthentication(authentication);
     UserDetails details =
-        this.userDetailsService.loadUserByUsername(username);
+      this.userDetailsService.loadUserByUsername(username);
 
     Event event = eventRepository.findOne(eventId);
     temporalAccess = temporalAccessRepository.findOneByIdAndEventByEventId(id, event);
@@ -118,10 +114,10 @@ public class UserXAuthTokenController {
   }
 
   @RequestMapping(value = "/delete",
-      method = RequestMethod.POST)
+    method = RequestMethod.POST)
   @Timed
   public ResponseEntity<?> deleteAccount(@RequestParam Long id,
-      @RequestParam String password) {
+                                         @RequestParam String password) {
 
     User user = userRepository.findOne(id);
 
@@ -131,13 +127,13 @@ public class UserXAuthTokenController {
 
     try {
       UsernamePasswordAuthenticationToken token =
-          new UsernamePasswordAuthenticationToken(user.getLogin(), password);
+        new UsernamePasswordAuthenticationToken(user.getLogin(), password);
       Authentication authentication =
-          this.authenticationManager.authenticate(token);
+        this.authenticationManager.authenticate(token);
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
       UserDetails details =
-          this.userDetailsService.loadUserByUsername(user.getLogin());
+        this.userDetailsService.loadUserByUsername(user.getLogin());
 
     } catch (Exception e) {
       return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -150,9 +146,9 @@ public class UserXAuthTokenController {
     String encode = passwordEncoder.encode(info);
     Random rn = new Random();
     email = encode.replaceAll("[^a-z0-9]",
-        Integer.toString(rn.nextInt(9 - 1 + 1) + 1)).substring(0, 20);
+      Integer.toString(rn.nextInt(9 - 1 + 1) + 1)).substring(0, 20);
     user.setLogin(encode.replaceAll("[^a-z0-9]", Integer.toString(rn.nextInt(9 - 1 + 1) + 1))
-        .substring(0, Math.min(encode.length(), 40)));
+      .substring(0, Math.min(encode.length(), 40)));
     user.setPassword(encode);
     user.setEmail(email + "@" + email + ".com");
     user.setActivated(false);

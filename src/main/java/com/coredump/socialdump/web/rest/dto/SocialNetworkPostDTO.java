@@ -5,6 +5,7 @@ import com.coredump.socialdump.domain.util.CustomTimestampDeserializer;
 import com.coredump.socialdump.domain.util.CustomTimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -130,6 +131,7 @@ public class SocialNetworkPostDTO {
   public void setEventId(Long eventId) {
     this.eventId = eventId;
   }
+
   public String getBody() {
     return body;
   }
@@ -196,7 +198,7 @@ public class SocialNetworkPostDTO {
 
     SocialNetworkPostDTO socialNetworkPostDTO = (SocialNetworkPostDTO) object;
 
-    if ( ! Objects.equals(id, socialNetworkPostDTO.id)) {
+    if (!Objects.equals(id, socialNetworkPostDTO.id)) {
       return false;
     }
     return true;
@@ -205,11 +207,11 @@ public class SocialNetworkPostDTO {
   @Override
   public String toString() {
     return "PostDTO{"
-          + "body='" + body + '\''
-          + ", socialNetworkName=" + socialNetworkName
-          + ", searchCriteria=" + searchCriteria
-          + ", eventName=" + eventName
-          + '}';
+      + "body='" + body + '\''
+      + ", socialNetworkName=" + socialNetworkName
+      + ", searchCriteria=" + searchCriteria
+      + ", eventName=" + eventName
+      + '}';
   }
 
 

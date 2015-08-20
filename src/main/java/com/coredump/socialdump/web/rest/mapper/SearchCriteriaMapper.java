@@ -4,12 +4,8 @@ import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.GenericStatus;
 import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.domain.SocialNetwork;
-import com.coredump.socialdump.repository.EventRepository;
-import com.coredump.socialdump.repository.GenericStatusRepository;
-import com.coredump.socialdump.repository.SocialNetworkRepository;
 import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
 import com.coredump.socialdump.web.rest.dto.SearchCriteriaRequestDTO;
-import javax.inject.Inject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -32,48 +28,50 @@ public interface SearchCriteriaMapper {
 
   @Mappings({
     @Mapping(source = "eventByEventId.id",
-             target = "eventId"),
+      target = "eventId"),
     @Mapping(source = "eventByEventId.description",
-             target = "eventDescription"),
+      target = "eventDescription"),
     @Mapping(source = "socialNetworkBySocialNetworkId.id",
-             target = "socialNetworkId"),
+      target = "socialNetworkId"),
     @Mapping(source = "socialNetworkBySocialNetworkId.name",
-             target = "socialNetworkName"),
+      target = "socialNetworkName"),
     @Mapping(source = "genericStatusByStatusId.id",
-             target = "statusId"),
+      target = "statusId"),
     @Mapping(source = "genericStatusByStatusId.status",
-             target = "status")
+      target = "status")
   })
   SearchCriteriaDTO searchCriteriaToSearchCriteriaDTO(
     SearchCriteria searchCriteria);
 
   /**
    * Obtiene un criterio de búsqueda de un DTO
+   *
    * @param searchCriteriaDTO DTO de criterio de búsqueda
    * @return criterio de búsqueda
    */
   @Mappings({
     @Mapping(source = "eventId",
-             target = "eventByEventId"),
+      target = "eventByEventId"),
     @Mapping(target = "socialNetworkBySocialNetworkId",
-             source = "socialNetworkId"),
+      source = "socialNetworkId"),
     @Mapping(target = "genericStatusByStatusId",
-             source = "statusId"),
+      source = "statusId"),
     @Mapping(target = "socialNetworkPostsById",
-             ignore = true)
+      ignore = true)
   })
   SearchCriteria searchCriteriaDTOToSearchCriteria(
     SearchCriteriaDTO searchCriteriaDTO);
 
   @Mappings({
-        @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
-        @Mapping(source = "eventId", target = "eventByEventId"),
-        @Mapping(source = "genericStatusId", target = "genericStatusByStatusId")})
+    @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
+    @Mapping(source = "eventId", target = "eventByEventId"),
+    @Mapping(source = "genericStatusId", target = "genericStatusByStatusId")})
   SearchCriteria searchCriteriaRequestDTOToSearchCriteria(
-        SearchCriteriaRequestDTO searchCriteriaRequestDTO);
+    SearchCriteriaRequestDTO searchCriteriaRequestDTO);
 
   /**
    * Genera un evento de un Id
+   *
    * @param id id del evento
    * @return evento
    */
@@ -88,6 +86,7 @@ public interface SearchCriteriaMapper {
 
   /**
    * Genera una red social a partir de un id
+   *
    * @param id id de la red social
    * @return red social
    */
@@ -102,6 +101,7 @@ public interface SearchCriteriaMapper {
 
   /**
    * Genera un estado a partir de un id
+   *
    * @param id id del estado
    * @return estado
    */

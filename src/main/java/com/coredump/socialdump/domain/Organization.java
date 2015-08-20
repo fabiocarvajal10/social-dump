@@ -5,14 +5,14 @@ import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Objects;
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Objects;
 
 
 /**

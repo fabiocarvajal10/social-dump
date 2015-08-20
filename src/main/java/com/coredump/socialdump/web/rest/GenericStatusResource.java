@@ -24,34 +24,34 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class GenericStatusResource {
 
-    private final Logger log = LoggerFactory.getLogger(GenericStatusResource.class);
+  private final Logger log = LoggerFactory.getLogger(GenericStatusResource.class);
 
-    @Inject
-    private GenericStatusRepository genericStatusRepository;
+  @Inject
+  private GenericStatusRepository genericStatusRepository;
 
-    /**
-     * GET  /generic-statuses -> get all generic statuses.
-     */
-    @RequestMapping(value = "/generic-statuses",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<GenericStatus> getAll() {
-        log.debug("REST request to get all Generic Status");
-        return genericStatusRepository.findAll();
-    }
+  /**
+   * GET  /generic-statuses -> get all generic statuses.
+   */
+  @RequestMapping(value = "/generic-statuses",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public List<GenericStatus> getAll() {
+    log.debug("REST request to get all Generic Status");
+    return genericStatusRepository.findAll();
+  }
 
-    /**
-     * GET  /generic-statuses/:id -> get the "id" generic status.
-     */
-    @RequestMapping(value = "/generic-statuses/{id}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<GenericStatus> get(@PathVariable short id) {
-        log.debug("REST request to get Generic Status : {}", id);
-        return Optional.ofNullable(genericStatusRepository.findOne(id))
-                .map(genericStatus -> new ResponseEntity<>(genericStatus, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
+  /**
+   * GET  /generic-statuses/:id -> get the "id" generic status.
+   */
+  @RequestMapping(value = "/generic-statuses/{id}",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public ResponseEntity<GenericStatus> get(@PathVariable short id) {
+    log.debug("REST request to get Generic Status : {}", id);
+    return Optional.ofNullable(genericStatusRepository.findOne(id))
+      .map(genericStatus -> new ResponseEntity<>(genericStatus, HttpStatus.OK))
+      .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
 }

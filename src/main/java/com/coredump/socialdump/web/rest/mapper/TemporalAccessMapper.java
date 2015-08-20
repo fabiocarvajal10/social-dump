@@ -8,7 +8,6 @@ import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.GenericStatusRepository;
 import com.coredump.socialdump.repository.MonitorContactRepository;
 import com.coredump.socialdump.web.rest.dto.TemporalAccessDTO;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -31,8 +30,8 @@ public abstract class TemporalAccessMapper {
   private GenericStatusRepository genericStatusRepository;
 
   @Mappings({
-      @Mapping(source = "eventId", target = "eventByEventId"),
-      @Mapping(source = "monitorContactId", target = "monitorContactByMonitorContactId")})
+    @Mapping(source = "eventId", target = "eventByEventId"),
+    @Mapping(source = "monitorContactId", target = "monitorContactByMonitorContactId")})
   public abstract TemporalAccess temporalAccessDTOToTemporalAccess(TemporalAccessDTO temporalAccessDTO);
 
   public Event eventFromId(Long id) {

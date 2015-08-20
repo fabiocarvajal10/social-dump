@@ -3,7 +3,6 @@ package com.coredump.socialdump.repository;
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.TemporalAccess;
-
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,7 @@ public interface TemporalAccessRepository extends JpaRepository<TemporalAccess, 
   List<TemporalAccess> getAllByEventByEventId(Event event);
 
   List<TemporalAccess> getAllByEventByEventIdAndStartDateAndEndDate(Event event,
-      DateTime starDate, DateTime endDate);
+                                                                    DateTime starDate, DateTime endDate);
 
   TemporalAccess findOneByIdAndEventByEventId(Long id, Event event);
 }

@@ -6,17 +6,14 @@ import com.coredump.socialdump.domain.SearchCriteria;
 import com.coredump.socialdump.repository.GenericStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.repository.SocialNetworkRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service class for managing SearchCriteria.
@@ -37,7 +34,7 @@ public class SearchCriteriaService {
   private GenericStatusRepository genericStatusRepository;
 
   public List<SearchCriteria> getSearchCriteriasFromStringList(Event event,
-      List<String> searchCriterias) {
+                                                               List<String> searchCriterias) {
 
     List<SearchCriteria> searchCriteriaList = new ArrayList<>();
     int socialNetworkId = 1;
@@ -72,12 +69,12 @@ public class SearchCriteriaService {
   }
 
   public void inactivateAll(Event event) {
-    GenericStatus genericStatus = genericStatusRepository.findOne((short)2);
+    GenericStatus genericStatus = genericStatusRepository.findOne((short) 2);
     searchCriteriaRepository.findAllByEventByEventId(event)
-        .forEach( sc -> {
-            sc.setGenericStatusByStatusId(genericStatus);
-            searchCriteriaRepository.save(sc);
-          });
+      .forEach(sc -> {
+        sc.setGenericStatusByStatusId(genericStatus);
+        searchCriteriaRepository.save(sc);
+      });
   }
 }
 

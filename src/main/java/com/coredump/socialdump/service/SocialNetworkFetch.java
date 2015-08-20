@@ -5,13 +5,11 @@ import com.coredump.socialdump.domain.SocialNetworkApiCredential;
 import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.SocialNetworkApiCredentialRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
-
 import com.coredump.socialdump.web.websocket.EventPublicationService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by Franz on 13/07/2015.
@@ -61,9 +59,9 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
   public void setSocialNetworkApiCrededential() {
     if (getSearchCriteria() != null) {
       socialNetworkApiCredential =
-          socialNetworkApiCredentialRepository
-              .findOneBySocialNetworkBySocialNetworkId(getSearchCriteria()
-                  .getSocialNetworkBySocialNetworkId());
+        socialNetworkApiCredentialRepository
+          .findOneBySocialNetworkBySocialNetworkId(getSearchCriteria()
+            .getSocialNetworkBySocialNetworkId());
     }
   }
 
@@ -75,16 +73,16 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     return this.alive;
   }
 
-  public void setDelay(int delay) {
-    this.delay = delay;
+  private void setIsAlive(boolean alive) {
+    this.alive = alive;
   }
 
   public int getDelay() {
     return this.delay;
   }
 
-  private void setIsAlive(boolean alive) {
-    this.alive = alive;
+  public void setDelay(int delay) {
+    this.delay = delay;
   }
 
   protected String getName() {
@@ -98,6 +96,7 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
 
     this.name = orgName + eventName + searchCriteriaName;
   }
+
   protected void notifyPublications(List<SocialNetworkPost> postList) {
     try {
       eventPublicationService.showPost(postList);

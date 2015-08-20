@@ -2,22 +2,19 @@ package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.SearchCriteria;
-
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 /**
  * Created by Francisco J. Milanés Sánchez on 13/07/2015.
@@ -35,35 +32,33 @@ public class FetchExecutorService {
   private ScheduledExecutorService scheduledExecutorService;
 
   /**
-   *
    * @param event
    */
   public void scheduleFetch(Event event) {
     int searchCriteriaQ = event.getSearchCriteriasById().size();
 
     scheduledExecutorService = Executors
-          .newScheduledThreadPool(searchCriteriaQ);
+      .newScheduledThreadPool(searchCriteriaQ);
 
     List<SearchCriteria> scList = (List) event.getSearchCriteriasById();
 
     scList.forEach(sc -> {
-        try {
-          FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
-              .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
-              .getName().toLowerCase());
+      try {
+        FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
+          .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
+            .getName().toLowerCase());
 
-          log.debug("Search Criteria {}", sc.getSearchCriteria());
-          socialNetworkFetch.prepareFetch(sc, event.getPostDelay());
-          addSchedule(socialNetworkFetch, event.getStartDate());
-          addToMap(event, socialNetworkFetch, sc);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      });
+        log.debug("Search Criteria {}", sc.getSearchCriteria());
+        socialNetworkFetch.prepareFetch(sc, event.getPostDelay());
+        addSchedule(socialNetworkFetch, event.getStartDate());
+        addToMap(event, socialNetworkFetch, sc);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    });
   }
 
   /**
-   *
    * @param socialNetworkFetch
    * @param startDate
    */
@@ -74,19 +69,17 @@ public class FetchExecutorService {
   }
 
   /**
-   *
    * @param event
    * @param socialNetworkFetch
    * @param searchCriteria
    */
   private void addToMap(Event event, FetchableInterface socialNetworkFetch,
-      SearchCriteria searchCriteria) {
+                        SearchCriteria searchCriteria) {
     String key = buildKey(event, searchCriteria);
     fetchableMap.put(key, socialNetworkFetch);
   }
 
   /**
-   *
    * @param searchCriteria
    * @return
    */
@@ -103,7 +96,6 @@ public class FetchExecutorService {
   }
 
   /**
-   *
    * @param event
    */
   public void killAll(Event event) {
@@ -112,7 +104,6 @@ public class FetchExecutorService {
   }
 
   /**
-   * 
    * @param searchCriteria
    * @param delay
    * @return
@@ -141,8 +132,8 @@ public class FetchExecutorService {
 
   private String buildKey(Event event, SearchCriteria searchCriteria) {
     String key = event.getId().toString()
-        + event.getOrganizationByOrganizationId().getId().toString()
-        + searchCriteria.getSocialNetworkBySocialNetworkId().getName();
+      + event.getOrganizationByOrganizationId().getId().toString()
+      + searchCriteria.getSocialNetworkBySocialNetworkId().getName();
 
     return key;
   }

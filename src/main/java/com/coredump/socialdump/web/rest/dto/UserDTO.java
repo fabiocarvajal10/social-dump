@@ -57,7 +57,7 @@ public class UserDTO {
   public UserDTO(Long id, String login, String password, String firstName,
                  String lastName, String email, String langKey,
                  List<String> roles) {
-    this(login, password, firstName, lastName, email,langKey, roles);
+    this(login, password, firstName, lastName, email, langKey, roles);
     this.id = id;
   }
 
@@ -65,7 +65,9 @@ public class UserDTO {
     return password;
   }
 
-  public Long getId() { return id; }
+  public Long getId() {
+    return id;
+  }
 
   public String getLogin() {
     return login;
@@ -90,7 +92,6 @@ public class UserDTO {
   public List<String> getRoles() {
     return roles;
   }
-
 
 
   @Override

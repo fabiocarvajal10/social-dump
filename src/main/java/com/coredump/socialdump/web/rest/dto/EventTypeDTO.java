@@ -1,9 +1,7 @@
 package com.coredump.socialdump.web.rest.dto;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 
@@ -12,65 +10,65 @@ import java.util.Objects;
  */
 public class EventTypeDTO implements Serializable {
 
-    private Long id;
+  private Long id;
 
-    @NotNull
-    private String name;
+  @NotNull
+  private String name;
 
-    @NotNull
-    private String description;
+  @NotNull
+  private String description;
 
-    public Long getId() {
-        return id;
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    EventTypeDTO eventTypeDTO = (EventTypeDTO) o;
 
-    public String getName() {
-        return name;
-    }
+    if (!Objects.equals(id, eventTypeDTO.id)) return false;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    return true;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        EventTypeDTO eventTypeDTO = (EventTypeDTO) o;
-
-        if ( ! Objects.equals(id, eventTypeDTO.id)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return "EventTypeDTO{" +
-                "id=" + id +
-                ", name='" + name + "'" +
-                ", description='" + description + "'" +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "EventTypeDTO{" +
+      "id=" + id +
+      ", name='" + name + "'" +
+      ", description='" + description + "'" +
+      '}';
+  }
 }

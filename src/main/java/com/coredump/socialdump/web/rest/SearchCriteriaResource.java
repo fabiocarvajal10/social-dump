@@ -7,14 +7,6 @@ import com.coredump.socialdump.service.GenericStatusService;
 import com.coredump.socialdump.web.rest.dto.SearchCriteriaDTO;
 import com.coredump.socialdump.web.rest.mapper.SearchCriteriaMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -25,8 +17,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.inject.Inject;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 /**
  * Controlador REST para manejar criterios de búsqueda.
+ *
  * @author Esteban
  */
 @RestController
@@ -59,19 +61,20 @@ public class SearchCriteriaResource {
 
   /**
    * POST  /search-criteria -> Crea un nuevo criterio de búsqueda.
+   *
    * @param searchCriteriaDTO encapsulación del criterio de búsqueda
    * @return representación del nuevo criterio de búsqueda
    */
   @RequestMapping(value = "/search-criteria",
-        method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<SearchCriteriaDTO> create(
     @Valid @RequestBody SearchCriteriaDTO searchCriteriaDTO)
     throws URISyntaxException {
 
     log.debug("REST request to save SearchCriteria : {}",
-              searchCriteriaDTO.getId());
+      searchCriteriaDTO.getId());
 
     if (searchCriteriaDTO.getId() != null) {
       return ResponseEntity.badRequest()
@@ -80,15 +83,15 @@ public class SearchCriteriaResource {
     }
 
     SearchCriteria searchCriteria = searchCriteriaMapper
-          .searchCriteriaDTOToSearchCriteria(searchCriteriaDTO);
+      .searchCriteriaDTOToSearchCriteria(searchCriteriaDTO);
 
     if (searchCriteria.getEventByEventId() == null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "Event doesn't exist").body(null);
+        .header("Failure", "Event doesn't exist").body(null);
     }
     if (searchCriteria.getSocialNetworkBySocialNetworkId() == null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "Social network doesn't exist").body(null);
+        .header("Failure", "Social network doesn't exist").body(null);
     }
 
     searchCriteria.setGenericStatusByStatusId(statusService.getActive());
@@ -97,11 +100,12 @@ public class SearchCriteriaResource {
 
     return ResponseEntity.created(new URI("/api/search-criteria/" +
       searchCriteriaDTO.getId()))
-        .body(searchCriteriaMapper.searchCriteriaToSearchCriteriaDTO(searchCriteria));
+      .body(searchCriteriaMapper.searchCriteriaToSearchCriteriaDTO(searchCriteria));
   }
 
   /**
    * PUT  /searchCriterias -> Actualiza un criterio de búsqueda existente.
+   *
    * @param searchCriteriaDTO encapsulación del criterio de búsqueda.
    * @return representación del nuevo criterio de búsqueda
    */
@@ -126,18 +130,19 @@ public class SearchCriteriaResource {
 
   /**
    * GET  /search-criteria -> obtiene todos los criterios de búsqueda
+   *
    * @param offset cantidad de registros de offset para la consulta
-   * @param limit límite de la consulta
+   * @param limit  límite de la consulta
    * @return lista de criterios de búsqueda
    * @throws URISyntaxException si se forma incorrectamente el URI de respuesta
    */
   @RequestMapping(value = "/search-criteria",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public ResponseEntity<List<SearchCriteriaDTO>> getAll(
-    @RequestParam(value = "page" , required = false) Integer offset,
+    @RequestParam(value = "page", required = false) Integer offset,
     @RequestParam(value = "per_page", required = false) Integer limit)
     throws URISyntaxException {
     Page<SearchCriteria> page =
@@ -154,6 +159,7 @@ public class SearchCriteriaResource {
 
   /**
    * GET  /searchCriterias/:id -> obtiene el criterio de búsqueda del ID dado.
+   *
    * @param id Identificador del criterio de búsqueda.
    * @return resultados de la consulta
    */
@@ -174,6 +180,7 @@ public class SearchCriteriaResource {
   /**
    * DELETE  /searchCriterias/:id -> elimina el criterio de búsqueda
    * identificado por el "id".
+   *
    * @param id id del criterio de búsqudda
    */
   @RequestMapping(value = "/search-criteria/{id}",

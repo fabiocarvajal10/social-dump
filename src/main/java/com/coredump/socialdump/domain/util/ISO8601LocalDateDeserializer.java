@@ -15,17 +15,17 @@ import java.io.IOException;
  */
 public class ISO8601LocalDateDeserializer extends JsonDeserializer<LocalDate> {
 
-    @Override
-    public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException {
-        JsonToken t = jp.getCurrentToken();
-        if (t == JsonToken.VALUE_STRING) {
-            String str = jp.getText().trim();
-            return ISODateTimeFormat.dateTimeParser().parseLocalDate(str);
-        }
-        if (t == JsonToken.VALUE_NUMBER_INT) {
-            return new LocalDate(jp.getLongValue());
-        }
-        throw ctxt.mappingException(handledType());
+  @Override
+  public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
+    throws IOException {
+    JsonToken t = jp.getCurrentToken();
+    if (t == JsonToken.VALUE_STRING) {
+      String str = jp.getText().trim();
+      return ISODateTimeFormat.dateTimeParser().parseLocalDate(str);
     }
+    if (t == JsonToken.VALUE_NUMBER_INT) {
+      return new LocalDate(jp.getLongValue());
+    }
+    throw ctxt.mappingException(handledType());
+  }
 }
