@@ -9,7 +9,6 @@ import com.coredump.socialdump.repository.TemporalAccessRepository;
 import com.coredump.socialdump.web.rest.dto.MonitorContactDTO;
 import com.coredump.socialdump.web.rest.mapper.MonitorContactMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,16 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +34,7 @@ import java.util.stream.Collectors;
 public class MonitorContactResource {
 
   private final Logger log =
-      LoggerFactory.getLogger(MonitorContactResource.class);
+    LoggerFactory.getLogger(MonitorContactResource.class);
 
   @Inject
   private MonitorContactRepository monitorContactRepository;
@@ -60,29 +52,40 @@ public class MonitorContactResource {
    * POST  /register -> register the monitor contact.
    */
   @RequestMapping(value = "/monitor-contacts",
-      method = RequestMethod.POST,
-      produces = MediaType.TEXT_PLAIN_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
   public ResponseEntity<?> create(@RequestBody MonitorContactDTO monitorContactDTO) {
     MonitorContact monitorContact =
-        monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
+      monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
+
+    String missingReqProperty =
+    (monitorContactDTO.getFirstName() == null ||
+      monitorContactDTO.getFirstName().length() == 0) ? "First name" :
+      (monitorContactDTO.getLastName() == null ||
+        monitorContactDTO.getLastName().length() == 0) ? "Last name" :
+        null;
+
+    if (missingReqProperty != null) {
+      new ResponseEntity<>(missingReqProperty + " cannot be null", HttpStatus.BAD_REQUEST);
+    }
 
     return monitorContactRepository
-        .findOneByEmailAndOrganizationByOrganizationId(monitorContact.getEmail(),
-            monitorContact.getOrganizationByOrganizationId())
-        .map(monitor -> new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT))
-        .orElseGet(() -> {
-            monitorContactRepository.save(monitorContact);
-            return new ResponseEntity<>(Long.toString(monitorContact.getId()), HttpStatus.CREATED);
-          });
+      .findOneByEmailAndOrganizationByOrganizationId(monitorContact.getEmail(),
+        monitorContact.getOrganizationByOrganizationId())
+      .map(monitor -> new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT))
+      .orElseGet(() -> {
+        monitorContactRepository.save(monitorContact);
+        return new ResponseEntity<>(Long.toString(monitorContact.getId()), HttpStatus.CREATED);
+      });
   }
 
   /**
    * PUT  /monitor-contacts -> Updates an existing monitor contact.
    */
   @RequestMapping(value = "/monitor-contacts",
-      method = RequestMethod.PUT,
-      produces = MediaType.TEXT_PLAIN_VALUE)
+    method = RequestMethod.PUT,
+    produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
   public ResponseEntity<?> update(@RequestBody MonitorContactDTO monitorContactDTO) {
 
@@ -91,37 +94,37 @@ public class MonitorContactResource {
     }
 
     MonitorContact monitorContact =
-        monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
+      monitorContactMapper.monitorContactDTOToMonitorContact(monitorContactDTO);
 
     return monitorContactRepository.findOneByEmailAndOrganizationByOrganizationId(
-        monitorContact.getEmail(), monitorContact.getOrganizationByOrganizationId())
-        .map(monitor ->  {
-            if (monitor.getId() == monitorContact.getId()) {
-              monitorContactRepository.save(monitorContact);
-              return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-              return new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT);
-            }
-          })
-        .orElseGet(() -> {
-            monitorContactRepository.save(monitorContact);
-            return new ResponseEntity<>(HttpStatus.OK);
-          });
+      monitorContact.getEmail(), monitorContact.getOrganizationByOrganizationId())
+      .map(monitor -> {
+        if (monitor.getId() == monitorContact.getId()) {
+          monitorContactRepository.save(monitorContact);
+          return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>("e-mail address already in use", HttpStatus.CONFLICT);
+        }
+      })
+      .orElseGet(() -> {
+        monitorContactRepository.save(monitorContact);
+        return new ResponseEntity<>(HttpStatus.OK);
+      });
   }
 
   /**
    * GET  /monitor-contacts -> get all the monitors.
    */
   @RequestMapping(value = "/monitor-contacts",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public ResponseEntity<List<MonitorContactDTO>> getAll(
-      @RequestParam(value = "page" , required = false) Integer offset,
-      @RequestParam(value = "per_page", required = false) Integer limit,
-      @RequestParam(value = "organizationId")
-        Long organizationId) throws URISyntaxException {
+    @RequestParam(value = "page", required = false) Integer offset,
+    @RequestParam(value = "per_page", required = false) Integer limit,
+    @RequestParam(value = "organizationId")
+    Long organizationId) throws URISyntaxException {
 
     Organization organization = organizationRepository.findOneForCurrentAndById(organizationId);
 
@@ -129,42 +132,42 @@ public class MonitorContactResource {
       return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    Page<MonitorContact> page  = monitorContactRepository
-        .findAllByOrganizationByOrganizationId(PaginationUtil.generatePageRequest(offset, limit),
+    Page<MonitorContact> page = monitorContactRepository
+      .findAllByOrganizationByOrganizationId(PaginationUtil.generatePageRequest(offset, limit),
         organization
-    );
+      );
 
     HttpHeaders headers = PaginationUtil
-        .generatePaginationHttpHeaders(page, "/api/monitor-contacts", offset, limit);
+      .generatePaginationHttpHeaders(page, "/api/monitor-contacts", offset, limit);
 
     return new ResponseEntity<>(page
-              .getContent()
-              .stream()
-              .map(monitorContactMapper::monitorContactToMonitorContactDTO)
-              .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);
+      .getContent()
+      .stream()
+      .map(monitorContactMapper::monitorContactToMonitorContactDTO)
+      .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);
   }
 
   /**
    * GET  /monitor-contacts/:id -> get the "id" generic status.
    */
   @RequestMapping(value = "/monitor-contacts/{id}",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<MonitorContact> get(@PathVariable long id) {
     log.debug("REST request to get MonitorContacts : {}", id);
     return Optional.ofNullable(monitorContactRepository.findOne(id))
-            .map(MonitorContact ->
-                  new ResponseEntity<>(MonitorContact, HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+      .map(MonitorContact ->
+        new ResponseEntity<>(MonitorContact, HttpStatus.OK))
+      .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   /**
    * DELETE  /monitor-contacts/:id -> delete the monitor contact.
    */
   @RequestMapping(value = "/monitor-contacts/{id}",
-      method = RequestMethod.DELETE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.DELETE,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional
   public ResponseEntity<Void> delete(@PathVariable Long id) {

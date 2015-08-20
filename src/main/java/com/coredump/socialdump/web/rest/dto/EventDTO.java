@@ -4,14 +4,12 @@ import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
 import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import java.util.List;
-import java.util.Objects;
+import org.joda.time.DateTime;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.joda.time.DateTime;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by fabio on 13/07/15.
@@ -31,16 +29,16 @@ public class EventDTO {
   @JsonDeserialize(using = CustomDateTimeDeserializer.class)
   private DateTime endDate;
 
-  @Size(min = 1,max = 255)
+  @Size(min = 1, max = 255)
   private String description;
 
   @JsonSerialize(using = CustomDateTimeSerializer.class)
   @JsonDeserialize(using = CustomDateTimeDeserializer.class)
   private DateTime activatedAt;
-  private int postDelay;
+  private Integer postDelay;
   private Long organizationId;
-  private short statusId;
-  private int typeId;
+  private Short statusId;
+  private Integer typeId;
   private List<String> searchCriterias;
 
   public List<String> getSearchCriterias() {
@@ -51,11 +49,11 @@ public class EventDTO {
     this.searchCriterias = searchCriterias;
   }
 
-  public int getTypeId() {
+  public Integer getTypeId() {
     return typeId;
   }
 
-  public void setTypeId(int typeId) {
+  public void setTypeId(Integer typeId) {
     this.typeId = typeId;
   }
 
@@ -75,19 +73,19 @@ public class EventDTO {
     this.activatedAt = activatedAt;
   }
 
-  public int getPostDelay() {
+  public Integer getPostDelay() {
     return postDelay;
   }
 
-  public void setPostDelay(int postDelay) {
+  public void setPostDelay(Integer postDelay) {
     this.postDelay = postDelay;
   }
 
-  public short getStatusId() {
+  public Short getStatusId() {
     return statusId;
   }
 
-  public void setStatusId(short statusId) {
+  public void setStatusId(Short statusId) {
     this.statusId = statusId;
   }
 
@@ -131,12 +129,12 @@ public class EventDTO {
   @Override
   public String toString() {
     return "EventDTO{"
-            + "description='" + description + '\''
-            + ", startDate=" + startDate
-            + ", endDate=" + endDate
-            + ", activatedAt=" + activatedAt
-            + ", postDelay=" + postDelay
-            + '}';
+      + "description='" + description + '\''
+      + ", startDate=" + startDate
+      + ", endDate=" + endDate
+      + ", activatedAt=" + activatedAt
+      + ", postDelay=" + postDelay
+      + '}';
   }
 
 

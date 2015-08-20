@@ -1,11 +1,13 @@
 package com.coredump.socialdump.web.rest.mapper;
 
-import com.coredump.socialdump.domain.*;
+import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.EventStatus;
+import com.coredump.socialdump.domain.EventType;
+import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.EventTypeRepository;
 import com.coredump.socialdump.repository.OrganizationRepository;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -29,15 +31,15 @@ public abstract class EventMapper {
   private OrganizationRepository organizationRepository;
 
   @Mappings({
-          @Mapping(source = "organizationByOrganizationId.id", target = "organizationId"),
-          @Mapping(source = "eventStatusByStatusId.id", target = "statusId"),
-          @Mapping(source = "eventTypeByEventTypeId.id", target = "typeId")})
+    @Mapping(source = "organizationByOrganizationId.id", target = "organizationId"),
+    @Mapping(source = "eventStatusByStatusId.id", target = "statusId"),
+    @Mapping(source = "eventTypeByEventTypeId.id", target = "typeId")})
   public abstract EventDTO eventToEventDTO(Event event);
 
   @Mappings({
-          @Mapping(source = "organizationId", target = "organizationByOrganizationId"),
-          @Mapping(source = "statusId", target = "eventStatusByStatusId"),
-          @Mapping(source = "typeId", target = "eventTypeByEventTypeId")})
+    @Mapping(source = "organizationId", target = "organizationByOrganizationId"),
+    @Mapping(source = "statusId", target = "eventStatusByStatusId"),
+    @Mapping(source = "typeId", target = "eventTypeByEventTypeId")})
   public abstract Event eventDTOToEvent(EventDTO eventDTO);
 
   /**

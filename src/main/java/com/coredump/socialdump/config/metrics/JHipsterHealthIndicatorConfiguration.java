@@ -11,19 +11,19 @@ import javax.sql.DataSource;
 @Configuration
 public class JHipsterHealthIndicatorConfiguration {
 
-    @Inject
-    private JavaMailSenderImpl javaMailSender;
+  @Inject
+  private JavaMailSenderImpl javaMailSender;
 
-    @Inject
-    private DataSource dataSource;
+  @Inject
+  private DataSource dataSource;
 
-    @Bean
-    public HealthIndicator dbHealthIndicator() {
-        return new DatabaseHealthIndicator(dataSource);
-    }
+  @Bean
+  public HealthIndicator dbHealthIndicator() {
+    return new DatabaseHealthIndicator(dataSource);
+  }
 
-    @Bean
-    public HealthIndicator mailHealthIndicator() {
-        return new JavaMailHealthIndicator(javaMailSender);
-    }
+  @Bean
+  public HealthIndicator mailHealthIndicator() {
+    return new JavaMailHealthIndicator(javaMailSender);
+  }
 }

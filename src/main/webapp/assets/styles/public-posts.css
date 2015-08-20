@@ -1,16 +1,16 @@
 #post-main-wrapper {
-	background-color:#424242;
-	margin:0;
-	height: 100%;
-	width: 100%;
-	position: fixed;
-	top: 0px;
-    left: 0px;
-    z-index: -1;
+  background-color: #424242;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
 }
 
 .list-group-item {
-	background-color: transparent;
+  background-color: transparent;
 }
 
 div.white-background {
@@ -18,14 +18,15 @@ div.white-background {
 }
 
 .wrapper-post {
-	top:0px;
+  top: 0px;
 }
 
 .circle-card {
-	-webkit-border-radius: 200px;
-	-moz-border-radius: 200px;
-	border-radius: 200px;
+  -webkit-border-radius: 200px;
+  -moz-border-radius: 200px;
+  border-radius: 200px;
 }
+
 /*
 .bg-light.lter.b-b{
 	border-bottom-width: 3px;
@@ -38,8 +39,8 @@ div.white-background {
 }
 */
 .filter-wrapper {
-	height: 65px;
-	width:25%;
+  height: 65px;
+  width: 25%;
 }
 
 /*
@@ -89,45 +90,43 @@ div.white-background {
 }
 */
 .navbar-default .navbar-nav > li > .btn-twitter {
-	color: #55acee;
+  color: #55acee;
 }
 
-.navbar-default .navbar-nav > li > .btn-twitter:hover{
-	color: #309aea;
+.navbar-default .navbar-nav > li > .btn-twitter:hover {
+  color: #309aea;
 }
 
 .navbar-default .navbar-nav > li > .btn-instagram {
-	color: #3f729b;
+  color: #3f729b;
 }
 
-.navbar-default .navbar-nav > li > .btn-instagram:hover{
-	color: #335d7e;
+.navbar-default .navbar-nav > li > .btn-instagram:hover {
+  color: #335d7e;
 }
 
 .navbar-default .navbar-nav > li > .btn-all {
-	color: #444;
+  color: #444;
 }
 
 .navbar-default .navbar-nav > li > .btn-all:hover {
-	color: #303030;
+  color: #303030;
 }
 
-#nav-public{
-	color: #f8f8f8;
-	border-bottom-width: 1.9px;
-	border-color:  #e74c3c;
+#nav-public {
+  color: #f8f8f8;
+  border-bottom-width: 1.9px;
+  border-color: #e74c3c;
 }
 
-#nav-public a{
-	height: 46px;
+#nav-public a {
+  height: 46px;
 }
-
-
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus{
-    background-color: #727272;
+.navbar-default .navbar-nav > .active > a:focus {
+  background-color: #727272;
 
 }
 
@@ -146,108 +145,110 @@ div > .bootcards-cards > div > .header {
 */
 
 .graff {
-	display: block;
-	margin-top: 4px;
-	margin-bottom: 0;
-	font-family: 'Erica One', cursive, sans-serif;
-	font-size: 1em;
-	letter-spacing: -0.01em;
-	font-weight: normal;
-	text-transform: uppercase;
-	color: #212121;
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 0;
+  font-family: 'Erica One', cursive, sans-serif;
+  font-size: 1em;
+  letter-spacing: -0.01em;
+  font-weight: normal;
+  text-transform: uppercase;
+  color: #212121;
 }
+
 img.pull-left.thumb-sm.avatar.b-3x.m-r.post-profile {
-	margin-top: 5px;
-    margin-left: 5px;
+  margin-top: 5px;
+  margin-left: 5px;
 }
 
 #ribbon-container {
-	position: absolute;
-	top: 12px;
-	right: -4px;
-	overflow: visible; /* so we can see the pseudo-elements we're going to add to the anchor */
-	font-size: 22px; /* font-size and line-height must be equal so we can account for the height of the banner */
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  overflow: visible; /* so we can see the pseudo-elements we're going to add to the anchor */
+  font-size: 22px; /* font-size and line-height must be equal so we can account for the height of the banner */
 }
 
 #ribbon-container:before {
-	content:"";
-	height: 0;
-	width: 0;
-	display: block;
-	position: absolute;
-	top:2.2px;
-	left:4.9px;
+  content: "";
+  height: 0;
+  width: 0;
+  display: block;
+  position: absolute;
+  top: 2.2px;
+  left: 4.9px;
 }
 
 #ribbon-container a {
-	display:block;
-	padding:20px;
-	position:relative; /* allows us to position our pseudo-elements properly */
-	background:#ffffff;
-	overflow:visible;
-	height:29px;
-	margin-left:29px;
-	text-decoration:none;
+  display: block;
+  padding: 20px;
+  position: relative; /* allows us to position our pseudo-elements properly */
+  background: #ffffff;
+  overflow: visible;
+  height: 29px;
+  margin-left: 29px;
+  text-decoration: none;
 }
 
 #ribbon-container a > .fa-twitter {
-	color:#55acee;
+  color: #55acee;
 }
 
 #ribbon-container a > .fa-instagram {
-	color:#F44336;
-}
-#ribbon-container a > i{
-	position: relative;
-    top: -15px;
+  color: #F44336;
 }
 
-#ribbon-container a:after { /* this creates the "folded" part of our ribbon */
-	content:"";
-	height: 0;
-	width: 0;
-	display:block;
-	position:absolute;
-	bottom: -14px;
-    right: 1.5px;
-    border-top: 14.5px solid #9E9E9E;
-    border-right: 14.5px solid transparent;
+#ribbon-container a > i {
+  position: relative;
+  top: -15px;
 }
 
-#ribbon-container a:before { /* this creates the "forked" part of our ribbon */
-	content:"";
-	height: 0;
-	width: 0;
-	display:block;
-	position:absolute;
-	top:0;
-	left:-20px;
-	border-top: 20.5px solid #ffffff;
-	border-bottom: 20.5px solid #ffffff;
-	border-right: 20.5px solid transparent;
-	border-left: 20.5px solid transparent;
+#ribbon-container a:after {
+  /* this creates the "folded" part of our ribbon */
+  content: "";
+  height: 0;
+  width: 0;
+  display: block;
+  position: absolute;
+  bottom: -14px;
+  right: 1.5px;
+  border-top: 14.5px solid #9E9E9E;
+  border-right: 14.5px solid transparent;
+}
+
+#ribbon-container a:before {
+  /* this creates the "forked" part of our ribbon */
+  content: "";
+  height: 0;
+  width: 0;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -20px;
+  border-top: 20.5px solid #ffffff;
+  border-bottom: 20.5px solid #ffffff;
+  border-right: 20.5px solid transparent;
+  border-left: 20.5px solid transparent;
 }
 
 #ribbon-container a:hover {
-	background:#212121;
+  background: #212121;
 }
 
-
-
-#ribbon-container a:hover:before { /* this makes sure that the "forked" part of the ribbon changes color with the anchor on :hover */
-	border-top: 20.5px solid #212121;
-	border-bottom: 20.5px solid #212121;
+#ribbon-container a:hover:before {
+  /* this makes sure that the "forked" part of the ribbon changes color with the anchor on :hover */
+  border-top: 20.5px solid #212121;
+  border-bottom: 20.5px solid #212121;
 }
-
 
 .panel.panel-default {
-	background-color: #ffffff;
-	border-color: #424242;
+  background-color: #ffffff;
+  border-color: #424242;
 }
 
 .panel-heading.header.clearfix {
-	background-color: #ef5350;
-	color: #ecf0f1;
+  background-color: #ef5350;
+  color: #ecf0f1;
 }
 
 .panel-footer {

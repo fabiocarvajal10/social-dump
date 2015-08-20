@@ -12,14 +12,14 @@ import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 @Configuration
 public class JacksonConfiguration {
 
-    @Bean
-    public JodaModule jacksonJodaModule() {
-        JodaModule module = new JodaModule();
-        DateTimeFormatterFactory formatterFactory = new DateTimeFormatterFactory();
-        formatterFactory.setIso(DateTimeFormat.ISO.DATE);
-        module.addSerializer(DateTime.class, new DateTimeSerializer(
-                new JacksonJodaFormat(formatterFactory.createDateTimeFormatter()
-                        .withZoneUTC())));
-        return module;
-    }
+  @Bean
+  public JodaModule jacksonJodaModule() {
+    JodaModule module = new JodaModule();
+    DateTimeFormatterFactory formatterFactory = new DateTimeFormatterFactory();
+    formatterFactory.setIso(DateTimeFormat.ISO.DATE);
+    module.addSerializer(DateTime.class, new DateTimeSerializer(
+      new JacksonJodaFormat(formatterFactory.createDateTimeFormatter()
+        .withZoneUTC())));
+    return module;
+  }
 }

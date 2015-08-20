@@ -8,17 +8,15 @@ import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.GenericStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.inject.Inject;
 
 /**
  * Service class for managing Events.
@@ -51,19 +49,17 @@ public class EventService {
   private SearchCriteriaService searchCriteriaService;
 
   /**
-   *
    * @param event
    * @return
    */
   public List<String> getSearchCriterias(Event event) {
-    return  searchCriteriaRepository.findAllByEventByEventId(event)
-          .stream()
-          .map(SearchCriteria::getSearchCriteria)
-          .collect(Collectors.toCollection(ArrayList::new));
+    return searchCriteriaRepository.findAllByEventByEventId(event)
+      .stream()
+      .map(SearchCriteria::getSearchCriteria)
+      .collect(Collectors.toCollection(ArrayList::new));
   }
 
   /**
-   *
    * @param event
    */
   public void scheduleFetch(Event event) {
@@ -73,7 +69,6 @@ public class EventService {
   }
 
   /**
-   *
    * @param searchCriteria
    * @return
    */
@@ -90,7 +85,6 @@ public class EventService {
   }
 
   /**
-   *
    * @param event
    */
   public void stopAllSync(Event event) {
@@ -98,7 +92,6 @@ public class EventService {
   }
 
   /**
-   *
    * @param searchCriteria
    * @param delay
    * @return
@@ -113,7 +106,6 @@ public class EventService {
   }
 
   /**
-   *
    * @param event
    * @param delay
    */
@@ -124,7 +116,6 @@ public class EventService {
   }
 
   /**
-   *
    * @param event
    */
   public void cancelEvent(Event event) {

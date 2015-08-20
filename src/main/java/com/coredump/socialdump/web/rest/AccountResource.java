@@ -8,13 +8,6 @@ import com.coredump.socialdump.security.SecurityUtils;
 import com.coredump.socialdump.service.MailService;
 import com.coredump.socialdump.service.UserService;
 import com.coredump.socialdump.web.rest.dto.UserDTO;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing the current user's account.
@@ -181,7 +180,8 @@ public class AccountResource {
 
   /**
    * Solicita el reinicio de la contraseña.
-   * @param mail correo electrónico.
+   *
+   * @param mail    correo electrónico.
    * @param request solicitud HTTP.
    * @return respuesta HTTP.
    */
@@ -208,7 +208,8 @@ public class AccountResource {
 
   /**
    * Completa el reseteo de la contraseña.
-   * @param key hash utilizado para validar el cambio de contraseña.
+   *
+   * @param key         hash utilizado para validar el cambio de contraseña.
    * @param newPassword nuevo password a utilizar.
    * @return respuesta HTTP.
    */
@@ -230,6 +231,7 @@ public class AccountResource {
 
   /**
    * Valida la longitud de una contraseña.
+   *
    * @param password contraseña.
    * @return si es válida.
    */

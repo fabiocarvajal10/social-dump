@@ -2,22 +2,19 @@ package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.SearchCriteria;
-
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 /**
  * Created by Francisco J. Milanés Sánchez on 13/07/2015.
@@ -37,34 +34,36 @@ public class FetchExecutorService {
 
   /**
    * Agenda la extracción de datos de las redes sociales.
+   *
    * @param event evento al que se va a agendar
    */
   public void scheduleFetch(Event event) {
     int searchCriteriaQ = event.getSearchCriteriasById().size();
 
     scheduledExecutorService = Executors
-          .newScheduledThreadPool(searchCriteriaQ);
+      .newScheduledThreadPool(searchCriteriaQ);
 
     List<SearchCriteria> scList = (List<SearchCriteria>) event.getSearchCriteriasById();
 
     scList.forEach(sc -> {
-        try {
-          FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
-              .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
-              .getName().toLowerCase());
+      try {
+        FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
+          .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
+            .getName().toLowerCase());
 
-          log.debug("Search Criteria {}", sc.getSearchCriteria());
-          socialNetworkFetch.prepareFetch(sc, event.getPostDelay());
-          addSchedule(socialNetworkFetch, event.getStartDate());
-          addToMap(event, socialNetworkFetch, sc);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      });
+        log.debug("Search Criteria {}", sc.getSearchCriteria());
+        socialNetworkFetch.prepareFetch(sc, event.getPostDelay());
+        addSchedule(socialNetworkFetch, event.getStartDate());
+        addToMap(event, socialNetworkFetch, sc);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    });
   }
 
   /**
    * Agrega un agendador, para la extracción de datos.
+   *
    * @param socialNetworkFetch red social de la que se va a extraer
    * @param startDate fecha en la que se empieza a extraer datos
    */
@@ -75,14 +74,15 @@ public class FetchExecutorService {
   }
 
   /**
-   * A&ntilde;ade un nuevo campo al Map fechableMap.
-   * @param event evento al que se le va a agregar un criterio de b&uacute;squeda
+   * Anade un nuevo campo al Map fechableMap.
+   *
+   * @param event evento al que se le va a agregar un criterio de busqueda
    * @param socialNetworkFetch red social de la que se van a extraer datos
    * @param searchCriteria criterio que va a utilizar el
    *                       servicio para extraer los posts de una red social
    */
   private void addToMap(Event event, FetchableInterface socialNetworkFetch,
-      SearchCriteria searchCriteria) {
+                        SearchCriteria searchCriteria) {
     String key = buildKey(event, searchCriteria);
     fetchableMap.put(key, socialNetworkFetch);
   }
@@ -90,6 +90,7 @@ public class FetchExecutorService {
   /**
    * Método que detiene la sincronización del eventoa una red social
    * detiene la extracción de datos.
+   *
    * @param searchCriteria criterio por el que se va a realizar la búsqueda
    * @return valor booleano indicando el resultado de la stop
    */
@@ -107,6 +108,7 @@ public class FetchExecutorService {
 
   /**
    * Detiene los hilos encargados de traer los datos de las redes sociales.
+   *
    * @param event evento que va detener extracción posts
    */
   public void killAll(Event event) {
@@ -116,6 +118,7 @@ public class FetchExecutorService {
 
   /**
    * Modifica el tiempo por los que se extraen los posts.
+   *
    * @param searchCriteria criterio de búsqueda que se va modificar
    * @param delay indica los segundos de retraso
    * @return delay modificado

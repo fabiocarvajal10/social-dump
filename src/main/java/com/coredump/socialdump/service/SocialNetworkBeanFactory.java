@@ -16,6 +16,7 @@ public class SocialNetworkBeanFactory {
 
   /**
    * Retorna un bean de tipo FetchableInterface
+   *
    * @param name nombre del tipo que se quiere obtener
    * @return FetchableInterface
    */

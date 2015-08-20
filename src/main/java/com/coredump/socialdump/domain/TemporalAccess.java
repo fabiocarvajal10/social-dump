@@ -5,14 +5,12 @@ import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * Created by fabio on 09/07/15.
@@ -113,11 +111,16 @@ public class TemporalAccess implements Serializable {
     TemporalAccess that = (TemporalAccess) o;
 
     if (id != that.id) return false;
-    if (email != null ? !email.equals(that.email) : that.email != null) return false;
-    if (password != null ? !password.equals(that.password) : that.password != null) return false;
-    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
-    if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
-    if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
+    if (email != null ? !email.equals(that.email) : that.email != null)
+      return false;
+    if (password != null ? !password.equals(that.password) : that.password != null)
+      return false;
+    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null)
+      return false;
+    if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null)
+      return false;
+    if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null)
+      return false;
 
     return true;
   }

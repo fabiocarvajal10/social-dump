@@ -1,14 +1,15 @@
 package com.coredump.socialdump.domain;
 
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 /**
  * Estados genéricos para las entidades que lo necesiten.
  * Created by fabio on 09/07/15
+ *
  * @autor Fabio
  */
 @Entity
@@ -62,8 +63,10 @@ public class GenericStatus implements Serializable {
     GenericStatus that = (GenericStatus) o;
 
     if (id != that.id) return false;
-    if (status != null ? !status.equals(that.status) : that.status != null) return false;
-    if (description != null ? !description.equals(that.description) : that.description != null) return false;
+    if (status != null ? !status.equals(that.status) : that.status != null)
+      return false;
+    if (description != null ? !description.equals(that.description) : that.description != null)
+      return false;
 
     return true;
   }
@@ -112,8 +115,8 @@ public class GenericStatus implements Serializable {
   @Override
   public String toString() {
     return "GenericStatus{"
-          + "status='" + status + '\''
-          + ", description='" + description + '\''
-          + '}';
+      + "status='" + status + '\''
+      + ", description='" + description + '\''
+      + '}';
   }
 }

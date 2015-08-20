@@ -9,17 +9,12 @@ import com.coredump.socialdump.repository.EventRepository;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.SearchCriteriaRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
-import com.coredump.socialdump.service.EventService;
-import com.coredump.socialdump.service.EventStatusService;
-import com.coredump.socialdump.service.OrganizationService;
-import com.coredump.socialdump.service.SearchCriteriaService;
-import com.coredump.socialdump.service.TemporalAccessService;
+import com.coredump.socialdump.service.*;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
 import com.coredump.socialdump.web.rest.dto.EventSocialNetworkSummaryDTO;
 import com.coredump.socialdump.web.rest.mapper.EventMapper;
 import com.coredump.socialdump.web.rest.util.PaginationUtil;
 import com.coredump.socialdump.web.rest.util.ValidatorUtil;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,28 +26,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
  * Controlador REST encargado de procesar las solicitudes provenientes de
  * los consumidores del API.
  * Created by fabio on 13/07/15.
+ *
  * @author Esteban
  * @author Fabio
  * @author Francisco
  */
 @RestController
 @RequestMapping("/api")
-public class  EventResource{
+public class EventResource {
   private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
   @Inject
@@ -80,14 +76,19 @@ public class  EventResource{
   private SocialNetworkPostRepository socialNetworkPostRepository;
 
   /**
-  * Servicio que maneja lógica de obtención de criterios de búsqueda de la base
-  * de datos.
-  */
+   * Servicio que maneja lógica de obtención de criterios de búsqueda de la base
+   * de datos.
+   */
   @Inject
   private SearchCriteriaService searchCriteriaService;
 
   @Inject
   private TemporalAccessService temporalAccessService;
+  /**
+   * Repositorio de estados de eventos.
+   */
+  @Inject
+  private EventStatusService eventStatusService;
 
   private Organization validateOwner(Event event) {
     return organizationService.ownsOrganization(event
@@ -103,8 +104,8 @@ public class  EventResource{
    * POST  /events/activate/:id -> activate the "id" event.
    */
   @RequestMapping(value = "/events/activate/{id}",
-        method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<Void> activate(@Valid @PathVariable Long id) {
     log.debug("REST request to get Event : {}", id);
@@ -115,7 +116,7 @@ public class  EventResource{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    if ( validateOwner(event) == null) {
+    if (validateOwner(event) == null) {
       return ResponseEntity.status(403).body(null);
     }
 
@@ -124,33 +125,39 @@ public class  EventResource{
     return ResponseEntity.ok().build();
   }
 
-
-  /**
-   * Repositorio de estados de eventos.
-   */
-  @Inject
-  private EventStatusService eventStatusService;
-
   /**
    * POST /events -> Create a new event.
    */
   @RequestMapping(value = "/events",
-          method = RequestMethod.POST,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<EventDTO> create(@Valid @RequestBody EventDTO eventDTO)
-          throws URISyntaxException {
+    throws URISyntaxException {
     log.debug("REST request to save Event: {}", eventDTO.toString());
     if (eventDTO.getId() != null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "A new event cannot already have an ID")
-            .body(null);
+        .header("Failure", "A new event cannot already have an ID")
+        .body(null);
     }
 
-    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+    if (eventDTO.getDescription() == null) {
       return ResponseEntity.badRequest()
-            .header("Failure", "End date can't be lower than start date")
-            .body(null);
+        .header("Failure", "The description is required")
+        .body(null);
+    }
+
+    if (eventDTO.getPostDelay() == null) {
+      return ResponseEntity.badRequest()
+        .header("Failure", "The post delay is required")
+        .body(null);
+    }
+
+    if (ValidatorUtil.isDateLower(eventDTO.getEndDate(),
+      eventDTO.getStartDate())) {
+      return ResponseEntity.badRequest()
+        .header("Failure", "End date can't be lower than start date")
+        .body(null);
     }
 
     Event event = eventMapper.eventDTOToEvent(eventDTO);
@@ -170,13 +177,15 @@ public class  EventResource{
    * PUT  /events -> Updates an existing event.
    */
   @RequestMapping(value = "/events",
-          method = RequestMethod.PUT,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.PUT,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<Void> update(@Valid @RequestBody EventDTO eventDTO,
-      HttpServletRequest request) throws URISyntaxException {
+                                     HttpServletRequest request)
+    throws URISyntaxException {
+
     log.debug("REST request to update Event {}: ",
-            eventDTO.toString());
+      eventDTO.toString());
 
     Event event;
     event = eventRepository.findOne(eventDTO.getId());
@@ -185,15 +194,16 @@ public class  EventResource{
       return ResponseEntity.notFound().build();
     }
 
-    if ( validateOwner(event) == null) {
+    if (validateOwner(event) == null) {
       return ResponseEntity.status(403).build();
     }
 
 
-    if ( ValidatorUtil.isDateLower(eventDTO.getEndDate(), eventDTO.getStartDate())) {
+    if (ValidatorUtil.isDateLower(eventDTO.getEndDate(),
+      eventDTO.getStartDate())) {
       return ResponseEntity.badRequest()
-            .header("Failure", "End date can't be lower than start date")
-            .build();
+        .header("Failure", "End date can't be lower than start date")
+        .build();
     }
 
     DateTime oldStartDate = event.getStartDate();
@@ -201,7 +211,8 @@ public class  EventResource{
 
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
-    temporalAccessService.updateAccessDates(event, oldStartDate, oldEndDate, request);
+    temporalAccessService.updateAccessDates(event, oldStartDate, oldEndDate,
+      request);
 
     return ResponseEntity.ok().build();
   }
@@ -210,46 +221,46 @@ public class  EventResource{
    * GET  /events -> get all the events.
    */
   @RequestMapping(value = "/events",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public ResponseEntity<List<EventDTO>> getAll(
-          @RequestParam(value = "page" , required = false) Integer offset,
-          @RequestParam(value = "per_page", required = false) Integer limit,
-          @Valid @RequestParam(value = "organizationId") Long orgId)
-          throws URISyntaxException {
+    @RequestParam(value = "page", required = false) Integer offset,
+    @RequestParam(value = "per_page", required = false) Integer limit,
+    @Valid @RequestParam(value = "organizationId") Long orgId)
+    throws URISyntaxException {
 
     log.debug("REST request to get all Organizations");
 
     Organization organization = validateOwner(orgId);
-    if ( organization == null) {
+    if (organization == null) {
       return ResponseEntity.status(403).body(null);
     }
 
     Page<Event> page = eventRepository
-            .findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
-                    PaginationUtil.generatePageRequest(offset, limit),
-                    organization.getId());
+      .findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
+        PaginationUtil.generatePageRequest(offset, limit),
+        organization.getId());
 
     HttpHeaders headers = PaginationUtil
-            .generatePaginationHttpHeaders(page, "/api/events",
-                  offset, limit);
+      .generatePaginationHttpHeaders(page, "/api/events",
+        offset, limit);
 
     return new ResponseEntity<>(page
-          .getContent()
-          .stream()
-          .map(eventMapper::eventToEventDTO)
-          .collect(Collectors.toCollection(LinkedList::new)),
-          headers, HttpStatus.OK);
+      .getContent()
+      .stream()
+      .map(eventMapper::eventToEventDTO)
+      .collect(Collectors.toCollection(LinkedList::new)),
+      headers, HttpStatus.OK);
   }
 
   /**
    * GET  /events/:id -> get the "id" event.
    */
   @RequestMapping(value = "/events/{id}",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<EventDTO> get(@Valid @PathVariable Long id) {
     log.debug("REST request to get Event : {}", id);
@@ -260,24 +271,24 @@ public class  EventResource{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    if ( validateOwner(event) == null) {
+    if (validateOwner(event) == null) {
       return ResponseEntity.status(403).body(null);
     }
 
     return Optional.ofNullable(event)
-            .map(eventMapper::eventToEventDTO)
-            .map(EventDTO -> new ResponseEntity<>(
-              EventDTO,
-              HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+      .map(eventMapper::eventToEventDTO)
+      .map(EventDTO -> new ResponseEntity<>(
+        EventDTO,
+        HttpStatus.OK))
+      .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   /**
    * DELETE  /events/:id -> delete the "id" event.
    */
   @RequestMapping(value = "/events/{id}",
-          method = RequestMethod.DELETE,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.DELETE,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     log.debug("REST request to delete Event : {}", id);
@@ -289,20 +300,24 @@ public class  EventResource{
     }
 
     Organization organization = organizationService
-            .ownsOrganization(event
-              .getOrganizationByOrganizationId()
-              .getId());
+      .ownsOrganization(event
+        .getOrganizationByOrganizationId()
+        .getId());
+    log.debug("Organization null for event with id: {}, organization id: {}",
+      event.getId(), event.getOrganizationByOrganizationId().getId());
 
     if (organization == null) {
+      log.debug("Organization not found");
       return ResponseEntity.status(403).build();
     }
 
     if (validateOwner(event) == null) {
+      log.debug("Organization owner mismatch");
       return ResponseEntity.status(403).body(null);
     }
 
     EventStatus status = statusRepository
-            .findOneByStatus("Cancelado");
+      .findOneByStatus("Cancelado");
 
     event.setEventStatusByStatusId(status);
     eventRepository.save(event);
@@ -313,29 +328,29 @@ public class  EventResource{
    * GET  /events -> get the next 5 incoming events.
    */
   @RequestMapping(value = "/events/incoming",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public ResponseEntity<List<EventDTO>> getIncomingEvents(
-      @RequestParam(value = "page" , required = false) Integer offset,
-      @RequestParam(value = "per_page", required = false) Integer limit,
-      @Valid @RequestParam(value = "organizationId") Long orgId)
+    @RequestParam(value = "page", required = false) Integer offset,
+    @RequestParam(value = "per_page", required = false) Integer limit,
+    @Valid @RequestParam(value = "organizationId") Long orgId)
     throws URISyntaxException {
 
     Organization organization = validateOwner(orgId);
-    if ( organization == null) {
+    if (organization == null) {
       return ResponseEntity.status(403).body(null);
     }
 
     DateTime now = new DateTime();
     Page<Event> page = eventRepository
-        .findIncomingEvents(PaginationUtil.generatePageRequest(offset, limit),
-          organization.getId(),
-          now);
+      .findIncomingEvents(PaginationUtil.generatePageRequest(offset, limit),
+        organization.getId(),
+        now);
 
     HttpHeaders headers = PaginationUtil
-        .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+      .generatePaginationHttpHeaders(page, "/api/events", offset, limit);
 
     return new ResponseEntity<>(page
       .getContent()
@@ -350,14 +365,14 @@ public class  EventResource{
    * GET  /events -> get the last 5 finalized events.
    */
   @RequestMapping(value = "/events/finalized",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public ResponseEntity<List<EventDTO>> getFinalizedEvents(
-      @RequestParam(value = "page" , required = false) Integer offset,
-      @RequestParam(value = "per_page", required = false) Integer limit,
-      @Valid @RequestParam(value = "organizationId") Long orgId)
+    @RequestParam(value = "page", required = false) Integer offset,
+    @RequestParam(value = "per_page", required = false) Integer limit,
+    @Valid @RequestParam(value = "organizationId") Long orgId)
     throws URISyntaxException {
 
     Organization organization = validateOwner(orgId);
@@ -387,8 +402,8 @@ public class  EventResource{
    * GET  /events-public/:id -> get the "id" event.
    */
   @RequestMapping(value = "/events-public/{id}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<EventDTO> getPublic(@Valid @PathVariable Long id) {
     log.debug("REST request to get Event : {}", id);
@@ -413,11 +428,12 @@ public class  EventResource{
    * POST  /events/synchronization/kill
    */
   @RequestMapping(value = "/events/synchronization/kill",
-      method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-    public ResponseEntity<?> stopSync(@RequestParam(value = "eventId") Long eventId,
-      @RequestParam(value = "searchCriteria") String searchCriteria) {
+  public ResponseEntity<?> stopSync(
+    @RequestParam(value = "eventId") Long eventId,
+    @RequestParam(value = "searchCriteria") String searchCriteria) {
 
     Event event = eventRepository.findOne(eventId);
 
@@ -437,7 +453,8 @@ public class  EventResource{
     }
 
     SearchCriteria sc =
-      searchCriteriaRepository.findOneBySearchCriteriaAndEventByEventId(searchCriteria, event);
+      searchCriteriaRepository.findOneBySearchCriteriaAndEventByEventId(
+        searchCriteria, event);
 
     if (sc != null) {
       boolean killed = eventService.stopSync(sc);
@@ -456,10 +473,11 @@ public class  EventResource{
    * POST  /events/synchronization/kill/all
    */
   @RequestMapping(value = "/events/synchronization/kill/all",
-      method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<?> stopAllSync(@RequestParam(value = "eventId") Long eventId) {
+  public ResponseEntity<?> stopAllSync(@RequestParam(value = "eventId")
+                                       Long eventId) {
 
     Event event = eventRepository.findOne(eventId);
 
@@ -467,7 +485,8 @@ public class  EventResource{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+    event.setSearchCriteriasById(
+      searchCriteriaRepository.findAllByEventByEventId(event));
     eventService.stopAllSync(event);
 
     return new ResponseEntity<>(HttpStatus.OK);
@@ -478,13 +497,15 @@ public class  EventResource{
    * POST  /events/delay
    */
   @RequestMapping(value = "/events/delay",
-      method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<?> changeDelay(@RequestParam(value = "searchCriteriaId")
-      Long searchCriteriaId, @RequestParam(value = "delay") int delay) {
+  public ResponseEntity<?> changeDelay(
+    @RequestParam(value = "searchCriteriaId")
+    Long searchCriteriaId, @RequestParam(value = "delay") int delay) {
 
-    SearchCriteria searchCriteria = searchCriteriaRepository.findOne(searchCriteriaId);
+    SearchCriteria searchCriteria =
+      searchCriteriaRepository.findOne(searchCriteriaId);
 
     if (searchCriteria.getEventByEventId() == null || searchCriteria == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -504,11 +525,11 @@ public class  EventResource{
    * POST  /events/delay-all
    */
   @RequestMapping(value = "/events/delay-all",
-      method = RequestMethod.POST,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<?> delayAll(@RequestParam(value = "eventId") Long eventId,
-      @RequestParam(value = "delay") int delay) {
+                                    @RequestParam(value = "delay") int delay) {
 
     Event event = eventRepository.findOne(eventId);
     event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
@@ -523,6 +544,7 @@ public class  EventResource{
 
   /**
    * GET  /events/{id}/sn-summary -> gets the summary of an event.
+   *
    * @param id Id del evento
    * @return summary of an event
    */
@@ -539,7 +561,7 @@ public class  EventResource{
     List<EventSocialNetworkSummaryDTO> list =
       socialNetworkPostRepository.getSummariesOfEventGroupBySocialNetwork(id);
 
-    if(list.size() == 0)
+    if (list.size() == 0)
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     return new ResponseEntity<>(list, HttpStatus.OK);
@@ -549,8 +571,8 @@ public class  EventResource{
    * Cancel  /events/cancel -> cancel the event
    */
   @RequestMapping(value = "/events/cancel",
-      method = RequestMethod.POST,
-      produces = MediaType.TEXT_PLAIN_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
   public ResponseEntity<?> cancel(@RequestParam(value = "id") Long id) {
 
@@ -574,7 +596,7 @@ public class  EventResource{
     }
 
     Organization organization = organizationService
-        .ownsOrganization(event.getOrganizationByOrganizationId().getId());
+      .ownsOrganization(event.getOrganizationByOrganizationId().getId());
 
     if (organization == null) {
       return ResponseEntity.status(403).build();
@@ -594,8 +616,8 @@ public class  EventResource{
    * Validate Ownership /events/owner/validate -> validates the event owner
    */
   @RequestMapping(value = "/events/owner/validate",
-      method = RequestMethod.POST,
-      produces = MediaType.TEXT_PLAIN_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.TEXT_PLAIN_VALUE)
   @Timed
   public ResponseEntity<?> validateOwnerhsip(@RequestParam(value = "id") Long id) {
 

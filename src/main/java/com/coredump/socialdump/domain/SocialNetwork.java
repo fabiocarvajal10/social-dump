@@ -1,9 +1,9 @@
 package com.coredump.socialdump.domain;
 
-import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by fabio on 09/07/15.
@@ -59,7 +59,8 @@ public class SocialNetwork implements Serializable {
     SocialNetwork that = (SocialNetwork) o;
 
     if (id != that.id) return false;
-    if (name != null ? !name.equals(that.name) : that.name != null) return false;
+    if (name != null ? !name.equals(that.name) : that.name != null)
+      return false;
     if (url != null ? !url.equals(that.url) : that.url != null) return false;
 
     return true;
@@ -102,6 +103,7 @@ public class SocialNetwork implements Serializable {
 
   /**
    * Devuelve el estado
+   *
    * @return estado
    */
   @ManyToOne
@@ -112,6 +114,7 @@ public class SocialNetwork implements Serializable {
 
   /**
    * Asigna el estado
+   *
    * @param status estado
    */
   public void setGenericStatusByStatusId(GenericStatus status) {

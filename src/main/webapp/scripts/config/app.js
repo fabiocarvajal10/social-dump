@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular.module('socialdumpApp', [
@@ -13,7 +13,7 @@
     'socialdumpApp.settings', 'socialdumpApp.temporalAccess'])
     .controller('AppCtrl', [
       '$scope', '$translate', '$localStorage', '$window',
-      function($scope, $translate, $localStorage, $window) {
+      function ($scope, $translate, $localStorage, $window) {
         // add 'ie' classes to html
         var isIE = !!navigator.userAgent.match(/MSIE/i);
         isIE && angular.element($window.document.body).addClass('ie');
@@ -54,7 +54,7 @@
         } else {
           $localStorage.settings = $scope.app.settings;
         }
-        $scope.$watch('app.settings', function() {
+        $scope.$watch('app.settings', function () {
           if ($scope.app.settings.asideDock && $scope.app.settings.asideFixed) {
             // aside dock and fixed must set the header fixed.
             $scope.app.settings.headerFixed = true;
@@ -70,19 +70,19 @@
         function isSmartDevice($window) {
           // Adapted from http://www.detectmobilebrowsers.com
           var ua = $window['navigator']['userAgent'] ||
-                   $window['navigator']['vendor'] || $window['opera'];
+            $window['navigator']['vendor'] || $window['opera'];
           // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile
           // devices
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
         }
 
-    }])
-    .run(function($rootScope, $location, $window, $http, $state,  Auth,
-                  Principal, ENV, VERSION) {
+      }])
+    .run(function ($rootScope, $location, $window, $http, $state, Auth,
+                   Principal, ENV, VERSION) {
       $rootScope.ENV = ENV;
       $rootScope.VERSION = VERSION;
-      $rootScope.$on('$stateChangeStart', function(event, toState,
-                                                   toStateParams) {
+      $rootScope.$on('$stateChangeStart', function (event, toState,
+                                                    toStateParams) {
         $rootScope.toState = toState;
         $rootScope.toStateParams = toStateParams;
 
@@ -92,23 +92,23 @@
 
       });
 
-       $rootScope.$on('$stateChangeStart', function(event, toState, toParams,
+      $rootScope.$on('$stateChangeStart', function (event, toState, toParams,
+                                                    fromState, fromParams) {
+
+        var requireOrg = ['event.list', 'event.detail', 'event.detail.summary',
+          'event.detail.list', 'event.new', 'event.new', 'event.edit',
+          'monitors', 'accesses'];
+
+        if (requireOrg.indexOf(toState.name) > -1 && ($rootScope.currentOrg === null ||
+          $rootScope.currentOrg === undefined)) {
+
+          event.preventDefault();
+          $state.go('dashboard');
+        }
+      });
+
+      $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams,
                                                       fromState, fromParams) {
-
-         var requireOrg = ['event.list', 'event.detail', 'event.detail.summary',
-                           'event.detail.list', 'event.new', 'event.new', 'event.edit',
-                           'monitors', 'accesses'];
-
-         if(requireOrg.indexOf(toState.name) > -1 && ($rootScope.currentOrg === null ||
-               $rootScope.currentOrg === undefined)) {
-
-           event.preventDefault();
-           $state.go('dashboard');
-         }
-       });
-
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams,
-                                                     fromState, fromParams) {
         var titleKey = 'Social Dump';
         var appName = ' - Social Dump';
 
@@ -123,10 +123,10 @@
         $window.document.title = titleKey;
       });
 
-      $rootScope.back = function() {
+      $rootScope.back = function () {
         // If previous state is 'activate' or do not exist go to 'home'
         if ($rootScope.previousStateName === 'activate' ||
-            $state.get($rootScope.previousStateName) === null) {
+          $state.get($rootScope.previousStateName) === null) {
           $state.go('home');
         } else {
           $state.go($rootScope.previousStateName,
@@ -134,11 +134,11 @@
         }
       };
     })
-    .factory('authInterceptor', function($rootScope, $q, $location,
-                                         localStorageService) {
+    .factory('authInterceptor', function ($rootScope, $q, $location,
+                                          localStorageService) {
       return {
         // Add authorization token to headers
-        request: function(config) {
+        request: function (config) {
           config.headers = config.headers || {};
           var token = localStorageService.get('token');
 
@@ -150,9 +150,9 @@
         }
       };
     })
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider,
-                     $locationProvider,
-                     httpRequestInterceptorCacheBusterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider,
+                      $locationProvider,
+                      httpRequestInterceptorCacheBusterProvider) {
 
       //Cache everything except rest api requests
       httpRequestInterceptorCacheBusterProvider
@@ -169,7 +169,7 @@
         },
         resolve: {
           authorize: ['Auth',
-            function(Auth) {
+            function (Auth) {
               return Auth.authorize();
             }
           ]
@@ -181,26 +181,26 @@
     })
     .config(
     ['JQ_CONFIG', 'MODULE_CONFIG',
-      function(JQ_CONFIG, MODULE_CONFIG) {
+      function (JQ_CONFIG, MODULE_CONFIG) {
 
         function load(srcs, callback) {
           return {
             deps: ['$ocLazyLoad', '$q',
-              function($ocLazyLoad, $q) {
+              function ($ocLazyLoad, $q) {
                 var deferred = $q.defer();
                 var promise = false;
                 srcs = angular.isArray(srcs) ? srcs : srcs.split(/\s+/);
                 if (!promise) {
                   promise = deferred.promise;
                 }
-                angular.forEach(srcs, function(src) {
+                angular.forEach(srcs, function (src) {
                   console.log(src);
-                  promise = promise.then(function() {
+                  promise = promise.then(function () {
                     if (JQ_CONFIG[src]) {
                       return $ocLazyLoad.load(JQ_CONFIG[src]);
                     }
                     var name = '';
-                    angular.forEach(MODULE_CONFIG, function(module) {
+                    angular.forEach(MODULE_CONFIG, function (module) {
                       if (module.name === src) {
                         name = module.name;
                       } else {
@@ -211,11 +211,12 @@
                   });
                 });
                 deferred.resolve();
-                return callback ? promise.then(function() {
-                                                return callback(); }) :
-                                  promise;
+                return callback ? promise.then(function () {
+                  return callback();
+                }) :
+                  promise;
               }]
           };
         }
-    }]);
+      }]);
 }());

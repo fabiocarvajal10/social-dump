@@ -16,23 +16,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.bind.annotation.*;
 
+import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.validation.Valid;
 
 /**
  * Created by fabio on 11/07/15.
@@ -57,20 +51,20 @@ public class OrganizationResource {
    * POST  /organizations -> Create a new organization.
    */
   @RequestMapping(value = "/organizations",
-          method = RequestMethod.POST,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.POST,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<Void> create(@Valid @RequestBody OrganizationDTO organizationDTO)
-          throws URISyntaxException {
+    throws URISyntaxException {
 
     log.debug("REST request to save Organization : {}",
-            organizationDTO.toString());
+      organizationDTO.toString());
 
     if (organizationDTO.getId() != null) {
       return ResponseEntity.badRequest()
-              .header("Failure",
-                      "A new organization cannot already have an ID")
-              .build();
+        .header("Failure",
+          "A new organization cannot already have an ID")
+        .build();
     }
     organizationDTO.setCreatedAt(DateTime.now());
 
@@ -89,19 +83,19 @@ public class OrganizationResource {
     organizationRepository.save(organization);
 
     return ResponseEntity.created(new URI("/api/organizations/"
-            + organization.getId())).build();
+      + organization.getId())).build();
   }
 
   /**
    * PUT  /organizations -> Updates an existing organization.
    */
   @RequestMapping(value = "/organizations",
-          method = RequestMethod.PUT,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.PUT,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public ResponseEntity<Void> update(@Valid @RequestParam("id")  Long id,
+  public ResponseEntity<Void> update(@Valid @RequestParam("id") Long id,
                                      @RequestParam("name") String name)
-          throws URISyntaxException, NullPointerException {
+    throws URISyntaxException, NullPointerException {
     log.debug("REST request to update Organization name: ", name);
 
     Organization organization = organizationService.ownsOrganization(id);
@@ -130,68 +124,68 @@ public class OrganizationResource {
    * GET  /organizations -> get all the organizations.
    */
   @RequestMapping(value = "/organizations",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   @Transactional(readOnly = true)
   public ResponseEntity<List<OrganizationDTO>> getAll(
-          @RequestParam(value = "page" , required = false) Integer offset,
-          @RequestParam(value = "per_page", required = false) Integer limit)
-          throws URISyntaxException {
+    @RequestParam(value = "page", required = false) Integer offset,
+    @RequestParam(value = "per_page", required = false) Integer limit)
+    throws URISyntaxException {
 
     Page<Organization> page = organizationRepository
-          .findAllForCurrentUser(PaginationUtil.generatePageRequest(offset, limit));
+      .findAllForCurrentUser(PaginationUtil.generatePageRequest(offset, limit));
 
     HttpHeaders headers = PaginationUtil
-            .generatePaginationHttpHeaders(page,
-                    "/api/organizations",
-                    offset,
-                    limit);
+      .generatePaginationHttpHeaders(page,
+        "/api/organizations",
+        offset,
+        limit);
 
     return new ResponseEntity<>(page
-          .getContent()
-          .stream()
-          .map(organizationMapper::organizationToOrganizationDTO)
-          .collect(Collectors
-                .toCollection(LinkedList::new)),
-          headers, HttpStatus.OK);
+      .getContent()
+      .stream()
+      .map(organizationMapper::organizationToOrganizationDTO)
+      .collect(Collectors
+        .toCollection(LinkedList::new)),
+      headers, HttpStatus.OK);
   }
 
   /**
    * GET  /organizations/:id -> get the "id" organization.
    */
   @RequestMapping(value = "/organizations/{id}",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<OrganizationDTO> get(@PathVariable Long id) {
     log.debug("REST request to get Organization : {}", id);
 
     Organization organization = organizationService.ownsOrganization(id);
-    if ( organization == null) {
+    if (organization == null) {
       return ResponseEntity.status(403).body(null);
     }
 
     return Optional.ofNullable(organization)
-            .map(organizationMapper::organizationToOrganizationDTO)
-            .map(organizationDTO -> new ResponseEntity<>(
-                    organizationDTO,
-                    HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+      .map(organizationMapper::organizationToOrganizationDTO)
+      .map(organizationDTO -> new ResponseEntity<>(
+        organizationDTO,
+        HttpStatus.OK))
+      .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   /**
    * DELETE  /organizations/:id -> delete the "id" organization.
    */
   @RequestMapping(value = "/organizations/{id}",
-          method = RequestMethod.DELETE,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.DELETE,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     log.debug("REST request to delete Organization : {}", id);
 
     Organization organization = organizationService.ownsOrganization(id);
-    if ( organization == null) {
+    if (organization == null) {
       return ResponseEntity.notFound().build();
     }
 
@@ -211,11 +205,11 @@ public class OrganizationResource {
 
 
     return new ResponseEntity<>(organizationRepository.findAllForCurrentUserOrderByCreatedAtDesc()
-              .stream()
-              .limit(5)
-              .map(organizationMapper::organizationToOrganizationDTO)
-              .collect(Collectors.toCollection(ArrayList::new)),
-              new HttpHeaders(),
-              HttpStatus.OK);
+      .stream()
+      .limit(5)
+      .map(organizationMapper::organizationToOrganizationDTO)
+      .collect(Collectors.toCollection(ArrayList::new)),
+      new HttpHeaders(),
+      HttpStatus.OK);
   }
 }

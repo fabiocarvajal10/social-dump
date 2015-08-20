@@ -2,8 +2,6 @@ package com.coredump.socialdump.web.rest.dto;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * Created by Franz on 20/07/2015.
  */

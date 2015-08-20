@@ -4,7 +4,6 @@ import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
 import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import org.joda.time.DateTime;
 
 /**
@@ -111,7 +110,8 @@ public class TemporalAccessDTO {
     TemporalAccessDTO that = (TemporalAccessDTO) o;
 
     if (getId() != that.getId()) return false;
-    if (getGenericStatusByStatusId() != that.getGenericStatusByStatusId()) return false;
+    if (getGenericStatusByStatusId() != that.getGenericStatusByStatusId())
+      return false;
     if (getEmail() != null ? !getEmail().equals(that.getEmail()) : that.getEmail() != null)
       return false;
     if (getPassword() != null ? !getPassword().equals(that.getPassword()) : that.getPassword() != null)

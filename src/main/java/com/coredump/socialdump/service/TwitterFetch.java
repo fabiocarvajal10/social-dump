@@ -1,7 +1,6 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.SocialNetworkPost;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Created by Franz on 13/07/2015.
@@ -42,7 +40,7 @@ public class TwitterFetch extends SocialNetworkFetch {
       try {
         log.debug("Obteniendo Tweets de: {}...", getSearchCriteria().getSearchCriteria());
         SearchResults searchResults = twitterTemplate.searchOperations()
-            .search(getSearchCriteria().getSearchCriteria());
+          .search(getSearchCriteria().getSearchCriteria());
         List<Tweet> tweetsList = searchResults.getTweets();
 
         log.debug("Cantidad de Tweets obtenidos: {}...", tweetsList.size());

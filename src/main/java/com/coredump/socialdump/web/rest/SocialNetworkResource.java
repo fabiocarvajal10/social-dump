@@ -46,16 +46,16 @@ public class SocialNetworkResource {
    * GET  /social-networks/:id -> get the "id" generic status.
    */
   @RequestMapping(value = "/social-networks/{id}",
-          method = RequestMethod.GET,
-          produces = MediaType.APPLICATION_JSON_VALUE)
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
   public ResponseEntity<SocialNetwork> get(
     @PathVariable int id) {
     log.debug("REST request to get SocialNetworks : {}", id);
     return Optional.ofNullable(socialNetworkRepository.findOne(id))
-            .map(SocialNetwork ->
-                  new ResponseEntity<>(SocialNetwork, HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+      .map(SocialNetwork ->
+        new ResponseEntity<>(SocialNetwork, HttpStatus.OK))
+      .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }
 

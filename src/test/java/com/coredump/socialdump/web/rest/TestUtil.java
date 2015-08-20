@@ -21,42 +21,44 @@ import java.nio.charset.Charset;
  */
 public class TestUtil {
 
-    /** MediaType for JSON UTF8 */
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
-            MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+  /**
+   * MediaType for JSON UTF8
+   */
+  public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
+    MediaType.APPLICATION_JSON.getType(),
+    MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
-    /**
-     * Convert an object to JSON byte array.
-     *
-     * @param object
-     *            the object to convert
-     * @return the JSON byte array
-     * @throws IOException
-     */
-    public static byte[] convertObjectToJsonBytes(Object object)
-            throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        JodaModule module = new JodaModule();
-        DateTimeFormatterFactory formatterFactory = new DateTimeFormatterFactory();
-        formatterFactory.setIso(DateTimeFormat.ISO.DATE);
-        module.addSerializer(DateTime.class, new DateTimeSerializer(
-            new JacksonJodaFormat(formatterFactory.createDateTimeFormatter()
-                .withZoneUTC())));
-        mapper.registerModule(module);
-        return mapper.writeValueAsBytes(object);
-    }
+  /**
+   * Convert an object to JSON byte array.
+   *
+   * @param object the object to convert
+   * @return the JSON byte array
+   * @throws IOException
+   */
+  public static byte[] convertObjectToJsonBytes(Object object)
+    throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    JodaModule module = new JodaModule();
+    DateTimeFormatterFactory formatterFactory = new DateTimeFormatterFactory();
+    formatterFactory.setIso(DateTimeFormat.ISO.DATE);
+    module.addSerializer(DateTime.class, new DateTimeSerializer(
+      new JacksonJodaFormat(formatterFactory.createDateTimeFormatter()
+        .withZoneUTC())));
+    mapper.registerModule(module);
+    return mapper.writeValueAsBytes(object);
+  }
 
-    /**
-     * Logs in a user.
-     * @param username
-     * @param password
-     */
-    public static void login(String username, String password) {
-      SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-      securityContext.setAuthentication(
-        new UsernamePasswordAuthenticationToken(username, password));
-      SecurityContextHolder.setContext(securityContext);
-    }
+  /**
+   * Logs in a user.
+   *
+   * @param username
+   * @param password
+   */
+  public static void login(String username, String password) {
+    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+    securityContext.setAuthentication(
+      new UsernamePasswordAuthenticationToken(username, password));
+    SecurityContextHolder.setContext(securityContext);
+  }
 }

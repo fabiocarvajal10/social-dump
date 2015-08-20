@@ -1,7 +1,7 @@
 package com.coredump.socialdump.domain;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by fabio on 09/07/15.
