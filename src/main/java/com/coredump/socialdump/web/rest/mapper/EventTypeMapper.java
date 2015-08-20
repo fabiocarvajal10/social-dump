@@ -13,7 +13,6 @@ import org.mapstruct.Mapping;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface EventTypeMapper {
-  EventTypeDTO eventTypeToEventTypeDTO(EventType eventType);
 
   /**
    * Traduce objetos de dominio a objetos limpios para
