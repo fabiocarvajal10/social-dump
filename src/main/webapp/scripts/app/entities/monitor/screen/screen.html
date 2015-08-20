@@ -16,8 +16,7 @@
                     <h5 class="graff">{{::event.description}}
                         <p class="hash">
                             <small data-ng-repeat="hashtag in event.searchCriterias">
-                                <small ng-if="hashtag[0] === '#'">{{::hashtag}}</small>
-                                <small ng-if="hashtag[0] !== '#'">#{{::hashtag}}</small>
+                                #{{::hashtag}}
                             </small>
                         </p>
                     </h5>
