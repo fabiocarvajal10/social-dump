@@ -18,6 +18,7 @@ angular.module('socialdumpApp')
 
           switch(status) {
             case 0:
+                  modalStack.dismissAll('cancel');
                   modal.openNoInternet();
                   break;
             case 500:
