@@ -131,5 +131,13 @@ public class EventService {
     eventRepository.save(event);
   }
 
+  /**
+   * Método que modifica las tareas programadas para el evento.
+   * @param event evento a modificar
+   */
+  public void modifySchedule(Event event) {
+    fetchExecutorService.killAll(event);
+    fetchExecutorService.scheduleFetch(event);
+  }
 }
 
