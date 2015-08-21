@@ -6,9 +6,13 @@ import com.coredump.socialdump.domain.SocialNetworkPost;
 import com.coredump.socialdump.repository.SocialNetworkApiCredentialRepository;
 import com.coredump.socialdump.repository.SocialNetworkPostRepository;
 import com.coredump.socialdump.web.websocket.EventPublicationService;
+
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +35,7 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
   private boolean alive;
   private int delay;
   private String name;
+  private DateTime endDate;
 
   public SocialNetworkFetch() {
 
@@ -55,6 +60,7 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     this.alive = true;
     this.delay = (delay * 1000);
     this.setName(searchCriteria);
+    this.setEndDate(searchCriteria.getEventByEventId().getEndDate());
   }
 
 
@@ -103,6 +109,19 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
 
   public void setDelay(int delay) {
     this.delay = delay;
+  }
+
+  private DateTime getEndDate() {
+    return this.endDate;
+  }
+
+  private void setEndDate(DateTime endDate) {
+    this.endDate = endDate;
+  }
+
+  protected boolean isEventActive() {
+    System.out.print(getEndDate().isBeforeNow());
+    return getEndDate().isAfterNow();
   }
 
   protected String getName() {
