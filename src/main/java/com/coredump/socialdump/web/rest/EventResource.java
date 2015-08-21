@@ -212,7 +212,8 @@ public class EventResource {
     event = eventMapper.eventDTOToEvent(eventDTO);
     eventRepository.save(event);
     temporalAccessService.updateAccessDates(event, oldStartDate, oldEndDate,
-      request);
+        request);
+    eventService.modifySchedule(event);
 
     return ResponseEntity.ok().build();
   }
