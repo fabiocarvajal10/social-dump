@@ -22,10 +22,14 @@ angular.module('socialdumpApp')
                   modal.openNoInternet();
                   break;
             case 500:
-                  modalStack.dismissAll('cancel');
-                  modal.open(createMessage('Error al completar su solicitud',
-                    'Algo ha salido mal. En este momento no se puede completar su solicitud. ' +
-                    'Por favor inténtelo después'));
+                  if(rejection.data.exception
+                     !== 'org.springframework.dao.DataIntegrityViolationException') {
+                    modalStack.dismissAll('cancel');
+                    modal.open(createMessage('Error al completar su solicitud',
+                     'Algo ha salido mal. En este momento no se puede completar su solicitud. ' +
+                     'Por favor inténtelo después'));
+                  }
+
                   break;
             default:
                   break;
