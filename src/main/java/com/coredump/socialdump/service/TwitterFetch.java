@@ -36,7 +36,7 @@ public class TwitterFetch extends SocialNetworkFetch {
     TwitterTemplate twitterTemplate = new TwitterTemplate(appId, appSecret);
     List<SocialNetworkPost> postsList = new ArrayList<>();
     Thread.currentThread().setName(this.getName());
-    while (this.getIsAlive()) {
+    while (this.getIsAlive() && this.isEventActive()) {
       try {
         log.debug("Obteniendo Tweets de: {}...", getSearchCriteria().getSearchCriteria());
         SearchResults searchResults = twitterTemplate.searchOperations()

@@ -40,7 +40,7 @@ public class InstagramFetch extends SocialNetworkFetch {
     instagram = new Instagram(accessToken);
     List<SocialNetworkPost> postsList = new ArrayList<>();
     Thread.currentThread().setName(this.getName());
-    while (this.getIsAlive()) {
+    while (this.getIsAlive() && this.isEventActive()) {
       try {
         log.debug("Obteniendo grams de: {}...", getSearchCriteria().getSearchCriteria());
         TagMediaFeed mediaFeed =
