@@ -120,7 +120,6 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
   }
 
   protected boolean isEventActive() {
-    System.out.print(getEndDate().isBeforeNow());
     return getEndDate().isAfterNow();
   }
 
