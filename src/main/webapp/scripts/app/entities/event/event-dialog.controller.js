@@ -17,25 +17,29 @@
       $scope.socialNetworksDict = {};
       $scope.event.searchCriterias = [];
 
+      $scope.hstep = 1;
+      $scope.mstep = 15;
+      $scope.isMeridian = true;
+
       var initDateTime = function() {
         var today = DateUtils.toNextHalfHour(new Date());
         $scope.event.startDate = today;
-        $scope.event.startTime = DateUtils.toHourMinutesString(today);
-        $scope.event.endDate =
-          new Date(today.getTime() + 24 * 60 * 60 * 1000);
-        $scope.event.endTime = $scope.event.startTime;
+        // $scope.event.startTime = DateUtils.toHourMinutesString(today);
+        $scope.event.endDate = DateUtils.addDays(today, 1);
+          // new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        // $scope.event.endTime = $scope.event.startTime;
       };
       initDateTime();
 
-      $scope.changeStartTime = function(timeStr) {
-        $scope.event.startDate.setHours(DateUtils.hoursOfString(timeStr));
-        $scope.event.startDate.setMinutes(DateUtils.minutesOfString(timeStr));
-      };
+      // $scope.changeStartTime = function(timeStr) {
+      //   $scope.event.startDate.setHours(DateUtils.hoursOfString(timeStr));
+      //   $scope.event.startDate.setMinutes(DateUtils.minutesOfString(timeStr));
+      // };
 
-      $scope.changeEndTime = function(timeStr) {
-        $scope.event.endDate.setHours(DateUtils.hoursOfString(timeStr));
-        $scope.event.endDate.setMinutes(DateUtils.minutesOfString(timeStr));
-      };
+      // $scope.changeEndTime = function(timeStr) {
+      //   $scope.event.endDate.setHours(DateUtils.hoursOfString(timeStr));
+      //   $scope.event.endDate.setMinutes(DateUtils.minutesOfString(timeStr));
+      // };
 
       $scope.eventTypes = EventType.query();
 
@@ -84,5 +88,6 @@
       $scope.clear = function() {
         $modalInstance.dismiss('cancel');
       };
+
     }]);
 }());

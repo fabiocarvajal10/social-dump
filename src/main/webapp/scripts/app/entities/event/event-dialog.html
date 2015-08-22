@@ -16,7 +16,7 @@
     <div class="form-group hide">
       <label>ID</label>
       <input type="text" class="form-control" name="id"
-             ng-model="event.id" readonly>
+             ng-model="event.id" readonly />
     </div>
 
     <div class="form-group">
@@ -52,19 +52,18 @@
     <div class="form-group" ng-hide="!!event.id">
       <div class="checkbox">
         <label class="i-checks">
-          <input type="checkbox" name="sameHashtagChk" ng-model="sameHashtag">
+          <input type="checkbox" name="sameHashtagChk" ng-model="sameHashtag" />
           <i></i> Seguir el mismo hashtag para todas las redes sociales
         </label>
       </div>
     </div>
-
 
     <div class="form-group" ng-hide="!sameHashtag || !!event.id">
       <div class="input-group">
         <span class="input-group-addon">
           <i class="fa fa-twitter"></i>
           <i class="fa fa-instagram"></i>
-          <span class="h4"> &nbsp # </span>
+          <span class="h4">&nbsp;#</span>
         </span>
         <input type="text" class="form-control" name="allHashtags" ng-init="event.searchCriterias = []"
             ng-model="event.searchCriterias[0]"
@@ -87,7 +86,7 @@
       <div class="input-group">
         <span class="input-group-addon">
           <i class="fa fa-twitter"></i>
-          <span class="h4"> &nbsp # </span>
+          <span class="h4">&nbsp;#</span>
         </span>
         <input type="text" class="form-control" name="twitterHashtag"
                ng-model="event.searchCriterias[0]"
@@ -109,14 +108,16 @@
       <div class="input-group">
         <span class="input-group-addon">
           <i class="fa fa-instagram"></i>
-          <span class="h4"> &nbsp # </span>
+          <span class="h4">&nbsp;#</span>
         </span>
         <input type="text" class="form-control" name="instagramHashtag"
                ng-model="event.searchCriterias[1]"
                placeholder="Hashtag a seguir en Instagram"
                ng-required="!sameHashtag && !event.id">
       </div>
-      <div ng-show="(editForm.$submitted || editForm.instagramHashtag.$touched) && editForm.instagramHashtag.$invalid"
+      <div ng-show="(editForm.$submitted ||
+                     editForm.instagramHashtag.$touched) &&
+                     editForm.instagramHashtag.$invalid"
            ng-messages="editForm.instagramHashtag.$error">
         <p class="help-block"
           ng-message="required">
@@ -125,33 +126,88 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-6 fix-timepicker">
+              <label for="field_startDate">Comienza</label>
+              <input ui-date class="form-control" name="startDate"
+                     id="field_startDate"
+                     ng-attr-validate-date-greater-than-value="{{minStartDate.toUTCString() || undefined}}"
+                     ng-model="event.startDate"
+                     ng-enabled="!!minStartDate"
+                     ng-change="validateDates()"
+                     required>
+            </div>
 
-    <div class="form-group">
-      <label for="field_startDate">Comienza</label>
-      <div class="row">
-        <div class="col-lg-6">
-          <input ui-date class="form-control" name="startDate"
-                 id="field_startDate"
-                 ng-attr-validate-date-greater-than-value="{{minStartDate.toUTCString() || undefined}}"
-                 ng-model="event.startDate"
-                 ng-enabled="!!minStartDate"
-                 ng-change="validateDates()"
-                 required>
-        </div>
+            <div class="col-lg-6">
+              <timepicker id="field_startTime"
+                          class="digital-font"
+                          name="startTime"
+                          hour-step="hstep"
+                          minute-step="mstep"
+                          show-meridian="isMeridian"
+                          ng-model="event.startDate"
+                          validate-control="editForm.endDate">
+              </timepicker>
+            </div>
+<!--             <div ng-show="(editForm.$submitted ||
+                           editForm.startDate.$touched ||
+                           editForm.startTime.$touched) &&
+                          editForm.startDate.$invalid">
+              <p class="help-block"
+                ng-show="editForm.startDate.$error.required">
+                Este campo es requerido.
+              </p>
+              <p class="help-block"
+                ng-show="editForm.startDate.$error.dateGreaterThanValue">
+                <p ng-if="!event.id">
+                  No se permite la creación de eventos anteriores a la fecha actual.
+                </p>
+              </p>
+            </div> -->
+          </div>
 
-        <div class="col-lg-6">
-          <select class="form-control digital-font" id="field_startTime"
-                  name="startTime" ng-model="event.startTime"
-                  ng-options="hour as hour for hour in hours"
-                  ng-change="changeStartTime(event.startTime)"
-                  validate-control="editForm.endDate"
-                  >
-          </select>
+
         </div>
       </div>
 
 
-      <div ng-show="(editForm.$submitted || editForm.startDate.$touched) && editForm.startDate.$invalid">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <div class="row">
+
+            <div class="col-lg-6 fix-timepicker">
+              <label for="field_endDate">Termina</label>
+              <input ui-date class="form-control" name="endDate" id="field_endDate"
+                  ng-model="event.endDate" ng-model-options="{allowInvalid: true}"
+                  validate-date-greater-than-model="event.startDate"
+                  required>
+            </div>
+            <div class="col-lg-6">
+              <timepicker id="field_endTime"
+                          class="digital-font"
+                          name="endTime"
+                          hour-step="hstep"
+                          minute-step="mstep"
+                          show-meridian="isMeridian"
+                          ng-model="event.endDate"
+                          validate-control="editForm.endDate">
+              </timepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="m-b-md fix-distant-validation-message">
+      <div ng-show="(editForm.$submitted ||
+                     editForm.startDate.$touched ||
+                     editForm.startTime.$touched) &&
+                    editForm.startDate.$invalid">
         <p class="help-block"
           ng-show="editForm.startDate.$error.required">
           Este campo es requerido.
@@ -163,31 +219,10 @@
           </p>
         </p>
       </div>
-    </div>
 
-
-    <div class="form-group">
-      <label for="field_endDate">Termina</label>
-      <div class="row">
-
-        <div class="col-lg-6">
-          <input ui-date class="form-control" name="endDate" id="field_endDate"
-              ng-model="event.endDate" ng-model-options="{allowInvalid: true}"
-              validate-date-greater-than-model="event.startDate"
-              required>
-        </div>
-        <div class="col-lg-6">
-          <select class="form-control digital-font" id="field_endTime"
-                  name="endTime" ng-model="event.endTime"
-                  ng-options="hour as hour for hour in hours"
-                  ng-change="changeEndTime(event.endTime)"
-                  validate-control="editForm.endDate">
-          </select>
-        </div>
-      </div>
-
-
-      <div ng-show="(editForm.$submitted || editForm.endDate.$touched) && editForm.endDate.$invalid">
+      <div ng-show="(editForm.$submitted ||
+                     editForm.endDate.$touched ||
+                     editForm.endTime.$touched) && editForm.endDate.$invalid">
         <p class="help-block"
           ng-show="editForm.endDate.$error.required">
           Este campo es requerido.
@@ -202,7 +237,6 @@
         </p>
       </div>
     </div>
-
 
     <div class="form-group">
       <label for="field_type">Tipo</label>

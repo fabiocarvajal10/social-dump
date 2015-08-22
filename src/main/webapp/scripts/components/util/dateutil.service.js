@@ -154,5 +154,19 @@
         var now = new Date().toISOString();
         return date < now;
       };
+
+      /**
+      * Anade dias a una fecha.
+      *
+      * @param {Date} date Fecha a anadir dias..
+      * @param {Number} days Cantidad de dias a anadir.
+      * @return {Date} nueva fecha aumentada o disminuida.
+      */
+      this.addDays = function(date, days) {
+        if (!date) {
+          throw 'Missing required parameter \'date\'';
+        }
+        return new Date(date.getTime() + 24 * days * 60 * 60 * 1000);
+      };
     });
 }());

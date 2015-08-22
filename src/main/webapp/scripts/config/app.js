@@ -78,7 +78,7 @@
 
       }])
     .run(function ($rootScope, $location, $window, $http, $state, Auth,
-                   Principal, ENV, VERSION) {
+                   Principal, ENV, VERSION, localStorageService) {
       $rootScope.ENV = ENV;
       $rootScope.VERSION = VERSION;
       $rootScope.$on('$stateChangeStart', function (event, toState,
@@ -89,8 +89,10 @@
         if (Principal.isIdentityResolved()) {
           Auth.authorize();
         }
-
       });
+      $window.onbeforeunload = function() {
+        localStorageService.set('currentOrg', $rootScope.currentOrg);
+      };
 
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams,
                                                     fromState, fromParams) {
@@ -99,6 +101,10 @@
           'event.detail.list', 'event.new', 'event.new', 'event.edit',
           'monitors', 'accesses'];
 
+        if (requireOrg.indexOf(toState.name) > -1 && ($rootScope.currentOrg === null ||
+          $rootScope.currentOrg === undefined)) {
+          $rootScope.currentOrg = localStorageService.get('currentOrg');
+        }
         if (requireOrg.indexOf(toState.name) > -1 && ($rootScope.currentOrg === null ||
           $rootScope.currentOrg === undefined)) {
 
