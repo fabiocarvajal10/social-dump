@@ -38,6 +38,15 @@
           return index;
         }
 
+        var addEventStatusMessage = function(event) {
+          console.log(JSON.stringify(event));
+          if (event.endDate < new Date()) {
+            event.status.status = 'Finalizado';
+          } else if (event.startDate > new Date()) {
+            event.status.status = 'Pendiente';
+          }
+        };
+
         $scope.loadAll = function() {
           if (!isOrgEmpty()) {
             Event.query({page: $scope.page, per_page: 20,
@@ -45,7 +54,12 @@
               function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
-                  result[i].status = EventStatus.get({id: result[i].statusId});
+                  result[i].status = EventStatus.get(
+                    {id: result[i].statusId}
+                  );
+                  result[i].status.$promise.then(
+                    addEventStatusMessage(result[i])
+                  );
                   result[i].type = EventType.get({id: result[i].typeId});
                   $scope.events.push(result[i]);
                 }
