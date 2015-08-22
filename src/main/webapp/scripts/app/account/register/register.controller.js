@@ -27,6 +27,7 @@ angular.module('socialdumpApp')
 
         Auth.createAccount($scope.registerAccount).then(function() {
           $scope.success = 'OK';
+          $scope.errorUserExists = null;
           $scope.msgState = 'Cuenta creada con éxito';
         }).catch (function(response) {
           $scope.success = null;

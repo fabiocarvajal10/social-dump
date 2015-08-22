@@ -1,10 +1,7 @@
 package com.coredump.socialdump.service;
 
-import com.coredump.socialdump.domain.SearchCriteria;
-import com.coredump.socialdump.domain.SocialNetworkApiCredential;
-import com.coredump.socialdump.domain.SocialNetworkPost;
-import com.coredump.socialdump.repository.SocialNetworkApiCredentialRepository;
-import com.coredump.socialdump.repository.SocialNetworkPostRepository;
+import com.coredump.socialdump.domain.*;
+import com.coredump.socialdump.repository.*;
 import com.coredump.socialdump.web.websocket.EventPublicationService;
 
 import org.joda.time.DateTime;
@@ -29,6 +26,15 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
 
   @Inject
   private SocialNetworkPostRepository socialNetworkPostRepository;
+
+  @Inject
+  private EventStatusRepository eventStatusRepository;
+
+  @Inject
+  private SearchCriteriaRepository searchCriteriaRepository;
+
+  @Inject
+  private EventRepository eventRepository;
 
   private SearchCriteria searchCriteria;
   private SocialNetworkApiCredential socialNetworkApiCredential;
@@ -120,6 +126,10 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
   }
 
   protected boolean isEventActive() {
+    if (!getEndDate().isAfterNow()) {
+      this.stopEvent();
+    }
+
     return getEndDate().isAfterNow();
   }
 
@@ -141,5 +151,21 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  protected void activateEvent() {
+    EventStatus eventStatus =
+      eventStatusRepository.findOneByStatus("Activo");
+    Event event = searchCriteria.getEventByEventId();
+    event.setEventStatusByStatusId(eventStatus);
+    eventRepository.saveAndFlush(event);
+  }
+
+  protected void stopEvent() {
+    EventStatus eventStatus =
+      eventStatusRepository.findOneByStatus("Finalizado");
+    Event event = searchCriteria.getEventByEventId();
+    event.setEventStatusByStatusId(eventStatus);
+    eventRepository.saveAndFlush(event);
   }
 }

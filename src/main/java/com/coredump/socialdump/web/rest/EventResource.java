@@ -120,6 +120,9 @@ public class EventResource {
       return ResponseEntity.status(403).body(null);
     }
 
+    event.setEventStatusByStatusId(eventStatusService.getActive());
+    eventRepository.save(event);
+
     eventService.scheduleFetch(event);
 
     return ResponseEntity.ok().build();
@@ -161,7 +164,13 @@ public class EventResource {
     }
 
     Event event = eventMapper.eventDTOToEvent(eventDTO);
-    event.setEventStatusByStatusId(eventStatusService.getActive());
+
+    if (event.getStartDate().isBeforeNow()) {
+      event.setEventStatusByStatusId(eventStatusService.getActive());
+    } else {
+      event.setEventStatusByStatusId(eventStatusService.getPending());
+    }
+
 
     eventRepository.save(event);
     event.setSearchCriteriasById(searchCriteriaService
@@ -210,7 +219,8 @@ public class EventResource {
     DateTime oldEndDate = event.getEndDate();
 
     event = eventMapper.eventDTOToEvent(eventDTO);
-    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
+    event.setSearchCriteriasById(searchCriteriaRepository
+      .findAllByEventByEventId(event));
     eventRepository.save(event);
     temporalAccessService.updateAccessDates(event, oldStartDate, oldEndDate,
         request);
@@ -318,8 +328,13 @@ public class EventResource {
       return ResponseEntity.status(403).body(null);
     }
 
+    event.setSearchCriteriasById(searchCriteriaRepository
+      .findAllByEventByEventId(event));
+
+    eventService.stopAllSync(event);
     EventStatus status = statusRepository
       .findOneByStatus("Cancelado");
+    event.setEndDate(new DateTime());
 
     event.setEventStatusByStatusId(status);
     eventRepository.save(event);

@@ -46,14 +46,13 @@
       </div>
       <div class="form-group">
         <label> Número de teléfono </label>
-        <input type="text" class="form-control" name="phone" placeholder="Número de teléfono"
-               ng-model="monitorContact.phone" ng-pattern="/^\d+$/" required max="20">
+        <input type="text" class="form-control" name="phone"
+               placeholder="Número de teléfono"
+               ng-model="monitorContact.phone" ng-pattern="/^\d+$/" required
+               ng-maxlength="20">
         <div class="has-error" ng-messages="uptForm.phone.$error" ng-show="uptForm.phone.$touched">
           <label class="control-label" ng-message="required">
             Debe ingresar un número de teléfono
-          </label>
-          <label class="control-label" ng-show="uptForm.phone.$error.pattern">
-            Solo se aceptan números
           </label>
         </div>
       </div>

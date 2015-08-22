@@ -5465,3 +5465,10 @@ button.btn.btn-sm.ng-scope {
   border: 1px solid #FF5252;
 }
 
+.not-allowed {
+  cursor: not-allowed;
+}
+
+.text-disabled {
+  color: #555;
+}

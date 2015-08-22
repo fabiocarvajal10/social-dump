@@ -28,5 +28,9 @@ public class EventStatusService {
   public EventStatus getActive() {
     return eventStatusRepository.findOneByStatus("Activo");
   }
+
+  public EventStatus getPending() {
+    return eventStatusRepository.findOneByStatus("Pendiente");
+  }
 }
 

@@ -13,10 +13,6 @@
           event.endDate = DateUtils.convertDateTimeFromServer(event.endDate);
           event.activatedAt =
             DateUtils.convertDateTimeFromServer(event.activatedAt);
-          event.startDate =
-            DateUtils.nextHalfHour(event.startDate);
-          event.endDate =
-            DateUtils.nextHalfHour(event.endDate);
           event.startTime =
             DateUtils.toHourMinutesString(event.startDate);
           event.endTime =
@@ -49,8 +45,11 @@
               EventStatusUI.messageForStatus(event.status.status, true);
           }
         };
+        // this.addStatusMessage = function(event) {
+        //   addEventStatusMessage(event);
+        // };
         return $resource('api/events/:id', {}, {
-          'query': { 
+          'query': {
             method: 'GET',
             isArray: true
           },
