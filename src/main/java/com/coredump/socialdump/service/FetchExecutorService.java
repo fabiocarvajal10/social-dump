@@ -48,8 +48,8 @@ public class FetchExecutorService {
     scList.forEach(sc -> {
       try {
         FetchableInterface socialNetworkFetch = socialNetworkFetchFactory
-          .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
-            .getName().toLowerCase());
+              .getSocialNetworkFetch(sc.getSocialNetworkBySocialNetworkId()
+                    .getName().toLowerCase());
 
         log.debug("Search Criteria {}", sc.getSearchCriteria());
         socialNetworkFetch.prepareFetch(sc, event.getPostDelay());
@@ -113,7 +113,13 @@ public class FetchExecutorService {
    */
   public void killAll(Event event) {
     event.getSearchCriteriasById()
-      .forEach(sc -> fetchableMap.get(buildKey(event, sc)).kill());
+      .forEach(sc -> {
+        if (sc != null) {
+          if (fetchableMap.containsKey(buildKey(event, sc))) {
+            fetchableMap.get(buildKey(event, sc)).kill();
+          }
+        }
+      });
   }
 
   /**

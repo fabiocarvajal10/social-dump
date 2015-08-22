@@ -210,6 +210,7 @@ public class EventResource {
     DateTime oldEndDate = event.getEndDate();
 
     event = eventMapper.eventDTOToEvent(eventDTO);
+    event.setSearchCriteriasById(searchCriteriaRepository.findAllByEventByEventId(event));
     eventRepository.save(event);
     temporalAccessService.updateAccessDates(event, oldStartDate, oldEndDate,
         request);

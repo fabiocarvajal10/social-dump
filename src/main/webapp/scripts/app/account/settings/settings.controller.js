@@ -10,12 +10,13 @@ angular.module('socialdumpApp')
     });
 
     $scope.save = function () {
+      var email = $scope.settingsAccount.email;
       Auth.updateAccount($scope.settingsAccount).then(function() {
         $scope.error = null;
         $scope.errorEmailExists = false;
         $scope.success = 'OK';
         Principal.identity().then(function(account) {
-            //$scope.settingsAccount = account;
+          $scope.settingsAccount.email = email;
         });
       }).catch(function(error) {
         if(error.data.exception
