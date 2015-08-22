@@ -5440,5 +5440,14 @@ i.glyphicon.glyphicon-cog {
 }
 
 button.btn.btn-sm.ng-scope {
-    margin-left: 5px;
+  margin-left: 5px;
+}
+
+.fix-timepicker {
+  margin-top: 9px;
+}
+
+.fix-distant-validation-message {
+  position: relative;
+  top: -2em;
 }

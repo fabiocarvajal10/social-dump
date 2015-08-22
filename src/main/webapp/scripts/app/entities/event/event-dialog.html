@@ -115,7 +115,9 @@
                placeholder="Hashtag a seguir en Instagram"
                ng-required="!sameHashtag && !event.id">
       </div>
-      <div ng-show="(editForm.$submitted || editForm.instagramHashtag.$touched) && editForm.instagramHashtag.$invalid"
+      <div ng-show="(editForm.$submitted ||
+                     editForm.instagramHashtag.$touched) &&
+                     editForm.instagramHashtag.$invalid"
            ng-messages="editForm.instagramHashtag.$error">
         <p class="help-block"
           ng-message="required">
@@ -124,34 +126,84 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-6 fix-timepicker">
+              <label for="field_startDate">Comienza</label>
+              <input ui-date class="form-control" name="startDate"
+                     id="field_startDate"
+                     ng-attr-validate-date-greater-than-value="{{minStartDate.toUTCString() || undefined}}"
+                     ng-model="event.startDate"
+                     ng-enabled="!!minStartDate"
+                     ng-change="validateDates()"
+                     required>
+            </div>
 
-    <div class="form-group">
-      <label for="field_startDate">Comienza</label>
-      <div class="row">
-        <div class="col-lg-6">
-          <input ui-date class="form-control" name="startDate"
-                 id="field_startDate"
-                 ng-attr-validate-date-greater-than-value="{{minStartDate.toUTCString() || undefined}}"
-                 ng-model="event.startDate"
-                 ng-enabled="!!minStartDate"
-                 ng-change="validateDates()"
-                 required>
-        </div>
+            <div class="col-lg-6">
+              <timepicker id="field_startTime"
+                          class="digital-font"
+                          name="startTime"
+                          hour-step="hstep"
+                          minute-step="mstep"
+                          show-meridian="isMeridian"
+                          ng-model="event.startDate"
+                          validate-control="editForm.endDate">
+              </timepicker>
+            </div>
+<!--             <div ng-show="(editForm.$submitted ||
+                           editForm.startDate.$touched ||
+                           editForm.startTime.$touched) &&
+                          editForm.startDate.$invalid">
+              <p class="help-block"
+                ng-show="editForm.startDate.$error.required">
+                Este campo es requerido.
+              </p>
+              <p class="help-block"
+                ng-show="editForm.startDate.$error.dateGreaterThanValue">
+                <p ng-if="!event.id">
+                  No se permite la creación de eventos anteriores a la fecha actual.
+                </p>
+              </p>
+            </div> -->
+          </div>
 
-        <div class="col-lg-6">
-          <timepicker id="field_startTime"
-                      class="digital-font"
-                      name="startTime"
-                      hour-step="hstep"
-                      minute-step="mstep"
-                      show-meridian="isMeridian"
-                      ng-model="event.startDate"
-                      validate-control="editForm.endDate">
-          </timepicker>
+
         </div>
       </div>
 
 
+      <div class="col-lg-6">
+        <div class="form-group">
+          <div class="row">
+
+            <div class="col-lg-6 fix-timepicker">
+              <label for="field_endDate">Termina</label>
+              <input ui-date class="form-control" name="endDate" id="field_endDate"
+                  ng-model="event.endDate" ng-model-options="{allowInvalid: true}"
+                  validate-date-greater-than-model="event.startDate"
+                  required>
+            </div>
+            <div class="col-lg-6">
+              <timepicker id="field_endTime"
+                          class="digital-font"
+                          name="endTime"
+                          hour-step="hstep"
+                          minute-step="mstep"
+                          show-meridian="isMeridian"
+                          ng-model="event.endDate"
+                          validate-control="editForm.endDate">
+              </timepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="m-b-md fix-distant-validation-message">
       <div ng-show="(editForm.$submitted ||
                      editForm.startDate.$touched ||
                      editForm.startTime.$touched) &&
@@ -167,32 +219,6 @@
           </p>
         </p>
       </div>
-    </div>
-
-
-    <div class="form-group">
-      <label for="field_endDate">Termina</label>
-      <div class="row">
-
-        <div class="col-lg-6">
-          <input ui-date class="form-control" name="endDate" id="field_endDate"
-              ng-model="event.endDate" ng-model-options="{allowInvalid: true}"
-              validate-date-greater-than-model="event.startDate"
-              required>
-        </div>
-        <div class="col-lg-6">
-          <timepicker id="field_endTime"
-                      class="digital-font"
-                      name="endDate"
-                      hour-step="hstep"
-                      minute-step="mstep"
-                      show-meridian="isMeridian"
-                      ng-model="event.endDate"
-                      validate-control="editForm.endDate">
-          </timepicker>
-        </div>
-      </div>
-
 
       <div ng-show="(editForm.$submitted ||
                      editForm.endDate.$touched ||
@@ -211,7 +237,6 @@
         </p>
       </div>
     </div>
-
 
     <div class="form-group">
       <label for="field_type">Tipo</label>
