@@ -56,13 +56,15 @@ public class SearchCriteriaService {
 
   private String processSc(String searchCriteria, int socialNetworkId) {
     String sc = null;
+    String localSearchCriteria = searchCriteria;
+    localSearchCriteria = localSearchCriteria.replaceAll("\\W", "");
     if (socialNetworkId == 1) {
-      if (searchCriteria.charAt(0) != '#') {
-        sc = new StringBuilder(searchCriteria).insert(0, "#").toString();
+      if (localSearchCriteria.charAt(0) != '#') {
+        sc = new StringBuilder(localSearchCriteria).insert(0, "#").toString();
       }
     } else if (socialNetworkId == 2) {
       //Instagram no acepta # el request
-      sc = searchCriteria.replaceAll("#", "");
+      sc = localSearchCriteria.replaceAll("#", "");
     }
 
     return sc;
