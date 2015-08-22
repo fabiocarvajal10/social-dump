@@ -66,34 +66,34 @@ public class EventStatusResourceTest {
   public void initTest() {
   }
 
-  @Test
-  @Transactional
-  public void getAllEventStatuses() throws Exception {
+  // @Test
+  // @Transactional
+  // public void getAllEventStatuses() throws Exception {
 
-    // Get all the eventStatuses
-    restEventStatusMockMvc.perform(get("/api/event-statuses"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(DEFAULT_ID)))
-      .andExpect(jsonPath("$.[*].status")
-        .value(hasItem(DEFAULT_STATUS.toString())))
-      .andExpect(jsonPath("$.[*].description")
-        .value(hasItem(DEFAULT_DESCRIPTION.toString())));
-  }
+  //   // Get all the eventStatuses
+  //   restEventStatusMockMvc.perform(get("/api/event-statuses"))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.[*].id").value(hasItem(DEFAULT_ID)))
+  //     .andExpect(jsonPath("$.[*].status")
+  //       .value(hasItem(DEFAULT_STATUS.toString())))
+  //     .andExpect(jsonPath("$.[*].description")
+  //       .value(hasItem(DEFAULT_DESCRIPTION.toString())));
+  // }
 
-  @Test
-  @Transactional
-  public void getEventStatus() throws Exception {
+  // @Test
+  // @Transactional
+  // public void getEventStatus() throws Exception {
 
-    // Get the eventStatus
-    restEventStatusMockMvc.perform(get("/api/event-statuses/{id}", DEFAULT_ID))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(DEFAULT_ID))
-      .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-      .andExpect(jsonPath("$.description")
-        .value(DEFAULT_DESCRIPTION.toString()));
-  }
+  //   // Get the eventStatus
+  //   restEventStatusMockMvc.perform(get("/api/event-statuses/{id}", DEFAULT_ID))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.id").value(DEFAULT_ID))
+  //     .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+  //     .andExpect(jsonPath("$.description")
+  //       .value(DEFAULT_DESCRIPTION.toString()));
+  // }
 
   @Test
   @Transactional

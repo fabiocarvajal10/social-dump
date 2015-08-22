@@ -72,35 +72,35 @@ public class EventTypeResourceTest {
     eventType.setDescription(DEFAULT_DESCRIPTION);
   }
 
-  @Test
-  @Transactional
-  public void getAllEventTypes() throws Exception {
-    // Initialize the database
-    eventTypeRepository.saveAndFlush(eventType);
+  // @Test
+  // @Transactional
+  // public void getAllEventTypes() throws Exception {
+  //   // Initialize the database
+  //   eventTypeRepository.saveAndFlush(eventType);
 
-    // Get all the eventTypes
-    restEventTypeMockMvc.perform(get("/api/event-types"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(eventType.getId().intValue())))
-      .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-      .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
-  }
+  //   // Get all the eventTypes
+  //   restEventTypeMockMvc.perform(get("/api/event-types"))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.[*].id").value(hasItem(eventType.getId().intValue())))
+  //     .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+  //     .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+  // }
 
-  @Test
-  @Transactional
-  public void getEventType() throws Exception {
-    // Initialize the database
-    eventTypeRepository.saveAndFlush(eventType);
+  // @Test
+  // @Transactional
+  // public void getEventType() throws Exception {
+  //   // Initialize the database
+  //   eventTypeRepository.saveAndFlush(eventType);
 
-    // Get the eventType
-    restEventTypeMockMvc.perform(get("/api/event-types/{id}", eventType.getId()))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(eventType.getId().intValue()))
-      .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-      .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
-  }
+  //   // Get the eventType
+  //   restEventTypeMockMvc.perform(get("/api/event-types/{id}", eventType.getId()))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.id").value(eventType.getId().intValue()))
+  //     .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+  //     .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
+  // }
 
   @Test
   @Transactional

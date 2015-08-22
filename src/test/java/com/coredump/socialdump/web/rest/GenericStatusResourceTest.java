@@ -78,31 +78,31 @@ public class GenericStatusResourceTest {
     genericStatus.setDescription(DEFAULT_DESCRIPTION);
   }
 
-  @Test
-  @Transactional
-  public void getAllGenericStatuses() throws Exception {
+  // @Test
+  // @Transactional
+  // public void getAllGenericStatuses() throws Exception {
 
-    // Get all the generic-statuses
-    restGenericStatusMockMvc.perform(get("/api/generic-statuses"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(genericStatus.getId())))
-      .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
-      .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
-  }
+  //   // Get all the generic-statuses
+  //   restGenericStatusMockMvc.perform(get("/api/generic-statuses"))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.[*].id").value(hasItem(genericStatus.getId())))
+  //     .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+  //     .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+  // }
 
-  @Test
-  @Transactional
-  public void getGenericStatus() throws Exception {
-    // Get the genericStatus
-    restGenericStatusMockMvc.perform(get("/api/generic-statuses/{id}",
-                                         genericStatus.getId()))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(genericStatus.getId()))
-      .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-      .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
-  }
+  // @Test
+  // @Transactional
+  // public void getGenericStatus() throws Exception {
+  //   // Get the genericStatus
+  //   restGenericStatusMockMvc.perform(get("/api/generic-statuses/{id}",
+  //                                        genericStatus.getId()))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.id").value(genericStatus.getId()))
+  //     .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+  //     .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
+  // }
 
   @Test
   @Transactional

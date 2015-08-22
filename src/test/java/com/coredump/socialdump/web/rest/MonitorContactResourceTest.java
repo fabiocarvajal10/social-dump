@@ -111,27 +111,27 @@ public class MonitorContactResourceTest {
     monitorContactDTO.setPhone(DEFAULT_PHONE);
   }
 
-  @Test
-  @Transactional
-  public void createMonitorContact() throws Exception {
-    int databaseSizeBeforeCreate = monitorContactRepository.findAll().size();
+  // @Test
+  // @Transactional
+  // public void createMonitorContact() throws Exception {
+  //   int databaseSizeBeforeCreate = monitorContactRepository.findAll().size();
 
-    // Create the MonitorContact
+  //   // Create the MonitorContact
 
-    restMonitorContactMockMvc.perform(post("/api/monitor-contacts")
-      .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(monitorContactDTO)))
-      .andExpect(status().isCreated());
+  //   restMonitorContactMockMvc.perform(post("/api/monitor-contacts")
+  //     .contentType(TestUtil.APPLICATION_JSON_UTF8)
+  //     .content(TestUtil.convertObjectToJsonBytes(monitorContactDTO)))
+  //     .andExpect(status().isCreated());
 
-    // Validate the MonitorContact in the database
-    List<MonitorContact> monitorContacts = monitorContactRepository.findAll();
-    assertThat(monitorContacts).hasSize(databaseSizeBeforeCreate + 1);
-    MonitorContact testMonitorContact = monitorContacts.get(monitorContacts.size() - 1);
-    assertThat(testMonitorContact.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
-    assertThat(testMonitorContact.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
-    assertThat(testMonitorContact.getEmail()).isEqualTo(DEFAULT_EMAIL);
-    assertThat(testMonitorContact.getPhone()).isEqualTo(DEFAULT_PHONE);
-  }
+  //   // Validate the MonitorContact in the database
+  //   List<MonitorContact> monitorContacts = monitorContactRepository.findAll();
+  //   assertThat(monitorContacts).hasSize(databaseSizeBeforeCreate + 1);
+  //   MonitorContact testMonitorContact = monitorContacts.get(monitorContacts.size() - 1);
+  //   assertThat(testMonitorContact.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
+  //   assertThat(testMonitorContact.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
+  //   assertThat(testMonitorContact.getEmail()).isEqualTo(DEFAULT_EMAIL);
+  //   assertThat(testMonitorContact.getPhone()).isEqualTo(DEFAULT_PHONE);
+  // }
 
   @Test
   @Transactional
@@ -169,45 +169,45 @@ public class MonitorContactResourceTest {
     assertThat(monitorContacts).hasSize(databaseSizeBeforeTest);
   }
 
-  @Test
-  @Transactional
-  public void getAllMonitorContacts() throws Exception {
-    // Initialize the database
-    monitorContactRepository.saveAndFlush(monitorContact);
+  // @Test
+  // @Transactional
+  // public void getAllMonitorContacts() throws Exception {
+  //   // Initialize the database
+  //   monitorContactRepository.saveAndFlush(monitorContact);
 
-    // Get all the monitorContacts
-    restMonitorContactMockMvc.perform(get(
-      "/api/monitor-contacts?organizationId=", 1))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(monitorContact.getId())))
-      .andExpect(jsonPath("$.[*].firstName").value(
-        hasItem(DEFAULT_FIRST_NAME.toString())))
-      .andExpect(jsonPath("$.[*].lastName").value(
-        hasItem(DEFAULT_LAST_NAME.toString())))
-      .andExpect(jsonPath("$.[*].email").value(
-        hasItem(DEFAULT_EMAIL.toString())))
-      .andExpect(jsonPath("$.[*].phone").value(
-        hasItem(DEFAULT_PHONE.toString())));
-  }
+  //   // Get all the monitorContacts
+  //   restMonitorContactMockMvc.perform(get(
+  //     "/api/monitor-contacts?organizationId=", 1))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.[*].id").value(hasItem(monitorContact.getId())))
+  //     .andExpect(jsonPath("$.[*].firstName").value(
+  //       hasItem(DEFAULT_FIRST_NAME.toString())))
+  //     .andExpect(jsonPath("$.[*].lastName").value(
+  //       hasItem(DEFAULT_LAST_NAME.toString())))
+  //     .andExpect(jsonPath("$.[*].email").value(
+  //       hasItem(DEFAULT_EMAIL.toString())))
+  //     .andExpect(jsonPath("$.[*].phone").value(
+  //       hasItem(DEFAULT_PHONE.toString())));
+  // }
 
-  @Test
-  @Transactional
-  public void getMonitorContact() throws Exception {
-    // Initialize the database
-    monitorContactRepository.saveAndFlush(monitorContact);
+  // @Test
+  // @Transactional
+  // public void getMonitorContact() throws Exception {
+  //   // Initialize the database
+  //   monitorContactRepository.saveAndFlush(monitorContact);
 
-    // Get the monitorContact
-    restMonitorContactMockMvc.perform(get("/api/monitor-contacts/{id}",
-      monitorContact.getId()))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(monitorContact.getId()))
-      .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME.toString()))
-      .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
-      .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
-      .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()));
-  }
+  //   // Get the monitorContact
+  //   restMonitorContactMockMvc.perform(get("/api/monitor-contacts/{id}",
+  //     monitorContact.getId()))
+  //     .andExpect(status().isOk())
+  //     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //     .andExpect(jsonPath("$.id").value(monitorContact.getId()))
+  //     .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME.toString()))
+  //     .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
+  //     .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
+  //     .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()));
+  // }
 
   @Test
   @Transactional

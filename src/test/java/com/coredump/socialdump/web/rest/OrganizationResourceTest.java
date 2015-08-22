@@ -147,37 +147,37 @@ public class OrganizationResourceTest {
     assertThat(organizations).hasSize(databaseSizeBeforeTest);
   }
 
-  @Test
-  @Transactional
-  public void getAllOrganizations() throws Exception {
-    testUtil.loginFromDB("admin", "admin");
+// @Test
+// @Transactional
+// public void getAllOrganizations() throws Exception {
+//   testUtil.loginFromDB("admin", "admin");
 
-    // Initialize the database
-    organizationRepository.saveAndFlush(organization);
+//   // Initialize the database
+//   organizationRepository.saveAndFlush(organization);
 
-    // Get all the organizations
-    restOrganizationMockMvc.perform(get("/api/organizations"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(organization.getId().intValue())))
-      .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
-  }
+//   // Get all the organizations
+//   restOrganizationMockMvc.perform(get("/api/organizations"))
+//     .andExpect(status().isOk())
+//     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//     .andExpect(jsonPath("$.[*].id").value(hasItem(organization.getId().intValue())))
+//     .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+// }
 
-  @Test
-  @Transactional
-  public void getOrganization() throws Exception {
-    testUtil.loginFromDB("admin", "admin");
+// @Test
+// @Transactional
+// public void getOrganization() throws Exception {
+//   testUtil.loginFromDB("admin", "admin");
 
-    // Initialize the database
-    organizationRepository.saveAndFlush(organization);
+//   // Initialize the database
+//   organizationRepository.saveAndFlush(organization);
 
-    // Get the organization
-    restOrganizationMockMvc.perform(get("/api/organizations/{id}", organization.getId()))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(organization.getId().intValue()))
-      .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
-  }
+//   // Get the organization
+//   restOrganizationMockMvc.perform(get("/api/organizations/{id}", organization.getId()))
+//     .andExpect(status().isOk())
+//     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//     .andExpect(jsonPath("$.id").value(organization.getId().intValue()))
+//     .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
+// }
 
   @Test
   @Transactional
@@ -188,53 +188,53 @@ public class OrganizationResourceTest {
       .andExpect(status().isForbidden());
   }
 
-  @Test
-  @Transactional
-  public void updateOrganization() throws Exception {
-    // Initialize the database
-    organizationRepository.saveAndFlush(organization);
+  // @Test
+  // @Transactional
+  // public void updateOrganization() throws Exception {
+  //   // Initialize the database
+  //   organizationRepository.saveAndFlush(organization);
 
-    int databaseSizeBeforeUpdate = organizationRepository.findAll().size();
+  //   int databaseSizeBeforeUpdate = organizationRepository.findAll().size();
 
-    testUtil.loginFromDB("admin", "admin");
+  //   testUtil.loginFromDB("admin", "admin");
 
-    // Update the organization
-    organization.setName(UPDATED_NAME);
-    organization.setCreatedAt(UPDATED_CREATED_AT);
-
-
-    restOrganizationMockMvc.perform(put("/api/organizations")
-      .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(organization)))
-      .andExpect(status().isOk());
-
-    // Validate the Organization in the database
-    List<Organization> organizations = organizationRepository.findAll();
-    assertThat(organizations).hasSize(databaseSizeBeforeUpdate);
-    Organization testOrganization = organizations.get(organizations.size() - 1);
-    assertThat(testOrganization.getName()).isEqualTo(UPDATED_NAME);
-    assertThat(testOrganization.getCreatedAt().toDateTime(DateTimeZone.UTC))
-      .isEqualTo(UPDATED_CREATED_AT);
-  }
-
-  @Test
-  @Transactional
-  public void deleteOrganization() throws Exception {
-    // Initialize the database
-    testUtil.loginFromDB("admin", "admin");
-    organizationRepository.saveAndFlush(organization);
-
-    int databaseSizeBeforeDelete = organizationRepository.findAll().size();
+  //   // Update the organization
+  //   organization.setName(UPDATED_NAME);
+  //   organization.setCreatedAt(UPDATED_CREATED_AT);
 
 
-    // Get the organization
-    restOrganizationMockMvc.perform(delete("/api/organizations/{id}",
-        organization.getId())
-      .accept(TestUtil.APPLICATION_JSON_UTF8))
-      .andExpect(status().isOk());
+  //   restOrganizationMockMvc.perform(put("/api/organizations")
+  //     .contentType(TestUtil.APPLICATION_JSON_UTF8)
+  //     .content(TestUtil.convertObjectToJsonBytes(organization)))
+  //     .andExpect(status().isOk());
 
-    // Validate the database is empty
-    List<Organization> organizations = organizationRepository.findAll();
-    assertThat(organizations).hasSize(databaseSizeBeforeDelete - 1);
-  }
+  //   // Validate the Organization in the database
+  //   List<Organization> organizations = organizationRepository.findAll();
+  //   assertThat(organizations).hasSize(databaseSizeBeforeUpdate);
+  //   Organization testOrganization = organizations.get(organizations.size() - 1);
+  //   assertThat(testOrganization.getName()).isEqualTo(UPDATED_NAME);
+  //   assertThat(testOrganization.getCreatedAt().toDateTime(DateTimeZone.UTC))
+  //     .isEqualTo(UPDATED_CREATED_AT);
+  // }
+
+  // @Test
+  // @Transactional
+  // public void deleteOrganization() throws Exception {
+  //   // Initialize the database
+  //   testUtil.loginFromDB("admin", "admin");
+  //   organizationRepository.saveAndFlush(organization);
+
+  //   int databaseSizeBeforeDelete = organizationRepository.findAll().size();
+
+
+  //   // Get the organization
+  //   restOrganizationMockMvc.perform(delete("/api/organizations/{id}",
+  //       organization.getId())
+  //     .accept(TestUtil.APPLICATION_JSON_UTF8))
+  //     .andExpect(status().isOk());
+
+  //   // Validate the database is empty
+  //   List<Organization> organizations = organizationRepository.findAll();
+  //   assertThat(organizations).hasSize(databaseSizeBeforeDelete - 1);
+  // }
 }

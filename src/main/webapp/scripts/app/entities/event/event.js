@@ -120,6 +120,8 @@
                 }
               }).result.then(function(result) {
                 $state.go('event.list');
+              }, function() {
+                $state.go('event.list');
               });
           }]
         })
@@ -141,6 +143,8 @@
                 }]
               }
             }).result.then(function(result) {
+              $state.go('event.list');
+            }, function() {
               $state.go('event.list');
             });
           }]

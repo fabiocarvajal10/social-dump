@@ -2,13 +2,13 @@
 
 angular.module('socialdumpApp')
   .controller('AsideController', ['$rootScope', '$scope', '$location',
-    'OrganizationService',
-    function($rootScope, $scope, $location, OrganizationService) {
+    'OrganizationService', 'localStorageService',
+    function($rootScope, $scope, $location, OrganizationService,
+             localStorageService) {
       $rootScope.currentOrg = null;
       $scope.orgz = [];
 
       function broadcastOrgChange() {
-        //console.log('Broadcasting');
         $rootScope
           .$broadcast('currentOrganizationChange');
       }
@@ -16,7 +16,8 @@ angular.module('socialdumpApp')
       $scope.init = function() {
         OrganizationService.getAll(null, 15).then(function(data) {
           $scope.orgz = data;
-          $rootScope.currentOrg = data[0];
+          $rootScope.currentOrg = localStorageService.get('currentOrg') ||
+                                  data[0];
           broadcastOrgChange();
         });
       };
