@@ -20,6 +20,7 @@
 
         $rootScope
           .$on('socialdumpApp:eventAdded', function(event, data) {
+            data.status = EventStatus.get({id: data.statusId});
             data.type = EventType.get({id: data.typeId});
             var index = findOnList(data.id);
             if (index === -1) {
@@ -48,7 +49,6 @@
                   result[i].type = EventType.get({id: result[i].typeId});
                   $scope.events.push(result[i]);
                 }
-                console.log($scope.events);
               });
           }
         };
