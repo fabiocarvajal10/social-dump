@@ -13,7 +13,7 @@
       $scope.event.postDelay = 60;
       $scope.sameHashtag = true;
       $scope.todayMidnight = DateUtils.todayMidnight();
-      $scope.minStartDate = DateUtils.todayMidnight();
+      $scope.minStartDate = new Date(DateUtils.todayMidnight().getTime() - 1);
       $scope.socialNetworksDict = {};
       $scope.event.searchCriterias = [];
 
