@@ -20,33 +20,33 @@ import java.io.IOException;
  */
 public class XAuthTokenFilter extends GenericFilterBean {
 
-    private final static String XAUTH_TOKEN_HEADER_NAME = "x-auth-token";
+  private final static String XAUTH_TOKEN_HEADER_NAME = "x-auth-token";
 
-    private UserDetailsService detailsService;
+  private UserDetailsService detailsService;
 
-    private TokenProvider tokenProvider;
+  private TokenProvider tokenProvider;
 
-    public XAuthTokenFilter(UserDetailsService detailsService, TokenProvider tokenProvider) {
-        this.detailsService = detailsService;
-        this.tokenProvider = tokenProvider;
-    }
+  public XAuthTokenFilter(UserDetailsService detailsService, TokenProvider tokenProvider) {
+    this.detailsService = detailsService;
+    this.tokenProvider = tokenProvider;
+  }
 
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        try {
-            HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-            String authToken = httpServletRequest.getHeader(XAUTH_TOKEN_HEADER_NAME);
-            if (StringUtils.hasText(authToken)) {
-                String username = this.tokenProvider.getUserNameFromToken(authToken);
-                UserDetails details = this.detailsService.loadUserByUsername(username);
-                if (this.tokenProvider.validateToken(authToken, details)) {
-                    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, details.getPassword(), details.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(token);
-                }
-            }
-            filterChain.doFilter(servletRequest, servletResponse);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+  @Override
+  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    try {
+      HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+      String authToken = httpServletRequest.getHeader(XAUTH_TOKEN_HEADER_NAME);
+      if (StringUtils.hasText(authToken)) {
+        String username = this.tokenProvider.getUserNameFromToken(authToken);
+        UserDetails details = this.detailsService.loadUserByUsername(username);
+        if (this.tokenProvider.validateToken(authToken, details)) {
+          UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, details.getPassword(), details.getAuthorities());
+          SecurityContextHolder.getContext().setAuthentication(token);
         }
+      }
+      filterChain.doFilter(servletRequest, servletResponse);
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
     }
+  }
 }

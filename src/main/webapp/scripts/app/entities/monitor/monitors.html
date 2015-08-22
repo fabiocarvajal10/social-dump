@@ -2,11 +2,16 @@
   <h1 class="m-n font-thin h3"> Contactos de Monitoreo </h1>
 </div>
 <div class="wrapper-md">
-  <a class="btn m-b-xs btn-sm btn-success btn-addon m-r-sm" ng-click="open(null, null,'create')">
+  <a class="btn m-b-xs btn-sm btn-success btn-addon m-r-sm" ng-click="open(null, null,'create')"
+      ng-disabled="checkMonitorOrg()">
     <i class="fa fa-plus">
     </i> Agregar
   </a>
-  <span class="label text-base bg-info pos-rlt m-r" ng-show="!monitorContacts.length">
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="checkMonitorOrg()">
+    No posee ninguna organización
+  </span>
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="!monitorContacts.length
+      && !checkMonitorOrg()">
     No posee ningún contacto monitor
   </span>
   <div class="row">
@@ -31,4 +36,9 @@
       </div>
     </div>
   </div>
+  <div class="pull-right" ng-hide="!monitorContacts.length || totalItems < 9">
+    <pagination direction-links="false" total-items="totalItems" ng-model="currentPage"
+                ng-change="pageChanged()" num-pages="smallnumPages" items-per-page="8"></pagination>
+  </div>
 </div>
+

@@ -4,7 +4,9 @@
 'use strict';
 
 angular.module('socialdumpApp')
-  .factory('OrganizationService', function($http, $q, localStorageService) {
+  .factory('OrganizationService', function($rootScope, $http,
+      $q, localStorageService) {
+
     var currOrgId = 1;
     return {
       register: function(organizationName) {
@@ -12,7 +14,7 @@ angular.module('socialdumpApp')
           'name': organizationName,
           'ownerId': parseInt(localStorageService.get('userId'))
         };
-
+        var currentTime = new Date();
         var q = $q.defer();
         $http({
           url: 'api/organizations',
@@ -21,13 +23,23 @@ angular.module('socialdumpApp')
         }).
         success(function(data, status, headers) {
           organization.id = parseInt(headers('Location').match(/[0-9]+/g));
+          organization.createdAt = currentTime;
           currOrgId = organization.id;
+          $rootScope
+            .$broadcast('newOrganization',
+              {
+                'newOrganization':
+                {
+                  'id': organization.id,
+                  'name': organizationName
+                }
+              }
+            );
           q.resolve(organization);
         }).
-        catch (function(error) {
-          var err = error.data.exception;
-          if (err ===
-              'org.springframework.dao.DataIntegrityViolationException') {
+        catch(function(error) {
+          var err = error.headers('Failure');
+          if (err === 'Organization name already in use') {
             err = 'Ya cuenta con una organización del mismo nombre';
           }else {
             err = 'Error inesperado al intentar crear la organización';
@@ -38,11 +50,32 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
-      getAll: function() {
+      getAll: function(page, limit) {
         var q = $q.defer();
         $http({
           url: 'api/organizations',
-          method: 'GET'
+          method: 'GET',
+          params: {
+            'page': page,
+            'per_page': limit
+          }
+        }).
+        success(function(data, status, headers) {
+          data.total = parseInt(headers('X-Total-Count'));
+          q.resolve(data);
+        }).
+        error(function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+
+      getNewest: function() {
+        var q = $q.defer();
+        $http({
+          url: 'api/organizations/newest',
+          method: 'GET',
         }).
         success(function(data) {
           q.resolve(data);
@@ -103,14 +136,24 @@ angular.module('socialdumpApp')
           }
         }).
         success(function(data) {
+          $rootScope
+            .$broadcast('updatedOrganization',
+              {
+                'updatedOrganization':
+                  {
+                    'id': organization.id,
+                    'name': organization.name
+                  }
+              }
+            );
           q.resolve(organization);
         }).
-        catch (function(error) {
-          var err = error.data.exception;
-          if (err === 'org.springframework.dao.DataIntegrityViolationException') {
+        catch(function(error) {
+          var err = error.headers('Failure');
+          if (err === 'Organization name already in use') {
             err = 'Ya cuenta con una organización del mismo nombre';
           }else {
-            err = 'Error inesperado al intentar modificar la organización';
+            err = 'Error inesperado al intentar crear la organización';
           }
           q.reject(err);
         });
@@ -126,9 +169,12 @@ angular.module('socialdumpApp')
           data: id
         }).
         success(function(data) {
+          $rootScope
+            .$broadcast('deletedOrganization',
+              { 'deletedOrganization': id });
           q.resolve(data);
         }).
-        catch (function(error) {
+        catch(function(error) {
           var err = error.data.exception;
           if (err ===
               'org.springframework.dao.DataIntegrityViolationException') {
@@ -143,7 +189,24 @@ angular.module('socialdumpApp')
         return q.promise;
       },
 
-      setCurrentOrgId: function(organizationId){
+      getOrgPostCount: function(organizationId) {
+        var q = $q.defer();
+        $http({
+          url: 'api//social-network-posts/count',
+          method: 'GET',
+          params: { 'organizationId': organizationId}
+        }).
+        success(function(data) {
+          q.resolve(data);
+        }).
+        catch(function(error) {
+          q.reject(error);
+        });
+
+        return q.promise;
+      },
+      /*
+      setCurrentOrgId: function(organizationId) {
         localStorageService.set('orgId', organizationId);
       },
 
@@ -151,13 +214,13 @@ angular.module('socialdumpApp')
         return parseInt(localStorageService.get('eventId'));
       },
 
-      setCurrentEventId: function(eventId){
+      setCurrentEventId: function(eventId) {
         localStorageService.set('eventId', eventId);
       },
 
       getCurrentOrgId: function() {
         return parseInt(localStorageService.get('orgId'));
       }
-
+      */
      };
    });

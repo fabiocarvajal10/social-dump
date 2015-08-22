@@ -5,21 +5,19 @@ import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * Created by fabio on 09/07/15.
  */
 @Entity
 public class TemporalAccess implements Serializable {
-  private long id;
+  private Long id;
   private String email;
 
   @JsonIgnore
@@ -36,11 +34,11 @@ public class TemporalAccess implements Serializable {
   @Id
   @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -113,18 +111,24 @@ public class TemporalAccess implements Serializable {
     TemporalAccess that = (TemporalAccess) o;
 
     if (id != that.id) return false;
-    if (email != null ? !email.equals(that.email) : that.email != null) return false;
-    if (password != null ? !password.equals(that.password) : that.password != null) return false;
-    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
-    if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
-    if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
+    if (email != null ? !email.equals(that.email) : that.email != null)
+      return false;
+    if (password != null ? !password.equals(that.password) : that.password != null)
+      return false;
+    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null)
+      return false;
+    if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null)
+      return false;
+    if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null)
+      return false;
 
     return true;
   }
 
   @Override
   public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
+    int result = (id == null) ? 0 : id.intValue();
+    result = (int) (result ^ (result >>> 32));
     result = 31 * result + (email != null ? email.hashCode() : 0);
     result = 31 * result + (password != null ? password.hashCode() : 0);
     result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);

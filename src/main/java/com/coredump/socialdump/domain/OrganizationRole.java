@@ -1,8 +1,8 @@
 package com.coredump.socialdump.domain;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.*;
 
 /**
  * Created by fabio on 09/07/15.
@@ -43,7 +43,8 @@ public class OrganizationRole implements Serializable {
     OrganizationRole that = (OrganizationRole) o;
 
     if (id != that.id) return false;
-    if (name != null ? !name.equals(that.name) : that.name != null) return false;
+    if (name != null ? !name.equals(that.name) : that.name != null)
+      return false;
 
     return true;
   }

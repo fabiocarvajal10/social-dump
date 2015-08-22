@@ -4,7 +4,6 @@ import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.OrganizationRepository;
 import com.coredump.socialdump.web.rest.dto.MonitorContactDTO;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,8 +20,17 @@ public abstract class MonitorContactMapper {
 
   @Mapping(source = "organizationId", target = "organizationByOrganizationId")
   public abstract MonitorContact monitorContactDTOToMonitorContact(MonitorContactDTO
-      monitorContactDTO);
+                                                                     monitorContactDTO);
 
+  @Mapping(source = "organizationByOrganizationId.id", target = "organizationId")
+  public abstract MonitorContactDTO monitorContactToMonitorContactDTO(MonitorContact
+                                                                        monitorContact);
+
+  /**
+   * Obtiene una organization por un id.
+   * @param id id del organization
+   * @return Organization
+   */
   public Organization organizationFromId(Long id) {
     if (id == null) {
       return null;

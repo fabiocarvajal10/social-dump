@@ -3,62 +3,265 @@
 
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-        ng-click="clear()">&times;</button>
+            ng-click="clear()">&times;</button>
     <h4 class="modal-title" id="myEventLabel">
-      <span ng-hide="!!event.id">Crear</span>
-      <span ng-show="!!event.id">Modificar</span>
-      un Evento
+      <span ng-if="!event.id">Crear un</span>
+      <span ng-if="!!event.id">Modificar el</span>
+      evento
     </h4>
   </div>
+
+
   <div class="modal-body">
     <div class="form-group hide">
       <label>ID</label>
       <input type="text" class="form-control" name="id"
-          ng-model="event.id" readonly>
+             ng-model="event.id" readonly />
     </div>
 
     <div class="form-group">
-      <label for="field_startDate">Comienza</label>
-      <input type="date" class="form-control" name="startDate" id="field_startDate"
-          ng-model="event.startDate" required>
-
-      <div ng-show="editForm.startDate.$invalid">
-        <p class="help-block"
-          ng-show="editForm.startDate.$error.required">
-          Este campo es requerido.
-        </p>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="field_endDate">Termina</label>
-      <input type="date" class="form-control" name="endDate" id="field_endDate"
-          ng-model="event.endDate" required>
-
-      <div ng-show="editForm.endDate.$invalid">
-        <p class="help-block"
-          ng-show="editForm.endDate.$error.required">
-          Este campo es requerido.
-        </p>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="field_description">Descripción</label>
+      <label for="field_description">Descripción del evento</label>
       <input type="text" class="form-control" name="description" id="field_description"
           ng-model="event.description" required>
 
-      <div ng-show="editForm.description.$invalid">
+      <div ng-show="(editForm.$submitted || editForm.description.$touched) && editForm.description.$invalid">
         <p class="help-block"
           ng-show="editForm.description.$error.required">
           Este campo es requerido.
         </p>
       </div>
     </div>
-    <div class="form-group">
-      <label for="field_postDelay">Demora para rechazar Posts</label>
-      <input type="number" class="form-control" name="postDelay" id="field_postDelay"
-          ng-model="event.postDelay" required>
 
-      <div ng-show="editForm.postDelay.$invalid">
+<!--
+    <div class="form-group" ng-if="!event.id">
+      <p>Redes sociales</p>
+      <label class="pointer rel" for="{{::socialNetwork.name}}"
+             ng-repeat="socialNetwork in socialNetworks"
+             tooltip="{{::socialNetwork.name}}">
+        <div ng-bind-html="socialNetwork.icon"></div>
+        <input type="checkbox" name="{{::socialNetwork.name}}"
+               id="{{::socialNetwork.name}}" class="hide"
+               ng-model="socialNetworksDict[socialNetwork.id].selected" />
+        <div class="icon-block-overlay"
+             ng-show="!(socialNetworksDict[socialNetwork.id].selected)"></div>
+      </label>
+    </div>
+-->
+
+
+    <div class="form-group" ng-hide="!!event.id">
+      <div class="checkbox">
+        <label class="i-checks">
+          <input type="checkbox" name="sameHashtagChk" ng-model="sameHashtag" />
+          <i></i> Seguir el mismo hashtag para todas las redes sociales
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" ng-hide="!sameHashtag || !!event.id">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-twitter"></i>
+          <i class="fa fa-instagram"></i>
+          <span class="h4">&nbsp;#</span>
+        </span>
+        <input type="text" class="form-control" name="allHashtags" ng-init="event.searchCriterias = []"
+            ng-model="event.searchCriterias[0]"
+            ng-change="event.searchCriterias[1] = event.searchCriterias[0]"
+            placeholder="Hashtag a seguir"
+            ng-required="sameHashtag && !event.id">
+      </div>
+
+      <div ng-show="(editForm.$submitted || editForm.allHashtags.$touched) && editForm.allHashtags.$invalid"
+           ng-messages="editForm.allHashtags.$error">
+        <p class="help-block"
+          ng-message="required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="form-group" ng-show="!sameHashtag && !event.id">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-twitter"></i>
+          <span class="h4">&nbsp;#</span>
+        </span>
+        <input type="text" class="form-control" name="twitterHashtag"
+               ng-model="event.searchCriterias[0]"
+               placeholder="Hashtag a seguir en Twitter"
+               ng-required="!sameHashtag && !event.id">
+      </div>
+
+      <div ng-show="(editForm.$submitted || editForm.twitterHashtag.$touched) && editForm.twitterHashtag.$invalid"
+           ng-messages="editForm.twitterHashtag.$error">
+        <p class="help-block"
+          ng-message="required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="form-group" ng-show="!sameHashtag && !event.id">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-instagram"></i>
+          <span class="h4">&nbsp;#</span>
+        </span>
+        <input type="text" class="form-control" name="instagramHashtag"
+               ng-model="event.searchCriterias[1]"
+               placeholder="Hashtag a seguir en Instagram"
+               ng-required="!sameHashtag && !event.id">
+      </div>
+      <div ng-show="(editForm.$submitted ||
+                     editForm.instagramHashtag.$touched) &&
+                     editForm.instagramHashtag.$invalid"
+           ng-messages="editForm.instagramHashtag.$error">
+        <p class="help-block"
+          ng-message="required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-6 fix-timepicker">
+              <label for="field_startDate">Comienza</label>
+              <input ui-date class="form-control" name="startDate"
+                     id="field_startDate"
+                     ng-attr-validate-date-greater-than-value="{{minStartDate.toUTCString() || undefined}}"
+                     ng-model="event.startDate"
+                     ng-enabled="!!minStartDate"
+                     ng-change="validateDates()"
+                     required>
+            </div>
+
+            <div class="col-lg-6">
+              <timepicker id="field_startTime"
+                          class="digital-font"
+                          name="startTime"
+                          hour-step="hstep"
+                          minute-step="mstep"
+                          show-meridian="isMeridian"
+                          ng-model="event.startDate"
+                          validate-control="editForm.endDate">
+              </timepicker>
+            </div>
+<!--             <div ng-show="(editForm.$submitted ||
+                           editForm.startDate.$touched ||
+                           editForm.startTime.$touched) &&
+                          editForm.startDate.$invalid">
+              <p class="help-block"
+                ng-show="editForm.startDate.$error.required">
+                Este campo es requerido.
+              </p>
+              <p class="help-block"
+                ng-show="editForm.startDate.$error.dateGreaterThanValue">
+                <p ng-if="!event.id">
+                  No se permite la creación de eventos anteriores a la fecha actual.
+                </p>
+              </p>
+            </div> -->
+          </div>
+
+
+        </div>
+      </div>
+
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <div class="row">
+
+            <div class="col-lg-6 fix-timepicker">
+              <label for="field_endDate">Termina</label>
+              <input ui-date class="form-control" name="endDate" id="field_endDate"
+                  ng-model="event.endDate" ng-model-options="{allowInvalid: true}"
+                  validate-date-greater-than-model="event.startDate"
+                  required>
+            </div>
+            <div class="col-lg-6">
+              <timepicker id="field_endTime"
+                          class="digital-font"
+                          name="endTime"
+                          hour-step="hstep"
+                          minute-step="mstep"
+                          show-meridian="isMeridian"
+                          ng-model="event.endDate"
+                          validate-control="editForm.endDate">
+              </timepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="m-b-md fix-distant-validation-message">
+      <div ng-show="(editForm.$submitted ||
+                     editForm.startDate.$touched ||
+                     editForm.startTime.$touched) &&
+                    editForm.startDate.$invalid">
+        <p class="help-block"
+          ng-show="editForm.startDate.$error.required">
+          Este campo es requerido.
+        </p>
+        <p class="help-block"
+          ng-show="editForm.startDate.$error.dateGreaterThanValue">
+          <p ng-if="!event.id">
+            No se permite la creación de eventos anteriores a la fecha actual.
+          </p>
+        </p>
+      </div>
+
+      <div ng-show="(editForm.$submitted ||
+                     editForm.endDate.$touched ||
+                     editForm.endTime.$touched) && editForm.endDate.$invalid">
+        <p class="help-block"
+          ng-show="editForm.endDate.$error.required">
+          Este campo es requerido.
+        </p>
+        <p class="help-block"
+          ng-show="editForm.endDate.$error.dateGreaterThanModel">
+          El evento debe terminar después de que inicie.
+        </p>
+        <p class="help-block"
+          ng-show="editForm.endDate.$error.dateGreaterThanValue">
+          El evento debe terminar después de la fecha y hora actual.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="field_type">Tipo</label>
+      <select class="form-control" id="field_type"
+              name="type" ng-model="event.typeId"
+              ng-options="eventType.id as eventType.name for eventType in eventTypes"
+              required>
+      </select>
+      <div ng-show="(editForm.$submitted || editForm.type.$touched) && editForm.type.$invalid">
+        <p class="help-block"
+          ng-show="editForm.type.$error.required">
+          Este campo es requerido.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="field_postDelay">Segundos de demora para obtener para obtener Posts</label>
+      <input type="number" class="form-control"
+             name="postDelay" id="field_postDelay"
+             min="20" max="180"
+             ng-model="event.postDelay" required>
+
+      <div ng-show="(editForm.$submitted || editForm.postDelay.$touched) && editForm.postDelay.$invalid">
         <p class="help-block"
           ng-show="editForm.postDelay.$error.required">
           Este campo es requerido.
@@ -67,13 +270,26 @@
           ng-show="editForm.postDelay.$error.number">
           Este campo solo acepta números.
         </p>
+        <p class="help-block"
+          ng-show="editForm.postDelay.$error.min">
+          El mínimo son 20 segundos.
+        </p>
+        <p class="help-block"
+          ng-show="editForm.postDelay.$error.max">
+          El máximo son 180 segundos.
+        </p>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="field_type">Tipo</label>
-      <select class="form-control" id="field_type" name="type" ng-model="event.typeId"
-              ng-options="eventType.id as eventType.name for eventType in eventTypes">
-      </select>
+
+<!--
+      <div class="form-group" ng-show="!event.id">
+        <div class="checkbox">
+          <label class="i-checks">
+            <input type="checkbox" name="activate" ng-model="event.activate">
+            <i></i>Activar ahora mismo
+          </label>
+        </div>
+      </div>
+-->
     </div>
   </div>
   <div class="modal-footer">

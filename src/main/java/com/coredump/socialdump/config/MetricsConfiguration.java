@@ -30,130 +30,130 @@ import java.util.concurrent.TimeUnit;
 @Profile("!" + Constants.SPRING_PROFILE_FAST)
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
-    private static final String ENV_METRICS = "metrics.";
-    private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";
-    private static final String ENV_METRICS_SPARK = "metrics.spark.";
-    private static final String PROP_JMX_ENABLED = "jmx.enabled";
-    private static final String PROP_GRAPHITE_ENABLED = "enabled";
-    private static final String PROP_SPARK_ENABLED = "enabled";
-    private static final String PROP_GRAPHITE_PREFIX = "";
+  private static final String ENV_METRICS = "metrics.";
+  private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";
+  private static final String ENV_METRICS_SPARK = "metrics.spark.";
+  private static final String PROP_JMX_ENABLED = "jmx.enabled";
+  private static final String PROP_GRAPHITE_ENABLED = "enabled";
+  private static final String PROP_SPARK_ENABLED = "enabled";
+  private static final String PROP_GRAPHITE_PREFIX = "";
 
-    private static final String PROP_PORT = "port";
-    private static final String PROP_HOST = "host";
-    private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
-    private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
-    private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
-    private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
-    private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
+  private static final String PROP_PORT = "port";
+  private static final String PROP_HOST = "host";
+  private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
+  private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
+  private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
+  private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
+  private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
 
-    private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
+  private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
-    private MetricRegistry metricRegistry = new MetricRegistry();
+  private MetricRegistry metricRegistry = new MetricRegistry();
 
-    private HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
+  private HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
+
+  private RelaxedPropertyResolver propertyResolver;
+
+  @Override
+  public void setEnvironment(Environment environment) {
+    this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS);
+  }
+
+  @Override
+  @Bean
+  public MetricRegistry getMetricRegistry() {
+    return metricRegistry;
+  }
+
+  @Override
+  @Bean
+  public HealthCheckRegistry getHealthCheckRegistry() {
+    return healthCheckRegistry;
+  }
+
+  @PostConstruct
+  public void init() {
+    log.debug("Registering JVM gauges");
+    metricRegistry.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
+    metricRegistry.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
+    metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
+    metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
+    metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+    if (propertyResolver.getProperty(PROP_JMX_ENABLED, Boolean.class, false)) {
+      log.info("Initializing Metrics JMX reporting");
+      JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
+      jmxReporter.start();
+    }
+  }
+
+  @Configuration
+  @ConditionalOnClass(Graphite.class)
+  @Profile("!" + Constants.SPRING_PROFILE_FAST)
+  public static class GraphiteRegistry implements EnvironmentAware {
+
+    private final Logger log = LoggerFactory.getLogger(GraphiteRegistry.class);
+
+    @Inject
+    private MetricRegistry metricRegistry;
 
     private RelaxedPropertyResolver propertyResolver;
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS);
-    }
-
-    @Override
-    @Bean
-    public MetricRegistry getMetricRegistry() {
-        return metricRegistry;
-    }
-
-    @Override
-    @Bean
-    public HealthCheckRegistry getHealthCheckRegistry() {
-        return healthCheckRegistry;
+      this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS_GRAPHITE);
     }
 
     @PostConstruct
-    public void init() {
-        log.debug("Registering JVM gauges");
-        metricRegistry.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
-        metricRegistry.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
-        metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
-        metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
-        metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
-        if (propertyResolver.getProperty(PROP_JMX_ENABLED, Boolean.class, false)) {
-            log.info("Initializing Metrics JMX reporting");
-            JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
-            jmxReporter.start();
-        }
+    private void init() {
+      Boolean graphiteEnabled = propertyResolver.getProperty(PROP_GRAPHITE_ENABLED, Boolean.class, false);
+      if (graphiteEnabled) {
+        log.info("Initializing Metrics Graphite reporting");
+        String graphiteHost = propertyResolver.getRequiredProperty(PROP_HOST);
+        Integer graphitePort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
+        String graphitePrefix = propertyResolver.getProperty(PROP_GRAPHITE_PREFIX, String.class, "");
+
+        Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));
+        GraphiteReporter graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
+          .convertRatesTo(TimeUnit.SECONDS)
+          .convertDurationsTo(TimeUnit.MILLISECONDS)
+          .prefixedWith(graphitePrefix)
+          .build(graphite);
+        graphiteReporter.start(1, TimeUnit.MINUTES);
+      }
+    }
+  }
+
+  @Configuration
+  @ConditionalOnClass(SparkReporter.class)
+  @Profile("!" + Constants.SPRING_PROFILE_FAST)
+  public static class SparkRegistry implements EnvironmentAware {
+
+    private final Logger log = LoggerFactory.getLogger(SparkRegistry.class);
+
+    @Inject
+    private MetricRegistry metricRegistry;
+
+    private RelaxedPropertyResolver propertyResolver;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+      this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS_SPARK);
     }
 
-    @Configuration
-    @ConditionalOnClass(Graphite.class)
-    @Profile("!" + Constants.SPRING_PROFILE_FAST)
-    public static class GraphiteRegistry implements EnvironmentAware {
+    @PostConstruct
+    private void init() {
+      Boolean sparkEnabled = propertyResolver.getProperty(PROP_SPARK_ENABLED, Boolean.class, false);
+      if (sparkEnabled) {
+        log.info("Initializing Metrics Spark reporting");
+        String sparkHost = propertyResolver.getRequiredProperty(PROP_HOST);
+        Integer sparkPort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
 
-        private final Logger log = LoggerFactory.getLogger(GraphiteRegistry.class);
-
-        @Inject
-        private MetricRegistry metricRegistry;
-
-        private RelaxedPropertyResolver propertyResolver;
-
-        @Override
-        public void setEnvironment(Environment environment) {
-            this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS_GRAPHITE);
-        }
-
-        @PostConstruct
-        private void init() {
-            Boolean graphiteEnabled = propertyResolver.getProperty(PROP_GRAPHITE_ENABLED, Boolean.class, false);
-            if (graphiteEnabled) {
-                log.info("Initializing Metrics Graphite reporting");
-                String graphiteHost = propertyResolver.getRequiredProperty(PROP_HOST);
-                Integer graphitePort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
-                String graphitePrefix = propertyResolver.getProperty(PROP_GRAPHITE_PREFIX, String.class, "");
-
-                Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));
-                GraphiteReporter graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
-                        .convertRatesTo(TimeUnit.SECONDS)
-                        .convertDurationsTo(TimeUnit.MILLISECONDS)
-                        .prefixedWith(graphitePrefix)
-                        .build(graphite);
-                graphiteReporter.start(1, TimeUnit.MINUTES);
-            }
-        }
+        SparkReporter sparkReporter = SparkReporter.forRegistry(metricRegistry)
+          .convertRatesTo(TimeUnit.SECONDS)
+          .convertDurationsTo(TimeUnit.MILLISECONDS)
+          .build(sparkHost, sparkPort);
+        sparkReporter.start(1, TimeUnit.MINUTES);
+      }
     }
-
-    @Configuration
-    @ConditionalOnClass(SparkReporter.class)
-    @Profile("!" + Constants.SPRING_PROFILE_FAST)
-    public static class SparkRegistry implements EnvironmentAware {
-
-        private final Logger log = LoggerFactory.getLogger(SparkRegistry.class);
-
-        @Inject
-        private MetricRegistry metricRegistry;
-
-        private RelaxedPropertyResolver propertyResolver;
-
-        @Override
-        public void setEnvironment(Environment environment) {
-            this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS_SPARK);
-        }
-
-        @PostConstruct
-        private void init() {
-            Boolean sparkEnabled = propertyResolver.getProperty(PROP_SPARK_ENABLED, Boolean.class, false);
-            if (sparkEnabled) {
-                log.info("Initializing Metrics Spark reporting");
-                String sparkHost = propertyResolver.getRequiredProperty(PROP_HOST);
-                Integer sparkPort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
-
-                SparkReporter sparkReporter = SparkReporter.forRegistry(metricRegistry)
-                        .convertRatesTo(TimeUnit.SECONDS)
-                        .convertDurationsTo(TimeUnit.MILLISECONDS)
-                        .build(sparkHost, sparkPort);
-                sparkReporter.start(1, TimeUnit.MINUTES);
-            }
-        }
-    }
+  }
 }

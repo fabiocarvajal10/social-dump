@@ -1,0 +1,83 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "socialNetworkBySocialNetwork",
+            "otherEntityName": "socialNetwork",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "eventByEvent",
+            "otherEntityName": "event",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "description"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "searchCriteriaBySearchCriteria",
+            "otherEntityName": "searchCriteria",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "searchCriteria"
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "genericStatusByStatus",
+            "otherEntityName": "genericStatus",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "status"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "createdAt",
+            "fieldType": "DateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "snUserId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "snUserEmail",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "body",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "mediaUrl",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "fullName",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "profileImage",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 8,
+            "fieldName": "profileUrl",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20150818223113",
+    "dto": "no",
+    "pagination": "pager"
+}

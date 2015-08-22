@@ -27,12 +27,12 @@ authentication:
     xauth:
         secret: myXAuthSecret
         # Token is valid 30 minutes
-        tokenValidityInSeconds: 1800
+        tokenValidityInSeconds: 5400
 
 swagger:
     title: socialdump API
     description: socialdump applications and beyond!
-    termsOfServiceUrl: http://jhipster.github.io/
+    termsOfServiceUrl: 
     contact:
     license: Apache 2.0
     licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html

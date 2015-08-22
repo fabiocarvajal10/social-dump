@@ -1,9 +1,9 @@
 package com.coredump.socialdump.domain;
 
-import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Collection;
 
 
 /**
@@ -74,7 +74,7 @@ public class EventType implements Serializable {
 
   @Override
   public int hashCode() {
-    int result = id;
+    int result = (id == null) ? 0 : id;
     result = 31 * result + (name != null ? name.hashCode() : 0);
     result = 31 * result + (description != null ? description.hashCode() : 0);
     return result;
@@ -86,6 +86,6 @@ public class EventType implements Serializable {
   }
 
   public void setEventsById(Collection<Event> eventsById) {
-      this.eventsById = eventsById;
+    this.eventsById = eventsById;
   }
 }

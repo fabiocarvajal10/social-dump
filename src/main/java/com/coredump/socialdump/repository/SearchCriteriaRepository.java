@@ -10,5 +10,11 @@ public interface SearchCriteriaRepository
   extends JpaRepository<SearchCriteria, Long> {
 
   List<SearchCriteria> findAllByEventByEventId(Event event);
+
+  SearchCriteria findOneBySearchCriteriaAndEventByEventId(String searchCriteria,
+                                                          Event event);
+
+  List<SearchCriteria> findAllBySearchCriteria(String searchCriteria);
+
 }
 

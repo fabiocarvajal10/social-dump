@@ -1,9 +1,9 @@
 package com.coredump.socialdump.domain;
 
-import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by fabio on 09/07/15.
@@ -81,10 +81,14 @@ public class MonitorContact implements Serializable {
     MonitorContact that = (MonitorContact) o;
 
     if (id != that.id) return false;
-    if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-    if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-    if (email != null ? !email.equals(that.email) : that.email != null) return false;
-    if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+    if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null)
+      return false;
+    if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null)
+      return false;
+    if (email != null ? !email.equals(that.email) : that.email != null)
+      return false;
+    if (phone != null ? !phone.equals(that.phone) : that.phone != null)
+      return false;
 
     return true;
   }

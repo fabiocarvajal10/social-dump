@@ -4,53 +4,66 @@
   angular.module('socialdumpApp')
   .controller(
     'EventController', [
-      '$scope', 'Event', 'EventStatus', 'EventType', 'ParseLinks',
-      'OrganizationService', 'DateUtils',
-      function($scope, Event, EventStatus, EventType, // SearchCriteria,
-               ParseLinks, OrganizationService, DateUtils) {
+      '$rootScope', '$scope', 'Event', 'EventStatus', 'EventType',
+      'ParseLinks', 'DateUtils',
+      function($rootScope, $scope, Event, EventStatus, EventType,
+          ParseLinks, DateUtils) {
         $scope.defaultDateTimeFormat = DateUtils.defaultDateTimeFormat();
         var dateTimeFormat = 'date: \'' + $scope.defaultDateTimeFormat + '\'';
-        var buttonsTemplate =
-          '<button type="submit"' +
-          '    ui-sref="event.detail({id:id})"' +
-          '    class="btn btn-info btn-sm">' +
-          '  <span class="glyphicon glyphicon-eye-open"></span>' +
-          '</button>' +
-          '<button type="submit"' +
-          '    ui-sref="event.edit({id:id})"' +
-          '    class="btn btn-primary btn-sm">' +
-          '  <span class="glyphicon glyphicon-pencil"></span>' +
-          '</button>' +
-          '<button type="submit"' +
-          '    ng-click="delete(id)"' +
-          '    class="btn btn-danger btn-sm">' +
-          '  <span class="glyphicon glyphicon-remove-circle"></span>' +
-          '</button>';
         $scope.events = [];
         $scope.page = 1;
+
+        $rootScope
+          .$on('currentOrganizationChange', function(event, args) {
+            $scope.reset();
+          });
+
+        $rootScope
+          .$on('socialdumpApp:eventAdded', function(event, data) {
+            data.status = EventStatus.get({id: data.statusId});
+            data.type = EventType.get({id: data.typeId});
+            var index = findOnList(data.id);
+            if (index === -1) {
+              $scope.events.push(data);
+            } else {
+              $scope.events[index] = data;
+            }
+          });
+
+        function findOnList(eventId) {
+          var index = -1;
+          $scope.events.forEach(function(element, i, array) {
+            if (element.id === eventId) return index = i;
+          });
+          return index;
+        }
+
         $scope.loadAll = function() {
-          Event.query({page: $scope.page, per_page: 20,
-                       organizationId: OrganizationService.getCurrentOrgId()},
-            function(result, headers) {
-              $scope.links = ParseLinks.parse(headers('link'));
-              for (var i = 0; i < result.length; i++) {
-                result[i].status = EventStatus.get({id: result[i].statusId});
-                result[i].type = EventType.get({id: result[i].typeId});
-                $scope.events.push(result[i]);
-              }
-            });
+          if (!isOrgEmpty()) {
+            Event.query({page: $scope.page, per_page: 20,
+                         organizationId: $rootScope.currentOrg.id},
+              function(result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                for (var i = 0; i < result.length; i++) {
+                  result[i].status = EventStatus.get({id: result[i].statusId});
+                  result[i].type = EventType.get({id: result[i].typeId});
+                  $scope.events.push(result[i]);
+                }
+              });
+          }
         };
+
         $scope.reset = function() {
           $scope.page = 1;
           $scope.events = [];
           $scope.loadAll();
           $scope.gridOptions.data = $scope.events;
         };
+
         $scope.loadPage = function(page) {
           $scope.page = page;
           $scope.loadAll();
         };
-        $scope.loadAll();
 
         $scope.delete = function(id) {
           Event.get({id: id}, function(result) {
@@ -68,6 +81,25 @@
             });
         };
 
+        $scope.cancelEvent = function(id) {
+          Event.get({id: id}, function(result) {
+            $scope.errorMessage = '';
+            $scope.event = result;
+            $('#cancelEventConfirmation').modal('show');
+          });
+        };
+
+        $scope.confirmCancelEvent = function(id) {
+          Event.cancel({id: id})
+            .$promise.then(function() {
+              $scope.reset();
+              $('#cancelEventConfirmation').modal('hide');
+              $scope.clear();
+            }, function(error) {
+              $scope.errorMessage = error;
+            });
+        };
+
         $scope.refresh = function() {
           $scope.reset();
           $scope.clear();
@@ -79,64 +111,49 @@
         };
 
         $scope.gridOptions = {
-          // rowHeight: 36,
           enableColumnResizing: true,
           width: '*',
           data: $scope.events,
           columnDefs: [
             {
-              // cellClass: 'col-sm-2',
               field: 'id',
               displayName: 'ID',
               visible: false
             },
             {
-              // cellClass: 'col-sm-2',
               field: 'description',
               displayName: 'Descripción'
             },
             {
-              // cellClass: 'col-sm-2',
               field: 'startDate',
               displayName: 'Comienza',
               cellFilter: dateTimeFormat
             },
             {
-              // cellClass: 'col-sm-2',
               field: 'endDate',
               displayName: 'Termina',
               cellFilter: dateTimeFormat
             },
-            // {
-            //   // cellClass: 'col-sm-2',
-            //   field: 'activatedAt',
-            //   displayName: 'Activado el',
-            //   cellFilter: dateTimeFormat
-            // },
             {
-              // cellClass: 'col-sm-1',
               field: 'status.status',
               displayName: 'Estado'
             },
             {
-              // cellClass: 'col-sm-1',
               field: 'type.name',
               displayName: 'Tipo'
             },
             {
-              // cellClass: 'col-sm-2',
-              // field: 'icons',
               name: 'icons',
               displayName: '',
               enableHiding: false,
               enableSorting: false,
-              // width: 80,
-              cellTemplate: '<button type="submit"' +
-                '    ui-sref="event.detail({id:row.entity[\'id\']})"' +
+              cellTemplate:
+                '<button type="submit"' +
+                '    ui-sref="event.detail.summary({id:row.entity[\'id\']})"' +
                 '    class="btn btn-info btn-sm">' +
                 '  <span class="glyphicon glyphicon-eye-open"></span>' +
                 '</button>' +
-                '<button type="submit"' +
+                '<button type="submit" ng-hide="grid.appScope.checkDate(row.entity.startDate)"' +
                 '    ui-sref="event.edit({id:row.entity[\'id\']})"' +
                 '    class="btn btn-primary btn-sm">' +
                 '  <span class="glyphicon glyphicon-pencil"></span>' +
@@ -145,9 +162,25 @@
                 '    ng-click="grid.appScope.delete(row.entity[\'id\'])"' +
                 '    class="btn btn-danger btn-sm">' +
                 '  <span class="glyphicon glyphicon-remove-circle"></span>' +
+                '</button>' +
+                '<button type="submit" ng-hide="grid.appScope.checkDate(row.entity.startDate)"' +
+                '    ng-click="grid.appScope.cancelEvent(row.entity[\'id\'])"' +
+                '    class="btn btn-warning btn-sm">' +
+                '  <i class="fa fa-toggle-on"></i>' +
                 '</button>'
             }
           ]
         };
+
+        $scope.checkDate = function(date) {
+          return DateUtils.isDateLowerThanNow(date);
+        };
+
+        function isOrgEmpty() {
+            return $rootScope.currentOrg === null ||
+                $rootScope.currentOrg === undefined;
+        };
+
+        $scope.loadAll();
       }]);
 }());

@@ -185,7 +185,7 @@ public class SocialNetworkPostSocketDTO implements Serializable {
 
     SocialNetworkPostSocketDTO socialNetworkPostDTO = (SocialNetworkPostSocketDTO) object;
 
-    if ( ! Objects.equals(id, socialNetworkPostDTO.id)) {
+    if (!Objects.equals(id, socialNetworkPostDTO.id)) {
       return false;
     }
     return true;
@@ -194,11 +194,11 @@ public class SocialNetworkPostSocketDTO implements Serializable {
   @Override
   public String toString() {
     return "PostDTO{"
-          + "body='" + body + '\''
-          + ", socialNetworkName=" + socialNetworkName
-          + ", searchCriteria=" + searchCriteria
-          + ", eventName=" + eventName
-          + '}';
+      + "body='" + body + '\''
+      + ", socialNetworkName=" + socialNetworkName
+      + ", searchCriteria=" + searchCriteria
+      + ", eventName=" + eventName
+      + '}';
   }
 
   public String getEventName() {

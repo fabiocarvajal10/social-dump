@@ -62,13 +62,13 @@ class EventStatusGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all eventStatuss")
-            .get("/api/eventStatuss")
+            exec(http("Get all event-statuses")
+            .get("/api/event-Statuses")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new eventStatus")
-            .put("/api/eventStatuss")
+            .put("/api/event-statuses")
             .headers(headers_http_authenticated)
             .body(StringBody("""{"id":null, "status":"SAMPLE_TEXT", "description":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))

@@ -1,7 +1,8 @@
 <!-- list -->
 <ul ng-cloak class="nav">
-  <li ui-sref-active="active">
-    <a href class="auto">
+
+  <li has-role="ROLE_USER">
+    <a ui-sref="dashboard" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -9,42 +10,50 @@
       <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
       <span class="font-bold"> Dashboard </span>
     </a>
-    <ul class="nav nav-sub dk">
-      <li class="nav-sub-header">
-        <a ui-sref="app.dashboard-v1">
-          <span> Dashboard </span>
-        </a>
-      </li>
-    </ul>
   </li>
+
+
+  <li has-role="ROLE_USER">
+    <a ui-sref="organizations" class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="fa fa-users icon text-primary-dker"></i>
+      <span class="font-bold"> Organizaciones </span>
+    </a>
+  </li>
+
   <li has-role="ROLE_USER">
     <a ui-sref="event.list" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
-      <i class="glyphicon glyphicon-th-large icon text-success"></i>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
       <span class="font-bold"> Eventos </span>
     </a>
   </li>
+
   <li has-role="ROLE_USER">
-    <a ui-sref="dashboard" class="auto">
+    <a ui-sref="monitors" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
-      <i class="fa fa-users icon"></i>
-      <span class="font-bold"> Organizaciones </span>
+      <i class="fa fa-users icon text-primary-dker"></i>
+      <span class="font-bold"> Monitores </span>
     </a>
   </li>
+
   <li has-role="ROLE_USER">
-    <a ui-sref="app.summaries.list" class="auto">
+    <a ui-sref="accesses" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
-      <i class="fa fa-history icon"></i>
-      <span class="font-bold"> Resúmenes </span>
+      <i class="fa fa-users icon text-primary-dker"></i>
+      <span class="font-bold"> Accesos </span>
     </a>
   </li>
 </ul>
