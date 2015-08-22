@@ -8,16 +8,16 @@
 (function() {
   'use strict';
   angular.module('socialdumpApp')
-    .directive('validateDateGreaterThan', function() {
+    .directive('validateDateGreaterThanValue', function() {
       return {
         require: 'ngModel',
         link: function(scope, ele, attrs, ctrl) {
           scope.$watch(attrs.ngModel, function() {
             if (new Date(ctrl.$modelValue) >
-                new Date(attrs.validateDateGreaterThan)) {
-              ctrl.$setValidity('dateGreaterThan', true);
+                new Date(attrs.validateDateGreaterThanValue)) {
+              ctrl.$setValidity('dateGreaterThanValue', true);
             } else {
-              ctrl.$setValidity('dateGreaterThan', false);
+              ctrl.$setValidity('dateGreaterThanValue', false);
             }
           });
         }
