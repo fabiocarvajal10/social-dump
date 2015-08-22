@@ -2,7 +2,7 @@
 .ui-grid-header,
 .ui-grid-footer-panel,
 .ui-grid-cell,
-input[type="text"].ui-grid-filter-input{
+input[type="text"].ui-grid-filter-input {
   border-color: #dee5e7;
 }
 
@@ -12,24 +12,24 @@ input[type="text"].ui-grid-filter-input{
   border-top: 1px solid #edf1f2;
 }
 
-.ui-grid-header-cell:not(:last-child) .ui-grid-vertical-bar{
-	background-color: #dee5e7;
+.ui-grid-header-cell:not(:last-child) .ui-grid-vertical-bar {
+  background-color: #dee5e7;
 }
 
 .ui-grid-top-panel,
-.ui-grid-footer-panel{
+.ui-grid-footer-panel {
   background: #f6f8f8;
 }
 
 .ui-grid-cell,
-.ui-grid-row{
+.ui-grid-row {
   min-height: 36px;
 }
 
-.ui-grid-cell-contents{
+.ui-grid-cell-contents {
   padding: 8px 15px;
 }
 
-.ui-grid-column-menu-button{
+.ui-grid-column-menu-button {
   top: 5px;
 }

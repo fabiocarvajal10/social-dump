@@ -14,29 +14,29 @@ import javax.mail.MessagingException;
  */
 public class JavaMailHealthIndicator extends AbstractHealthIndicator {
 
-    private final Logger log = LoggerFactory.getLogger(JavaMailHealthIndicator.class);
+  private final Logger log = LoggerFactory.getLogger(JavaMailHealthIndicator.class);
 
-    private JavaMailSenderImpl javaMailSender;
+  private JavaMailSenderImpl javaMailSender;
 
-    public JavaMailHealthIndicator(JavaMailSenderImpl javaMailSender) {
-        Assert.notNull(javaMailSender, "javaMailSender must not be null");
-        this.javaMailSender = javaMailSender;
+  public JavaMailHealthIndicator(JavaMailSenderImpl javaMailSender) {
+    Assert.notNull(javaMailSender, "javaMailSender must not be null");
+    this.javaMailSender = javaMailSender;
+  }
+
+  @Override
+  protected void doHealthCheck(Health.Builder builder) throws Exception {
+    log.debug("Initializing JavaMail health indicator");
+    try {
+      javaMailSender.getSession().getTransport().connect(javaMailSender.getHost(),
+        javaMailSender.getPort(),
+        javaMailSender.getUsername(),
+        javaMailSender.getPassword());
+
+      builder.up();
+
+    } catch (MessagingException e) {
+      log.debug("Cannot connect to e-mail server. Error: {}", e.getMessage());
+      builder.down(e);
     }
-
-    @Override
-    protected void doHealthCheck(Health.Builder builder) throws Exception {
-        log.debug("Initializing JavaMail health indicator");
-        try {
-            javaMailSender.getSession().getTransport().connect(javaMailSender.getHost(),
-                    javaMailSender.getPort(),
-                    javaMailSender.getUsername(),
-                    javaMailSender.getPassword());
-
-            builder.up();
-
-        } catch (MessagingException e) {
-            log.debug("Cannot connect to e-mail server. Error: {}", e.getMessage());
-            builder.down(e);
-        }
-    }
+  }
 }

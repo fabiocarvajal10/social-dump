@@ -25,11 +25,9 @@ import static com.coredump.socialdump.config.WebsocketConfiguration.IP_ADDRESS;
 public class ActivityService implements ApplicationListener<SessionDisconnectEvent> {
 
   private static final Logger log = LoggerFactory.getLogger(ActivityService.class);
-
-  private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-
   @Inject
   SimpMessageSendingOperations messagingTemplate;
+  private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
   @SubscribeMapping("/topic/activity")
   @SendTo("/topic/tracker")
@@ -40,8 +38,8 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
     activityDTO.setUserLogin(principal.getName());
     activityDTO.setSessionId(stompHeaderAccessor.getSessionId());
     activityDTO.setIpAddress(stompHeaderAccessor
-          .getSessionAttributes()
-          .get(IP_ADDRESS).toString());
+      .getSessionAttributes()
+      .get(IP_ADDRESS).toString());
     activityDTO.setTime(dateTimeFormatter.print(Calendar.getInstance().getTimeInMillis()));
     log.debug("Sending user tracking data {}", activityDTO);
     return activityDTO;

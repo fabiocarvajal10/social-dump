@@ -1,8 +1,8 @@
 package com.coredump.socialdump.domain;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import javax.persistence.*;
 
 /**
  * Created by fabio on 09/07/15.

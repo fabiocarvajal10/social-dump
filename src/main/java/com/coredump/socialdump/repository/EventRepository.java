@@ -2,8 +2,6 @@ package com.coredump.socialdump.repository;
 
 import com.coredump.socialdump.domain.Event;
 import com.coredump.socialdump.domain.Organization;
-import java.util.List;
-
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +9,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
- * Created by fabio on 13/07/15.
+ * Repositorio de Eventos registrados por usuarios que serán utilizados como
+ * base para la obtención de Posts de las redes sociales.
+ * Crado el 13/07/15.
+ *
+ * @author Fabio
+ * @author Esteban Trejos
+ * @author Francisco
+ * @see com.coredump.socialdump.domain.Event Eventos de usuarios
  */
 public interface EventRepository extends JpaRepository<Event, Long> {
   Page<Event> findAllByorganizationByOrganizationId(Pageable pageable,
@@ -21,6 +28,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   /**
    * Devuelve todas los eventos de una organización, ordenado por fecha de
    * activación de manera descendiente.
+   *
    * @param organizationByOrganizationId organización
    * @return lista de eventos
    */
@@ -30,7 +38,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   /**
    * Devuelve todas los eventos de una organización, ordenado por fecha de
    * inicio de manera descendiente.
-   * @param pageable objeto paginable que indica la paginación deseada
+   *
+   * @param pageable     objeto paginable que indica la paginación deseada
    * @param organization organización
    * @return objeto página con eventos
    */
@@ -40,20 +49,61 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   /**
    * Devuelve todas los eventos de una organización, ordenado por fecha de
    * inicio de manera descendiente, sin incluir eventos cancelados.
+   *
    * @param pageable objeto paginable que indica la paginación deseada
-   * @param organization organización
+   * @param orgId    organización
    * @return objeto página con eventos
    */
-  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate desc")
+  @Query(value =
+    "FROM Event e " +
+      "WHERE e.organizationByOrganizationId.id = :orgId " +
+      "  and e.eventStatusByStatusId.id !=" +
+      "(SELECT s.id " +
+      "FROM EventStatus s " +
+      "WHERE s.status = 'Cancelado')" +
+      "ORDER BY e.startDate DESC")
   Page<Event> findAllByOrganizationByOrganizationIdOrderByStartDateDescActive(
     Pageable pageable,
     @Param("orgId") Long orgId);
 
-  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.startDate >= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.startDate asc")
+  /**
+   * Devuelve todos los eventos en desarrollo de una organización
+   *
+   * @param pageable Objeto paginable
+   * @param orgId    Id de la organización de la cual se quieren buscar los eventos
+   * @param date     Fecha actual
+   * @return Lista con todos los eventos en desarollo
+   */
+  @Query(
+    "FROM Event e "
+      + "WHERE e.organizationByOrganizationId.id = :orgId"
+      + "  AND e.startDate <= :date AND e.endDate >= :date"
+      + "  AND e.eventStatusByStatusId.id != ("
+      + "   SELECT s.id"
+      + "   FROM EventStatus s"
+      + "   WHERE s.status = 'Cancelado')"
+      + "   ORDER by e.startDate ASC")
   Page<Event> findIncomingEvents(Pageable pageable, @Param("orgId") Long orgId,
-      @Param("date") DateTime date);
+                                 @Param("date") DateTime date);
 
-  @Query("from Event e where e.organizationByOrganizationId.id = :orgId and e.endDate <= :date and e.eventStatusByStatusId.id != (select s.id from EventStatus s where s.status = 'Cancelado') order by e.endDate desc")
+  /**
+   * Devuelve todos los eventos que han finalizado de una organización
+   *
+   * @param pageable Objeto paginable
+   * @param orgId    Id de la organización
+   * @param date     Fecha actual
+   * @return Lista con todos los eventos finalizados
+   */
+  @Query(value =
+    "FROM Event e " +
+      "WHERE e.organizationByOrganizationId.id = :orgId " +
+      "  AND e.endDate <= :date " +
+      "  AND e.eventStatusByStatusId.id !=" +
+      "(SELECT s.id " +
+      "FROM EventStatus s " +
+      "WHERE s.status = 'Cancelado') " +
+      "ORDER BY e.endDate DESC")
   Page<Event> findFinalizedEvents(Pageable pageable, @Param("orgId") Long orgId,
-      @Param("date") DateTime date);
+                                  @Param("date") DateTime date);
+
 }

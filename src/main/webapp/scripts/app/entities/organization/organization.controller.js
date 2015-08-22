@@ -1,105 +1,88 @@
 /**
- * Created by Franz on 17/07/2015.
+ * Created by Franz on 11/08/2015.
  */
-angular.module('socialdumpApp')
-  .controller('OrganizationCtrl',
-      function($scope, OrganizationService, $timeout) {
-    $scope.organizations = [];
-    $scope.incomingEventsByOrg = [];
-    $scope.finalizedEventsByOrg = [];
-    $scope.modOrg = null;
-    $scope.orgError = '';
-    $scope.uptOrg = {};
-    $scope.isUptOrg = false;
-    $scope.showOrgError = false;
+(function() {
+  'use strict';
+  angular.module('socialdumpApp.organizations')
+    .controller('OrganizationCtrl',
+    ['$scope', 'OrganizationService', '$modal',
+     function($scope, OrganizationService, $modal) {
 
-    $scope.init = function() {
-      OrganizationService.getAll()
-        .then(function(data) {
-          $scope.organizations = data;
-          if ($scope.organizations.length > 1) {
-            $scope.changeOrgEvents($scope.organizations[0]);
-          }
-      })
-        .catch (function(rejection) {
+       $scope.totalItems = 0;
+       $scope.currentPage = 1;
+       $scope.organizations = [];
 
-      });
-    };
+       $scope.init = function() {
+         OrganizationService.getAll($scope.currentPage, 12)
+           .then(function(data) {
+             $scope.organizations = data;
+             $scope.totalItems = data.total;
+           })
+           .catch(function() {
 
-    $scope.init();
+           });
+       };
 
-    $scope.createOrg = function(organization) {
-      OrganizationService.register(organization.name)
-        .then(function(newOrg) {
-          organization.name = '';
-          $scope.organizations.push(newOrg);
-        })
-        .catch (function(error) {
-          showError(error);
-        });
-    };
+       $scope.open = function(organization, index, action) {
+         checkOrgsCant();
+         var modalInstance = $modal.open({
+           animation: true,
+           templateUrl: getModalUrl(action),
+           controller: 'OrganizationDetailCtrl',
+           resolve: {
+             'organizations': function() {
+               return $scope.organizations;
+             },
+             'organization': function() {
+               return organization;
+             },
+             'index': function() {
+               return index;
+             }
+           }
+         });
 
-    $scope.showUptOrg = function(organization, index) {
-      $scope.isUptOrg = true;
-      $scope.uptOrg.id = organization.id;
-      $scope.uptOrg.name = organization.name;
-      $scope.uptOrg.index = index;
-    };
+         modalInstance.result.then(function() {
+           checkOrgsCant();
+         }, function() {
 
-    $scope.updateOrg = function() {
-      OrganizationService.update($scope.uptOrg)
-        .then(function(updatedOrg) {
-          $scope.organizations[$scope.uptOrg.index].name = updatedOrg.name;
-          $scope.isUptOrg = false;
-        })
-        .catch (function(error) {
-          showError(error);
-        });
-    };
+         });
+       };
 
-    $scope.cancelUpdate = function() {
-      $scope.isUptOrg = false;
-    };
+       function checkOrgsCant() {
+         if ($scope.organizations.length === 0 && $scope.currentPage !== 1) {
+           $scope.currentPage--;
+           getOrganizations();
+         } else if ($scope.organizations.length > 12) {
+           $scope.currentPage++;
+           getOrganizations();
+         }
+       }
 
-    $scope.deleteOrg = function(organization, index) {
-      OrganizationService.delete(organization.id)
-        .then(function(sucess) {
-          $scope.organizations.splice(index, 1);
-        })
-        .catch (function(error) {
-          showError(error);
-      });
-    };
+       $scope.init();
 
-    $scope.changeOrgEvents = function(organization) {
-      OrganizationService.getIncomingEvents(organization.id)
-        .then(function(data) {
-          OrganizationService.setCurrentOrgId(organization.id);
-          $scope.incomingEventsByOrg = data;
-        })
-        .catch (function(error) {
+       $scope.pageChanged = function() {
+         getOrganizations();
+       };
 
-        });
+       function getOrganizations() {
+         OrganizationService.getAll($scope.currentPage, 12)
+           .then(function(data) {
+             $scope.organizations.splice(0, $scope.organizations.length);
+             $scope.organizations = data;
+             $scope.totalItems = data.total;
+           })
+           .catch(function() {
 
-      OrganizationService.getFinalizedEvents(organization.id)
-        .then(function(data) {
-          OrganizationService.setCurrentOrgId(organization.id);
-          $scope.finalizedEventsByOrg = data;
-        })
-        .catch (function(error) {
+           });
+       }
 
-        });
-    };
-
-    $scope.changeEvent = function(event){
-      OrganizationService.setCurrentEventId(event.id);
-    };
-
-    function showError(error) {
-      $scope.orgError = error;
-      $scope.showOrgError = true;
-      $timeout(function() {
-        $scope.showOrgError = false;
-      }, 5000);
-    };
-});
+       function getModalUrl(action) {
+         var baseUrl = 'scripts/app/entities/organization/partials/';
+         var extension = '.html';
+         return baseUrl + action + extension;
+       }
+     }
+    ]
+  );
+})();

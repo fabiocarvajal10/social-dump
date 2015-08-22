@@ -1,5 +1,5 @@
 <div class="container w-xxl w-auto-xs">
-  <a href class="navbar-brand block m-t"> Social Dump </a>
+  <span class="navbar-brand block m-t"> Social Dump </span>
   <div class="m-b-lg">
     <div class="wrapper text-center">
       <strong> Iniciar Sesión </strong>
@@ -9,14 +9,14 @@
         Usuario o contraseña no válido
       </div>
       <div class="list-group list-group-sm">
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="text" placeholder="Nombre de usuario" class="form-control no-border"
-                 name="username"  autofocus ng-model="username" required>
+                 name="username"  autofocus="autofocus" ng-model="username" required>
         </div>
         <div class="has-error" ng-messages="loginForm.username.$error" ng-show="loginForm.username.$touched">
           <label class="control-label" ng-message="required"> Debe ingresar un nombre de usuario </label>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item white-background">
           <input type="password" placeholder="Contraseña" class="form-control no-border" name="password" ng-model="password" required>
         </div>
         <div class="has-error" ng-messages="loginForm.password.$error" ng-show="loginForm.password.$touched">

@@ -29,24 +29,26 @@ public abstract class SocialNetworkPostMapper {
   private EventRepository eventRepository;
 
   @Mappings({
-        @Mapping(source = "socialNetworkBySocialNetworkId.id", target = "socialNetworkId"),
-        @Mapping(source = "socialNetworkBySocialNetworkId.name", target = "socialNetworkName"),
-        @Mapping(source = "searchCriteriaBySearchCriteriaId.id", target = "searchCriteriaId"),
-        @Mapping(source = "searchCriteriaBySearchCriteriaId.searchCriteria", target = "searchCriteria"),
-        @Mapping(source = "eventByEventId.id", target = "eventId"),
-        @Mapping(source = "eventByEventId.description", target = "eventName")})
+    @Mapping(source = "socialNetworkBySocialNetworkId.id", target = "socialNetworkId"),
+    @Mapping(source = "socialNetworkBySocialNetworkId.name", target = "socialNetworkName"),
+    @Mapping(source = "searchCriteriaBySearchCriteriaId.id", target = "searchCriteriaId"),
+    @Mapping(source = "searchCriteriaBySearchCriteriaId.searchCriteria", target = "searchCriteria"),
+    @Mapping(source = "eventByEventId.id", target = "eventId"),
+    @Mapping(source = "eventByEventId.description", target = "eventName")})
   public abstract SocialNetworkPostDTO socialNetworkPostToSocialNetworkPostDTO(
-        SocialNetworkPost post);
+    SocialNetworkPost post);
 
   @Mappings({
-        @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
-        @Mapping(source = "searchCriteriaId", target = "searchCriteriaBySearchCriteriaId"),
-        @Mapping(source = "eventId", target = "eventByEventId")})
+    @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
+    @Mapping(source = "searchCriteriaId", target = "searchCriteriaBySearchCriteriaId"),
+    @Mapping(source = "eventId", target = "eventByEventId")})
   public abstract SocialNetworkPost socialNetworkPostDTOToSocialNetworkPost(
-        SocialNetworkPostDTO postDTO);
+    SocialNetworkPostDTO postDTO);
 
   /**
-   *
+   * Obtiene un SocialNetwork por un id.
+   * @param id id del SocialNetwork
+   * @return SocialNetwork
    */
   public SocialNetwork socialNetworkPostFromId(Integer id) {
     if (id == null) {
@@ -54,8 +56,11 @@ public abstract class SocialNetworkPostMapper {
     }
     return socialNetworkRepository.findOne(id);
   }
+
   /**
-   *
+   * Obtiene un Event por un id.
+   * @param id id del Event
+   * @return Event
    */
   public Event eventFromId(Long id) {
     if (id == null) {
@@ -63,8 +68,11 @@ public abstract class SocialNetworkPostMapper {
     }
     return eventRepository.findOne(id);
   }
+
   /**
-   *
+   * Obtiene un SearchCriteria por un id.
+   * @param id id del SearchCriteria
+   * @return SearchCriteria
    */
   public SearchCriteria searchCriteriaFromId(Long id) {
     if (id == null) {

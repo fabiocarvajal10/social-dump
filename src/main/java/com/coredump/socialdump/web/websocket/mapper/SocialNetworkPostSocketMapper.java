@@ -30,21 +30,21 @@ public abstract class SocialNetworkPostSocketMapper {
   private EventRepository eventRepository;
 
   @Mappings({
-        @Mapping(source = "socialNetworkBySocialNetworkId.id", target = "socialNetworkId"),
-        @Mapping(source = "socialNetworkBySocialNetworkId.name", target = "socialNetworkName"),
-        @Mapping(source = "searchCriteriaBySearchCriteriaId.id", target = "searchCriteriaId"),
-        @Mapping(source = "searchCriteriaBySearchCriteriaId.searchCriteria", target = "searchCriteria"),
-        @Mapping(source = "eventByEventId.id", target = "eventId"),
-        @Mapping(source = "eventByEventId.description", target = "eventName")})
+    @Mapping(source = "socialNetworkBySocialNetworkId.id", target = "socialNetworkId"),
+    @Mapping(source = "socialNetworkBySocialNetworkId.name", target = "socialNetworkName"),
+    @Mapping(source = "searchCriteriaBySearchCriteriaId.id", target = "searchCriteriaId"),
+    @Mapping(source = "searchCriteriaBySearchCriteriaId.searchCriteria", target = "searchCriteria"),
+    @Mapping(source = "eventByEventId.id", target = "eventId"),
+    @Mapping(source = "eventByEventId.description", target = "eventName")})
   public abstract SocialNetworkPostSocketDTO SocialNetworkPostToSocialNetworkPostDTO(
-        SocialNetworkPost post);
+    SocialNetworkPost post);
 
   @Mappings({
-        @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
-        @Mapping(source = "searchCriteriaId", target = "searchCriteriaBySearchCriteriaId"),
-        @Mapping(source = "eventId", target = "eventByEventId")})
+    @Mapping(source = "socialNetworkId", target = "socialNetworkBySocialNetworkId"),
+    @Mapping(source = "searchCriteriaId", target = "searchCriteriaBySearchCriteriaId"),
+    @Mapping(source = "eventId", target = "eventByEventId")})
   public abstract SocialNetworkPost SocialNetworkPostDTOToSocialNetworkPost(
-        SocialNetworkPostSocketDTO postDTO);
+    SocialNetworkPostSocketDTO postDTO);
 
   /**
    *
@@ -55,6 +55,7 @@ public abstract class SocialNetworkPostSocketMapper {
     }
     return socialNetworkRepository.findOne(id);
   }
+
   /**
    *
    */
@@ -64,6 +65,7 @@ public abstract class SocialNetworkPostSocketMapper {
     }
     return eventRepository.findOne(id);
   }
+
   /**
    *
    */

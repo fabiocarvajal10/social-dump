@@ -1,17 +1,18 @@
 package com.coredump.socialdump.web.rest.mapper;
 
-import com.coredump.socialdump.domain.*;
+import com.coredump.socialdump.domain.Event;
+import com.coredump.socialdump.domain.EventStatus;
+import com.coredump.socialdump.domain.EventType;
+import com.coredump.socialdump.domain.Organization;
 import com.coredump.socialdump.repository.EventStatusRepository;
 import com.coredump.socialdump.repository.EventTypeRepository;
 import com.coredump.socialdump.repository.OrganizationRepository;
 import com.coredump.socialdump.web.rest.dto.EventDTO;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import javax.inject.Inject;
-import java.util.List;
 
 /**
  * Created by fabio on 13/07/15.
@@ -30,17 +31,22 @@ public abstract class EventMapper {
   private OrganizationRepository organizationRepository;
 
   @Mappings({
-          @Mapping(source = "organizationByOrganizationId.id", target = "organizationId"),
-          @Mapping(source = "eventStatusByStatusId.id", target = "statusId"),
-          @Mapping(source = "eventTypeByEventTypeId.id", target = "typeId")})
+    @Mapping(source = "organizationByOrganizationId.id", target = "organizationId"),
+    @Mapping(source = "eventStatusByStatusId.id", target = "statusId"),
+    @Mapping(source = "eventTypeByEventTypeId.id", target = "typeId")})
   public abstract EventDTO eventToEventDTO(Event event);
 
   @Mappings({
-          @Mapping(source = "organizationId", target = "organizationByOrganizationId"),
-          @Mapping(source = "statusId", target = "eventStatusByStatusId"),
-          @Mapping(source = "typeId", target = "eventTypeByEventTypeId")})
+    @Mapping(source = "organizationId", target = "organizationByOrganizationId"),
+    @Mapping(source = "statusId", target = "eventStatusByStatusId"),
+    @Mapping(source = "typeId", target = "eventTypeByEventTypeId")})
   public abstract Event eventDTOToEvent(EventDTO eventDTO);
 
+  /**
+   * Obtiene un eventStatus por un id.
+   * @param id id del eventStatus
+   * @return EventStatus
+   */
   public EventStatus eventStatusFromId(Short id) {
     if (id == null) {
       return null;
@@ -48,6 +54,11 @@ public abstract class EventMapper {
     return eventStatusRepository.findOne(id);
   }
 
+  /**
+   * Obtiene una organization por un id.
+   * @param id id del organization
+   * @return Organization
+   */
   public Organization organizationFromId(Long id) {
     if (id == null) {
       return null;
@@ -55,6 +66,11 @@ public abstract class EventMapper {
     return organizationRepository.findOne(id);
   }
 
+  /**
+   * Obtiene un EventType por un id.
+   * @param id id del EventType
+   * @return EventType
+   */
   public EventType eventTypeFromId(Integer id) {
     if (id == null) {
       return null;

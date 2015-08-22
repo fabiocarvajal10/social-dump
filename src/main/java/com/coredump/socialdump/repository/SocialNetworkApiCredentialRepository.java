@@ -13,7 +13,7 @@ public interface SocialNetworkApiCredentialRepository
     SocialNetwork socialNetwork);
 
   Optional<SocialNetworkApiCredential>
-    findOneBySocialNetworkBySocialNetworkIdOrderByLastRequestAsc(
+  findOneBySocialNetworkBySocialNetworkIdOrderByLastRequestAsc(
     SocialNetwork socialNetwork);
 }
 

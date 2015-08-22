@@ -13,15 +13,15 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 public class CustomTimestampSerializer extends
-      JsonSerializer<Timestamp> {
+  JsonSerializer<Timestamp> {
 
-  private static SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+  private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   @Override
   public void serialize(Timestamp value,
                         JsonGenerator generator,
                         SerializerProvider provider)
-        throws IOException {
+    throws IOException {
     String dateFormat = formatter.format(value);
     generator.writeString(dateFormat);
   }

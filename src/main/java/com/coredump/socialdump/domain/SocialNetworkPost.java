@@ -5,10 +5,10 @@ import com.coredump.socialdump.domain.util.CustomTimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * Created by fabio on 09/07/15.
@@ -137,11 +137,16 @@ public class SocialNetworkPost implements Serializable {
     SocialNetworkPost that = (SocialNetworkPost) o;
 
     if (id != that.id) return false;
-    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
-    if (snUserId != null ? !snUserId.equals(that.snUserId) : that.snUserId != null) return false;
-    if (snUserEmail != null ? !snUserEmail.equals(that.snUserEmail) : that.snUserEmail != null) return false;
-    if (body != null ? !body.equals(that.body) : that.body != null) return false;
-    if (mediaUrl != null ? !mediaUrl.equals(that.mediaUrl) : that.mediaUrl != null) return false;
+    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null)
+      return false;
+    if (snUserId != null ? !snUserId.equals(that.snUserId) : that.snUserId != null)
+      return false;
+    if (snUserEmail != null ? !snUserEmail.equals(that.snUserEmail) : that.snUserEmail != null)
+      return false;
+    if (body != null ? !body.equals(that.body) : that.body != null)
+      return false;
+    if (mediaUrl != null ? !mediaUrl.equals(that.mediaUrl) : that.mediaUrl != null)
+      return false;
 
     return true;
   }

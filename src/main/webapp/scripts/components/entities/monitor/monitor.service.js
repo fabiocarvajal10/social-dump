@@ -4,10 +4,11 @@
 'use strict';
 
 angular.module('socialdumpApp.monitors')
-  .factory('MonitorService', function($http, $q, OrganizationService) {
+  .factory('MonitorService', ['$http', '$q', '$rootScope',
+    function($http, $q, $rootScope) {
      return {
        register: function(monitorContact) {
-         monitorContact.organizationId = OrganizationService.getCurrentOrgId();
+         monitorContact.organizationId = $rootScope.currentOrg.id;
          var q = $q.defer();
          $http({
            url: 'api/monitor-contacts',
@@ -18,12 +19,12 @@ angular.module('socialdumpApp.monitors')
            monitorContact.id = parseInt(data);
            q.resolve(monitorContact);
          }).
-         catch (function(error) {
+         catch(function(error) {
            if (error.data === 'e-mail address already in use') {
-             error = 'Ya cuenta con un contacto de monitoreo' +
+             error = 'Ya cuenta con un contacto de monitoreo ' +
                      'con el mismo correo electrónico';
            }else {
-             error = 'Error inesperado al intentar crear' +
+             error = 'Error inesperado al intentar crear ' +
                      'el contacto de monitoreo';
            }
            q.reject(error);
@@ -32,16 +33,19 @@ angular.module('socialdumpApp.monitors')
          return q.promise;
        },
 
-       getAll: function() {
+       getAll: function(page, limit) {
          var q = $q.defer();
          $http({
            url: 'api/monitor-contacts',
            method: 'GET',
            params: {
-             'organizationId': OrganizationService.getCurrentOrgId()
+             'page': page,
+             'per_page': limit,
+             'organizationId': $rootScope.currentOrg.id
            }
          }).
-         success(function(data) {
+         success(function(data, status, headers) {
+           data.total = parseInt(headers('X-Total-Count'));
            q.resolve(data);
          }).
          error(function(error) {
@@ -52,8 +56,6 @@ angular.module('socialdumpApp.monitors')
        },
 
        update: function(monitorContact) {
-         monitorContact.organizationId =
-           monitorContact.organizationByOrganizationId.id;
          var q = $q.defer();
          $http({
            url: 'api/monitor-contacts/',
@@ -63,12 +65,12 @@ angular.module('socialdumpApp.monitors')
          success(function(data) {
           q.resolve(monitorContact);
          }).
-         catch (function(error) {
+         catch(function(error) {
            if (error.data === 'e-mail address already in use') {
-             error = 'Ya cuenta con un contacto de monitoreo' +
+             error = 'Ya cuenta con un contacto de monitoreo ' +
                      'con el mismo correo electrónico';
            }else {
-             error = 'Error inesperado al intentar modificar' +
+             error = 'Error inesperado al intentar modificar ' +
                      'el contacto de monitoreo';
            }
            q.reject(error);
@@ -87,13 +89,14 @@ angular.module('socialdumpApp.monitors')
          success(function(data) {
           q.resolve(data);
          }).
-         catch (function(error) {
+         catch(function(error) {
           var err = 'Error al eliminar el contacto de monitoreo';
           q.reject(err);
          });
 
          return q.promise;
-       }
-     };
-   });
+        }
+      };
+    }
+  ]);
 

@@ -4,7 +4,7 @@ angular.module('socialdumpApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('eventType', {
-                parent: 'entity',
+                parent: 'home',
                 url: '/eventType',
                 data: {
                     roles: ['ROLE_USER'],
@@ -20,7 +20,7 @@ angular.module('socialdumpApp')
                 }
             })
             .state('eventTypeDetail', {
-                parent: 'entity',
+                parent: 'home',
                 url: '/eventType/:id',
                 data: {
                     roles: ['ROLE_USER'],

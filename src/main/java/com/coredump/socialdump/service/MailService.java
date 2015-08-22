@@ -1,6 +1,5 @@
 package com.coredump.socialdump.service;
 
-import com.coredump.socialdump.domain.MonitorContact;
 import com.coredump.socialdump.domain.TemporalAccess;
 import com.coredump.socialdump.domain.User;
 import org.apache.commons.lang.CharEncoding;
@@ -56,15 +55,15 @@ public class MailService {
 
   @Async
   public void sendEmail(String to, String subject, String content, boolean isMultipart,
-      boolean isHtml) {
+                        boolean isHtml) {
     log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
-        isMultipart, isHtml, to, subject, content);
+      isMultipart, isHtml, to, subject, content);
 
     // Prepare message using a Spring helper
     MimeMessage mimeMessage = javaMailSender.createMimeMessage();
     try {
       MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart,
-          CharEncoding.UTF_8);
+        CharEncoding.UTF_8);
       message.setTo(to);
       message.setFrom(from);
       message.setSubject(subject);
@@ -109,6 +108,18 @@ public class MailService {
     context.setVariable("baseUrl", baseUrl);
     String content = templateEngine.process("temporalAccess", context);
     String subject = messageSource.getMessage("email.temporalaccess.title", null, locale);
+    sendEmail(temporalAccess.getEmail(), subject, content, false, true);
+  }
+
+  @Async
+  public void temporalAccessNewDate(TemporalAccess temporalAccess, String baseUrl) {
+    log.debug("Sending password reset e-mail to '{}'", temporalAccess.getEmail());
+    Locale locale = Locale.forLanguageTag("en");
+    Context context = new Context(locale);
+    context.setVariable("temporalAccess", temporalAccess);
+    context.setVariable("baseUrl", baseUrl);
+    String content = templateEngine.process("newAccessDateEmail", context);
+    String subject = messageSource.getMessage("email.taNewDate.title", null, locale);
     sendEmail(temporalAccess.getEmail(), subject, content, false, true);
   }
 }

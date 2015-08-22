@@ -1,7 +1,6 @@
 package com.coredump.socialdump.service;
 
 import com.coredump.socialdump.domain.SocialNetworkPost;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -14,8 +13,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 /**
  * Created by Franz on 13/07/2015.
  */
@@ -25,23 +22,25 @@ public class TwitterFetch extends SocialNetworkFetch {
 
   private final Logger log = LoggerFactory.getLogger(TwitterFetch.class);
 
-  private TwitterTemplate twitterTemplate;
-
   public TwitterFetch() {
     super();
   }
 
+  /**
+   * Método que ejecuta el hilo.
+   */
   @Override
   public void run() {
     String appId = getSocialNetworkApiCredential().getAppId();
     String appSecret = getSocialNetworkApiCredential().getAppSecret();
-    twitterTemplate = new TwitterTemplate(appId, appSecret);
+    TwitterTemplate twitterTemplate = new TwitterTemplate(appId, appSecret);
     List<SocialNetworkPost> postsList = new ArrayList<>();
-    while (true) {
+    Thread.currentThread().setName(this.getName());
+    while (this.getIsAlive() && this.isEventActive()) {
       try {
         log.debug("Obteniendo Tweets de: {}...", getSearchCriteria().getSearchCriteria());
         SearchResults searchResults = twitterTemplate.searchOperations()
-            .search(getSearchCriteria().getSearchCriteria());
+          .search(getSearchCriteria().getSearchCriteria());
         List<Tweet> tweetsList = searchResults.getTweets();
 
         log.debug("Cantidad de Tweets obtenidos: {}...", tweetsList.size());
@@ -52,8 +51,8 @@ public class TwitterFetch extends SocialNetworkFetch {
         getSocialNetworkPostRepository().save(postsList);
         super.notifyPublications(postsList);
         postsList.clear();
-        log.debug("Sleeping");
-        Thread.sleep(10000);
+        log.debug("Sleeping for " + this.getDelay() + " ms");
+        Thread.sleep(this.getDelay());
 
       } catch (InterruptedException e) {
         e.printStackTrace();
@@ -69,6 +68,11 @@ public class TwitterFetch extends SocialNetworkFetch {
     }
   }
 
+  /**
+   * Método que convierte un tweet a un SocialNetworkPost.
+   * @param tweet post extraído de la red social
+   * @return el post procesado
+   */
   private SocialNetworkPost processTweet(Tweet tweet) {
     log.debug("Procesando tweets");
     SocialNetworkPost post = new SocialNetworkPost();

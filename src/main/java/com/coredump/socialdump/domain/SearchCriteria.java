@@ -1,10 +1,9 @@
 package com.coredump.socialdump.domain;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by fabio on 09/07/15.
@@ -15,7 +14,7 @@ public class SearchCriteria implements Serializable {
   /**
    * Identificador
    */
-  private long id;
+  private Long id;
 
   /**
    * Criterio de búsqueda actual
@@ -44,25 +43,28 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Obtiene el identificador
+   *
    * @return identificador
    */
   @Id
   @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
   /**
    * Asigna el identificador
+   *
    * @param id identificador
    */
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
   /**
    * Obtiene el criterio de búsqueda
+   *
    * @return criterio de búsqueda
    */
   @Basic
@@ -74,6 +76,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Asigna el criterio de búsqueda
+   *
    * @param searchCriteria criterio de búsqueda
    */
   public void setSearchCriteria(String searchCriteria) {
@@ -82,6 +85,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Determina si una instancia es equivalente a la misma instancia
+   *
    * @param o instancia a comparar
    * @return si es equivalente o no
    */
@@ -101,17 +105,23 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Obtiene el código hash
+   *
    * @return
    */
   @Override
   public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
+    int tmpId = 0;
+    if (id != null) {
+      tmpId = id.intValue();
+    }
+    int result = (tmpId ^ (tmpId >>> 32));
     result = 31 * result + (searchCriteria != null ? searchCriteria.hashCode() : 0);
     return result;
   }
 
   /**
    * Devuelve el evento
+   *
    * @return evento
    */
   @ManyToOne
@@ -122,6 +132,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Asigna el evento
+   *
    * @param eventByEventId evento
    */
   public void setEventByEventId(Event eventByEventId) {
@@ -130,6 +141,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Devuelve la red social
+   *
    * @return red social
    */
   @ManyToOne
@@ -140,6 +152,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Asigna la red social
+   *
    * @param socialNetworkBySocialNetworkId red social
    */
   public void setSocialNetworkBySocialNetworkId(SocialNetwork socialNetworkBySocialNetworkId) {
@@ -148,6 +161,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Devuelve el estado
+   *
    * @return estado
    */
   @ManyToOne
@@ -158,6 +172,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Asigna el estado
+   *
    * @param genericStatusByStatusId estado
    */
   public void setGenericStatusByStatusId(GenericStatus genericStatusByStatusId) {
@@ -166,6 +181,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Devuelve una colección de posts de redes sociales
+   *
    * @return colección
    */
   @OneToMany(mappedBy = "searchCriteriaBySearchCriteriaId")
@@ -175,6 +191,7 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Asigna una colección de posts de redes sociales
+   *
    * @param socialNetworkPostsById colección de posts
    */
   public void setSocialNetworkPostsById(Collection<SocialNetworkPost> socialNetworkPostsById) {
@@ -183,16 +200,16 @@ public class SearchCriteria implements Serializable {
 
   /**
    * Obtiene información de la instancia
+   *
    * @return información
    */
   @Override
   public String toString() {
-      return "SearchCriteria{" +
-              "id=" + id +
-              ", searchCriteria='" + searchCriteria + "'" +
-              '}';
+    return "SearchCriteria{" +
+      "id=" + id +
+      ", searchCriteria='" + searchCriteria + "'" +
+      '}';
   }
-
 
 
 }
