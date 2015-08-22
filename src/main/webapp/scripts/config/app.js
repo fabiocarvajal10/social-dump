@@ -164,7 +164,7 @@
       httpRequestInterceptorCacheBusterProvider
         .setMatchlist([/.*api.*/, /.*protected.*/], true);
 
-      $urlRouterProvider.otherwise('/');
+      $urlRouterProvider.otherwise('/dashboard/organizations');
       $stateProvider.state('site', {
         'abstract': true,
         views: {
