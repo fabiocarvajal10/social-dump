@@ -13,7 +13,7 @@
          Event.stopSync({
            'eventId': event.id,
            'searchCriteria': searchCriteria
-         }, function(){
+         }, function() {
            event.searchCriterias.splice(index, 1);
            $modalInstance.close();
          });

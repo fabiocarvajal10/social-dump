@@ -43,19 +43,24 @@
           } else if (event.startDate > new Date()) {
             event.status.status = 'Pendiente';
           }
+
           if (event && event.status) {
             event.status.message =
               EventStatusUI.messageForStatus(event.status.status, true);
           }
         };
         return $resource('api/events/:id', {}, {
-          'query': { method: 'GET', isArray: true},
+          'query': { 
+            method: 'GET',
+            isArray: true
+          },
           'get': {
             method: 'GET',
             transformResponse: function(data) {
               data = angular.fromJson(data);
               data.type = EventType.get({id: data.typeId});
-              data.status = EventStatus.get({id: data.statusId});
+              data.status = EventStatus.get({id: data.statusId},
+                function() {addEventStatusMessage(data);});
               addDateTimeProperties(data);
               return data;
             }

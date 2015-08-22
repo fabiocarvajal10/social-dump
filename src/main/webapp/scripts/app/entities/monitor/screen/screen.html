@@ -27,7 +27,7 @@
 
         <div class="m-l-xxl m-t-sm" has-role="ROLE_USER" style="float:right">
           <button class="btn btn-sm btn-icon btn-danger m-r-sm"
-                data-ng-repeat="hashtag in event.searchCriterias"
+                data-ng-repeat="hashtag in event.allSearchCriterias"
                 ng-click="openUnsyncModal(hashtag)"
                 ng-hide="!hashtag">
             <i ng-show="hashtag[0] === '#'" class="fa fa-twitter fa-2x"></i>

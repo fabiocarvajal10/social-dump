@@ -23,6 +23,7 @@
         EventPublic.get({'id': $stateParams.id})
           .$promise.then(function(data) {
             $scope.event = data;
+            $scope.event.allSearchCriterias = angular.copy($scope.event.searchCriterias);
             $scope.event.searchCriterias
               .forEach(function(element, index, array) {
                 if (element[0] === '#') array[index] = element.slice(1);

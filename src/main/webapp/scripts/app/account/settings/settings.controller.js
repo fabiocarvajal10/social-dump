@@ -15,7 +15,7 @@ angular.module('socialdumpApp')
         $scope.errorEmailExists = false;
         $scope.success = 'OK';
         Principal.identity().then(function(account) {
-            $scope.settingsAccount = account;
+            //$scope.settingsAccount = account;
         });
       }).catch(function(error) {
         if(error.data.exception
