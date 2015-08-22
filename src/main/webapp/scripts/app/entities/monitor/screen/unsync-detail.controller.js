@@ -9,12 +9,12 @@
      function($scope, $modalInstance, event, searchCriteria, Event) {
 
        $scope.confirmUnsync = function() {
-         var index = event.searchCriterias.indexOf(searchCriteria);
+         var index = event.allSearchCriterias.indexOf(searchCriteria);
          Event.stopSync({
            'eventId': event.id,
            'searchCriteria': searchCriteria
          }, function() {
-           event.searchCriterias.splice(index, 1);
+           event.allSearchCriterias.splice(index, 1);
            $modalInstance.close();
          });
        };
