@@ -1,0 +1,36 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3"> Organizaciones </h1>
+</div>
+<div class="wrapper-md">
+  <a class="btn m-b-xs btn-sm btn-success btn-addon m-r-sm" ng-click="open(null, null,'create')">
+    <i class="fa fa-plus">
+    </i> Agregar
+  </a>
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="!organizations.length">
+    No posee ninguna organización
+  </span>
+  <div class="row">
+    <div class="col-xs-6 col-lg-3" ng-repeat="organization in organizations">
+      <div class="panel padder-v item wrapper">
+        <div class="top text-right w-full" ng-click="">
+          <span class="btn m-b-xs btn-xs btn-warning m-xs"
+                ng-click="open(organization, $index, 'update')">
+            <i class="fa fa-pencil"></i>
+          </span>
+          <span class="btn m-b-xs btn-xs btn-danger m-xs"
+                ng-click="open(organization, $index, 'delete')">
+            <i class="fa fa-trash-o"></i>
+          </span>
+        </div>
+        <div>
+          <p class="h3 text-info font-thin m-t-sm"> {{ organization.name }} </p>
+          <p class="h5"> {{ organization.createdAt | date:"dd/MM/yyyy '|' h:mma" }} </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pull-right" ng-hide="!organizations.length || totalItems < 13">
+    <pagination direction-links="false" total-items="totalItems" ng-model="currentPage"
+                ng-change="pageChanged()" num-pages="smallnumPages" items-per-page="12"></pagination>
+  </div>
+</div>

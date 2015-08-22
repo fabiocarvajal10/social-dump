@@ -1,0 +1,44 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3"> Contactos de Monitoreo </h1>
+</div>
+<div class="wrapper-md">
+  <a class="btn m-b-xs btn-sm btn-success btn-addon m-r-sm" ng-click="open(null, null,'create')"
+      ng-disabled="checkMonitorOrg()">
+    <i class="fa fa-plus">
+    </i> Agregar
+  </a>
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="checkMonitorOrg()">
+    No posee ninguna organización
+  </span>
+  <span class="label text-base bg-info pos-rlt m-r" ng-show="!monitorContacts.length
+      && !checkMonitorOrg()">
+    No posee ningún contacto monitor
+  </span>
+  <div class="row">
+    <div class="col-xs-6 col-lg-3" ng-repeat="monitorContact in monitorContacts">
+      <div class="panel padder-v item wrapper">
+        <div class="top text-right w-full" ng-click="">
+          <span class="btn m-b-xs btn-xs btn-warning m-xs"
+                ng-click="open(monitorContact, $index, 'update')">
+            <i class="fa fa-pencil"></i>
+          </span>
+          <span class="btn m-b-xs btn-xs btn-danger m-xs"
+                ng-click="open(monitorContact, $index, 'delete')">
+            <i class="fa fa-trash-o"></i>
+          </span>
+        </div>
+        <div>
+          <p class="h3 text-info font-thin m-t-sm"> {{ monitorContact.firstName }} </p>
+          <p class="h3 text-info font-thin"> {{monitorContact.lastName}} </p>
+          <p class="h3"> {{ monitorContact.phone }} </p>
+          <p class="font-thin"> {{ monitorContact.email }} </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pull-right" ng-hide="!monitorContacts.length || totalItems < 9">
+    <pagination direction-links="false" total-items="totalItems" ng-model="currentPage"
+                ng-change="pageChanged()" num-pages="smallnumPages" items-per-page="8"></pagination>
+  </div>
+</div>
+

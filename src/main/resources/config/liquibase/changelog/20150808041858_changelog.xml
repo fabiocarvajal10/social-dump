@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet author="esteban (generated)" id="1439029152450-1">
+        <addColumn tableName="SocialNetwork">
+            <column name="statusId" type="smallint(3)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="esteban (generated)" id="1439029152450-2">
+        <addForeignKeyConstraint baseColumnNames="statusId" baseTableName="SocialNetwork" constraintName="FK_fm5s0414xue29v3ui8cynljcq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="GenericStatus"/>
+    </changeSet>
+</databaseChangeLog>

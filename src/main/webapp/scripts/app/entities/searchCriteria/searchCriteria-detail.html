@@ -1,0 +1,55 @@
+
+<div>
+    <h2><span>SearchCriteria</span> {{searchCriteria.id}}</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span>SearchCriteria</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{searchCriteria.searchCriteria}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>eventByEventId</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{searchCriteria.eventByEventIdDescription}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>socialNetworkBySocialNetworkId</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{searchCriteria.socialNetworkBySocialNetworkIdName}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>genericStatusByGenericStatusId</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{searchCriteria.genericStatusByGenericStatusIdStatus}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="searchCriteria"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

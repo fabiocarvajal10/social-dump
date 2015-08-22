@@ -1,138 +1,169 @@
 package com.coredump.socialdump.domain;
 
+import com.coredump.socialdump.domain.util.CustomDateTimeDeserializer;
+import com.coredump.socialdump.domain.util.CustomDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
- * Created by fabio on 05/07/15.
+ * Created by fabio on 09/07/15.
  */
 @Entity
-public class TemporalAccess {
-    private long id;
-    private String email;
-    private String password;
-    private Timestamp createdAt;
-    private Timestamp startDate;
-    private Timestamp endDate;
-    private Event eventByEventId;
-    private MonitorContact monitorContactByMonitorContactId;
-    private GenericStatus genericStatusByStatusId;
+public class TemporalAccess implements Serializable {
+  private Long id;
+  private String email;
 
-    @Id
-    @Column(name = "id")
-    public long getId() {
-        return id;
-    }
+  @JsonIgnore
+  private String password;
+  private DateTime createdAt;
+  private DateTime startDate;
+  private DateTime endDate;
+  private Event eventByEventId;
+  private MonitorContact monitorContactByMonitorContactId;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  @JsonIgnore
+  private GenericStatus genericStatusByStatusId;
 
-    @Basic
-    @Column(name = "email")
-    public String getEmail() {
-        return email;
-    }
+  @Id
+  @Column(name = "id", columnDefinition = "bigint(15) unsigned", nullable = false)
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  public Long getId() {
+    return id;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    @Basic
-    @Column(name = "password")
-    public String getPassword() {
-        return password;
-    }
+  @Basic
+  @Column(name = "email", length = 255, nullable = false)
+  @Size(max = 255)
+  public String getEmail() {
+    return email;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    @Basic
-    @Column(name = "createdAt")
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
+  @Basic
+  @Column(name = "password", length = 80, nullable = false)
+  @Size(max = 80)
+  public String getPassword() {
+    return password;
+  }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    @Basic
-    @Column(name = "startDate")
-    public Timestamp getStartDate() {
-        return startDate;
-    }
+  @Basic
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Column(name = "createdAt", nullable = false)
+  @JsonSerialize(using = CustomDateTimeSerializer.class)
+  @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+  public DateTime getCreatedAt() {
+    return createdAt;
+  }
 
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
+  public void setCreatedAt(DateTime createdAt) {
+    this.createdAt = createdAt;
+  }
 
-    @Basic
-    @Column(name = "endDate")
-    public Timestamp getEndDate() {
-        return endDate;
-    }
+  @Basic
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Column(name = "startDate", nullable = false)
+  @JsonSerialize(using = CustomDateTimeSerializer.class)
+  @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+  public DateTime getStartDate() {
+    return startDate;
+  }
 
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
-    }
+  public void setStartDate(DateTime startDate) {
+    this.startDate = startDate;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Basic
+  @Column(name = "endDate", nullable = false)
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @JsonSerialize(using = CustomDateTimeSerializer.class)
+  @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+  public DateTime getEndDate() {
+    return endDate;
+  }
 
-        TemporalAccess that = (TemporalAccess) o;
+  public void setEndDate(DateTime endDate) {
+    this.endDate = endDate;
+  }
 
-        if (id != that.id) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
-        if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
-        if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        return true;
-    }
+    TemporalAccess that = (TemporalAccess) o;
 
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-        return result;
-    }
+    if (id != that.id) return false;
+    if (email != null ? !email.equals(that.email) : that.email != null)
+      return false;
+    if (password != null ? !password.equals(that.password) : that.password != null)
+      return false;
+    if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null)
+      return false;
+    if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null)
+      return false;
+    if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null)
+      return false;
 
-    @ManyToOne
-    @JoinColumn(name = "eventId", referencedColumnName = "id")
-    public Event getEventByEventId() {
-        return eventByEventId;
-    }
+    return true;
+  }
 
-    public void setEventByEventId(Event eventByEventId) {
-        this.eventByEventId = eventByEventId;
-    }
+  @Override
+  public int hashCode() {
+    int result = (id == null) ? 0 : id.intValue();
+    result = (int) (result ^ (result >>> 32));
+    result = 31 * result + (email != null ? email.hashCode() : 0);
+    result = 31 * result + (password != null ? password.hashCode() : 0);
+    result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+    result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+    result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
+    return result;
+  }
 
-    @ManyToOne
-    @JoinColumn(name = "monitorContactId", referencedColumnName = "id")
-    public MonitorContact getMonitorContactByMonitorContactId() {
-        return monitorContactByMonitorContactId;
-    }
+  @ManyToOne
+  @JoinColumn(name = "eventId", referencedColumnName = "id")
+  public Event getEventByEventId() {
+    return eventByEventId;
+  }
 
-    public void setMonitorContactByMonitorContactId(MonitorContact monitorContactByMonitorContactId) {
-        this.monitorContactByMonitorContactId = monitorContactByMonitorContactId;
-    }
+  public void setEventByEventId(Event eventByEventId) {
+    this.eventByEventId = eventByEventId;
+  }
 
-    @ManyToOne
-    @JoinColumn(name = "statusId", referencedColumnName = "id")
-    public GenericStatus getGenericStatusByStatusId() {
-        return genericStatusByStatusId;
-    }
+  @ManyToOne
+  @JoinColumn(name = "monitorContactId", referencedColumnName = "id")
+  public MonitorContact getMonitorContactByMonitorContactId() {
+    return monitorContactByMonitorContactId;
+  }
 
-    public void setGenericStatusByStatusId(GenericStatus genericStatusByStatusId) {
-        this.genericStatusByStatusId = genericStatusByStatusId;
-    }
+  public void setMonitorContactByMonitorContactId(MonitorContact monitorContactByMonitorContactId) {
+    this.monitorContactByMonitorContactId = monitorContactByMonitorContactId;
+  }
+
+  @ManyToOne
+  @JoinColumn(name = "statusId", referencedColumnName = "id")
+  public GenericStatus getGenericStatusByStatusId() {
+    return genericStatusByStatusId;
+  }
+
+  public void setGenericStatusByStatusId(GenericStatus genericStatusByStatusId) {
+    this.genericStatusByStatusId = genericStatusByStatusId;
+  }
 }

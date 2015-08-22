@@ -1,0 +1,53 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="mySearchCriteriaLabel">Create or edit a SearchCriteria</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>ID</label>
+            <input type="text" class="form-control" name="id"
+                    ng-model="searchCriteria.id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="field_searchCriteria">SearchCriteria</label>
+            <input type="text" class="form-control" name="searchCriteria" id="field_searchCriteria"
+                    ng-model="searchCriteria.searchCriteria" required>
+
+            <div ng-show="editForm.searchCriteria.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.searchCriteria.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_eventByEventId">eventByEventId</label>
+            <select class="form-control" id="field_eventByEventId" name="eventByEventId" ng-model="searchCriteria.eventByEventId.id" ng-options="event.id as event.description for event in events">
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_socialNetworkBySocialNetworkId">socialNetworkBySocialNetworkId</label>
+            <select class="form-control" id="field_socialNetworkBySocialNetworkId" name="socialNetworkBySocialNetworkId" ng-model="searchCriteria.socialNetworkBySocialNetworkId.id" ng-options="socialNetwork.id as socialNetwork.name for socialNetwork in socialnetworks">
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_genericStatusByGenericStatusId">genericStatusByGenericStatusId</label>
+            <select class="form-control" id="field_genericStatusByGenericStatusId" name="genericStatusByGenericStatusId" ng-model="searchCriteria.genericStatusByGenericStatusId.id" ng-options="genericStatus.id as genericStatus.status for genericStatus in genericstatuss">
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

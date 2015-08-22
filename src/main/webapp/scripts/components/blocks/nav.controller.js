@@ -1,12 +1,20 @@
 'use strict';
 
 angular.module('socialdumpApp')
-    .controller('NavbarController', function ($scope, $location, $state, Auth, Principal) {
-        $scope.isAuthenticated = Principal.isAuthenticated;
-        $scope.$state = $state;
+  .controller('NavbarController',
+    function($scope, $location, $state, Auth, Principal, localStorageService) {
+      $scope.isAuthenticated = Principal.isAuthenticated;
+      $scope.$state = $state;
 
-        $scope.logout = function () {
-            Auth.logout();
-            $state.go('home');
-        };
-    });
+      $scope.userFirstName = localStorageService.get('loggedUser').firstName;
+
+      $scope.$on('accountUpdated', function(){
+        $scope.userFirstName = localStorageService.get('loggedUser').firstName;
+      });
+
+      $scope.logout = function() {
+        Auth.logout();
+        $state.go('home');
+      };
+    }
+  );

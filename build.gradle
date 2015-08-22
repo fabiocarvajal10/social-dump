@@ -79,7 +79,7 @@ dependencies {
     compile (group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version) {
         exclude(module: 'metrics-core')
         exclude(module: 'metrics-healthchecks')
-    } 
+    }
     compile(group: 'com.zaxxer', name: 'HikariCP') {
         exclude(module: 'tools')
     }
@@ -119,7 +119,7 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-config', version: spring_security_version
     compile group: 'org.springframework.security', name: 'spring-security-data', version: spring_security_version
     compile group: 'org.springframework.security', name: 'spring-security-web', version: spring_security_version
-    compile group: 'org.springframework.security', name: 'spring-security-messaging', version: spring_security_version 
+    compile group: 'org.springframework.security', name: 'spring-security-messaging', version: spring_security_version
     compile(group: 'com.mangofactory', name: 'swagger-springmvc', version: swagger_springmvc_version) {
         exclude(module: 'jackson-module-scala_2.10')
         exclude(module: 'scalap')
@@ -128,6 +128,11 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java'
     compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
     compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version
+    compile 'org.springframework.social:spring-social-web:1.1.0.RELEASE'
+    compile 'com.restfb:restfb:1.14.0'
+    compile 'org.springframework.social:spring-social-twitter:1.1.0.RELEASE'
+    compile 'com.sachinhandiekar:jInstagram:1.0.10'
+
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
@@ -138,9 +143,10 @@ dependencies {
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version
     testCompile group: 'org.hamcrest', name: 'hamcrest-library'
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version
-    
+
     testCompile group: 'com.h2database', name: 'h2'
 
+    //testCompile 'org.springframework.social:spring-social-test:1.1.0.RELEASE'
 }
 
 task wrapper(type: Wrapper) {

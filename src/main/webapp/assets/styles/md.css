@@ -1,4 +1,4 @@
-/* 
+/*
 
 */
 
@@ -34,9 +34,9 @@
   transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), -webkit-transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   font-variant: inherit;
 }
 
@@ -87,7 +87,7 @@
 
 .md-btn.md-raised {
   -webkit-transform: translate3d(0, 0, 0);
-          transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 .md-btn.md-fab {
@@ -97,7 +97,7 @@
   overflow: hidden;
   border-radius: 50%;
   -webkit-transform: translate3d(0, 0, 0);
-          transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   transition: 0.2s linear;
   transition-property: -webkit-transform, box-shadow;
   transition-property: transform, box-shadow;
@@ -161,13 +161,13 @@
 .md-btn:not([disabled]).md-fab:focus,
 .md-btn:not([disabled]).md-fab:hover {
   -webkit-transform: translate3d(0, -1px, 0);
-          transform: translate3d(0, -1px, 0);
+  transform: translate3d(0, -1px, 0);
 }
 
 .md-toast-open-top .md-btn.md-fab-top-left,
 .md-toast-open-top .md-btn.md-fab-top-right {
   -webkit-transform: translate3d(0, 42px, 0);
-          transform: translate3d(0, 42px, 0);
+  transform: translate3d(0, 42px, 0);
 }
 
 .md-toast-open-top .md-btn.md-fab-top-left:not([disabled]):focus,
@@ -175,13 +175,13 @@
 .md-toast-open-top .md-btn.md-fab-top-right:not([disabled]):focus,
 .md-toast-open-top .md-btn.md-fab-top-right:not([disabled]):hover {
   -webkit-transform: translate3d(0, 41px, 0);
-          transform: translate3d(0, 41px, 0);
+  transform: translate3d(0, 41px, 0);
 }
 
 .md-toast-open-bottom .md-btn.md-fab-bottom-left,
 .md-toast-open-bottom .md-btn.md-fab-bottom-right {
   -webkit-transform: translate3d(0, -42px, 0);
-          transform: translate3d(0, -42px, 0);
+  transform: translate3d(0, -42px, 0);
 }
 
 .md-toast-open-bottom .md-btn.md-fab-bottom-left:not([disabled]):focus,
@@ -189,7 +189,7 @@
 .md-toast-open-bottom .md-btn.md-fab-bottom-right:not([disabled]):focus,
 .md-toast-open-bottom .md-btn.md-fab-bottom-right:not([disabled]):hover {
   -webkit-transform: translate3d(0, -43px, 0);
-          transform: translate3d(0, -43px, 0);
+  transform: translate3d(0, -43px, 0);
 }
 
 .card {
@@ -197,7 +197,7 @@
   margin-bottom: 24px;
   background-color: #fff;
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .card-heading {
@@ -1551,6 +1551,7 @@
     z-index: 45;
     max-width: 75%;
   }
+
   .off-screen.md-content + * {
     z-index: 30;
     padding-top: 60px;
@@ -1611,7 +1612,7 @@
   font-size: 0.85em;
   opacity: 0.5;
   -webkit-transition: all 0.2s;
-          transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 .md-input.disabled,
@@ -1688,8 +1689,8 @@ textarea.md-input {
   border-left: 0;
   content: ' ';
   -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-          transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .md-check input[type="radio"]:checked + i:after {
@@ -1733,7 +1734,7 @@ fieldset[disabled] .md-check input + i:before {
   border-radius: 2px;
   content: "";
   -webkit-transition: all 0.2s;
-          transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 .md-check > i.no-icon:after {
@@ -1800,7 +1801,7 @@ fieldset[disabled] .md-switch input + i:after {
   border-radius: 8px;
   content: "";
   -webkit-transition: all 0.2s;
-          transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 .md-switch i:after {
@@ -1816,7 +1817,7 @@ fieldset[disabled] .md-switch input + i:after {
   outline: none;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   -webkit-transition: all 0.2s;
-          transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 .md-whiteframe-z0 {

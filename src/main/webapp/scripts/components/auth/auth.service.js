@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('socialdumpApp')
-    .factory('Auth', function Auth($rootScope, $state, $q, Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish, Tracker) {
+    .factory('Auth', function Auth($rootScope, $state, $q, Principal,
+      AuthServerProvider, Account, Register, Activate,
+        Password, PasswordResetInit, PasswordResetFinish, localStorageService) {//, Tracker) {
         return {
             login: function (credentials, callback) {
                 var cb = callback || angular.noop;
@@ -10,8 +12,8 @@ angular.module('socialdumpApp')
                 AuthServerProvider.login(credentials).then(function (data) {
                     // retrieve the logged account information
                     Principal.identity(true).then(function(account) {
-                      
-                        Tracker.sendActivity();
+
+                        //Tracker.sendActivity();
                         deferred.resolve(data);
                     });
                     return cb();
@@ -69,7 +71,10 @@ angular.module('socialdumpApp')
 
                 return Account.save(account,
                     function () {
-                        return cb(account);
+                      account.email = localStorageService.get('loggedUser').email;
+                      localStorageService.set('loggedUser', account);
+                      $rootScope.$broadcast('accountUpdated');
+                      return cb(account);
                     },
                     function (err) {
                         return cb(err);

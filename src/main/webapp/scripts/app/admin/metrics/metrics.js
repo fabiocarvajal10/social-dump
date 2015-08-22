@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('socialdumpApp')
-    .config(function ($stateProvider) {
+    .config(function($stateProvider) {
         $stateProvider
             .state('metrics', {
                 parent: 'admin',
@@ -11,7 +11,7 @@ angular.module('socialdumpApp')
                     pageTitle: 'Application Metrics'
                 },
                 views: {
-                    'content@': {
+                    '': {
                         templateUrl: 'scripts/app/admin/metrics/metrics.html',
                         controller: 'MetricsController'
                     }

@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <h4 class="modal-title m-n font-thin h3"> Confirmar desincronización </h4>
+</div>
+<div class="modal-body">
+  <p class="h5"> ¿Desea detener la sincronización? </p>
+  <p class="h5">
+    Una vez realizada la operación, se detendrá la búsqueda de nuevas publicaciones.
+  </p>
+  <p class="h5">
+    Las publicaciones que ya fueron obtenidas, se seguirán mostrando.
+  </p>
+  <p class="h5 text-danger font-thin m-t-sm">
+    Esta operación no puede ser revertida
+  </p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="confirmUnsync()"> Continuar </button>
+  <button class="btn btn-warning" ng-click="cancel()"> Cancelar </button>
+</div>
+

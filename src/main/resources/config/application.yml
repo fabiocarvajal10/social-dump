@@ -14,25 +14,25 @@ async:
     queueCapacity: 10000
 
 mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.gmail.com
+    port: 587
+    username: noreply.socialdump@gmail.com
+    password: socialdumpFEF
     protocol: smtp
-    tls: false
-    auth: false
-    from: socialdump@localhost
+    tls: true
+    auth: true
+    from: noreply.socialdump@gmail.com
 
 authentication:
     xauth:
         secret: myXAuthSecret
         # Token is valid 30 minutes
-        tokenValidityInSeconds: 1800
+        tokenValidityInSeconds: 5400
 
 swagger:
     title: socialdump API
     description: socialdump applications and beyond!
-    termsOfServiceUrl: http://jhipster.github.io/
+    termsOfServiceUrl: 
     contact:
     license: Apache 2.0
     licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html

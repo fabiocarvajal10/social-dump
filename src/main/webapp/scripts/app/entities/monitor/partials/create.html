@@ -1,0 +1,68 @@
+<div class="modal-header">
+  <h4 class="modal-title m-n font-thin h3"> Crear Contacto de Monitoreo </h4>
+</div>
+<div class="modal-body">
+  <div class="m-b" ng-show="errorMessage.length">
+    <span class="label text-base bg-danger pos-rlt m-r">
+      {{ errorMessage }}
+    </span>
+  </div>
+  <div class="m-b">
+    <form name="uptForm" role="form">
+      <div class="form-group">
+        <label> Nombre </label>
+        <input type="text" class="form-control" name="firstName" placeholder="Nombre"
+               ng-model="monitorContact.firstName" required>
+        <div class="has-error" ng-messages="uptForm.firstName.$error"
+             ng-show="uptForm.firstName.$touched">
+          <label class="control-label" ng-message="required">
+            Debe ingresar un nombre
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label> Apellidos </label>
+        <input type="text" class="form-control" name="lastName" placeholder="Apellidos"
+               ng-model="monitorContact.lastName" required>
+        <div class="has-error" ng-messages="uptForm.lastName.$error"
+             ng-show="uptForm.lastName.$touched">
+          <label class="control-label" ng-message="required">
+            Debe ingresar unos apellidos
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label> Correo Electrónico </label>
+        <input type="email" class="form-control" name="email" placeholder="Correo Electrónico"
+               ng-model="monitorContact.email" required>
+        <div class="has-error" ng-messages="uptForm.email.$error" ng-show="uptForm.email.$touched">
+          <label class="control-label" ng-message="required">
+            Debe ingresar un correo electrónico
+          </label>
+          <label class="control-label" ng-message="email">
+            El correo electrónico ingresado no es válido
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label> Número de teléfono </label>
+        <input type="text" class="form-control" name="phone" placeholder="Número de teléfono"
+               ng-model="monitorContact.phone" ng-pattern="/^\d+$/" required max="20">
+        <div class="has-error" ng-messages="uptForm.phone.$error" ng-show="uptForm.phone.$touched">
+          <label class="control-label" ng-message="required">
+            Debe ingresar un número de teléfono
+          </label>
+          <label class="control-label" ng-show="uptForm.phone.$error.pattern">
+            Solo se aceptan números
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-info" ng-click="createMC(monitorContact)" ng-disabled="uptForm.$invalid">
+    Agregar
+  </button>
+  <button class="btn btn-warning" ng-click="cancel()"> Cancelar </button>
+</div>
