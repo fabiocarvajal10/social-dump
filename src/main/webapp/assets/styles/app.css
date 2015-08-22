@@ -5451,3 +5451,17 @@ button.btn.btn-sm.ng-scope {
   position: relative;
   top: -2em;
 }
+
+.btn-gray {
+  background-color: #727272;
+  color: #FFF;
+}
+
+.bg-img-body {
+  background: url('../../assets/images/body.jpg');
+}
+
+.border-app {
+  border: 1px solid #FF5252;
+}
+
