@@ -25,7 +25,11 @@
   </li>
 
   <li has-role="ROLE_USER">
-    <a ui-sref="event.list" class="auto">
+    <a ui-sref="event.list" class="auto"
+       ng-class="{'not-allowed text-disabled' : !org}"
+       tooltip="Necesita una organización para utilizar esta funcionalidad."
+       tooltip-enable="!org"
+       tooltip-popup-delay="500">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -36,7 +40,11 @@
   </li>
 
   <li has-role="ROLE_USER">
-    <a ui-sref="monitors" class="auto">
+    <a ui-sref="monitors" class="auto"
+       ng-class="{'not-allowed text-disabled' : !org}"
+       tooltip="Necesita una organización para utilizar esta funcionalidad."
+       tooltip-enable="!org"
+       tooltip-popup-delay="500">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -47,7 +55,11 @@
   </li>
 
   <li has-role="ROLE_USER">
-    <a ui-sref="accesses" class="auto">
+    <a ui-sref="accesses" class="auto"
+       ng-class="{'not-allowed text-disabled' : !org}"
+       tooltip="Necesita una organización para utilizar esta funcionalidad."
+       tooltip-enable="!org"
+       tooltip-popup-delay="500">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>

@@ -7,6 +7,8 @@ angular.module('socialdumpApp')
              localStorageService) {
       $rootScope.currentOrg = null;
       $scope.orgz = [];
+      $scope.org = $rootScope.currentOrg;
+      console.log(JSON.stringify($scope.org));
 
       function broadcastOrgChange() {
         $rootScope
@@ -18,6 +20,7 @@ angular.module('socialdumpApp')
           $scope.orgz = data;
           $rootScope.currentOrg = localStorageService.get('currentOrg') ||
                                   data[0];
+          $scope.org = $rootScope.currentOrg;
           broadcastOrgChange();
         });
       };
@@ -36,6 +39,8 @@ angular.module('socialdumpApp')
       $rootScope.$on('newOrganization', function(event, args) {
         var newOrg = args.newOrganization;
         $scope.orgz.push(newOrg);
+        $rootScope.currentOrg = newOrg;
+        $scope.org = newOrg;
       });
 
       $rootScope.$on('updatedOrganization', function(event, args) {
@@ -54,7 +59,12 @@ angular.module('socialdumpApp')
           if (element.id === deletedOrg) array.splice(index, 1);
         });
         if ($rootScope.currentOrg.id === deletedOrg) {
-          $rootScope.currentOrg = $scope.orgz[0];
+          if (!!$scope.orgz && $scope.orgz.length > 0) {
+            $rootScope.currentOrg = $scope.orgz[0];
+          } else {
+            $rootScope.currentOrg = null;
+            $scope.org = null;
+          }
         }
       });
 
