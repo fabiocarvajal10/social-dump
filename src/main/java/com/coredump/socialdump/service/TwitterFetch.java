@@ -67,8 +67,6 @@ public class TwitterFetch extends SocialNetworkFetch {
         }
       }
     }
-
-    this.stopEvent();
   }
 
   /**

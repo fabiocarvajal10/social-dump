@@ -126,12 +126,8 @@ public abstract class SocialNetworkFetch implements FetchableInterface {
   }
 
   protected boolean isEventActive() {
-    if (getEndDate().isAfterNow()) {
-      EventStatus eventStatus =
-        eventStatusRepository.findOneByStatus("Finalizado");
-
-      searchCriteria.getEventByEventId().setEventStatusByStatusId(eventStatus);
-      searchCriteriaRepository.save(searchCriteria);
+    if (!getEndDate().isAfterNow()) {
+      this.stopEvent();
     }
 
     return getEndDate().isAfterNow();

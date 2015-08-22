@@ -71,8 +71,6 @@ public class InstagramFetch extends SocialNetworkFetch {
         }
       }
     }
-
-    this.stopEvent();
   }
 
   private SocialNetworkPost processGram(MediaFeedData mediaFeedData) {
