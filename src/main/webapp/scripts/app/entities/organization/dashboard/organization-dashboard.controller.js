@@ -52,6 +52,7 @@ angular.module('socialdumpApp')
       OrganizationService.update($scope.uptOrg)
         .then(function(updatedOrg) {
           $scope.organizations[$scope.uptOrg.index].name = updatedOrg.name;
+          $scope.currentOrg = updatedOrg.name;
           $scope.isUptOrg = false;
         })
         .catch(function(error) {
